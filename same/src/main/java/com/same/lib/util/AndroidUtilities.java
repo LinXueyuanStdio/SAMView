@@ -2,6 +2,7 @@ package com.same.lib.util;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -33,6 +34,7 @@ import android.widget.TextView;
 
 import com.same.lib.helper.Bitmaps;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.security.SecureRandom;
@@ -515,6 +517,25 @@ public class AndroidUtilities {
 
     public static float computePerceivedBrightness(int color) {
         return (Color.red(color) * 0.2126f + Color.green(color) * 0.7152f + Color.blue(color) * 0.0722f) / 255f;
+    }
+
+
+    public static File getFilesDirFixed() {
+        for (int a = 0; a < 10; a++) {
+            File path = ApplicationLoader.applicationContext.getFilesDir();
+            if (path != null) {
+                return path;
+            }
+        }
+        try {
+            ApplicationInfo info = applicationContext.getApplicationInfo();
+            File path = new File(info.dataDir, "files");
+            path.mkdirs();
+            return path;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new File("/data/data/com.demo.chat.messager/files");
     }
 }
 
