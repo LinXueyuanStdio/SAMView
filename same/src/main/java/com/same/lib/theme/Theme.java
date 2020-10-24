@@ -1062,7 +1062,7 @@ public class Theme {
         }
 
         public File getPathToWallpaper() {
-            return !TextUtils.isEmpty(patternSlug) ? new File(ApplicationLoader.getFilesDirFixed(), String.format(Locale.US, "%s_%d_%s.jpg", parentTheme.getKey(), id, patternSlug)) : null;
+            return !TextUtils.isEmpty(patternSlug) ? new File(AndroidUtilities.getFilesDirFixed(), String.format(Locale.US, "%s_%d_%s.jpg", parentTheme.getKey(), id, patternSlug)) : null;
         }
 
         public File saveToFile() {
@@ -1167,8 +1167,8 @@ public class Theme {
             parentAccent = accent;
             if (!TextUtils.isEmpty(info.fileName)) {
                 try {
-                    File fromFile = new File(ApplicationLoader.getFilesDirFixed(), info.fileName);
-                    File toFile = new File(ApplicationLoader.getFilesDirFixed(), fileName = parentTheme.generateWallpaperName(parentAccent, false));
+                    File fromFile = new File(AndroidUtilities.getFilesDirFixed(), info.fileName);
+                    File toFile = new File(AndroidUtilities.getFilesDirFixed(), fileName = parentTheme.generateWallpaperName(parentAccent, false));
                     AndroidUtilities.copyFile(fromFile, toFile);
                 } catch (Exception e) {
                     fileName = "";
@@ -1180,8 +1180,8 @@ public class Theme {
             if (!TextUtils.isEmpty(info.originalFileName)) {
                 if (!info.originalFileName.equals(info.fileName)){
                     try {
-                        File fromFile = new File(ApplicationLoader.getFilesDirFixed(), info.originalFileName);
-                        File toFile = new File(ApplicationLoader.getFilesDirFixed(), originalFileName = parentTheme.generateWallpaperName(parentAccent, true));
+                        File fromFile = new File(AndroidUtilities.getFilesDirFixed(), info.originalFileName);
+                        File toFile = new File(AndroidUtilities.getFilesDirFixed(), originalFileName = parentTheme.generateWallpaperName(parentAccent, true));
                         AndroidUtilities.copyFile(fromFile, toFile);
                     } catch (Exception e) {
                         originalFileName = "";
@@ -1248,8 +1248,8 @@ public class Theme {
             String key = getKey();
             SharedPreferences themeConfig = SharedConfig.applicationContext().getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
             themeConfig.edit().remove(key).apply();
-            new File(ApplicationLoader.getFilesDirFixed(), fileName).delete();
-            new File(ApplicationLoader.getFilesDirFixed(), originalFileName).delete();
+            new File(AndroidUtilities.getFilesDirFixed(), fileName).delete();
+            new File(AndroidUtilities.getFilesDirFixed(), originalFileName).delete();
         }
     }
 
@@ -4192,6 +4192,21 @@ public class Theme {
         editor.commit();
     }
 
+    //region 创建 Drawable
+
+    public static Drawable getThemedDrawable(Context context, int resId, String key) {
+        return getThemedDrawable(context, resId, getColor(key));
+    }
+
+    public static Drawable getThemedDrawable(Context context, int resId, int color) {
+        if (context == null) {
+            return null;
+        }
+        Drawable drawable = context.getResources().getDrawable(resId).mutate();
+        drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+        return drawable;
+    }
+
     @SuppressLint("PrivateApi")
     private static Drawable getStateDrawable(Drawable drawable, int index) {
         if (Build.VERSION.SDK_INT >= 29 && drawable instanceof StateListDrawable) {
@@ -4641,7 +4656,9 @@ public class Theme {
             return stateListDrawable;
         }
     }
+    //endregion
 
+    //region 主题管理
     public static void applyPreviousTheme() {
         if (previousTheme == null) {
             return;
@@ -4696,7 +4713,7 @@ public class Theme {
 
             if (!TextUtils.isEmpty(wallpaperLink[0])) {
                 String ling = wallpaperLink[0];
-                themeInfo.pathToWallpaper = new File(ApplicationLoader.getFilesDirFixed(), Utilities.MD5(ling) + ".wp").getAbsolutePath();
+                themeInfo.pathToWallpaper = new File(AndroidUtilities.getFilesDirFixed(), Utilities.MD5(ling) + ".wp").getAbsolutePath();
                 try {
                     Uri data = Uri.parse(ling);
                     themeInfo.slug = data.getQueryParameter("slug");
@@ -4757,6 +4774,14 @@ public class Theme {
         return null;
     }
 
+    /**
+     * 应用主题文件
+     * @param file 主题文件
+     * @param themeName 主题名字 xxx.attheme 文件名
+     * @param theme Skin
+     * @param temporary 暂时的
+     * @return ThemeInfo
+     */
     public static ThemeInfo applyThemeFile(File file, String themeName, Skin theme, boolean temporary) {
         try {
             if (!themeName.toLowerCase().endsWith(".attheme")) {
@@ -4775,10 +4800,10 @@ public class Theme {
                 File finalFile;
                 if (theme != null) {
                     key = "remote" + theme.id;
-                    finalFile = new File(ApplicationLoader.getFilesDirFixed(), key + ".attheme");
+                    finalFile = new File(AndroidUtilities.getFilesDirFixed(), key + ".attheme");
                 } else {
                     key = themeName;
-                    finalFile = new File(ApplicationLoader.getFilesDirFixed(), key);
+                    finalFile = new File(AndroidUtilities.getFilesDirFixed(), key);
                 }
                 if (!AndroidUtilities.copyFile(file, finalFile)) {
                     applyPreviousTheme();
@@ -4851,7 +4876,7 @@ public class Theme {
                 themedWallpaperFileOffset = offset != null ? offset : -1;
                 if (!TextUtils.isEmpty(wallpaperLink[0])) {
                     themedWallpaperLink = wallpaperLink[0];
-                    String newPathToFile = new File(ApplicationLoader.getFilesDirFixed(), Utilities.MD5(themedWallpaperLink) + ".wp").getAbsolutePath();
+                    String newPathToFile = new File(AndroidUtilities.getFilesDirFixed(), Utilities.MD5(themedWallpaperLink) + ".wp").getAbsolutePath();
                     try {
                         if (themeInfo.pathToWallpaper != null && !themeInfo.pathToWallpaper.equals(newPathToFile)) {
                             new File(themeInfo.pathToWallpaper).delete();
@@ -5117,6 +5142,15 @@ public class Theme {
         saveThemeAccents(theme, save, remove, indexOnly, upload, false);
     }
 
+    /**
+     * TODO
+     * @param theme
+     * @param save
+     * @param remove
+     * @param indexOnly
+     * @param upload
+     * @param migration
+     */
     public static void saveThemeAccents(ThemeInfo theme, boolean save, boolean remove, boolean indexOnly, boolean upload, boolean migration) {
         if (save) {
             SharedPreferences preferences = SharedConfig.applicationContext().getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
@@ -5361,9 +5395,6 @@ public class Theme {
                 lastBrightnessValue = 1.0f;
                 sensorManager.unregisterListener(ambientSensorListener, lightSensor);
                 lightSensorRegistered = false;
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d("light sensor unregistered");
-                }
             }
         }
     }
@@ -5411,9 +5442,6 @@ public class Theme {
             if (!lightSensorRegistered && lightSensor != null && ambientSensorListener != null) {
                 sensorManager.registerListener(ambientSensorListener, lightSensor, 500000);
                 lightSensorRegistered = true;
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d("light sensor registered");
-                }
             }
             if (lastBrightnessValue <= autoNightBrighnessThreshold) {
                 if (!switchNightRunnableScheduled) {
@@ -5525,7 +5553,7 @@ public class Theme {
 
     public static ThemeInfo createNewTheme(String name) {
         ThemeInfo newTheme = new ThemeInfo();
-        newTheme.pathToFile = new File(ApplicationLoader.getFilesDirFixed(), "theme" + Utilities.random.nextLong() + ".attheme").getAbsolutePath();
+        newTheme.pathToFile = new File(AndroidUtilities.getFilesDirFixed(), "theme" + AndroidUtilities.random.nextLong() + ".attheme").getAbsolutePath();
         newTheme.name = name;
         themedWallpaperLink = getWallpaperUrl(currentTheme.overrideWallpaper);
         saveCurrentTheme(newTheme, true, true, false);
@@ -5610,7 +5638,7 @@ public class Theme {
                 if (newTheme) {
                     try {
                         Bitmap bitmap = ((BitmapDrawable) wallpaperToSave).getBitmap();
-                        FileOutputStream wallpaperStream = new FileOutputStream(new File(ApplicationLoader.getFilesDirFixed(), Utilities.MD5(wallpaperLink) + ".wp"));
+                        FileOutputStream wallpaperStream = new FileOutputStream(new File(AndroidUtilities.getFilesDirFixed(), Utilities.MD5(wallpaperLink) + ".wp"));
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 87, wallpaperStream);
                         wallpaperStream.close();
                     } catch (Throwable e) {
@@ -5812,7 +5840,7 @@ public class Theme {
 //                        if (info == null) {
 //                            info = new ThemeInfo();
 //                            info.account = currentAccount;
-//                            info.pathToFile = new File(ApplicationLoader.getFilesDirFixed(), key + ".attheme").getAbsolutePath();
+//                            info.pathToFile = new File(AndroidUtilities.getFilesDirFixed(), key + ".attheme").getAbsolutePath();
 //                            themes.add(info);
 //                            otherThemes.add(info);
 //                            added = true;
@@ -5966,7 +5994,7 @@ public class Theme {
             theme.info = info;
             theme.name = info.title;
             File oldPath = new File(theme.pathToFile);
-            File newPath = new File(ApplicationLoader.getFilesDirFixed(), key + ".attheme");
+            File newPath = new File(AndroidUtilities.getFilesDirFixed(), key + ".attheme");
             if (!oldPath.equals(newPath)) {
                 try {
                     AndroidUtilities.copyFile(oldPath, newPath);
@@ -5986,7 +6014,7 @@ public class Theme {
     }
 
     public static File getAssetFile(String assetName) {
-        File file = new File(ApplicationLoader.getFilesDirFixed(), assetName);
+        File file = new File(AndroidUtilities.getFilesDirFixed(), assetName);
         long size;
         try {
             InputStream stream = SharedConfig.applicationContext().getAssets().open(assetName);
@@ -6124,7 +6152,7 @@ public class Theme {
                     BitmapFactory.Options options = new BitmapFactory.Options();
                     options.inJustDecodeBounds = true;
                     if (!TextUtils.isEmpty(wallpaperLink[0])) {
-                        pathToWallpaper = new File(ApplicationLoader.getFilesDirFixed(), Utilities.MD5(wallpaperLink[0]) + ".wp");
+                        pathToWallpaper = new File(AndroidUtilities.getFilesDirFixed(), Utilities.MD5(wallpaperLink[0]) + ".wp");
                         BitmapFactory.decodeFile(pathToWallpaper.getAbsolutePath(), options);
                     } else {
                         stream = new FileInputStream(pathToFile);
@@ -6321,7 +6349,31 @@ public class Theme {
         }
         return stringMap;
     }
+    //endregion
+    
+    //region 资源管理
+    public static void destroyResources() {
 
+    }
+
+    public static void reloadAllResources(Context context) {
+        destroyResources();
+        if (chat_msgInDrawable != null) {
+            chat_msgInDrawable = null;
+            currentColor = 0;
+            currentSelectedColor = 0;
+            createChatResources(context, false);
+        }
+        if (dialogs_namePaint != null) {
+            dialogs_namePaint = null;
+            createDialogsResources(context);
+        }
+        if (profile_verifiedDrawable != null) {
+            profile_verifiedDrawable = null;
+        }
+    }
+    
+    //region 业务：通用
     public static void createCommonResources(Context context) {
         if (dividerPaint == null) {
             dividerPaint = new Paint();
@@ -6437,7 +6489,9 @@ public class Theme {
         dialogs_unarchiveDrawable.setLayerColor("Box1.**", getNonAnimatedColor(key_chats_archiveIcon));
         dialogs_unarchiveDrawable.commitApplyLayerColors();
     }
+    //endregion
 
+    //region 业务：对话
     /**
      * 对话列表的UI资源
      * @param context 上下文
@@ -6537,28 +6591,9 @@ public class Theme {
         setDrawableColorByKey(dialogs_holidayDrawable, key_actionBarDefaultTitle);
         setDrawableColorByKey(dialogs_scamDrawable, key_chats_draft);
     }
-
-    public static void destroyResources() {
-
-    }
-
-    public static void reloadAllResources(Context context) {
-        destroyResources();
-        if (chat_msgInDrawable != null) {
-            chat_msgInDrawable = null;
-            currentColor = 0;
-            currentSelectedColor = 0;
-            createChatResources(context, false);
-        }
-        if (dialogs_namePaint != null) {
-            dialogs_namePaint = null;
-            createDialogsResources(context);
-        }
-        if (profile_verifiedDrawable != null) {
-            profile_verifiedDrawable = null;
-        }
-    }
-
+    //endregion
+    
+    //region 业务：聊天
     /**
      * 聊天的UI资源
      * @param context 上下文
@@ -7155,7 +7190,9 @@ public class Theme {
             colorPressedFilter2 = new PorterDuffColorFilter(servicePressedColor2, PorterDuff.Mode.MULTIPLY);
         }
     }
+    //endregion
 
+    //region 业务：身份
     /**
      * 身份的UI资源
      * @param context 上下文
@@ -7173,6 +7210,17 @@ public class Theme {
         }
 
         profile_aboutTextPaint.setTextSize(AndroidUtilities.dp(16));
+    }
+    public static void applyProfileTheme() {
+        if (profile_verifiedDrawable == null) {
+            return;
+        }
+
+        profile_aboutTextPaint.setColor(getColor(key_windowBackgroundWhiteBlackText));
+        profile_aboutTextPaint.linkColor = getColor(key_windowBackgroundWhiteLinkText);
+
+        setDrawableColorByKey(profile_verifiedDrawable, key_profile_verifiedBackground);
+        setDrawableColorByKey(profile_verifiedCheckDrawable, key_profile_verifiedCheck);
     }
 
     private static ColorFilter currentShareColorFilter;
@@ -7194,32 +7242,10 @@ public class Theme {
             return currentShareColorFilter;
         }
     }
-
-    public static void applyProfileTheme() {
-        if (profile_verifiedDrawable == null) {
-            return;
-        }
-
-        profile_aboutTextPaint.setColor(getColor(key_windowBackgroundWhiteBlackText));
-        profile_aboutTextPaint.linkColor = getColor(key_windowBackgroundWhiteLinkText);
-
-        setDrawableColorByKey(profile_verifiedDrawable, key_profile_verifiedBackground);
-        setDrawableColorByKey(profile_verifiedCheckDrawable, key_profile_verifiedCheck);
-    }
-
-    public static Drawable getThemedDrawable(Context context, int resId, String key) {
-        return getThemedDrawable(context, resId, getColor(key));
-    }
-
-    public static Drawable getThemedDrawable(Context context, int resId, int color) {
-        if (context == null) {
-            return null;
-        }
-        Drawable drawable = context.getResources().getDrawable(resId).mutate();
-        drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-        return drawable;
-    }
-
+    //endregion
+    //endregion
+    
+    //region 工具函数
     public static int getDefaultColor(String key) {
         Integer value = defaultColors.get(key);
         if (value == null) {
@@ -7544,5 +7570,6 @@ public class Theme {
         }
         return null;
     }
+    //endregion
 
 }
