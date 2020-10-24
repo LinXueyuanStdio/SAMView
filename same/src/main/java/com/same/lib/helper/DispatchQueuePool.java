@@ -1,4 +1,4 @@
-package com.same.lib.core;
+package com.same.lib.helper;
 
 import android.os.SystemClock;
 

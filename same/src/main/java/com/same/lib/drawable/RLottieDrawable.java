@@ -1,4 +1,4 @@
-package com.same.lib.core;
+package com.same.lib.drawable;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -15,6 +15,7 @@ import android.view.HapticFeedbackConstants;
 import android.view.View;
 
 import com.same.lib.R;
+import com.same.lib.helper.DispatchQueuePool;
 import com.same.lib.util.AndroidUtilities;
 import com.same.lib.util.SharedConfig;
 

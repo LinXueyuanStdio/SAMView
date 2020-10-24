@@ -2,12 +2,16 @@ package com.same.lib.util;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.text.Selection;
@@ -26,6 +30,8 @@ import android.widget.EdgeEffect;
 import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import com.same.lib.helper.Bitmaps;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -385,6 +391,130 @@ public class AndroidUtilities {
 
     public static int getPaddingEnd(View view) {
         return SharedConfig.isRTL ? view.getPaddingLeft() : view.getPaddingRight();
+    }
+
+    public static int calcBitmapColor(Bitmap bitmap) {
+        try {
+            Bitmap b = Bitmaps.createScaledBitmap(bitmap, 1, 1, true);
+            if (b != null) {
+                int bitmapColor = b.getPixel(0, 0);
+                if (bitmap != b) {
+                    b.recycle();
+                }
+                return bitmapColor;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static int[] calcDrawableColor(Drawable drawable) {
+        int bitmapColor = 0xff000000;
+        int[] result = new int[4];
+        try {
+            if (drawable instanceof BitmapDrawable) {
+                Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+                bitmapColor = calcBitmapColor(bitmap);
+            } else if (drawable instanceof ColorDrawable) {
+                bitmapColor = ((ColorDrawable) drawable).getColor();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        double[] hsv = rgbToHsv((bitmapColor >> 16) & 0xff, (bitmapColor >> 8) & 0xff, bitmapColor & 0xff);
+        hsv[1] = Math.min(1.0, hsv[1] + 0.05 + 0.1 * (1.0 - hsv[1]));
+        double v = Math.max(0, hsv[2] * 0.65);
+        int[] rgb = hsvToRgb(hsv[0], hsv[1], v);
+        result[0] = Color.argb(0x66, rgb[0], rgb[1], rgb[2]);
+        result[1] = Color.argb(0x88, rgb[0], rgb[1], rgb[2]);
+
+        double v2 = Math.max(0, hsv[2] * 0.72);
+        rgb = hsvToRgb(hsv[0], hsv[1], v2);
+        result[2] = Color.argb(0x66, rgb[0], rgb[1], rgb[2]);
+        result[3] = Color.argb(0x88, rgb[0], rgb[1], rgb[2]);
+        return result;
+    }
+
+
+    public static double[] rgbToHsv(int color) {
+        return rgbToHsv(Color.red(color), Color.green(color), Color.blue(color));
+    }
+
+    public static double[] rgbToHsv(int r, int g, int b) {
+        double rf = r / 255.0;
+        double gf = g / 255.0;
+        double bf = b / 255.0;
+        double max = (rf > gf && rf > bf) ? rf : (gf > bf) ? gf : bf;
+        double min = (rf < gf && rf < bf) ? rf : (gf < bf) ? gf : bf;
+        double h, s;
+        double d = max - min;
+        s = max == 0 ? 0 : d / max;
+        if (max == min) {
+            h = 0;
+        } else {
+            if (rf > gf && rf > bf) {
+                h = (gf - bf) / d + (gf < bf ? 6 : 0);
+            } else if (gf > bf) {
+                h = (bf - rf) / d + 2;
+            } else {
+                h = (rf - gf) / d + 4;
+            }
+            h /= 6;
+        }
+        return new double[]{h, s, max};
+    }
+
+    public static int hsvToColor(double h, double s, double v) {
+        int[] rgb = hsvToRgb(h, s, v);
+        return Color.argb(0xff, rgb[0], rgb[1], rgb[2]);
+    }
+
+    public static int[] hsvToRgb(double h, double s, double v) {
+        double r = 0, g = 0, b = 0;
+        double i = (int) Math.floor(h * 6);
+        double f = h * 6 - i;
+        double p = v * (1 - s);
+        double q = v * (1 - f * s);
+        double t = v * (1 - (1 - f) * s);
+        switch ((int) i % 6) {
+            case 0:
+                r = v;
+                g = t;
+                b = p;
+                break;
+            case 1:
+                r = q;
+                g = v;
+                b = p;
+                break;
+            case 2:
+                r = p;
+                g = v;
+                b = t;
+                break;
+            case 3:
+                r = p;
+                g = q;
+                b = v;
+                break;
+            case 4:
+                r = t;
+                g = p;
+                b = v;
+                break;
+            case 5:
+                r = v;
+                g = p;
+                b = q;
+                break;
+        }
+        return new int[]{(int) (r * 255), (int) (g * 255), (int) (b * 255)};
+    }
+
+    public static float computePerceivedBrightness(int color) {
+        return (Color.red(color) * 0.2126f + Color.green(color) * 0.7152f + Color.blue(color) * 0.0722f) / 255f;
     }
 }
 

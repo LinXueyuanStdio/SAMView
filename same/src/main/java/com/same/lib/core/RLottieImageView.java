@@ -2,6 +2,7 @@ package com.same.lib.core;
 
 import android.content.Context;
 
+import com.same.lib.drawable.RLottieDrawable;
 import com.same.lib.util.AndroidUtilities;
 
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.same.lib.core;
+package com.same.lib.drawable;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
