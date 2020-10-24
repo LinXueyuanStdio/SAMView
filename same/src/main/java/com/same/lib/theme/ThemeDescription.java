@@ -24,11 +24,11 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.same.lib.core.ActionBar;
-import com.same.lib.core.BackDrawable;
-import com.same.lib.core.CombinedDrawable;
+import com.same.lib.drawable.BackDrawable;
+import com.same.lib.drawable.CombinedDrawable;
 import com.same.lib.core.EditTextBoldCursor;
 import com.same.lib.core.LineProgressView;
-import com.same.lib.core.RLottieDrawable;
+import com.same.lib.drawable.RLottieDrawable;
 import com.same.lib.core.RLottieImageView;
 import com.same.lib.core.RadialProgressView;
 import com.same.lib.core.SimpleTextView;
@@ -527,21 +527,7 @@ public class ThemeDescription {
                                 }
                                 if ((changeFlags & FLAG_BACKGROUND) != 0 && object instanceof View) {
                                     View view = (View) object;
-                                    Drawable background = view.getBackground();
-                                    if (background instanceof MessageBackgroundDrawable) {
-                                        ((MessageBackgroundDrawable) background).setColor(color);
-                                    } else {
-                                        view.setBackgroundColor(color);
-                                    }
-                                } else if (object instanceof EditTextCaption) {
-                                    if ((changeFlags & FLAG_HINTTEXTCOLOR) != 0) {
-                                        ((EditTextCaption) object).setHintColor(color);
-                                        ((EditTextCaption) object).setHintTextColor(color);
-                                    } else if ((changeFlags & FLAG_CURSORCOLOR) != 0) {
-                                        ((EditTextCaption) object).setCursorColor(color);
-                                    } else {
-                                        ((EditTextCaption) object).setTextColor(color);
-                                    }
+                                    view.setBackgroundColor(color);
                                 } else if (object instanceof SimpleTextView) {
                                     if ((changeFlags & FLAG_LINKCOLOR) != 0) {
                                         ((SimpleTextView) object).setLinkTextColor(color);
@@ -587,25 +573,8 @@ public class ThemeDescription {
                                     } else {
                                         imageView.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
                                     }
-                                } else if (object instanceof BackupImageView) {
-                                    Drawable drawable = ((BackupImageView) object).getImageReceiver().getStaticThumb();
-                                    if (drawable instanceof CombinedDrawable) {
-                                        if ((changeFlags & FLAG_BACKGROUNDFILTER) != 0) {
-                                            ((CombinedDrawable) drawable).getBackground().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-                                        } else {
-                                            ((CombinedDrawable) drawable).getIcon().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-                                        }
-                                    } else if (drawable != null) {
-                                        drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-                                    }
                                 } else if (object instanceof Drawable) {
-                                    if (object instanceof LetterDrawable) {
-                                        if ((changeFlags & FLAG_BACKGROUNDFILTER) != 0) {
-                                            ((LetterDrawable) object).setBackgroundColor(color);
-                                        } else {
-                                            ((LetterDrawable) object).setColor(color);
-                                        }
-                                    } else if (object instanceof CombinedDrawable) {
+                                   if (object instanceof CombinedDrawable) {
                                         if ((changeFlags & FLAG_BACKGROUNDFILTER) != 0) {
                                             ((CombinedDrawable) object).getBackground().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
                                         } else {
@@ -624,8 +593,6 @@ public class ThemeDescription {
                                     } else if ((changeFlags & FLAG_CHECKBOXCHECK) != 0) {
                                         ((CheckBox) object).setCheckColor(color);
                                     }
-                                } else if (object instanceof GroupCreateCheckBox) {
-                                    ((GroupCreateCheckBox) object).updateColors();
                                 } else if (object instanceof Integer) {
                                     field.set(child, color);
                                 } else if (object instanceof RadioButton) {
@@ -653,12 +620,6 @@ public class ThemeDescription {
                                 } else if (object instanceof Paint) {
                                     ((Paint) object).setColor(color);
                                     child.invalidate();
-                                } else if (object instanceof SeekBarView) {
-                                    if ((changeFlags & FLAG_PROGRESSBAR) != 0) {
-                                        ((SeekBarView) object).setOuterColor(color);
-                                    } else {
-                                        ((SeekBarView) object).setInnerColor(color);
-                                    }
                                 }
                             }
                         }
@@ -666,8 +627,6 @@ public class ThemeDescription {
                         e.printStackTrace();
                         notFoundCachedFields.put(key, true);
                     }
-                } else if (child instanceof GroupCreateSpan) {
-                    ((GroupCreateSpan) child).updateColors();
                 }
             }
         }
