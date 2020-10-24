@@ -33,6 +33,9 @@ import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.Theme;
 import com.same.lib.util.AndroidUtilities;
 import com.same.lib.util.SharedConfig;
+import com.timecat.component.locale.MLang;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 /**
  * @author 林学渊
@@ -821,7 +824,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 searchContainer.addView(searchFieldCaption, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 36, Gravity.CENTER_VERTICAL | Gravity.RIGHT, 0, 5.5f, 48, 0));
             }
 
-            clearButton = new ImageView(getContext()) {
+            clearButton = new AppCompatImageView(getContext()) {
                 @Override
                 protected void onDetachedFromWindow() {
                     super.onDetachedFromWindow();
@@ -859,7 +862,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 searchField.requestFocus();
                 AndroidUtilities.showKeyboard(searchField);
             });
-            clearButton.setContentDescription(LocaleController.getString("ClearButton", R.string.ClearButton));
+            clearButton.setContentDescription(MLang.getString(getContext(), "ClearButton", R.string.ClearButton));
             searchContainer.addView(clearButton, LayoutHelper.createFrame(48, LayoutHelper.MATCH_PARENT, Gravity.CENTER_VERTICAL | Gravity.RIGHT));
         }
         isSearchField = value;

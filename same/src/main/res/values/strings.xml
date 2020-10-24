@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="AccDescrMoreOptions">More options</string>
+    <string name="AccDescrGoBack">Go back</string>
+    <string name="ClearButton">Clear</string>
+    <string name="AppName">SAMView</string>
+    <string name="StopLoading">Stop loading?</string>
+    <string name="WaitMore">Wait more</string>
+    <string name="Stop">Stop</string>
+
+</resources>

@@ -39,6 +39,7 @@ import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
 import com.same.lib.util.AndroidUtilities;
+import com.same.lib.util.NotificationCenter;
 import com.same.lib.util.SharedConfig;
 
 import java.util.ArrayList;
@@ -248,10 +249,10 @@ public class BottomSheet extends Dialog {
                         if (currentAnimation != null && currentAnimation.equals(animation)) {
                             currentAnimation = null;
                         }
-                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 512);
+                        NotificationCenter.postNotificationName(NotificationCenter.startAllHeavyOperations);
                     }
                 });
-                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, 512);
+                NotificationCenter.postNotificationName(NotificationCenter.stopAllHeavyOperations);
                 currentAnimation.start();
             }
         }
@@ -1001,7 +1002,7 @@ public class BottomSheet extends Dialog {
                             getWindow().setAttributes(params);
                         }
                     }
-                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 512);
+                    NotificationCenter.postNotificationName(NotificationCenter.startAllHeavyOperations);
                 }
 
                 @Override
@@ -1012,7 +1013,7 @@ public class BottomSheet extends Dialog {
                     }
                 }
             });
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, 512);
+            NotificationCenter.postNotificationName(NotificationCenter.stopAllHeavyOperations);
             currentSheetAnimation.start();
         }
     }
@@ -1102,7 +1103,7 @@ public class BottomSheet extends Dialog {
                         }
                     });
                 }
-                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 512);
+                NotificationCenter.postNotificationName(NotificationCenter.startAllHeavyOperations);
             }
 
             @Override
@@ -1113,7 +1114,7 @@ public class BottomSheet extends Dialog {
                 }
             }
         });
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, 512);
+        NotificationCenter.postNotificationName(NotificationCenter.stopAllHeavyOperations);
         currentSheetAnimation.start();
     }
 
@@ -1156,7 +1157,7 @@ public class BottomSheet extends Dialog {
                             }
                         });
                     }
-                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 512);
+                    NotificationCenter.postNotificationName(NotificationCenter.startAllHeavyOperations);
                 }
 
                 @Override
@@ -1167,7 +1168,7 @@ public class BottomSheet extends Dialog {
                     }
                 }
             });
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, 512);
+            NotificationCenter.postNotificationName(NotificationCenter.stopAllHeavyOperations);
             currentSheetAnimation.start();
         }
     }

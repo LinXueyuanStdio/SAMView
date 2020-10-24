@@ -36,6 +36,7 @@ import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
 import com.same.lib.util.AndroidUtilities;
 import com.same.lib.util.SharedConfig;
+import com.timecat.component.locale.MLang;
 
 import java.util.ArrayList;
 
@@ -789,10 +790,10 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             return;
         }
         Builder builder = new Builder(getContext());
-        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-        builder.setMessage(LocaleController.getString("StopLoading", R.string.StopLoading));
-        builder.setPositiveButton(LocaleController.getString("WaitMore", R.string.WaitMore), null);
-        builder.setNegativeButton(LocaleController.getString("Stop", R.string.Stop), (dialogInterface, i) -> {
+        builder.setTitle(MLang.getString(getContext(), "AppName", R.string.AppName));
+        builder.setMessage(MLang.getString(getContext(), "StopLoading", R.string.StopLoading));
+        builder.setPositiveButton(MLang.getString(getContext(), "WaitMore", R.string.WaitMore), null);
+        builder.setNegativeButton(MLang.getString(getContext(), "Stop", R.string.Stop), (dialogInterface, i) -> {
             if (onCancelListener != null) {
                 onCancelListener.onCancel(AlertDialog.this);
             }

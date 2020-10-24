@@ -23,7 +23,9 @@ import android.widget.RadioButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.same.lib.core.ActionBar;
 import com.same.lib.core.BackDrawable;
+import com.same.lib.core.CombinedDrawable;
 import com.same.lib.core.EditTextBoldCursor;
 import com.same.lib.core.LineProgressView;
 import com.same.lib.core.RLottieDrawable;
@@ -111,9 +113,6 @@ public class ThemeDescription {
         changeFlags = flags;
         listClasses = classes;
         delegate = themeDescriptionDelegate;
-        if (viewToInvalidate instanceof EditTextEmoji) {
-            viewToInvalidate = ((EditTextEmoji) viewToInvalidate).getEditText();
-        }
     }
 
     public ThemeDescription(View view, int flags, Class[] classes, Paint paint, Drawable[] drawables, ThemeDescriptionDelegate themeDescriptionDelegate, String key) {
@@ -126,9 +125,6 @@ public class ThemeDescription {
         changeFlags = flags;
         listClasses = classes;
         delegate = themeDescriptionDelegate;
-        if (viewToInvalidate instanceof EditTextEmoji) {
-            viewToInvalidate = ((EditTextEmoji) viewToInvalidate).getEditText();
-        }
     }
 
     public ThemeDescription(View view, int flags, Class[] classes, RLottieDrawable[] drawables, String layerName, String key) {
@@ -138,9 +134,6 @@ public class ThemeDescription {
         viewToInvalidate = view;
         changeFlags = flags;
         listClasses = classes;
-        if (viewToInvalidate instanceof EditTextEmoji) {
-            viewToInvalidate = ((EditTextEmoji) viewToInvalidate).getEditText();
-        }
     }
 
     public ThemeDescription(View view, int flags, Class[] classes, String[] classesFields, Paint[] paint, Drawable[] drawables, ThemeDescriptionDelegate themeDescriptionDelegate, String key) {
@@ -159,9 +152,6 @@ public class ThemeDescription {
         delegate = themeDescriptionDelegate;
         cachedFields = new HashMap<>();
         notFoundCachedFields = new HashMap<>();
-        if (viewToInvalidate instanceof EditTextEmoji) {
-            viewToInvalidate = ((EditTextEmoji) viewToInvalidate).getEditText();
-        }
     }
 
     public ThemeDescription(View view, int flags, Class[] classes, String[] classesFields, String layerName, String key) {
@@ -173,9 +163,6 @@ public class ThemeDescription {
         listClassesFieldName = classesFields;
         cachedFields = new HashMap<>();
         notFoundCachedFields = new HashMap<>();
-        if (viewToInvalidate instanceof EditTextEmoji) {
-            viewToInvalidate = ((EditTextEmoji) viewToInvalidate).getEditText();
-        }
     }
 
     public ThemeDescriptionDelegate setDelegateDisabled() {
@@ -246,11 +233,7 @@ public class ThemeDescription {
             if ((changeFlags & FLAG_CHECKTAG) == 0 || checkTag(currentKey, viewToInvalidate)) {
                 if ((changeFlags & FLAG_BACKGROUND) != 0) {
                     Drawable background = viewToInvalidate.getBackground();
-                    if (background instanceof MessageBackgroundDrawable) {
-                        ((MessageBackgroundDrawable) background).setColor(color);
-                    } else {
-                        viewToInvalidate.setBackgroundColor(color);
-                    }
+                    viewToInvalidate.setBackgroundColor(color);
                 }
                 if ((changeFlags & FLAG_BACKGROUNDFILTER) != 0) {
                     if ((changeFlags & FLAG_PROGRESSBAR) != 0) {
@@ -317,16 +300,6 @@ public class ThemeDescription {
                 ((ActionBar) viewToInvalidate).setPopupBackgroundColor(color, false);
             }
         }
-        if (viewToInvalidate instanceof VideoTimelineView) {
-            ((VideoTimelineView) viewToInvalidate).setColor(color);
-        }
-        if (viewToInvalidate instanceof EmptyTextProgressView) {
-            if ((changeFlags & FLAG_TEXTCOLOR) != 0) {
-                ((EmptyTextProgressView) viewToInvalidate).setTextColor(color);
-            } else if ((changeFlags & FLAG_PROGRESSBAR) != 0) {
-                ((EmptyTextProgressView) viewToInvalidate).setProgressBarColor(color);
-            }
-        }
         if (viewToInvalidate instanceof RadialProgressView) {
             ((RadialProgressView) viewToInvalidate).setProgressColor(color);
         } else if (viewToInvalidate instanceof LineProgressView) {
@@ -342,12 +315,8 @@ public class ThemeDescription {
             if ((changeFlags & FLAG_CHECKTAG) == 0 || checkTag(currentKey, viewToInvalidate)) {
                 if (viewToInvalidate instanceof TextView) {
                     ((TextView) viewToInvalidate).setTextColor(color);
-                } else if (viewToInvalidate instanceof NumberTextView) {
-                    ((NumberTextView) viewToInvalidate).setTextColor(color);
                 } else if (viewToInvalidate instanceof SimpleTextView) {
                     ((SimpleTextView) viewToInvalidate).setTextColor(color);
-                } else if (viewToInvalidate instanceof ChatBigEmptyView) {
-                    ((ChatBigEmptyView) viewToInvalidate).setTextColor(color);
                 }
             }
         }

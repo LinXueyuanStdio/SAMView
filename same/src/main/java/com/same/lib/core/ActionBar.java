@@ -26,6 +26,7 @@ import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.Theme;
 import com.same.lib.util.AndroidUtilities;
 import com.same.lib.util.SharedConfig;
+import com.timecat.component.locale.MLang;
 
 import java.util.ArrayList;
 
@@ -126,7 +127,7 @@ public class ActionBar extends FrameLayout {
                 actionBarMenuOnItemClick.onItemClick(-1);
             }
         });
-        backButtonImageView.setContentDescription(LocaleController.getString("AccDescrGoBack", R.string.AccDescrGoBack));
+        backButtonImageView.setContentDescription(MLang.getString(getContext(), "AccDescrGoBack", R.string.AccDescrGoBack));
     }
 
     public void setBackButtonDrawable(Drawable drawable) {
@@ -868,7 +869,7 @@ public class ActionBar extends FrameLayout {
         if (!allowOverlayTitle || parentFragment.parentLayout == null) {
             return;
         }
-        CharSequence textToSet = title != null ? LocaleController.getString(title, titleId) : lastTitle;
+        CharSequence textToSet = title != null ? MLang.getString(getContext(), title, titleId) : lastTitle;
         if (textToSet != null && titleTextView == null) {
             createTitleTextView();
         }

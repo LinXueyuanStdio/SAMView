@@ -42,6 +42,7 @@ import android.widget.TextView;
 import com.same.lib.R;
 import com.same.lib.theme.Theme;
 import com.same.lib.util.AndroidUtilities;
+import com.timecat.component.locale.MLang;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -648,7 +649,7 @@ public final class FloatingToolbar {
                 mOverflowPanel.setAlpha(1);
                 mOverflowPanel.setVisibility(View.VISIBLE);
                 mOverflowButton.setImageDrawable(mArrow);
-                mOverflowButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
+                mOverflowButton.setContentDescription(MLang.getString(mContext, "AccDescrMoreOptions", R.string.AccDescrMoreOptions));
 
                 if (isInRTLMode()) {
                     mContentContainer.setX(mMarginHorizontal);
@@ -680,7 +681,7 @@ public final class FloatingToolbar {
                 mOverflowPanel.setAlpha(0);
                 mOverflowPanel.setVisibility(View.INVISIBLE);
                 mOverflowButton.setImageDrawable(mOverflow);
-                mOverflowButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
+                mOverflowButton.setContentDescription(MLang.getString(mContext, "AccDescrMoreOptions", R.string.AccDescrMoreOptions));
                 if (hasOverflow()) {
                     if (isInRTLMode()) {
                         mContentContainer.setX(mMarginHorizontal);

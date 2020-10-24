@@ -11,6 +11,7 @@ import android.content.Context;
  */
 public class SharedConfig {
     public static boolean smoothKeyboard = false;
+    public static boolean DEBUG_PRIVATE_VERSION = false;
     public static boolean DEBUG_VERSION = false;
     public static boolean isRTL = false;
     public static boolean view_animations = false;

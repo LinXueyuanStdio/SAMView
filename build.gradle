@@ -5,6 +5,7 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven { url "https://raw.githubusercontent.com/LinXueyuanStdio/MLang/main/dist" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.0.0'
@@ -19,6 +20,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url "https://raw.githubusercontent.com/LinXueyuanStdio/MLang/main" }
     }
 }
 
