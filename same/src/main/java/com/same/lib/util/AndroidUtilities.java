@@ -1,6 +1,7 @@
 package com.same.lib.util;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Bitmap;
@@ -35,10 +36,17 @@ import android.widget.TextView;
 import com.same.lib.helper.Bitmaps;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.security.SecureRandom;
 import java.util.Hashtable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import androidx.viewpager.widget.ViewPager;
 
@@ -83,8 +91,8 @@ public class AndroidUtilities {
     public static SecureRandom random = new SecureRandom();
 
 
-    public static void init(Context context){
-        if(applicationInited ){
+    public static void init(Context context) {
+        if (applicationInited) {
             return;
         }
 
@@ -213,7 +221,7 @@ public class AndroidUtilities {
     }
 
     public static CharSequence getTrimmedString(CharSequence src) {
-        if(src == null){
+        if (src == null) {
             return "";
         }
 
@@ -251,6 +259,7 @@ public class AndroidUtilities {
         }
         return isTablet;
     }
+
     public static boolean isSmallTablet() {
         float minSide = Math.min(displaySize.x, displaySize.y) / density;
         return minSide <= 700;
@@ -282,6 +291,7 @@ public class AndroidUtilities {
             return typefaceCache.get(assetPath);
         }
     }
+
     public static int getOffsetColor(int color1, int color2, float offset, float alpha) {
         int rF = Color.red(color2);
         int gF = Color.green(color2);
@@ -293,6 +303,7 @@ public class AndroidUtilities {
         int aS = Color.alpha(color1);
         return Color.argb((int) ((aS + (aF - aS) * offset) * alpha), (int) (rS + (rF - rS) * offset), (int) (gS + (gF - gS) * offset), (int) (bS + (bF - bS) * offset));
     }
+
     public static class LinkMovementMethodMy extends LinkMovementMethod {
         @Override
         public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
@@ -374,6 +385,7 @@ public class AndroidUtilities {
             }
         }
     }
+
     public static void setPadding(View view, float padding) {
         final int px = padding != 0 ? AndroidUtilities.dp(padding) : 0;
         view.setPadding(px, px, px, px);
@@ -522,7 +534,7 @@ public class AndroidUtilities {
 
     public static File getFilesDirFixed() {
         for (int a = 0; a < 10; a++) {
-            File path = ApplicationLoader.applicationContext.getFilesDir();
+            File path = SharedConfig.applicationContext().getFilesDir();
             if (path != null) {
                 return path;
             }
@@ -537,5 +549,199 @@ public class AndroidUtilities {
         }
         return new File("/data/data/com.demo.chat.messager/files");
     }
+
+    public static boolean copyFile(InputStream sourceFile, File destFile) throws IOException {
+        OutputStream out = new FileOutputStream(destFile);
+        byte[] buf = new byte[4096];
+        int len;
+        while ((len = sourceFile.read(buf)) > 0) {
+            Thread.yield();
+            out.write(buf, 0, len);
+        }
+        out.close();
+        return true;
+    }
+
+    public static boolean copyFile(File sourceFile, File destFile) throws IOException {
+        if (sourceFile.equals(destFile)) {
+            return true;
+        }
+        if (!destFile.exists()) {
+            destFile.createNewFile();
+        }
+        try (FileInputStream source = new FileInputStream(sourceFile); FileOutputStream destination = new FileOutputStream(destFile)) {
+            destination.getChannel().transferFrom(source.getChannel(), 0, source.getChannel().size());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public static Pattern pattern = Pattern.compile("[\\-0-9]+");
+
+    public static Integer parseInt(CharSequence value) {
+        if (value == null) {
+            return 0;
+        } else {
+            int val = 0;
+
+            try {
+                Matcher matcher = pattern.matcher(value);
+                if (matcher.find()) {
+                    String num = matcher.group(0);
+                    val = Integer.parseInt(num);
+                }
+            } catch (Exception var4) {
+            }
+
+            return val;
+        }
+    }
+
+    public static SharedPreferences getGlobalMainSettings() {
+        return null;
+    }
+
+    public static File getSharingDirectory() {
+        return new File(FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE), "sharing/");
+    }
+
+    public static byte[] getStringBytes(String src) {
+        try {
+            return src.getBytes("UTF-8");
+        } catch (Exception ignore) {
+
+        }
+        return new byte[0];
+    }
+
+    public static int getColorDistance(int color1, int color2) {
+        int r1 = Color.red(color1);
+        int g1 = Color.green(color1);
+        int b1 = Color.blue(color1);
+
+        int r2 = Color.red(color2);
+        int g2 = Color.green(color2);
+        int b2 = Color.blue(color2);
+
+        int rMean = (r1 + r2) / 2;
+        int r = r1 - r2;
+        int g = g1 - g2;
+        int b = b1 - b2;
+        return (((512 + rMean) * r * r) >> 8) + (4 * g * g) + (((767 - rMean) * b * b) >> 8);
+    }
+
+    public static float[] RGBtoHSB(int r, int g, int b) {
+        float hue, saturation, brightness;
+        float[] hsbvals = new float[3];
+        int cmax = (r > g) ? r : g;
+        if (b > cmax) {
+            cmax = b;
+        }
+        int cmin = (r < g) ? r : g;
+        if (b < cmin) {
+            cmin = b;
+        }
+
+        brightness = ((float) cmax) / 255.0f;
+        if (cmax != 0) {
+            saturation = ((float) (cmax - cmin)) / ((float) cmax);
+        } else {
+            saturation = 0;
+        }
+        if (saturation == 0) {
+            hue = 0;
+        } else {
+            float redc = ((float) (cmax - r)) / ((float) (cmax - cmin));
+            float greenc = ((float) (cmax - g)) / ((float) (cmax - cmin));
+            float bluec = ((float) (cmax - b)) / ((float) (cmax - cmin));
+            if (r == cmax) {
+                hue = bluec - greenc;
+            } else if (g == cmax) {
+                hue = 2.0f + redc - bluec;
+            } else {
+                hue = 4.0f + greenc - redc;
+            }
+            hue = hue / 6.0f;
+            if (hue < 0) {
+                hue = hue + 1.0f;
+            }
+        }
+        hsbvals[0] = hue;
+        hsbvals[1] = saturation;
+        hsbvals[2] = brightness;
+        return hsbvals;
+    }
+
+    public static int HSBtoRGB(float hue, float saturation, float brightness) {
+        int r = 0, g = 0, b = 0;
+        if (saturation == 0) {
+            r = g = b = (int) (brightness * 255.0f + 0.5f);
+        } else {
+            float h = (hue - (float) Math.floor(hue)) * 6.0f;
+            float f = h - (float) java.lang.Math.floor(h);
+            float p = brightness * (1.0f - saturation);
+            float q = brightness * (1.0f - saturation * f);
+            float t = brightness * (1.0f - (saturation * (1.0f - f)));
+            switch ((int) h) {
+                case 0:
+                    r = (int) (brightness * 255.0f + 0.5f);
+                    g = (int) (t * 255.0f + 0.5f);
+                    b = (int) (p * 255.0f + 0.5f);
+                    break;
+                case 1:
+                    r = (int) (q * 255.0f + 0.5f);
+                    g = (int) (brightness * 255.0f + 0.5f);
+                    b = (int) (p * 255.0f + 0.5f);
+                    break;
+                case 2:
+                    r = (int) (p * 255.0f + 0.5f);
+                    g = (int) (brightness * 255.0f + 0.5f);
+                    b = (int) (t * 255.0f + 0.5f);
+                    break;
+                case 3:
+                    r = (int) (p * 255.0f + 0.5f);
+                    g = (int) (q * 255.0f + 0.5f);
+                    b = (int) (brightness * 255.0f + 0.5f);
+                    break;
+                case 4:
+                    r = (int) (t * 255.0f + 0.5f);
+                    g = (int) (p * 255.0f + 0.5f);
+                    b = (int) (brightness * 255.0f + 0.5f);
+                    break;
+                case 5:
+                    r = (int) (brightness * 255.0f + 0.5f);
+                    g = (int) (p * 255.0f + 0.5f);
+                    b = (int) (q * 255.0f + 0.5f);
+                    break;
+            }
+        }
+        return 0xff000000 | ((r & 0xff) << 16) | ((g & 0xff) << 8) | (b & 0xff);
+    }
+
+    public static int getPatternColor(int color) {
+        float[] hsb = RGBtoHSB(Color.red(color), Color.green(color), Color.blue(color));
+        if (hsb[1] > 0.0f || (hsb[2] < 1.0f && hsb[2] > 0.0f)) {
+            hsb[1] = Math.min(1.0f, hsb[1] + 0.05f + 0.1f * (1.0f - hsb[1]));
+        }
+        if (hsb[2] > 0.5f) {
+            hsb[2] = Math.max(0.0f, hsb[2] * 0.65f);
+        } else {
+            hsb[2] = Math.max(0.0f, Math.min(1.0f, 1.0f - hsb[2] * 0.65f));
+        }
+        return HSBtoRGB(hsb[0], hsb[1], hsb[2]) & 0x66ffffff;
+    }
+
+    public static int getAverageColor(int color1, int color2) {
+        int r1 = Color.red(color1);
+        int r2 = Color.red(color2);
+        int g1 = Color.green(color1);
+        int g2 = Color.green(color2);
+        int b1 = Color.blue(color1);
+        int b2 = Color.blue(color2);
+        return Color.argb(255, (r1 / 2 + r2 / 2), (g1 / 2 + g2 / 2), (b1 / 2 + b2 / 2));
+    }
+
 }
 

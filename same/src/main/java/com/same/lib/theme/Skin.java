@@ -16,7 +16,22 @@ public class Skin {
     public String slug;
     public String title;
     public int installs_count;
+
+    public static class SkinSettings {
+        public int flags;
+        public BaseTheme base_theme;
+        public int accent_color;
+        public int message_top_color;
+        public int message_bottom_color;
+        public WallPaper wallpaper;
+    }
+
+    public static abstract class BaseTheme {}
+
     public String toJson() {
         return  "";
+    }
+    public static Skin fromJson(String json) {
+        return new Skin();
     }
 }

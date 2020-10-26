@@ -13,6 +13,7 @@ public class NotificationCenter {
     public static int didSetNewTheme = 0;
     public static int needCheckSystemBarColors = 0;
     public static int goingToPreviewTheme = 0;
+    public static int needSetDayNightTheme = 0;
     public  static  void postNotificationName(int id) {}
     public  static  void postNotificationName(int id, boolean yes) {}
 }

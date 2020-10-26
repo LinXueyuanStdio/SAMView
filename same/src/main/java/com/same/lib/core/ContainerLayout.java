@@ -34,6 +34,7 @@ import com.same.lib.helper.CubicBezierInterpolator;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
+import com.same.lib.theme.ThemeInfo;
 import com.same.lib.util.AndroidUtilities;
 import com.same.lib.util.SharedConfig;
 
@@ -261,7 +262,7 @@ public class ContainerLayout  extends FrameLayout {
     private AnimatorSet themeAnimatorSet;
     private float themeAnimationValue;
     private boolean animateThemeAfterAnimation;
-    private Theme.ThemeInfo animateSetThemeAfterAnimation;
+    private ThemeInfo animateSetThemeAfterAnimation;
     private boolean animateSetThemeNightAfterAnimation;
     private int animateSetThemeAccentIdAfterAnimation;
     private boolean rebuildAfterAnimation;
@@ -1654,7 +1655,7 @@ public class ContainerLayout  extends FrameLayout {
         }
     }
 
-    public void animateThemedValues(Theme.ThemeInfo theme, int accentId, boolean nightTheme, boolean instant) {
+    public void animateThemedValues(ThemeInfo theme, int accentId, boolean nightTheme, boolean instant) {
         if (transitionAnimationInProgress || startedTracking) {
             animateThemeAfterAnimation = true;
             animateSetThemeAfterAnimation = theme;
