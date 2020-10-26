@@ -792,6 +792,27 @@ public class ThemeManager {
         }
     }
 
+    public static void saveAutoNightThemeConfig() {
+        SharedPreferences.Editor editor = AndroidUtilities.getGlobalMainSettings().edit();
+        editor.putInt("selectedAutoNightType", selectedAutoNightType);
+        editor.putBoolean("autoNightScheduleByLocation", autoNightScheduleByLocation);
+        editor.putFloat("autoNightBrighnessThreshold", autoNightBrighnessThreshold);
+        editor.putInt("autoNightDayStartTime", autoNightDayStartTime);
+        editor.putInt("autoNightDayEndTime", autoNightDayEndTime);
+        editor.putInt("autoNightSunriseTime", autoNightSunriseTime);
+        editor.putString("autoNightCityName", autoNightCityName);
+        editor.putInt("autoNightSunsetTime", autoNightSunsetTime);
+        editor.putLong("autoNightLocationLatitude3", Double.doubleToRawLongBits(autoNightLocationLatitude));
+        editor.putLong("autoNightLocationLongitude3", Double.doubleToRawLongBits(autoNightLocationLongitude));
+        editor.putInt("autoNightLastSunCheckDay", autoNightLastSunCheckDay);
+        if (currentNightTheme != null) {
+            editor.putString("nighttheme", currentNightTheme.getKey());
+        } else {
+            editor.remove("nighttheme");
+        }
+        editor.commit();
+    }
+
     static int needSwitchToTheme() {
         if (selectedAutoNightType == AUTO_NIGHT_TYPE_SCHEDULED) {
             Calendar calendar = Calendar.getInstance();
