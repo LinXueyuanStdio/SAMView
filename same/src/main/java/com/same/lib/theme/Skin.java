@@ -15,6 +15,8 @@ public class Skin {
     public long access_hash;
     public String slug;
     public String title;
+    public Document document;
+    public SkinSettings settings;
     public int installs_count;
 
     public static class SkinSettings {
@@ -25,8 +27,6 @@ public class Skin {
         public int message_bottom_color;
         public WallPaper wallpaper;
     }
-
-    public static abstract class BaseTheme {}
 
     public String toJson() {
         return  "";

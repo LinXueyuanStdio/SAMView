@@ -12,13 +12,13 @@ import android.view.Window;
 import com.same.lib.core.BasePage;
 import com.same.lib.core.ContainerLayout;
 import com.same.lib.util.AndroidUtilities;
-import com.same.ui.page.SplashPage;
+import com.same.ui.page.theme.ThemePage;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 
-public class MainActivity extends Activity implements ContainerLayout.ActionBarLayoutDelegate{
+public class MainActivity extends Activity implements ContainerLayout.ActionBarLayoutDelegate {
     private ContainerLayout actionBarLayout;
 
     @Override
@@ -36,10 +36,10 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
         actionBarLayout.init(new ArrayList<BasePage>());
         actionBarLayout.setDelegate(this);
 
-//        actionBarLayout.setBottomBar(createBottomBar());
-//        actionBarLayout.setBottomBarHeight(240);
+        //        actionBarLayout.setBottomBar(createBottomBar());
+        //        actionBarLayout.setBottomBarHeight(240);
 
-        actionBarLayout.presentFragment(new SplashPage());
+        actionBarLayout.presentFragment(new ThemePage());
         setContentView(actionBarLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
     }
@@ -119,13 +119,13 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
 
     @Override
     public boolean onPreIme() {
-        Log.d("which2","onPreIme...");
+        Log.d("which2", "onPreIme...");
         return false;
     }
 
     @Override
     public boolean needPresentFragment(BasePage fragment, boolean removeLast, boolean forceWithoutAnimation, ContainerLayout layout) {
-        Log.d("which2","needPresentFragment...");
+        Log.d("which2", "needPresentFragment...");
 
         //这个很重要，必须要返回true，才可以到下个界面
         return true;
@@ -133,8 +133,7 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
 
     @Override
     public boolean needAddFragmentToStack(BasePage fragment, ContainerLayout layout) {
-        Log.d("which2","needAddFragmentToStack...");
-
+        Log.d("which2", "needAddFragmentToStack...");
 
 
         return true;
@@ -142,8 +141,8 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
 
     @Override
     public boolean needCloseLastFragment(ContainerLayout layout) {
-        Log.d("which2","needCloseLastFragment...");
-        if(actionBarLayout.fragmentsStack.size() <= 1){
+        Log.d("which2", "needCloseLastFragment...");
+        if (actionBarLayout.fragmentsStack.size() <= 1) {
             finish();
             return false;
         }
@@ -156,4 +155,19 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
 
     }
 
+    public ContainerLayout getActionBarLayout() {
+        return null;
+    }
+
+    public ContainerLayout getRightActionBarLayout() {
+        return null;
+    }
+
+    public ContainerLayout getLayersActionBarLayout() {
+        return null;
+    }
+
+    public void rebuildAllFragments(boolean b) {
+
+    }
 }

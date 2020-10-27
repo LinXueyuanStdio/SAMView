@@ -8,4 +8,10 @@
     <string name="WaitMore">Wait more</string>
     <string name="Stop">Stop</string>
 
+    <string name="ThemeDark">Dark</string>
+    <string name="ThemeDarkBlue">Dark Blue</string>
+    <string name="ThemeDay">Day</string>
+    <string name="ThemeNight">Night</string>
+    <string name="ThemeArcticBlue">Arctic</string>
+    <string name="ThemeClassic">Classic</string>
 </resources>

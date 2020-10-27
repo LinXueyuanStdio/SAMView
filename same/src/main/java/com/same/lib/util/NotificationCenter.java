@@ -1,5 +1,7 @@
 package com.same.lib.util;
 
+import com.same.lib.theme.ThemeInfo;
+
 /**
  * @author 林学渊
  * @email linxy59@mail2.sysu.edu.cn
@@ -14,6 +16,11 @@ public class NotificationCenter {
     public static int needCheckSystemBarColors = 0;
     public static int goingToPreviewTheme = 0;
     public static int needSetDayNightTheme = 0;
+    public static int didSetNewWallpapper = 0;
+    public static int fileDidLoad = 0;
+    public static int fileDidFailToLoad = 0;
+    public static int themeAccentListUpdated = 0;
     public  static  void postNotificationName(int id) {}
     public  static  void postNotificationName(int id, boolean yes) {}
+    public  static  void postNotificationName(int id, ThemeInfo info) {}
 }

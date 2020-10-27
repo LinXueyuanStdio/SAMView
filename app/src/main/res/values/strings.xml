@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">SAMView</string>
+    <string name="NoResult">NoResult</string>
+    <string name="Search">Search</string>
+    <string name="LanguageCustom">LanguageCustom</string>
+    <string name="Language">Language</string>
+    <string name="Cancel">Cancel</string>
+    <string name="Default">Default</string>
+    <string name="Save">Save</string>
+    <string name="Delete">Delete</string>
+    <string name="CloseEditor">CloseEditor</string>
+    <string name="SaveTheme">SaveTheme</string>
+    <string name="NoChats">NoChats</string>
+    <string name="DeleteLocalizationTitle">Delete language pack</string>
+    <string name="DeleteLocalizationText">Are you sure you want to delete **%1$s** language pack?</string>
 </resources>

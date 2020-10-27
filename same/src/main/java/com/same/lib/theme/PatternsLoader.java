@@ -9,14 +9,24 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 
+import com.same.lib.drawable.BackgroundGradientDrawable;
 import com.same.lib.util.AndroidUtilities;
-import com.same.lib.util.NotificationCenter;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static com.same.lib.theme.Theme.DEFALT_THEME_ACCENT_ID;
+import static com.same.lib.theme.Theme.currentTheme;
+import static com.same.lib.theme.Theme.key_chat_wallpaper;
+import static com.same.lib.theme.Theme.key_chat_wallpaper_gradient_to;
+import static com.same.lib.theme.Theme.loadScreenSizedBitmap;
+import static com.same.lib.theme.Theme.reloadWallpaper;
+import static com.same.lib.theme.Theme.themesDict;
+import static com.same.lib.theme.ThemeManager.changeColorAccent;
+import static com.same.lib.theme.ThemeManager.getThemeFileValues;
 
 /**
  * @author 林学渊
@@ -25,16 +35,16 @@ import java.util.HashMap;
  * @description null
  * @usage null
  */
-public class PatternsLoader implements NotificationCenter.NotificationCenterDelegate {
+public class PatternsLoader {
 
-    private static class LoadingPattern {
+    static class LoadingPattern {
         public WallPaper pattern;
         public ArrayList<ThemeAccent> accents = new ArrayList<>();
     }
 
-    private int account = UserConfig.selectedAccount;
-    private HashMap<String, LoadingPattern> watingForLoad;
-    private static PatternsLoader loader;
+    private int account = 1;
+    private HashMap<String, PatternsLoader.LoadingPattern> watingForLoad;
+    static PatternsLoader loader;
 
     public static void createLoader(boolean force) {
         if (loader != null && !force) {
@@ -61,13 +71,13 @@ public class PatternsLoader implements NotificationCenter.NotificationCenterDele
                     key = "Night";
                     break;
             }
-            ThemeInfo info = Theme.themesDict.get(key);
+            ThemeInfo info = themesDict.get(key);
             if (info == null || info.themeAccents == null || info.themeAccents.isEmpty()) {
                 continue;
             }
             for (int a = 0, N = info.themeAccents.size(); a < N; a++) {
                 ThemeAccent accent = info.themeAccents.get(a);
-                if (accent.id == Theme.DEFALT_THEME_ACCENT_ID || TextUtils.isEmpty(accent.patternSlug)) {
+                if (accent.id == DEFALT_THEME_ACCENT_ID || TextUtils.isEmpty(accent.patternSlug)) {
                     continue;
                 }
                 if (accentsToLoad == null) {
@@ -83,7 +93,7 @@ public class PatternsLoader implements NotificationCenter.NotificationCenterDele
         if (accents == null) {
             return;
         }
-        Utilities.globalQueue.postRunnable(() -> {
+        AndroidUtilities.globalQueue.postRunnable(() -> {
             ArrayList<String> slugs = null;
             for (int a = 0, N = accents.size(); a < N; a++) {
                 ThemeAccent accent = accents.get(a);
@@ -169,23 +179,27 @@ public class PatternsLoader implements NotificationCenter.NotificationCenterDele
     }
 
     private void checkCurrentWallpaperInternal(ArrayList<ThemeAccent> accents, boolean load) {
-        if (accents != null && Theme.currentTheme.themeAccents != null && !Theme.currentTheme.themeAccents.isEmpty()) {
-            if (accents.contains(Theme.currentTheme.getAccent(false))) {
+        if (accents != null && currentTheme.themeAccents != null && !currentTheme.themeAccents.isEmpty()) {
+            if (accents.contains(currentTheme.getAccent(false))) {
+                reloadWallpaper();
             }
         }
         if (load) {
             if (watingForLoad != null) {
-                NotificationCenter.getInstance(account).addObserver(this, NotificationCenter.fileDidLoad);
-                NotificationCenter.getInstance(account).addObserver(this, NotificationCenter.fileDidFailToLoad);
-                for (HashMap.Entry<String, LoadingPattern> entry : watingForLoad.entrySet()) {
-                    LoadingPattern loadingPattern = entry.getValue();
-                    FileLoader.getInstance(account).loadFile(ImageLocation.getForDocument(loadingPattern.pattern.document), "wallpaper", null, 0, 1);
+                //TODO 先注释，后面再填坑
+//                NotificationCenter.getInstance(account).addObserver(this, NotificationCenter.fileDidLoad);
+//                NotificationCenter.getInstance(account).addObserver(this, NotificationCenter.fileDidFailToLoad);
+                for (HashMap.Entry<String, PatternsLoader.LoadingPattern> entry : watingForLoad.entrySet()) {
+                    PatternsLoader.LoadingPattern loadingPattern = entry.getValue();
+                    //TODO 先注释，后面再填坑
+//                    FileLoader.getInstance(account).loadFile(ImageLocation.getForDocument(loadingPattern.pattern.document), "wallpaper", null, 0, 1);
                 }
             }
         } else {
             if (watingForLoad == null || watingForLoad.isEmpty()) {
-                NotificationCenter.getInstance(account).removeObserver(this, NotificationCenter.fileDidLoad);
-                NotificationCenter.getInstance(account).removeObserver(this, NotificationCenter.fileDidFailToLoad);
+                //TODO 先注释，后面再填坑
+//                NotificationCenter.getInstance(account).removeObserver(this, NotificationCenter.fileDidLoad);
+//                NotificationCenter.getInstance(account).removeObserver(this, NotificationCenter.fileDidFailToLoad);
             }
         }
     }
@@ -207,7 +221,7 @@ public class PatternsLoader implements NotificationCenter.NotificationCenterDele
                 if (backgroundColor != 0) {
                     backgroundAccent = backgroundColor;
                 }
-                Integer color = values.get(Theme.key_chat_wallpaper_gradient_to);
+                Integer color = values.get(key_chat_wallpaper_gradient_to);
                 if (color != null) {
                     backgroundGradientColor = changeColorAccent(themeInfo, backgroundAccent, color);
                 }
@@ -216,7 +230,7 @@ public class PatternsLoader implements NotificationCenter.NotificationCenterDele
             }
 
             if (backgroundColor == 0) {
-                Integer color = values.get(Theme.key_chat_wallpaper);
+                Integer color = values.get(key_chat_wallpaper);
                 if (color != null) {
                     backgroundColor = changeColorAccent(themeInfo, backgroundAccent, color);
                 }
@@ -238,7 +252,7 @@ public class PatternsLoader implements NotificationCenter.NotificationCenterDele
                 //                        patternBitmap = SvgHelper.getBitmap(patternPath, AndroidUtilities.dp(360), AndroidUtilities.dp(640), false);
                 //                    } else {
                 //                    }
-                patternBitmap = Theme.loadScreenSizedBitmap(new FileInputStream(patternPath), 0);
+                patternBitmap = loadScreenSizedBitmap(new FileInputStream(patternPath), 0);
             }
 
             Bitmap dst = Bitmap.createBitmap(patternBitmap.getWidth(), patternBitmap.getHeight(), Bitmap.Config.ARGB_8888);
@@ -260,41 +274,41 @@ public class PatternsLoader implements NotificationCenter.NotificationCenterDele
         return patternBitmap;
     }
 
-    @Override
-    public void didReceivedNotification(int id, int account, Object... args) {
-        if (watingForLoad == null) {
-            return;
-        }
-        if (id == NotificationCenter.fileDidLoad) {
-            String location = (String) args[0];
-            LoadingPattern loadingPattern = watingForLoad.remove(location);
-            if (loadingPattern != null) {
-                Utilities.globalQueue.postRunnable(() -> {
-                    ArrayList<ThemeAccent> createdAccents = null;
-                    WallPaper wallPaper = loadingPattern.pattern;
-                    File patternPath = FileLoader.getPathToAttach(wallPaper.document, true);
-                    Bitmap patternBitmap = null;
-                    for (int a = 0, N = loadingPattern.accents.size(); a < N; a++) {
-                        ThemeAccent accent = loadingPattern.accents.get(a);
-                        if (accent.patternSlug.equals(wallPaper.slug)) {
-                            patternBitmap = createWallpaperForAccent(patternBitmap, "application/x-tgwallpattern".equals(wallPaper.document.mime_type), patternPath, accent);
-                            if (createdAccents == null) {
-                                createdAccents = new ArrayList<>();
-                                createdAccents.add(accent);
-                            }
-                        }
-                    }
-                    if (patternBitmap != null) {
-                        patternBitmap.recycle();
-                    }
-                    checkCurrentWallpaper(createdAccents, false);
-                });
-            }
-        } else if (id == NotificationCenter.fileDidFailToLoad) {
-            String location = (String) args[0];
-            if (watingForLoad.remove(location) != null) {
-                checkCurrentWallpaper(null, false);
-            }
-        }
-    }
+//    @Override TODO 文件加载？
+//    public void didReceivedNotification(int id, int account, Object... args) {
+//        if (watingForLoad == null) {
+//            return;
+//        }
+//        if (id == NotificationCenter.fileDidLoad) {
+//            String location = (String) args[0];
+//            PatternsLoader.LoadingPattern loadingPattern = watingForLoad.remove(location);
+//            if (loadingPattern != null) {
+//                AndroidUtilities.globalQueue.postRunnable(() -> {
+//                    ArrayList<ThemeAccent> createdAccents = null;
+//                    WallPaper wallPaper = loadingPattern.pattern;
+//                    File patternPath = AndroidUtilities.getPathToAttach(wallPaper.document, true);
+//                    Bitmap patternBitmap = null;
+//                    for (int a = 0, N = loadingPattern.accents.size(); a < N; a++) {
+//                        ThemeAccent accent = loadingPattern.accents.get(a);
+//                        if (accent.patternSlug.equals(wallPaper.slug)) {
+//                            patternBitmap = createWallpaperForAccent(patternBitmap, "application/x-tgwallpattern".equals(wallPaper.document.mime_type), patternPath, accent);
+//                            if (createdAccents == null) {
+//                                createdAccents = new ArrayList<>();
+//                                createdAccents.add(accent);
+//                            }
+//                        }
+//                    }
+//                    if (patternBitmap != null) {
+//                        patternBitmap.recycle();
+//                    }
+//                    checkCurrentWallpaper(createdAccents, false);
+//                });
+//            }
+//        } else if (id == NotificationCenter.fileDidFailToLoad) {
+//            String location = (String) args[0];
+//            if (watingForLoad.remove(location) != null) {
+//                checkCurrentWallpaper(null, false);
+//            }
+//        }
+//    }
 }

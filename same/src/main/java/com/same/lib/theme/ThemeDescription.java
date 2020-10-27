@@ -13,29 +13,28 @@ import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.text.SpannedString;
 import android.text.TextPaint;
-import android.text.style.TypefaceSpan;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.same.lib.component.CheckBox;
+import com.same.lib.component.RadioButton;
 import com.same.lib.core.ActionBar;
-import com.same.lib.drawable.BackDrawable;
-import com.same.lib.drawable.CombinedDrawable;
 import com.same.lib.core.EditTextBoldCursor;
 import com.same.lib.core.LineProgressView;
-import com.same.lib.drawable.RLottieDrawable;
 import com.same.lib.core.RLottieImageView;
 import com.same.lib.core.RadialProgressView;
 import com.same.lib.core.SimpleTextView;
+import com.same.lib.drawable.BackDrawable;
+import com.same.lib.drawable.CombinedDrawable;
+import com.same.lib.drawable.RLottieDrawable;
+import com.same.lib.span.TypefaceSpan;
 import com.same.lib.util.AndroidUtilities;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import androidx.viewpager.widget.ViewPager;
@@ -210,8 +209,6 @@ public class ThemeDescription {
                 }
                 if (drawablesToUpdate[a] instanceof BackDrawable) {
                     ((BackDrawable) drawablesToUpdate[a]).setColor(color);
-                } else if (drawablesToUpdate[a] instanceof ScamDrawable) {
-                    ((ScamDrawable) drawablesToUpdate[a]).setColor(color);
                 } else if (drawablesToUpdate[a] instanceof RLottieDrawable) {
                     if (lottieLayerName != null) {
                         ((RLottieDrawable) drawablesToUpdate[a]).setLayerColor(lottieLayerName + ".**", color);
@@ -222,8 +219,6 @@ public class ThemeDescription {
                     } else {
                         ((CombinedDrawable) drawablesToUpdate[a]).getIcon().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
                     }
-                } else if (drawablesToUpdate[a] instanceof AvatarDrawable) {
-                    ((AvatarDrawable) drawablesToUpdate[a]).setColor(color);
                 } else {
                     drawablesToUpdate[a].setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
                 }
@@ -308,8 +303,6 @@ public class ThemeDescription {
             } else {
                 ((LineProgressView) viewToInvalidate).setBackColor(color);
             }
-        } else if (viewToInvalidate instanceof ContextProgressView) {
-            ((ContextProgressView) viewToInvalidate).updateColors();
         }
         if ((changeFlags & FLAG_TEXTCOLOR) != 0) {
             if ((changeFlags & FLAG_CHECKTAG) == 0 || checkTag(currentKey, viewToInvalidate)) {
@@ -353,8 +346,6 @@ public class ThemeDescription {
                     } else {
                         ((ImageView) viewToInvalidate).setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
                     }
-                } else if (viewToInvalidate instanceof BackupImageView) {
-                    //((BackupImageView) viewToInvalidate).setResourceImageColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
                 } else if (viewToInvalidate instanceof SimpleTextView) {
                     SimpleTextView textView = (SimpleTextView) viewToInvalidate;
                     textView.setSideDrawablesColor(color);
@@ -380,36 +371,7 @@ public class ThemeDescription {
                 AndroidUtilities.setViewPagerEdgeEffectColor((ViewPager) viewToInvalidate, color);
             }
         }
-        if (viewToInvalidate instanceof RecyclerListView) {
-            RecyclerListView recyclerListView = (RecyclerListView) viewToInvalidate;
-            if ((changeFlags & FLAG_SELECTOR) != 0) {
-                recyclerListView.setListSelectorColor(color);
-            }
-            if ((changeFlags & FLAG_FASTSCROLL) != 0) {
-                recyclerListView.updateFastScrollColors();
-            }
-            if ((changeFlags & FLAG_LISTGLOWCOLOR) != 0) {
-                recyclerListView.setGlowColor(color);
-            }
-            if ((changeFlags & FLAG_SECTIONS) != 0) {
-                ArrayList<View> headers = recyclerListView.getHeaders();
-                if (headers != null) {
-                    for (int a = 0; a < headers.size(); a++) {
-                        processViewColor(headers.get(a), color);
-                    }
-                }
-                headers = recyclerListView.getHeadersCache();
-                if (headers != null) {
-                    for (int a = 0; a < headers.size(); a++) {
-                        processViewColor(headers.get(a), color);
-                    }
-                }
-                View header = recyclerListView.getPinnedHeader();
-                if (header != null) {
-                    processViewColor(header, color);
-                }
-            }
-        } else if (viewToInvalidate != null && (listClasses == null || listClasses.length == 0)) {
+        if (viewToInvalidate != null && (listClasses == null || listClasses.length == 0)) {
             if ((changeFlags & FLAG_SELECTOR) != 0) {
                 viewToInvalidate.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             } else if ((changeFlags & FLAG_SELECTORWHITE) != 0) {
@@ -417,22 +379,6 @@ public class ThemeDescription {
             }
         }
         if (listClasses != null) {
-            if (viewToInvalidate instanceof RecyclerListView) {
-                RecyclerListView recyclerListView = (RecyclerListView) viewToInvalidate;
-                recyclerListView.getRecycledViewPool().clear();
-                int count = recyclerListView.getHiddenChildCount();
-                for (int a = 0; a < count; a++) {
-                    processViewColor(recyclerListView.getHiddenChildAt(a), color);
-                }
-                count = recyclerListView.getCachedChildCount();
-                for (int a = 0; a < count; a++) {
-                    processViewColor(recyclerListView.getCachedChildAt(a), color);
-                }
-                count = recyclerListView.getAttachedScrapChildCount();
-                for (int a = 0; a < count; a++) {
-                    processViewColor(recyclerListView.getAttachedScrapChildAt(a), color);
-                }
-            }
             if (viewToInvalidate instanceof ViewGroup) {
                 ViewGroup viewGroup = (ViewGroup) viewToInvalidate;
                 int count = viewGroup.getChildCount();

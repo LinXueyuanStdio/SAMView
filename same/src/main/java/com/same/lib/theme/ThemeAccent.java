@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Locale;
 
 import static com.same.lib.theme.ThemeManager.*;
+import static com.same.lib.theme.Theme.*;
 
 /**
  * @author 林学渊
@@ -36,6 +37,7 @@ public class ThemeAccent {
     public boolean patternMotion;
 
     public Skin info;
+    public WallPaper pattern;
     public int account;
 
     public String pathToFile;
@@ -56,19 +58,19 @@ public class ThemeAccent {
 
         if (accentColor != parentTheme.accentBaseColor) {
             HashSet<String> keys = new HashSet<>(currentColorsNoAccent.keySet());
-            keys.addAll(Theme.defaultColors.keySet());
-            keys.removeAll(Theme.themeAccentExclusionKeys);
+            keys.addAll(defaultColors.keySet());
+            keys.removeAll(themeAccentExclusionKeys);
 
             for (String key : keys) {
                 Integer color = currentColorsNoAccent.get(key);
                 if (color == null) {
-                    String fallbackKey = Theme.fallbackKeys.get(key);
+                    String fallbackKey = fallbackKeys.get(key);
                     if (fallbackKey != null && currentColorsNoAccent.get(fallbackKey) != null) {
                         continue;
                     }
                 }
                 if (color == null) {
-                    color = Theme.defaultColors.get(key);
+                    color = defaultColors.get(key);
                 }
 
                 int newColor = changeColorAccent(hsvTemp1, hsvTemp2, color, isDarkTheme);
@@ -80,9 +82,9 @@ public class ThemeAccent {
         int myMessagesAccent = myMessagesAccentColor;
         if ((myMessagesAccentColor != 0 || accentColor != 0) && myMessagesGradientAccentColor != 0) {
             int firstColor = myMessagesAccentColor != 0 ? myMessagesAccentColor : accentColor;
-            Integer color = currentColorsNoAccent.get(Theme.key_chat_outBubble);
+            Integer color = currentColorsNoAccent.get(key_chat_outBubble);
             if (color == null) {
-                color = Theme.defaultColors.get(Theme.key_chat_outBubble);
+                color = defaultColors.get(key_chat_outBubble);
             }
             int newColor = changeColorAccent(hsvTemp1, hsvTemp2, color, isDarkTheme);
             int distance1 = AndroidUtilities.getColorDistance(firstColor, newColor);
@@ -93,16 +95,16 @@ public class ThemeAccent {
 
         if (myMessagesAccent != 0 && (parentTheme.accentBaseColor != 0 && myMessagesAccent != parentTheme.accentBaseColor || accentColor != 0 && accentColor != myMessagesAccent)) {
             Color.colorToHSV(myMessagesAccent, hsvTemp2);
-            for (String key : Theme.myMessagesColorKeys) {
+            for (String key : myMessagesColorKeys) {
                 Integer color = currentColorsNoAccent.get(key);
                 if (color == null) {
-                    String fallbackKey = Theme.fallbackKeys.get(key);
+                    String fallbackKey = fallbackKeys.get(key);
                     if (fallbackKey != null && currentColorsNoAccent.get(fallbackKey) != null) {
                         continue;
                     }
                 }
                 if (color == null) {
-                    color = Theme.defaultColors.get(key);
+                    color = defaultColors.get(key);
                 }
                 if (color == null) {
                     continue;
@@ -128,103 +130,103 @@ public class ThemeAccent {
                     seekbarColor = 0x4dffffff;
                 }
 
-                currentColors.put(Theme.key_chat_outAudioProgress, seekbarColor);
-                currentColors.put(Theme.key_chat_outAudioSelectedProgress, seekbarColor);
-                currentColors.put(Theme.key_chat_outAudioSeekbar, seekbarColor);
-                currentColors.put(Theme.key_chat_outAudioCacheSeekbar, seekbarColor);
-                currentColors.put(Theme.key_chat_outAudioSeekbarSelected, seekbarColor);
-                currentColors.put(Theme.key_chat_outAudioSeekbarFill, textColor);
+                currentColors.put(key_chat_outAudioProgress, seekbarColor);
+                currentColors.put(key_chat_outAudioSelectedProgress, seekbarColor);
+                currentColors.put(key_chat_outAudioSeekbar, seekbarColor);
+                currentColors.put(key_chat_outAudioCacheSeekbar, seekbarColor);
+                currentColors.put(key_chat_outAudioSeekbarSelected, seekbarColor);
+                currentColors.put(key_chat_outAudioSeekbarFill, textColor);
 
-                currentColors.put(Theme.key_chat_outVoiceSeekbar, seekbarColor);
-                currentColors.put(Theme.key_chat_outVoiceSeekbarSelected, seekbarColor);
-                currentColors.put(Theme.key_chat_outVoiceSeekbarFill, textColor);
+                currentColors.put(key_chat_outVoiceSeekbar, seekbarColor);
+                currentColors.put(key_chat_outVoiceSeekbarSelected, seekbarColor);
+                currentColors.put(key_chat_outVoiceSeekbarFill, textColor);
 
-                currentColors.put(Theme.key_chat_messageTextOut, textColor);
-                currentColors.put(Theme.key_chat_messageLinkOut, textColor);
-                currentColors.put(Theme.key_chat_outForwardedNameText, textColor);
-                currentColors.put(Theme.key_chat_outViaBotNameText, textColor);
-                currentColors.put(Theme.key_chat_outReplyLine, textColor);
-                currentColors.put(Theme.key_chat_outReplyNameText, textColor);
+                currentColors.put(key_chat_messageTextOut, textColor);
+                currentColors.put(key_chat_messageLinkOut, textColor);
+                currentColors.put(key_chat_outForwardedNameText, textColor);
+                currentColors.put(key_chat_outViaBotNameText, textColor);
+                currentColors.put(key_chat_outReplyLine, textColor);
+                currentColors.put(key_chat_outReplyNameText, textColor);
 
-                currentColors.put(Theme.key_chat_outPreviewLine, textColor);
-                currentColors.put(Theme.key_chat_outSiteNameText, textColor);
-                currentColors.put(Theme.key_chat_outInstant, textColor);
-                currentColors.put(Theme.key_chat_outInstantSelected, textColor);
-                currentColors.put(Theme.key_chat_outPreviewInstantText, textColor);
-                currentColors.put(Theme.key_chat_outPreviewInstantSelectedText, textColor);
+                currentColors.put(key_chat_outPreviewLine, textColor);
+                currentColors.put(key_chat_outSiteNameText, textColor);
+                currentColors.put(key_chat_outInstant, textColor);
+                currentColors.put(key_chat_outInstantSelected, textColor);
+                currentColors.put(key_chat_outPreviewInstantText, textColor);
+                currentColors.put(key_chat_outPreviewInstantSelectedText, textColor);
 
-                currentColors.put(Theme.key_chat_outViews, textColor);
+                currentColors.put(key_chat_outViews, textColor);
 
-                currentColors.put(Theme.key_chat_outAudioTitleText, textColor);
-                currentColors.put(Theme.key_chat_outFileNameText, textColor);
-                currentColors.put(Theme.key_chat_outContactNameText, textColor);
+                currentColors.put(key_chat_outAudioTitleText, textColor);
+                currentColors.put(key_chat_outFileNameText, textColor);
+                currentColors.put(key_chat_outContactNameText, textColor);
 
-                currentColors.put(Theme.key_chat_outAudioPerformerText, textColor);
-                currentColors.put(Theme.key_chat_outAudioPerformerSelectedText, textColor);
+                currentColors.put(key_chat_outAudioPerformerText, textColor);
+                currentColors.put(key_chat_outAudioPerformerSelectedText, textColor);
 
-                currentColors.put(Theme.key_chat_outSentCheck, textColor);
-                currentColors.put(Theme.key_chat_outSentCheckSelected, textColor);
+                currentColors.put(key_chat_outSentCheck, textColor);
+                currentColors.put(key_chat_outSentCheckSelected, textColor);
 
-                currentColors.put(Theme.key_chat_outSentCheckRead, textColor);
-                currentColors.put(Theme.key_chat_outSentCheckReadSelected, textColor);
+                currentColors.put(key_chat_outSentCheckRead, textColor);
+                currentColors.put(key_chat_outSentCheckReadSelected, textColor);
 
-                currentColors.put(Theme.key_chat_outSentClock, textColor);
-                currentColors.put(Theme.key_chat_outSentClockSelected, textColor);
+                currentColors.put(key_chat_outSentClock, textColor);
+                currentColors.put(key_chat_outSentClockSelected, textColor);
 
-                currentColors.put(Theme.key_chat_outMenu, textColor);
-                currentColors.put(Theme.key_chat_outMenuSelected, textColor);
+                currentColors.put(key_chat_outMenu, textColor);
+                currentColors.put(key_chat_outMenuSelected, textColor);
 
-                currentColors.put(Theme.key_chat_outTimeText, textColor);
-                currentColors.put(Theme.key_chat_outTimeSelectedText, textColor);
+                currentColors.put(key_chat_outTimeText, textColor);
+                currentColors.put(key_chat_outTimeSelectedText, textColor);
 
-                currentColors.put(Theme.key_chat_outAudioDurationText, subTextColor);
-                currentColors.put(Theme.key_chat_outAudioDurationSelectedText, subTextColor);
+                currentColors.put(key_chat_outAudioDurationText, subTextColor);
+                currentColors.put(key_chat_outAudioDurationSelectedText, subTextColor);
 
-                currentColors.put(Theme.key_chat_outContactPhoneText, subTextColor);
-                currentColors.put(Theme.key_chat_outContactPhoneSelectedText, subTextColor);
+                currentColors.put(key_chat_outContactPhoneText, subTextColor);
+                currentColors.put(key_chat_outContactPhoneSelectedText, subTextColor);
 
-                currentColors.put(Theme.key_chat_outFileInfoText, subTextColor);
-                currentColors.put(Theme.key_chat_outFileInfoSelectedText, subTextColor);
+                currentColors.put(key_chat_outFileInfoText, subTextColor);
+                currentColors.put(key_chat_outFileInfoSelectedText, subTextColor);
 
-                currentColors.put(Theme.key_chat_outVenueInfoText, subTextColor);
-                currentColors.put(Theme.key_chat_outVenueInfoSelectedText, subTextColor);
+                currentColors.put(key_chat_outVenueInfoText, subTextColor);
+                currentColors.put(key_chat_outVenueInfoSelectedText, subTextColor);
 
-                currentColors.put(Theme.key_chat_outReplyMessageText, textColor);
-                currentColors.put(Theme.key_chat_outReplyMediaMessageText, textColor);
-                currentColors.put(Theme.key_chat_outReplyMediaMessageSelectedText, textColor);
+                currentColors.put(key_chat_outReplyMessageText, textColor);
+                currentColors.put(key_chat_outReplyMediaMessageText, textColor);
+                currentColors.put(key_chat_outReplyMediaMessageSelectedText, textColor);
 
-                currentColors.put(Theme.key_chat_outLoader, textColor);
-                currentColors.put(Theme.key_chat_outLoaderSelected, textColor);
-                currentColors.put(Theme.key_chat_outFileProgress, myMessagesAccentColor);
-                currentColors.put(Theme.key_chat_outFileProgressSelected, myMessagesAccentColor);
-                currentColors.put(Theme.key_chat_outMediaIcon, myMessagesAccentColor);
-                currentColors.put(Theme.key_chat_outMediaIconSelected, myMessagesAccentColor);
+                currentColors.put(key_chat_outLoader, textColor);
+                currentColors.put(key_chat_outLoaderSelected, textColor);
+                currentColors.put(key_chat_outFileProgress, myMessagesAccentColor);
+                currentColors.put(key_chat_outFileProgressSelected, myMessagesAccentColor);
+                currentColors.put(key_chat_outMediaIcon, myMessagesAccentColor);
+                currentColors.put(key_chat_outMediaIconSelected, myMessagesAccentColor);
             }
         }
         if (isMyMessagesGradientColorsNear) {
-            int outColor = currentColors.get(Theme.key_chat_outLoader);
+            int outColor = currentColors.get(key_chat_outLoader);
             if (AndroidUtilities.getColorDistance(0xffffffff, outColor) < 5000) {
                 isMyMessagesGradientColorsNear = false;
             }
         }
         if (myMessagesAccentColor != 0 && myMessagesGradientAccentColor != 0) {
-            currentColors.put(Theme.key_chat_outBubble, myMessagesAccentColor);
-            currentColors.put(Theme.key_chat_outBubbleGradient, myMessagesGradientAccentColor);
+            currentColors.put(key_chat_outBubble, myMessagesAccentColor);
+            currentColors.put(key_chat_outBubbleGradient, myMessagesGradientAccentColor);
         }
         int backgroundOverride = (int) backgroundOverrideColor;
         if (backgroundOverride != 0) {
-            currentColors.put(Theme.key_chat_wallpaper, backgroundOverride);
+            currentColors.put(key_chat_wallpaper, backgroundOverride);
         } else if (backgroundOverrideColor != 0) {
-            currentColors.remove(Theme.key_chat_wallpaper);
+            currentColors.remove(key_chat_wallpaper);
         }
         int backgroundGradientOverride = (int) backgroundGradientOverrideColor;
         if (backgroundGradientOverride != 0) {
-            currentColors.put(Theme.key_chat_wallpaper_gradient_to, backgroundGradientOverride);
+            currentColors.put(key_chat_wallpaper_gradient_to, backgroundGradientOverride);
         } else if (backgroundGradientOverrideColor != 0) {
-            currentColors.remove(Theme.key_chat_wallpaper_gradient_to);
+            currentColors.remove(key_chat_wallpaper_gradient_to);
         }
         if (backgroundRotation != 45) {
-            currentColors.put(Theme.key_chat_wallpaper_gradient_rotation, backgroundRotation);
+            currentColors.put(key_chat_wallpaper_gradient_rotation, backgroundRotation);
         }
         return !isMyMessagesGradientColorsNear;
     }
@@ -249,15 +251,15 @@ public class ThemeAccent {
             if (patternMotion) {
                 modes.append("motion");
             }
-            Integer selectedColor = currentColors.get(Theme.key_chat_wallpaper);
+            Integer selectedColor = currentColors.get(key_chat_wallpaper);
             if (selectedColor == null) {
                 selectedColor = 0xffffffff;
             }
-            Integer selectedGradientColor = currentColors.get(Theme.key_chat_wallpaper_gradient_to);
+            Integer selectedGradientColor = currentColors.get(key_chat_wallpaper_gradient_to);
             if (selectedGradientColor == null) {
                 selectedGradientColor = 0;
             }
-            Integer selectedGradientRotation = currentColors.get(Theme.key_chat_wallpaper_gradient_rotation);
+            Integer selectedGradientRotation = currentColors.get(key_chat_wallpaper_gradient_rotation);
             if (selectedGradientRotation == null) {
                 selectedGradientRotation = 45;
             }
@@ -277,7 +279,7 @@ public class ThemeAccent {
         for (HashMap.Entry<String, Integer> entry : currentColors.entrySet()) {
             String key = entry.getKey();
             if (wallpaperLink != null) {
-                if (Theme.key_chat_wallpaper.equals(key) || Theme.key_chat_wallpaper_gradient_to.equals(key)) {
+                if (key_chat_wallpaper.equals(key) || key_chat_wallpaper_gradient_to.equals(key)) {
                     continue;
                 }
             }

@@ -20,4 +20,10 @@ public class SharedConfig {
     public static Context applicationContext() {
         return null;
     }
+    public static void saveConfig() {
+    }
+
+    public static int getLastLocalId() {
+        return 0;
+    }
 }

@@ -1,4 +1,4 @@
-package com.same.ui.page;
+package com.same.ui.page.language;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,13 +11,18 @@ import android.widget.TextView;
 import com.same.lib.core.ActionBar;
 import com.same.lib.core.ActionBarMenu;
 import com.same.lib.core.ActionBarMenuItem;
+import com.same.lib.core.AlertDialog;
 import com.same.lib.core.BasePage;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
 import com.same.lib.util.AndroidUtilities;
-import com.same.lib.util.NotificationCenter;
 import com.same.ui.R;
+import com.same.ui.lang.MyLang;
+import com.same.ui.view.RecyclerListView;
+import com.same.ui.page.language.cell.LanguageCell;
+import com.same.ui.page.language.cell.ShadowSectionCell;
+import com.same.ui.view.EmptyTextProgressView;
 import com.timecat.component.locale.MLang;
 
 import java.util.ArrayList;
@@ -36,7 +41,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * @description null
  * @usage null
  */
-public class LanguageSelectPage extends BasePage implements NotificationCenter.NotificationCenterDelegate {
+public class LanguageSelectPage extends BasePage {
 
     private ListAdapter listAdapter;
     private RecyclerListView listView;
@@ -54,15 +59,21 @@ public class LanguageSelectPage extends BasePage implements NotificationCenter.N
     @Override
     public boolean onFragmentCreate() {
         fillLanguages();
-        LocaleController.getInstance().loadRemoteLanguages(currentAccount);
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.suggestedLangpack);
+        MyLang.getInstance().loadRemoteLanguages(getParentActivity(), new MLang.FinishLoadCallback() {
+            @Override
+            public void finishLoad() {
+                if (listAdapter != null) {
+                    fillLanguages();
+                    listAdapter.notifyDataSetChanged();
+                }
+            }
+        });
         return super.onFragmentCreate();
     }
 
     @Override
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.suggestedLangpack);
     }
 
     @Override
@@ -70,9 +81,9 @@ public class LanguageSelectPage extends BasePage implements NotificationCenter.N
         searching = false;
         searchWas = false;
 
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(R.drawable.ic_baseline_arrow_back_ios_24);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setTitle(LocaleController.getString("Language", R.string.Language));
+        actionBar.setTitle(MyLang.getString("Language", R.string.Language));
 
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
@@ -84,7 +95,7 @@ public class LanguageSelectPage extends BasePage implements NotificationCenter.N
         });
 
         ActionBarMenu menu = actionBar.createMenu();
-        ActionBarMenuItem item = menu.addItem(0, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        ActionBarMenuItem item = menu.addItem(0, R.drawable.ic_baseline_search_24).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             @Override
             public void onSearchExpand() {
                 searching = true;
@@ -113,7 +124,7 @@ public class LanguageSelectPage extends BasePage implements NotificationCenter.N
                 }
             }
         });
-        item.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
+        item.setSearchFieldHint(MyLang.getString("Search", R.string.Search));
 
         listAdapter = new ListAdapter(context, false);
         searchListViewAdapter = new ListAdapter(context, true);
@@ -123,7 +134,7 @@ public class LanguageSelectPage extends BasePage implements NotificationCenter.N
         FrameLayout frameLayout = (FrameLayout) fragmentView;
 
         emptyView = new EmptyTextProgressView(context);
-        emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
+        emptyView.setText(MyLang.getString("NoResult", R.string.NoResult));
         emptyView.showTextView();
         emptyView.setShowAtCenter(true);
         frameLayout.addView(emptyView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
@@ -140,12 +151,16 @@ public class LanguageSelectPage extends BasePage implements NotificationCenter.N
                 return;
             }
             LanguageCell cell = (LanguageCell) view;
-            LocaleController.LocaleInfo localeInfo = cell.getCurrentLocale();
+            MLang.LocaleInfo localeInfo = cell.getCurrentLocale();
             if (localeInfo != null) {
-                LocaleController.getInstance().applyLanguage(localeInfo, true, false, false, true, currentAccount);
-                parentLayout.rebuildAllFragmentViews(false, false);
+                MyLang.getInstance().applyLanguage(getParentActivity(), localeInfo, true, false, false, true, new MLang.FinishLoadCallback() {
+                    @Override
+                    public void finishLoad() {
+                        parentLayout.rebuildAllFragmentViews(false, false);
+                        finishFragment();
+                    }
+                });
             }
-            finishFragment();
         });
 
         listView.setOnItemLongClickListener((view, position) -> {
@@ -153,16 +168,16 @@ public class LanguageSelectPage extends BasePage implements NotificationCenter.N
                 return false;
             }
             LanguageCell cell = (LanguageCell) view;
-            LocaleController.LocaleInfo localeInfo = cell.getCurrentLocale();
+            MLang.LocaleInfo localeInfo = cell.getCurrentLocale();
             if (localeInfo == null || localeInfo.pathToFile == null || localeInfo.isRemote() && localeInfo.serverIndex != Integer.MAX_VALUE) {
                 return false;
             }
-            final LocaleController.LocaleInfo finalLocaleInfo = localeInfo;
+            final MLang.LocaleInfo finalLocaleInfo = localeInfo;
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-            builder.setTitle(LocaleController.getString("DeleteLocalizationTitle", R.string.DeleteLocalizationTitle));
-            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("DeleteLocalizationText", R.string.DeleteLocalizationText, localeInfo.name)));
-            builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), (dialogInterface, i) -> {
-                if (LocaleController.getInstance().deleteLanguage(finalLocaleInfo, currentAccount)) {
+            builder.setTitle(MyLang.getString("DeleteLocalizationTitle", R.string.DeleteLocalizationTitle));
+            builder.setMessage(MyLang.replaceTags(MyLang.formatString("DeleteLocalizationText", R.string.DeleteLocalizationText, localeInfo.name)));
+            builder.setPositiveButton(MyLang.getString("Delete", R.string.Delete), (dialogInterface, i) -> {
+                if (MyLang.getInstance().deleteLanguage(getParentActivity(), finalLocaleInfo)) {
                     fillLanguages();
                     if (searchResult != null) {
                         searchResult.remove(finalLocaleInfo);
@@ -175,7 +190,7 @@ public class LanguageSelectPage extends BasePage implements NotificationCenter.N
                     }
                 }
             });
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            builder.setNegativeButton(MyLang.getString("Cancel", R.string.Cancel), null);
             AlertDialog alertDialog = builder.create();
             showDialog(alertDialog);
             TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -197,19 +212,9 @@ public class LanguageSelectPage extends BasePage implements NotificationCenter.N
         return fragmentView;
     }
 
-    @Override
-    public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.suggestedLangpack) {
-            if (listAdapter != null) {
-                fillLanguages();
-                listAdapter.notifyDataSetChanged();
-            }
-        }
-    }
-
     private void fillLanguages() {
-        final LocaleController.LocaleInfo currentLocale = LocaleController.getInstance().getCurrentLocaleInfo();
-        Comparator<LocaleController.LocaleInfo> comparator = (o, o2) -> {
+        final MLang.LocaleInfo currentLocale = MyLang.getInstance().getCurrentLocaleInfo();
+        Comparator<MLang.LocaleInfo> comparator = (o, o2) -> {
             if (o == currentLocale) {
                 return -1;
             } else if (o2 == currentLocale) {
@@ -226,11 +231,11 @@ public class LanguageSelectPage extends BasePage implements NotificationCenter.N
         };
 
         sortedLanguages = new ArrayList<>();
-        unofficialLanguages = new ArrayList<>(LocaleController.getInstance().unofficialLanguages);
+        unofficialLanguages = new ArrayList<>(MyLang.getInstance().unofficialLanguages);
 
-        ArrayList<LocaleController.LocaleInfo> arrayList = LocaleController.getInstance().languages;
+        ArrayList<MLang.LocaleInfo> arrayList = MyLang.getInstance().languages;
         for (int a = 0, size = arrayList.size(); a < size; a++) {
-            LocaleController.LocaleInfo info = arrayList.get(a);
+            MLang.LocaleInfo info = arrayList.get(a);
             if (info.serverIndex != Integer.MAX_VALUE) {
                 sortedLanguages.add(info);
             } else {
@@ -258,7 +263,7 @@ public class LanguageSelectPage extends BasePage implements NotificationCenter.N
                     searchTimer.cancel();
                 }
             } catch (Exception e) {
-                FileLog.e(e);
+                e.printStackTrace();
             }
             searchTimer = new Timer();
             searchTimer.schedule(new TimerTask() {
@@ -268,7 +273,7 @@ public class LanguageSelectPage extends BasePage implements NotificationCenter.N
                         searchTimer.cancel();
                         searchTimer = null;
                     } catch (Exception e) {
-                        FileLog.e(e);
+                        e.printStackTrace();
                     }
                     processSearch(query);
                 }
@@ -277,7 +282,7 @@ public class LanguageSelectPage extends BasePage implements NotificationCenter.N
     }
 
     private void processSearch(final String query) {
-        Utilities.searchQueue.postRunnable(() -> {
+        AndroidUtilities.searchQueue.postRunnable(() -> {
 
             String q = query.trim().toLowerCase();
             if (q.length() == 0) {
@@ -285,17 +290,17 @@ public class LanguageSelectPage extends BasePage implements NotificationCenter.N
                 return;
             }
             long time = System.currentTimeMillis();
-            ArrayList<LocaleController.LocaleInfo> resultArray = new ArrayList<>();
+            ArrayList<MLang.LocaleInfo> resultArray = new ArrayList<>();
 
             for (int a = 0, N = unofficialLanguages.size(); a < N; a++) {
-                LocaleController.LocaleInfo c = unofficialLanguages.get(a);
+                MLang.LocaleInfo c = unofficialLanguages.get(a);
                 if (c.name.toLowerCase().startsWith(query) || c.nameEnglish.toLowerCase().startsWith(query)) {
                     resultArray.add(c);
                 }
             }
 
             for (int a = 0, N = sortedLanguages.size(); a < N; a++) {
-                LocaleController.LocaleInfo c = sortedLanguages.get(a);
+                MLang.LocaleInfo c = sortedLanguages.get(a);
                 if (c.name.toLowerCase().startsWith(query) || c.nameEnglish.toLowerCase().startsWith(query)) {
                     resultArray.add(c);
                 }
@@ -305,7 +310,7 @@ public class LanguageSelectPage extends BasePage implements NotificationCenter.N
         });
     }
 
-    private void updateSearchResults(final ArrayList<LocaleController.LocaleInfo> arrCounties) {
+    private void updateSearchResults(final ArrayList<MLang.LocaleInfo> arrCounties) {
         AndroidUtilities.runOnUIThread(() -> {
             searchResult = arrCounties;
             searchListViewAdapter.notifyDataSetChanged();
@@ -369,7 +374,7 @@ public class LanguageSelectPage extends BasePage implements NotificationCenter.N
             switch (holder.getItemViewType()) {
                 case 0: {
                     LanguageCell textSettingsCell = (LanguageCell) holder.itemView;
-                    LocaleController.LocaleInfo localeInfo;
+                    MLang.LocaleInfo localeInfo;
                     boolean last;
                     if (search) {
                         localeInfo = searchResult.get(position);
@@ -385,11 +390,11 @@ public class LanguageSelectPage extends BasePage implements NotificationCenter.N
                         last = position == sortedLanguages.size() - 1;
                     }
                     if (localeInfo.isLocal()) {
-                        textSettingsCell.setLanguage(localeInfo, String.format("%1$s (%2$s)", localeInfo.name, LocaleController.getString("LanguageCustom", R.string.LanguageCustom)), !last);
+                        textSettingsCell.setLanguage(localeInfo, String.format("%1$s (%2$s)", localeInfo.name, MyLang.getString("LanguageCustom", R.string.LanguageCustom)), !last);
                     } else {
                         textSettingsCell.setLanguage(localeInfo, null, !last);
                     }
-                    textSettingsCell.setLanguageSelected(localeInfo == LocaleController.getInstance().getCurrentLocaleInfo());
+                    textSettingsCell.setLanguageSelected(localeInfo == MyLang.getInstance().getCurrentLocaleInfo());
                     break;
                 }
                 case 1: {
@@ -415,31 +420,28 @@ public class LanguageSelectPage extends BasePage implements NotificationCenter.N
 
     @Override
     public ArrayList<ThemeDescription> getThemeDescriptions() {
-        ArrayList<ThemeDescription> themeDescriptions = new ArrayList<>();
+        ArrayList<ThemeDescription> d = new ArrayList<>();
 
-        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{LanguageCell.class}, null, null, null, Theme.key_windowBackgroundWhite));
-        themeDescriptions.add(new ThemeDescription(fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray));
+        d.add(new ThemeDescription(fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray));
 
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault));
-        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault));
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon));
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle));
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector));
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SEARCH, null, null, null, null, Theme.key_actionBarDefaultSearch));
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, null, null, null, null, Theme.key_actionBarDefaultSearchPlaceholder));
+        d.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault));
+        d.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon));
+        d.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle));
+        d.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector));
+        d.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SEARCH, null, null, null, null, Theme.key_actionBarDefaultSearch));
+        d.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, null, null, null, null, Theme.key_actionBarDefaultSearchPlaceholder));
 
-        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector));
+        d.add(new ThemeDescription(emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_emptyListPlaceholder));
 
-        themeDescriptions.add(new ThemeDescription(emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_emptyListPlaceholder));
+        d.add(new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{LanguageCell.class}, null, null, null, Theme.key_windowBackgroundWhite));
+        d.add(new ThemeDescription(listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault));
+        d.add(new ThemeDescription(listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector));
+        d.add(new ThemeDescription(listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider));
+        d.add(new ThemeDescription(listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow));
+        d.add(new ThemeDescription(listView, 0, new Class[]{LanguageCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+        d.add(new ThemeDescription(listView, 0, new Class[]{LanguageCell.class}, new String[]{"textView2"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3));
+        d.add(new ThemeDescription(listView, 0, new Class[]{LanguageCell.class}, new String[]{"checkImage"}, null, null, null, Theme.key_featuredStickers_addedIcon));
 
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider));
-
-        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow));
-
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{LanguageCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{LanguageCell.class}, new String[]{"textView2"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{LanguageCell.class}, new String[]{"checkImage"}, null, null, null, Theme.key_featuredStickers_addedIcon));
-
-        return themeDescriptions;
+        return d;
     }
 }

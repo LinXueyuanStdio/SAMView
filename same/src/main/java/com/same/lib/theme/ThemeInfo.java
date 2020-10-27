@@ -13,6 +13,7 @@ import android.util.LongSparseArray;
 import android.util.SparseArray;
 
 import com.same.lib.R;
+import com.same.lib.drawable.BackgroundGradientDrawable;
 import com.same.lib.util.AndroidUtilities;
 import com.same.lib.util.NotificationCenter;
 import com.timecat.component.locale.MLang;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 
 import androidx.annotation.UiThread;
 
+import static com.same.lib.theme.Theme.*;
 import static com.same.lib.theme.ThemeManager.*;
 
 /**
@@ -34,7 +36,7 @@ import static com.same.lib.theme.ThemeManager.*;
  * @description null
  * @usage null
  */
-public class ThemeInfo implements NotificationCenter.NotificationCenterDelegate {
+public class ThemeInfo {
     public String name;
     public String pathToFile;
     public String pathToWallpaper;
@@ -117,9 +119,9 @@ public class ThemeInfo implements NotificationCenter.NotificationCenterDelegate 
         }
     }
 
-    private void loadOverrideWallpaper(SharedPreferences sharedPreferences, ThemeAccent accent, String key) {
+    void loadOverrideWallpaper(SharedPreferences sharedPreferences, ThemeAccent accent, String key) {
         try {
-            String json = sharedPreferences.getString(key, null);
+            String json = sharedPreferences.getString(key,  null);
             if (TextUtils.isEmpty(json)) {
                 return;
             }
@@ -144,7 +146,7 @@ public class ThemeInfo implements NotificationCenter.NotificationCenterDelegate 
             if (object.has("wallId")) {
                 long id = object.getLong("wallId");
                 if (id == 1000001) {
-                    wallpaperInfo.slug = Theme.DEFAULT_BACKGROUND_SLUG;
+                    wallpaperInfo.slug = DEFAULT_BACKGROUND_SLUG;
                 }
             }
         } catch (Throwable e) {
@@ -218,21 +220,21 @@ public class ThemeInfo implements NotificationCenter.NotificationCenterDelegate 
     }
 
     public int getPreviewInColor() {
-        if (firstAccentIsDefault && currentAccentId == Theme.DEFALT_THEME_ACCENT_ID) {
+        if (firstAccentIsDefault && currentAccentId == DEFALT_THEME_ACCENT_ID) {
             return 0xffffffff;
         }
         return previewInColor;
     }
 
     public int getPreviewOutColor() {
-        if (firstAccentIsDefault && currentAccentId == Theme.DEFALT_THEME_ACCENT_ID) {
+        if (firstAccentIsDefault && currentAccentId == DEFALT_THEME_ACCENT_ID) {
             return 0xfff0fee0;
         }
         return previewOutColor;
     }
 
     public int getPreviewBackgroundColor() {
-        if (firstAccentIsDefault && currentAccentId == Theme.DEFALT_THEME_ACCENT_ID) {
+        if (firstAccentIsDefault && currentAccentId == DEFALT_THEME_ACCENT_ID) {
             return 0xffcfd9e3;
         }
         return previewBackgroundColor;
@@ -242,10 +244,10 @@ public class ThemeInfo implements NotificationCenter.NotificationCenterDelegate 
         if (!firstAccentIsDefault) {
             return false;
         }
-        if (currentAccentId == Theme.DEFALT_THEME_ACCENT_ID) {
+        if (currentAccentId == DEFALT_THEME_ACCENT_ID) {
             return true;
         }
-        ThemeAccent defaultAccent = themeAccentsMap.get(Theme.DEFALT_THEME_ACCENT_ID);
+        ThemeAccent defaultAccent = themeAccentsMap.get(DEFALT_THEME_ACCENT_ID);
         ThemeAccent accent = themeAccentsMap.get(currentAccentId);
         if (defaultAccent == null || accent == null) {
             return false;
@@ -257,10 +259,10 @@ public class ThemeInfo implements NotificationCenter.NotificationCenterDelegate 
         if (!firstAccentIsDefault) {
             return false;
         }
-        if (currentAccentId == Theme.DEFALT_THEME_ACCENT_ID) {
+        if (currentAccentId == DEFALT_THEME_ACCENT_ID) {
             return true;
         }
-        ThemeAccent defaultAccent = themeAccentsMap.get(Theme.DEFALT_THEME_ACCENT_ID);
+        ThemeAccent defaultAccent = themeAccentsMap.get(DEFALT_THEME_ACCENT_ID);
         ThemeAccent accent = themeAccentsMap.get(currentAccentId);
         return accent != null && defaultAccent != null && defaultAccent.accentColor == accent.accentColor;
     }
@@ -326,7 +328,7 @@ public class ThemeInfo implements NotificationCenter.NotificationCenterDelegate 
         return themeInfo;
     }
 
-    private void setAccentColorOptions(int[] options) {
+    void setAccentColorOptions(int[] options) {
         setAccentColorOptions(options, null, null, null, null, null, null, null, null);
     }
 
@@ -348,14 +350,14 @@ public class ThemeInfo implements NotificationCenter.NotificationCenterDelegate 
             }
             if (background != null) {
                 themeAccent.backgroundOverrideColor = background[a];
-                if (firstAccentIsDefault && themeAccent.id == Theme.DEFALT_THEME_ACCENT_ID) {
+                if (firstAccentIsDefault && themeAccent.id == DEFALT_THEME_ACCENT_ID) {
                     themeAccent.backgroundOverrideColor = 0x100000000L;
                 } else {
                     themeAccent.backgroundOverrideColor = background[a];
                 }
             }
             if (backgroundGradient != null) {
-                if (firstAccentIsDefault && themeAccent.id == Theme.DEFALT_THEME_ACCENT_ID) {
+                if (firstAccentIsDefault && themeAccent.id == DEFALT_THEME_ACCENT_ID) {
                     themeAccent.backgroundGradientOverrideColor = 0x100000000L;
                 } else {
                     themeAccent.backgroundGradientOverrideColor = backgroundGradient[a];
@@ -381,24 +383,26 @@ public class ThemeInfo implements NotificationCenter.NotificationCenterDelegate 
         FileLoader.getInstance(account).loadFile(info.document, info, 1, 1);
     }
 
-    private void addObservers() {
-        NotificationCenter.getInstance(account).addObserver(this, NotificationCenter.fileDidLoad);
-        NotificationCenter.getInstance(account).addObserver(this, NotificationCenter.fileDidFailToLoad);
+    void addObservers() {
+        //TODO
+//        NotificationCenter.getInstance(account).addObserver(this, NotificationCenter.fileDidLoad);
+//        NotificationCenter.getInstance(account).addObserver(this, NotificationCenter.fileDidFailToLoad);
     }
 
 
     @UiThread
-    private void removeObservers() {
-        NotificationCenter.getInstance(account).removeObserver(this, NotificationCenter.fileDidLoad);
-        NotificationCenter.getInstance(account).removeObserver(this, NotificationCenter.fileDidFailToLoad);
+    void removeObservers() {
+        //TODO
+//        NotificationCenter.getInstance(account).removeObserver(this, NotificationCenter.fileDidLoad);
+//        NotificationCenter.getInstance(account).removeObserver(this, NotificationCenter.fileDidFailToLoad);
     }
 
-    private void onFinishLoadingRemoteTheme() {
+    void onFinishLoadingRemoteTheme() {
         loaded = true;
         previewParsed = false;
         saveOtherThemes(true);
-        if (this == Theme.currentTheme && Theme.previousTheme == null) {
-            NotificationCenter.postNotificationName(NotificationCenter.needSetDayNightTheme, this, this == Theme.currentNightTheme, null, -1);
+        if (this == currentTheme && previousTheme == null) {
+            NotificationCenter.postNotificationName(NotificationCenter.needSetDayNightTheme, this);
         }
     }
 
@@ -557,58 +561,58 @@ public class ThemeInfo implements NotificationCenter.NotificationCenterDelegate 
         return false;
     }
 
-    @Override
-    public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.fileDidLoad || id == NotificationCenter.fileDidFailToLoad) {
-            String location = (String) args[0];
-            if (info != null && info.document != null) {
-                if (location.equals(loadingThemeWallpaperName)) {
-                    loadingThemeWallpaperName = null;
-                    File file = (File) args[1];
-                    Utilities.globalQueue.postRunnable(() -> {
-                        createBackground(file, newPathToWallpaper);
-                        AndroidUtilities.runOnUIThread(this::onFinishLoadingRemoteTheme);
-                    });
-                } else {
-                    String name = FileLoader.getAttachFileName(info.document);
-                    if (location.equals(name)) {
-                        removeObservers();
-                        if (id == NotificationCenter.fileDidLoad) {
-                            File locFile = new File(pathToFile);
-                            ThemeInfo themeInfo = fillThemeValues(locFile, info.title, info);
-                            if (themeInfo != null && themeInfo.pathToWallpaper != null) {
-                                File file = new File(themeInfo.pathToWallpaper);
-                                if (!file.exists()) {
-                                    patternBgColor = themeInfo.patternBgColor;
-                                    patternBgGradientColor = themeInfo.patternBgGradientColor;
-                                    patternBgGradientRotation = themeInfo.patternBgGradientRotation;
-                                    isBlured = themeInfo.isBlured;
-                                    patternIntensity = themeInfo.patternIntensity;
-                                    newPathToWallpaper = themeInfo.pathToWallpaper;
-
-                                    //TODO 发起请求
-                                    //                                        TLRPC.TL_account_getWallPaper req = new TLRPC.TL_account_getWallPaper();
-                                    //                                        TLRPC.TL_inputWallPaperSlug inputWallPaperSlug = new TLRPC.TL_inputWallPaperSlug();
-                                    //                                        inputWallPaperSlug.slug = themeInfo.slug;
-                                    //                                        req.wallpaper = inputWallPaperSlug;
-                                    //                                        ConnectionsManager.getInstance(themeInfo.account).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
-                                    //                                            if (response instanceof WallPaper) {
-                                    //                                                WallPaper wallPaper = (WallPaper) response;
-                                    //                                                loadingThemeWallpaperName = FileLoader.getAttachFileName(wallPaper.document);
-                                    //                                                addObservers();
-                                    //                                                FileLoader.getInstance(themeInfo.account).loadFile(wallPaper.document, wallPaper, 1, 1);
-                                    //                                            } else {
-                                    //                                                onFinishLoadingRemoteTheme();
-                                    //                                            }
-                                    //                                        }));
-                                    return;
-                                }
-                            }
-                            onFinishLoadingRemoteTheme();
-                        }
-                    }
-                }
-            }
-        }
-    }
+//    @Override TODO 文件加载？
+//    public void didReceivedNotification(int id, int account, Object... args) {
+//        if (id == NotificationCenter.fileDidLoad || id == NotificationCenter.fileDidFailToLoad) {
+//            String location = (String) args[0];
+//            if (info != null && info.document != null) {
+//                if (location.equals(loadingThemeWallpaperName)) {
+//                    loadingThemeWallpaperName = null;
+//                    File file = (File) args[1];
+//                    AndroidUtilities.globalQueue.postRunnable(() -> {
+//                        createBackground(file, newPathToWallpaper);
+//                        AndroidUtilities.runOnUIThread(this::onFinishLoadingRemoteTheme);
+//                    });
+//                } else {
+//                    String name = AndroidUtilities.getAttachFileName(info.document);
+//                    if (location.equals(name)) {
+//                        removeObservers();
+//                        if (id == NotificationCenter.fileDidLoad) {
+//                            File locFile = new File(pathToFile);
+//                            ThemeInfo themeInfo = fillThemeValues(locFile, info.title, info);
+//                            if (themeInfo != null && themeInfo.pathToWallpaper != null) {
+//                                File file = new File(themeInfo.pathToWallpaper);
+//                                if (!file.exists()) {
+//                                    patternBgColor = themeInfo.patternBgColor;
+//                                    patternBgGradientColor = themeInfo.patternBgGradientColor;
+//                                    patternBgGradientRotation = themeInfo.patternBgGradientRotation;
+//                                    isBlured = themeInfo.isBlured;
+//                                    patternIntensity = themeInfo.patternIntensity;
+//                                    newPathToWallpaper = themeInfo.pathToWallpaper;
+//
+//                                    //TODO 发起请求
+//                                    //                                        TLRPC.TL_account_getWallPaper req = new TLRPC.TL_account_getWallPaper();
+//                                    //                                        TLRPC.TL_inputWallPaperSlug inputWallPaperSlug = new TLRPC.TL_inputWallPaperSlug();
+//                                    //                                        inputWallPaperSlug.slug = themeInfo.slug;
+//                                    //                                        req.wallpaper = inputWallPaperSlug;
+//                                    //                                        ConnectionsManager.getInstance(themeInfo.account).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+//                                    //                                            if (response instanceof WallPaper) {
+//                                    //                                                WallPaper wallPaper = (WallPaper) response;
+//                                    //                                                loadingThemeWallpaperName = FileLoader.getAttachFileName(wallPaper.document);
+//                                    //                                                addObservers();
+//                                    //                                                FileLoader.getInstance(themeInfo.account).loadFile(wallPaper.document, wallPaper, 1, 1);
+//                                    //                                            } else {
+//                                    //                                                onFinishLoadingRemoteTheme();
+//                                    //                                            }
+//                                    //                                        }));
+//                                    return;
+//                                }
+//                            }
+//                            onFinishLoadingRemoteTheme();
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 }

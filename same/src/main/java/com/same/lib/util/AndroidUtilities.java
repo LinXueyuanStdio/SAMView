@@ -15,6 +15,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.text.Selection;
 import android.text.Spannable;
@@ -34,6 +35,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.same.lib.helper.Bitmaps;
+import com.same.lib.helper.DispatchQueue;
+import com.same.lib.theme.Document;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -55,10 +58,14 @@ import androidx.viewpager.widget.ViewPager;
  */
 
 public class AndroidUtilities {
+    public static volatile DispatchQueue searchQueue = new DispatchQueue("searchQueue");
+    public static volatile DispatchQueue globalQueue = new DispatchQueue("globalQueue");
     private static final Hashtable<String, Typeface> typefaceCache = new Hashtable<>();
     private static int prevOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;//-10;
     private static boolean waitingForSms = false;
     private static boolean waitingForCall = false;
+    public static boolean mainInterfacePaused = false;
+    public static boolean isScreenOn = false;
     private static final Object smsLock = new Object();
     private static final Object callLock = new Object();
 
@@ -302,6 +309,18 @@ public class AndroidUtilities {
         int bS = Color.blue(color1);
         int aS = Color.alpha(color1);
         return Color.argb((int) ((aS + (aF - aS) * offset) * alpha), (int) (rS + (rF - rS) * offset), (int) (gS + (gF - gS) * offset), (int) (bS + (bF - bS) * offset));
+    }
+
+    public static int getShadowHeight() {
+        return 0;
+    }
+
+    public static String getAttachFileName(Document document) {
+        return document.file_name;
+    }
+
+    public static File getPathToAttach(Document document, boolean b) {
+        return new File(document.file_name);
     }
 
     public static class LinkMovementMethodMy extends LinkMovementMethod {
@@ -603,8 +622,48 @@ public class AndroidUtilities {
         return null;
     }
 
+
+    public static File getCacheDir() {
+        File cachePath = AndroidUtilities.cacheDir();
+        if (!cachePath.isDirectory()) {
+            try {
+                cachePath.mkdirs();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return cachePath;
+    }
+    public static File cacheDir() {
+        String state = null;
+        try {
+            state = Environment.getExternalStorageState();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (state == null || state.startsWith(Environment.MEDIA_MOUNTED)) {
+            try {
+                File file = SharedConfig.applicationContext().getExternalCacheDir();
+                if (file != null) {
+                    return file;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            File file = SharedConfig.applicationContext().getCacheDir();
+            if (file != null) {
+                return file;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new File("");
+    }
+
     public static File getSharingDirectory() {
-        return new File(FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE), "sharing/");
+        return new File(getCacheDir(), "sharing/");
     }
 
     public static byte[] getStringBytes(String src) {
@@ -743,5 +802,45 @@ public class AndroidUtilities {
         return Color.argb(255, (r1 / 2 + r2 / 2), (g1 / 2 + g2 / 2), (b1 / 2 + b2 / 2));
     }
 
+    public static String MD5(String md5) {
+        if (md5 == null) {
+            return null;
+        }
+        try {
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+            byte[] array = md.digest(AndroidUtilities.getStringBytes(md5));
+            StringBuilder sb = new StringBuilder();
+            for (int a = 0; a < array.length; a++) {
+                sb.append(Integer.toHexString((array[a] & 0xFF) | 0x100).substring(1, 3));
+            }
+            return sb.toString();
+        } catch (java.security.NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static boolean isClientActivated(int account) {
+        return true;
+    }
+
+    public static int getWallpaperRotation(int angle, boolean iOS) {
+        if (iOS) {
+            angle += 180;
+        } else {
+            angle -= 180;
+        }
+        while (angle >= 360) {
+            angle -= 360;
+        }
+        while (angle < 0) {
+            angle += 360;
+        }
+        return angle;
+    }
+
+    public static void destroyThemeEditor() {
+
+    }
 }
 
