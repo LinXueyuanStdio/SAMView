@@ -1997,7 +1997,7 @@ public class Theme {
                     }
                 }
                 saveOtherThemes(true, true);
-                themeConfig.edit().remove("themes").commit();
+                themeConfig.edit().remove("themes").apply();
             }
         }
 
@@ -2298,7 +2298,7 @@ public class Theme {
         return eventType;
     }
 
-    public static Drawable getCurrentHolidayDrawable() {
+    public static Drawable getCurrentHolidayDrawable(Context context) {
         if ((System.currentTimeMillis() - lastHolidayCheckTime) >= 60 * 1000) {
             lastHolidayCheckTime = System.currentTimeMillis();
             Calendar calendar = Calendar.getInstance();
@@ -2314,7 +2314,7 @@ public class Theme {
             }
             if (dialogs_holidayDrawable == null) {
                 if (monthOfYear == 11 && dayOfMonth >= (SharedConfig.DEBUG_PRIVATE_VERSION ? 29 : 31) && dayOfMonth <= 31 || monthOfYear == 0 && dayOfMonth == 1) {
-                    dialogs_holidayDrawable = SharedConfig.applicationContext().getResources().getDrawable(R.drawable.newyear);
+                    dialogs_holidayDrawable = context.getResources().getDrawable(R.drawable.newyear);
                     dialogs_holidayDrawableOffsetX = -AndroidUtilities.dp(3);
                     dialogs_holidayDrawableOffsetY = -AndroidUtilities.dp(1);
                 }
@@ -2377,14 +2377,14 @@ public class Theme {
         return defaultDrawable;
     }
 
-    public static CombinedDrawable createCircleDrawableWithIcon(int size, int iconRes) {
-        return createCircleDrawableWithIcon(size, iconRes, 0);
+    public static CombinedDrawable createCircleDrawableWithIcon(Context context, int size, int iconRes) {
+        return createCircleDrawableWithIcon(context, size, iconRes, 0);
     }
 
-    public static CombinedDrawable createCircleDrawableWithIcon(int size, int iconRes, int stroke) {
+    public static CombinedDrawable createCircleDrawableWithIcon(Context context, int size, int iconRes, int stroke) {
         Drawable drawable;
         if (iconRes != 0) {
-            drawable = SharedConfig.applicationContext().getResources().getDrawable(iconRes).mutate();
+            drawable = context.getResources().getDrawable(iconRes).mutate();
         } else {
             drawable = null;
         }
@@ -2408,10 +2408,10 @@ public class Theme {
         return combinedDrawable;
     }
 
-    public static Drawable createRoundRectDrawableWithIcon(int rad, int iconRes) {
+    public static Drawable createRoundRectDrawableWithIcon(Context context, int rad, int iconRes) {
         ShapeDrawable defaultDrawable = new ShapeDrawable(new RoundRectShape(new float[]{rad, rad, rad, rad, rad, rad, rad, rad}, null, null));
         defaultDrawable.getPaint().setColor(0xffffffff);
-        Drawable drawable = SharedConfig.applicationContext().getResources().getDrawable(iconRes).mutate();
+        Drawable drawable = context.getResources().getDrawable(iconRes).mutate();
         return new CombinedDrawable(defaultDrawable, drawable);
     }
 
@@ -2807,7 +2807,7 @@ public class Theme {
         return color;
     }
 
-    public static void setColor(String key, int color, boolean useDefault) {
+    public static void setColor(Context context, String key, int color, boolean useDefault) {
         if (key.equals(key_chat_wallpaper) || key.equals(key_chat_wallpaper_gradient_to) || key.equals(key_windowBackgroundWhite) || key.equals(key_windowBackgroundGray)) {
             color = 0xff000000 | color;
         }
@@ -2826,7 +2826,7 @@ public class Theme {
             case key_chat_wallpaper:
             case key_chat_wallpaper_gradient_to:
             case key_chat_wallpaper_gradient_rotation:
-                reloadWallpaper();
+                reloadWallpaper(context);
                 break;
             case key_actionBarDefault:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -2845,23 +2845,23 @@ public class Theme {
         defaultColors.put(key, color);
     }
 
-    public static void setThemeWallpaper(ThemeInfo themeInfo, Bitmap bitmap, File path) {
+    public static void setThemeWallpaper(Context context, ThemeInfo themeInfo, Bitmap bitmap, File path) {
         currentColors.remove(key_chat_wallpaper);
         currentColors.remove(key_chat_wallpaper_gradient_to);
         currentColors.remove(key_chat_wallpaper_gradient_rotation);
         themedWallpaperLink = null;
-        themeInfo.setOverrideWallpaper(null);
+        themeInfo.setOverrideWallpaper(context, null);
         if (bitmap != null) {
             themedWallpaper = new BitmapDrawable(bitmap);
-            saveCurrentTheme(themeInfo, false, false, false);
+            saveCurrentTheme(context, themeInfo, false, false, false);
             calcBackgroundColor(themedWallpaper, 0);
             applyChatServiceMessageColor();
             NotificationCenter.postNotificationName(NotificationCenter.didSetNewWallpapper);
         } else {
             themedWallpaper = null;
             wallpaper = null;
-            saveCurrentTheme(themeInfo, false, false, false);
-            reloadWallpaper();
+            saveCurrentTheme(context, themeInfo, false, false, false);
+            reloadWallpaper(context);
         }
     }
 
@@ -2983,14 +2983,14 @@ public class Theme {
         return isCustomTheme;
     }
 
-    public static void reloadWallpaper() {
+    public static void reloadWallpaper(Context context) {
         if (backgroundGradientDisposable != null) {
             backgroundGradientDisposable.dispose();
             backgroundGradientDisposable = null;
         }
         wallpaper = null;
         themedWallpaper = null;
-        loadWallpaper();
+        loadWallpaper(context);
     }
 
     static void calcBackgroundColor(Drawable drawable, int save) {
@@ -3008,7 +3008,7 @@ public class Theme {
         return serviceColor == null ? serviceMessageColor : serviceColor;
     }
 
-    public static void loadWallpaper() {
+    public static void loadWallpaper(Context context) {
         if (wallpaper != null) {
             return;
         }
@@ -3087,7 +3087,7 @@ public class Theme {
                         try {
                             File file;
                             if (currentTheme.assetName != null) {
-                                file = getAssetFile(currentTheme.assetName);
+                                file = getAssetFile(context, currentTheme.assetName);
                             } else {
                                 file = new File(currentTheme.pathToFile);
                             }
@@ -3105,7 +3105,7 @@ public class Theme {
                     int selectedColor = overrideWallpaper != null ? overrideWallpaper.color : 0;
                     try {
                         if (overrideWallpaper == null || overrideWallpaper.isDefault()) {
-                            wallpaper = SharedConfig.applicationContext().getResources().getDrawable(R.drawable.background_hd);
+                            wallpaper = context.getResources().getDrawable(R.drawable.background_hd);
                             isCustomTheme = false;
                         } else if (!overrideWallpaper.isColor() || overrideWallpaper.gradientColor != 0) {
                             if (selectedColor != 0 && !isPatternWallpaper) {
@@ -3138,7 +3138,7 @@ public class Theme {
                                     }
                                 }
                                 if (wallpaper == null) {
-                                    wallpaper = SharedConfig.applicationContext().getResources().getDrawable(R.drawable.background_hd);
+                                    wallpaper = context.getResources().getDrawable(R.drawable.background_hd);
                                     isCustomTheme = false;
                                 }
                             }
@@ -3209,7 +3209,7 @@ public class Theme {
     }
     //endregion
 
-    public static Drawable getThemedWallpaper(boolean thumb, View ownerView) {
+    public static Drawable getThemedWallpaper(Context context, boolean thumb, View ownerView) {
         Integer backgroundColor = currentColors.get(key_chat_wallpaper);
         File file = null;
         int offset = 0;
@@ -3264,7 +3264,7 @@ public class Theme {
             }
         } else if (themedWallpaperFileOffset > 0 && (currentTheme.pathToFile != null || currentTheme.assetName != null)) {
             if (currentTheme.assetName != null) {
-                file = getAssetFile(currentTheme.assetName);
+                file = getAssetFile(context, currentTheme.assetName);
             } else {
                 file = new File(currentTheme.pathToFile);
             }

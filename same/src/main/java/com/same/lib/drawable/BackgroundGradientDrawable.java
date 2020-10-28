@@ -1,5 +1,6 @@
 package com.same.lib.drawable;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
@@ -10,7 +11,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.view.View;
 
 import com.same.lib.util.AndroidUtilities;
-import com.same.lib.util.SharedConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -425,12 +425,12 @@ public class BackgroundGradientDrawable extends GradientDrawable {
         }
     }
 
-    public static BitmapDrawable createDitheredGradientBitmapDrawable(int angle, int[] colors, int width, int height) {
-        return createDitheredGradientBitmapDrawable(getGradientOrientation(angle), colors, width, height);
+    public static BitmapDrawable createDitheredGradientBitmapDrawable(Context context, int angle, int[] colors, int width, int height) {
+        return createDitheredGradientBitmapDrawable(context, getGradientOrientation(angle), colors, width, height);
     }
 
-    public static BitmapDrawable createDitheredGradientBitmapDrawable(Orientation orientation, int[] colors, int width, int height) {
-        return new BitmapDrawable(SharedConfig.applicationContext().getResources(), createDitheredGradientBitmap(orientation, colors, width, height));
+    public static BitmapDrawable createDitheredGradientBitmapDrawable(Context context, Orientation orientation, int[] colors, int width, int height) {
+        return new BitmapDrawable(context.getResources(), createDitheredGradientBitmap(orientation, colors, width, height));
     }
 
     private static Bitmap createDitheredGradientBitmap(Orientation orientation, int[] colors, int width, int height) {

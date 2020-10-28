@@ -1,5 +1,6 @@
 package com.same.lib.theme;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -174,14 +175,14 @@ public class PatternsLoader {
         });
     }
 
-    private void checkCurrentWallpaper(ArrayList<ThemeAccent> accents, boolean load) {
-        AndroidUtilities.runOnUIThread(() -> checkCurrentWallpaperInternal(accents, load));
+    private void checkCurrentWallpaper(Context context, ArrayList<ThemeAccent> accents, boolean load) {
+        AndroidUtilities.runOnUIThread(() -> checkCurrentWallpaperInternal(context, accents, load));
     }
 
-    private void checkCurrentWallpaperInternal(ArrayList<ThemeAccent> accents, boolean load) {
+    private void checkCurrentWallpaperInternal(Context context, ArrayList<ThemeAccent> accents, boolean load) {
         if (accents != null && currentTheme.themeAccents != null && !currentTheme.themeAccents.isEmpty()) {
             if (accents.contains(currentTheme.getAccent(false))) {
-                reloadWallpaper();
+                reloadWallpaper(context);
             }
         }
         if (load) {
@@ -204,14 +205,14 @@ public class PatternsLoader {
         }
     }
 
-    private Bitmap createWallpaperForAccent(Bitmap patternBitmap, boolean svg, File patternPath, ThemeAccent accent) {
+    private Bitmap createWallpaperForAccent(Context context, Bitmap patternBitmap, boolean svg, File patternPath, ThemeAccent accent) {
         try {
             File toFile = accent.getPathToWallpaper();
             if (toFile == null) {
                 return null;
             }
             ThemeInfo themeInfo = accent.parentTheme;
-            HashMap<String, Integer> values = getThemeFileValues(null, themeInfo.assetName, null);
+            HashMap<String, Integer> values = getThemeFileValues(context, null, themeInfo.assetName, null);
 
             int backgroundAccent = accent.accentColor;
 

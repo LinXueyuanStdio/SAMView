@@ -164,7 +164,7 @@ public class ActionBar extends FrameLayout {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         if (supportsHolidayImage && !titleOverlayShown && !SharedConfig.isRTL && ev.getAction() == MotionEvent.ACTION_DOWN) {
-            Drawable drawable = Theme.getCurrentHolidayDrawable();
+            Drawable drawable = Theme.getCurrentHolidayDrawable(getContext());
             if (drawable != null && drawable.getBounds().contains((int) ev.getX(), (int) ev.getY())) {
                 manualStart = true;
                 if (snowflakesEffect == null) {
@@ -196,7 +196,7 @@ public class ActionBar extends FrameLayout {
         }
         boolean result = super.drawChild(canvas, child, drawingTime);
         if (supportsHolidayImage && !titleOverlayShown && !SharedConfig.isRTL && child == titleTextView) {
-            Drawable drawable = Theme.getCurrentHolidayDrawable();
+            Drawable drawable = Theme.getCurrentHolidayDrawable(getContext());
             if (drawable != null) {
                 TextPaint textPaint = titleTextView.getTextPaint();
                 textPaint.getFontMetricsInt(fontMetricsInt);
@@ -283,7 +283,7 @@ public class ActionBar extends FrameLayout {
         titleTextView = new SimpleTextView(getContext());
         titleTextView.setGravity(Gravity.LEFT);
         titleTextView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultTitle));
-        titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        titleTextView.setTypeface(AndroidUtilities.getTypeface(getContext(), "fonts/rmedium.ttf"));
         addView(titleTextView, 0, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP));
     }
 

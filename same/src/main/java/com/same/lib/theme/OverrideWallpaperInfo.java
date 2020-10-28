@@ -1,11 +1,11 @@
 package com.same.lib.theme;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.same.lib.util.AndroidUtilities;
-import com.same.lib.util.SharedConfig;
 
 import org.json.JSONObject;
 
@@ -88,11 +88,11 @@ public class OverrideWallpaperInfo {
         return Theme.THEME_BACKGROUND_SLUG.equals(slug);
     }
 
-    public void saveOverrideWallpaper() {
+    public void saveOverrideWallpaper(Context context) {
         if (parentTheme == null || parentAccent == null && parentTheme.overrideWallpaper != this || parentAccent != null && parentAccent.overrideWallpaper != this) {
             return;
         }
-        save();
+        save(context);
     }
 
     private String getKey() {
@@ -103,10 +103,10 @@ public class OverrideWallpaperInfo {
         }
     }
 
-    void save() {
+    void save(Context context) {
         try {
             String key = getKey();
-            SharedPreferences themeConfig = SharedConfig.applicationContext().getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
+            SharedPreferences themeConfig = context.getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
             SharedPreferences.Editor editor = themeConfig.edit();
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("wall", fileName);
@@ -119,15 +119,15 @@ public class OverrideWallpaperInfo {
             jsonObject.put("wMotion", isMotion);
             jsonObject.put("pIntensity", intensity);
             editor.putString(key, jsonObject.toString());
-            editor.commit();
+            editor.apply();
         } catch (Throwable e) {
             e.printStackTrace();
         }
     }
 
-    void delete() {
+    void delete(Context context) {
         String key = getKey();
-        SharedPreferences themeConfig = SharedConfig.applicationContext().getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
+        SharedPreferences themeConfig = context.getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
         themeConfig.edit().remove(key).apply();
         new File(AndroidUtilities.getFilesDirFixed(), fileName).delete();
         new File(AndroidUtilities.getFilesDirFixed(), originalFileName).delete();

@@ -1693,9 +1693,9 @@ public class ContainerLayout  extends FrameLayout {
                 if (i == 0) {
                     if (accentId != -1) {
                         theme.setCurrentAccentId(accentId);
-                        ThemeManager.saveThemeAccents(theme, true, false, true, false);
+                        ThemeManager.saveThemeAccents(getContext(), theme, true, false, true, false);
                     }
-                    ThemeManager.applyTheme(theme, nightTheme);
+                    ThemeManager.applyTheme(getContext(), theme, nightTheme);
                 }
                 addEndDescriptions(descriptions);
                 if (fragment.visibleDialog instanceof BottomSheet) {
