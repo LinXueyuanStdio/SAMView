@@ -35,6 +35,7 @@ import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
 import com.same.lib.theme.ThemeInfo;
+import com.same.lib.theme.ThemeManager;
 import com.same.lib.util.AndroidUtilities;
 import com.same.lib.util.SharedConfig;
 
@@ -1692,9 +1693,9 @@ public class ContainerLayout  extends FrameLayout {
                 if (i == 0) {
                     if (accentId != -1) {
                         theme.setCurrentAccentId(accentId);
-                        Theme.saveThemeAccents(theme, true, false, true, false);
+                        ThemeManager.saveThemeAccents(theme, true, false, true, false);
                     }
-                    Theme.applyTheme(theme, nightTheme);
+                    ThemeManager.applyTheme(theme, nightTheme);
                 }
                 addEndDescriptions(descriptions);
                 if (fragment.visibleDialog instanceof BottomSheet) {

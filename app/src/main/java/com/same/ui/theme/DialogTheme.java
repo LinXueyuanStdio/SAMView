@@ -7,7 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 
 import com.same.lib.AbsTheme;
-import com.same.lib.drawable.RLottieDrawable;
+import com.same.lib.theme.CommonTheme;
 import com.same.lib.theme.Theme;
 import com.same.lib.util.AndroidUtilities;
 import com.same.ui.R;
@@ -54,15 +54,6 @@ public class DialogTheme extends AbsTheme {
     public static Drawable dialogs_verifiedCheckDrawable;
     public static Drawable dialogs_pinnedDrawable;
     public static Drawable dialogs_mentionDrawable;
-    public static RLottieDrawable dialogs_archiveAvatarDrawable;
-    public static RLottieDrawable dialogs_archiveDrawable;
-    public static RLottieDrawable dialogs_unarchiveDrawable;
-    public static RLottieDrawable dialogs_pinArchiveDrawable;
-    public static RLottieDrawable dialogs_unpinArchiveDrawable;
-    public static RLottieDrawable dialogs_hidePsaDrawable;
-    public static boolean dialogs_archiveDrawableRecolored;
-    public static boolean dialogs_hidePsaDrawableRecolored;
-    public static boolean dialogs_archiveAvatarDrawableRecolored;
 
     //region 业务：对话
 
@@ -71,7 +62,7 @@ public class DialogTheme extends AbsTheme {
      * @param context 上下文
      */
     public static void createDialogsResources(Context context) {
-        Theme.createCommonResources(context);
+        CommonTheme.createCommonResources(context);
         if (dialogs_namePaint == null) {
             Resources resources = context.getResources();
 
@@ -108,21 +99,6 @@ public class DialogTheme extends AbsTheme {
             dialogs_countGrayPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             dialogs_errorPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-            dialogs_lockDrawable = resources.getDrawable(R.drawable.list_secret);
-            dialogs_checkDrawable = resources.getDrawable(R.drawable.list_check).mutate();
-            dialogs_checkReadDrawable = resources.getDrawable(R.drawable.list_check).mutate();
-            dialogs_halfCheckDrawable = resources.getDrawable(R.drawable.list_halfcheck);
-            dialogs_clockDrawable = resources.getDrawable(R.drawable.msg_clock).mutate();
-            dialogs_errorDrawable = resources.getDrawable(R.drawable.list_warning_sign);
-            dialogs_reorderDrawable = resources.getDrawable(R.drawable.list_reorder).mutate();
-            dialogs_groupDrawable = resources.getDrawable(R.drawable.list_group);
-            dialogs_broadcastDrawable = resources.getDrawable(R.drawable.list_broadcast);
-            dialogs_muteDrawable = resources.getDrawable(R.drawable.list_mute).mutate();
-            dialogs_verifiedDrawable = resources.getDrawable(R.drawable.verified_area);
-            dialogs_verifiedCheckDrawable = resources.getDrawable(R.drawable.verified_check);
-            dialogs_mentionDrawable = resources.getDrawable(R.drawable.mentionchatslist);
-            dialogs_botDrawable = resources.getDrawable(R.drawable.list_bot);
-            dialogs_pinnedDrawable = resources.getDrawable(R.drawable.list_pin);
             Theme.moveUpDrawable = resources.getDrawable(R.drawable.preview_open);
 
             applyDialogsTheme();
@@ -143,14 +119,14 @@ public class DialogTheme extends AbsTheme {
             return;
         }
         for (int a = 0; a < 2; a++) {
-            dialogs_namePaint[a].setColor(getColor(key_chats_name));
-            dialogs_nameEncryptedPaint[a].setColor(getColor(key_chats_secretName));
-            dialogs_messagePaint[a].setColor(dialogs_messagePaint[a].linkColor = getColor(key_chats_message));
-            dialogs_messagePrintingPaint[a].setColor(getColor(key_chats_actionMessage));
+            dialogs_namePaint[a].setColor(Theme.getColor(Theme.key_chats_name));
+            dialogs_nameEncryptedPaint[a].setColor(Theme.getColor(Theme.key_chats_secretName));
+            dialogs_messagePaint[a].setColor(dialogs_messagePaint[a].linkColor = Theme.getColor(Theme.key_chats_message));
+            dialogs_messagePrintingPaint[a].setColor(Theme.getColor(Theme.key_chats_actionMessage));
         }
-        dialogs_searchNamePaint.setColor(getColor(key_chats_name));
-        dialogs_searchNameEncryptedPaint.setColor(getColor(key_chats_secretName));
-        dialogs_messageNamePaint.setColor(dialogs_messageNamePaint.linkColor = getColor(key_chats_nameMessage_threeLines));
+        dialogs_searchNamePaint.setColor(Theme.getColor(Theme.key_chats_name));
+        dialogs_searchNameEncryptedPaint.setColor(Theme.getColor(Theme.key_chats_secretName));
+        dialogs_messageNamePaint.setColor(dialogs_messageNamePaint.linkColor = Theme.getColor(Theme.key_chats_nameMessage_threeLines));
         dialogs_tabletSeletedPaint.setColor(Theme.getColor(Theme.key_chats_tabletSelectedOverlay));
         dialogs_pinnedPaint.setColor(Theme.getColor(Theme.key_chats_pinnedOverlay));
         dialogs_timePaint.setColor(Theme.getColor(Theme.key_chats_date));
@@ -177,7 +153,7 @@ public class DialogTheme extends AbsTheme {
         Theme.setDrawableColorByKey(dialogs_mentionDrawable, Theme.key_chats_mentionIcon);
         Theme.setDrawableColorByKey(dialogs_verifiedDrawable, Theme.key_chats_verifiedBackground);
         Theme.setDrawableColorByKey(dialogs_verifiedCheckDrawable, Theme.key_chats_verifiedCheck);
-        setDrawableColorByKey(dialogs_holidayDrawable, key_actionBarDefaultTitle);
+        Theme.setDrawableColorByKey(Theme.dialogs_holidayDrawable, Theme.key_actionBarDefaultTitle);
     }
 
     @Override

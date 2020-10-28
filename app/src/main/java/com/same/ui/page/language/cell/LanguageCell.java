@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.same.lib.helper.LayoutHelper;
+import com.same.lib.theme.CommonTheme;
 import com.same.lib.theme.Theme;
 import com.same.lib.util.AndroidUtilities;
 import com.same.ui.R;
@@ -98,7 +99,7 @@ public class LanguageCell extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         if (needDivider) {
-            canvas.drawLine(MLang.isRTL ? 0 : AndroidUtilities.dp(20), getMeasuredHeight() - 1, getMeasuredWidth() - (MLang.isRTL ? AndroidUtilities.dp(20) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
+            canvas.drawLine(MLang.isRTL ? 0 : AndroidUtilities.dp(20), getMeasuredHeight() - 1, getMeasuredWidth() - (MLang.isRTL ? AndroidUtilities.dp(20) : 0), getMeasuredHeight() - 1, CommonTheme.dividerPaint);
         }
     }
 }

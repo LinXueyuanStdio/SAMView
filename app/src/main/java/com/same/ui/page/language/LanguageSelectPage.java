@@ -14,15 +14,16 @@ import com.same.lib.core.ActionBarMenuItem;
 import com.same.lib.core.AlertDialog;
 import com.same.lib.core.BasePage;
 import com.same.lib.helper.LayoutHelper;
+import com.same.lib.theme.CommonTheme;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
 import com.same.lib.util.AndroidUtilities;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
-import com.same.ui.view.RecyclerListView;
 import com.same.ui.page.language.cell.LanguageCell;
 import com.same.ui.page.language.cell.ShadowSectionCell;
 import com.same.ui.view.EmptyTextProgressView;
+import com.same.ui.view.RecyclerListView;
 import com.timecat.component.locale.MLang;
 
 import java.util.ArrayList;
@@ -436,7 +437,7 @@ public class LanguageSelectPage extends BasePage {
         d.add(new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{LanguageCell.class}, null, null, null, Theme.key_windowBackgroundWhite));
         d.add(new ThemeDescription(listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault));
         d.add(new ThemeDescription(listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector));
-        d.add(new ThemeDescription(listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider));
+        d.add(new ThemeDescription(listView, 0, new Class[]{View.class}, CommonTheme.dividerPaint, null, null, Theme.key_divider));
         d.add(new ThemeDescription(listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow));
         d.add(new ThemeDescription(listView, 0, new Class[]{LanguageCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
         d.add(new ThemeDescription(listView, 0, new Class[]{LanguageCell.class}, new String[]{"textView2"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3));

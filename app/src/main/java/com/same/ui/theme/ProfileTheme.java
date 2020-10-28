@@ -6,13 +6,11 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 
 import com.same.lib.AbsTheme;
 import com.same.lib.theme.Theme;
 import com.same.lib.util.AndroidUtilities;
-import com.same.ui.R;
 
 /**
  * @author 林学渊
@@ -24,8 +22,6 @@ import com.same.ui.R;
 public class ProfileTheme extends AbsTheme {
 
     public static TextPaint profile_aboutTextPaint;
-    public static Drawable profile_verifiedDrawable;
-    public static Drawable profile_verifiedCheckDrawable;
 
     //region 业务：身份
 
@@ -34,30 +30,20 @@ public class ProfileTheme extends AbsTheme {
      * @param context 上下文
      */
     public static void createProfileResources(Context context) {
-        if (profile_verifiedDrawable == null) {
-            profile_aboutTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        profile_aboutTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
 
-            Resources resources = context.getResources();
-
-            profile_verifiedDrawable = resources.getDrawable(R.drawable.verified_area).mutate();
-            profile_verifiedCheckDrawable = resources.getDrawable(R.drawable.verified_check).mutate();
-
-            applyProfileTheme();
-        }
-
+        Resources resources = context.getResources();
+        applyProfileTheme();
         profile_aboutTextPaint.setTextSize(AndroidUtilities.dp(16));
     }
 
     public static void applyProfileTheme() {
-        if (profile_verifiedDrawable == null) {
+        if (profile_aboutTextPaint == null) {
             return;
         }
 
         profile_aboutTextPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         profile_aboutTextPaint.linkColor = Theme.getColor(Theme.key_windowBackgroundWhiteLinkText);
-
-        Theme.setDrawableColorByKey(profile_verifiedDrawable, Theme.key_profile_verifiedBackground);
-        Theme.setDrawableColorByKey(profile_verifiedCheckDrawable, Theme.key_profile_verifiedCheck);
     }
 
     static ColorFilter currentShareColorFilter;

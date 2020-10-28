@@ -50,10 +50,6 @@ import static com.same.lib.theme.Theme.DEFAULT_BACKGROUND_SLUG;
 import static com.same.lib.theme.Theme.LIGHT_SENSOR_THEME_SWITCH_DELAY;
 import static com.same.lib.theme.Theme.LIGHT_SENSOR_THEME_SWITCH_NEAR_DELAY;
 import static com.same.lib.theme.Theme.LIGHT_SENSOR_THEME_SWITCH_NEAR_THRESHOLD;
-import static com.same.lib.theme.Theme.applyChatTheme;
-import static com.same.lib.theme.Theme.applyCommonTheme;
-import static com.same.lib.theme.Theme.applyDialogsTheme;
-import static com.same.lib.theme.Theme.applyProfileTheme;
 import static com.same.lib.theme.Theme.autoNightBrighnessThreshold;
 import static com.same.lib.theme.Theme.autoNightCityName;
 import static com.same.lib.theme.Theme.autoNightDayEndTime;
@@ -477,10 +473,10 @@ public class ThemeManager {
             shouldDrawGradientIcons = accent.fillAccentColors(currentColorsNoAccent, currentColors);
         }
         reloadWallpaper();
-        applyCommonTheme();
-        applyDialogsTheme();
-        applyProfileTheme();
-        applyChatTheme(false);
+//        applyCommonTheme();
+//        applyDialogsTheme();
+//        applyProfileTheme();
+//        applyChatTheme(false);TODO apply custom theme
         AndroidUtilities.runOnUIThread(() -> NotificationCenter.postNotificationName(NotificationCenter.didSetNewTheme, false));
     }
 

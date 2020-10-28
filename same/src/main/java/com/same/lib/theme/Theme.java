@@ -923,6 +923,7 @@ public class Theme {
     //endregion
 
     static {
+        //region defaultColors
         defaultColors.put(key_dialogBackground, 0xffffffff);
         defaultColors.put(key_dialogBackgroundGray, 0xfff0f0f0);
         defaultColors.put(key_dialogTextBlack, 0xff222222);
@@ -1627,7 +1628,9 @@ public class Theme {
         defaultColors.put(key_statisticChartLine_lightgreen, 0xff8FCF39);
         defaultColors.put(key_statisticChartLine_orange, 0xffE3B727);
         defaultColors.put(key_statisticChartLine_indigo, 0xff7F79F3);
+        //endregion
 
+        //region fallbackKeys
         fallbackKeys.put(key_chat_adminText, key_chat_inTimeText);
         fallbackKeys.put(key_chat_adminSelectedText, key_chat_inTimeSelectedText);
         fallbackKeys.put(key_player_progressCachedBackground, key_player_progressBackground);
@@ -1756,7 +1759,9 @@ public class Theme {
 
         fallbackKeys.put(key_chat_inPsaNameText, key_avatar_nameInMessageGreen);
         fallbackKeys.put(key_chat_outPsaNameText, key_avatar_nameInMessageGreen);
+        //endregion
 
+        //region themeAccentExclusionKeys
         themeAccentExclusionKeys.addAll(Arrays.asList(keys_avatar_background));
         themeAccentExclusionKeys.addAll(Arrays.asList(keys_avatar_nameInMessage));
         themeAccentExclusionKeys.add(key_chat_attachFileBackground);
@@ -1765,7 +1770,9 @@ public class Theme {
         themeAccentExclusionKeys.add(key_chat_attachGalleryText);
         themeAccentExclusionKeys.add(key_chat_shareBackground);
         themeAccentExclusionKeys.add(key_chat_shareBackgroundSelected);
+        //endregion
 
+        //region myMessagesColorKeys
         myMessagesColorKeys.add(key_chat_outGreenCall);
         myMessagesColorKeys.add(key_chat_outBubble);
         myMessagesColorKeys.add(key_chat_outBubbleSelected);
@@ -1839,6 +1846,7 @@ public class Theme {
         myMessagesColorKeys.add(key_chat_outBroadcast);
         myMessagesColorKeys.add(key_chat_messageTextOut);
         myMessagesColorKeys.add(key_chat_messageLinkOut);
+        //endregion
 
         themes = new ArrayList<>();
         otherThemes = new ArrayList<>();
@@ -1955,12 +1963,12 @@ public class Theme {
         themes.add(themeInfo);
         themesDict.put("Night", themeInfo);
 
-        String themesString = themeConfig.getString("themes2", null);
-
         for (int a = 0; a < 1; a++) {
             remoteThemesHash[a] = themeConfig.getInt("remoteThemesHash" + (a != 0 ? a : ""), 0);
             lastLoadingThemesTime[a] = themeConfig.getInt("lastLoadingThemesTime" + (a != 0 ? a : ""), 0);
         }
+
+        String themesString = themeConfig.getString("themes2", null);
         if (!TextUtils.isEmpty(themesString)) {
             try {
                 JSONArray jsonArray = new JSONArray(themesString);
@@ -2179,7 +2187,7 @@ public class Theme {
                     currentNightTheme.setOverrideWallpaper(overrideWallpaper);
                 }
             }
-            preferences.edit().remove("overrideThemeWallpaper").remove("selectedBackground2").commit();
+            preferences.edit().remove("overrideThemeWallpaper").remove("selectedBackground2").apply();
         }
 
         int switchToTheme = needSwitchToTheme();
