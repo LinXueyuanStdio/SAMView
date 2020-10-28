@@ -159,18 +159,18 @@ public class ThemeInfo {
         }
     }
 
-    public void setOverrideWallpaper(Context context, OverrideWallpaperInfo info) {
+    public void setOverrideWallpaper(OverrideWallpaperInfo info) {
         if (overrideWallpaper == info) {
             return;
         }
         ThemeAccent accent = getAccent(false);
         if (overrideWallpaper != null) {
-            overrideWallpaper.delete(context);
+            overrideWallpaper.delete();
         }
         if (info != null) {
             info.parentAccent = accent;
             info.parentTheme = this;
-            info.save(context);
+            info.save();
         }
         overrideWallpaper = info;
         if (accent != null) {

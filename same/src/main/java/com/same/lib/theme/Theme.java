@@ -2,7 +2,6 @@ package com.same.lib.theme;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -1848,13 +1847,14 @@ public class Theme {
         myMessagesColorKeys.add(key_chat_messageLinkOut);
         //endregion
 
+        //region load theme from share preference
         themes = new ArrayList<>();
         otherThemes = new ArrayList<>();
         themesDict = new HashMap<>();
         currentColorsNoAccent = new HashMap<>();
         currentColors = new HashMap<>();
 
-        SharedPreferences themeConfig = SharedConfig.applicationContext().getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
+        SharedPreferences themeConfig = AndroidUtilities.getThemeConfig();
 
         ThemeInfo themeInfo = new ThemeInfo();
         themeInfo.name = "Blue";
@@ -2182,20 +2182,25 @@ public class Theme {
                 overrideWallpaper.isBlurred = preferences.getBoolean("selectedBackgroundBlurred", false);
                 overrideWallpaper.isMotion = preferences.getBoolean("selectedBackgroundMotion", false);
                 overrideWallpaper.intensity = preferences.getFloat("selectedIntensity", 0.5f);
-                currentDayTheme.setOverrideWallpaper(overrideWallpaper);
+                currentDayTheme.setOverrideWallpaper();
                 if (selectedAutoNightType != AUTO_NIGHT_TYPE_NONE) {
-                    currentNightTheme.setOverrideWallpaper(overrideWallpaper);
+                    currentNightTheme.setOverrideWallpaper();
                 }
             }
             preferences.edit().remove("overrideThemeWallpaper").remove("selectedBackground2").apply();
         }
 
-        int switchToTheme = needSwitchToTheme();
+        int switchToTheme = needSwitchToTheme(AndroidUtilities.applicationContext);
         if (switchToTheme == 2) {
             applyingTheme = currentNightTheme;
         }
-        applyTheme(applyingTheme, false, false, switchToTheme == 2);
-        AndroidUtilities.runOnUIThread(ThemeManager::checkAutoNightThemeConditions);
+        applyTheme(AndroidUtilities.applicationContext, applyingTheme, false, false, switchToTheme == 2);
+        AndroidUtilities.runOnUIThread(new Runnable() {
+            @Override
+            public void run() {
+                ThemeManager.checkAutoNightThemeConditions(AndroidUtilities.applicationContext);
+            }
+        });
     }
 
     static Method StateListDrawable_getStateDrawableMethod;
@@ -2850,7 +2855,7 @@ public class Theme {
         currentColors.remove(key_chat_wallpaper_gradient_to);
         currentColors.remove(key_chat_wallpaper_gradient_rotation);
         themedWallpaperLink = null;
-        themeInfo.setOverrideWallpaper(context, null);
+        themeInfo.setOverrideWallpaper(null);
         if (bitmap != null) {
             themedWallpaper = new BitmapDrawable(bitmap);
             saveCurrentTheme(context, themeInfo, false, false, false);

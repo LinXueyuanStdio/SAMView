@@ -1,6 +1,5 @@
 package com.same.lib.theme;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -177,7 +176,7 @@ public class ThemeManager {
             isApplyingAccent = false;
             reloadWallpaper(context);
         } else {
-            currentTheme.setOverrideWallpaper(context, null);
+            currentTheme.setOverrideWallpaper(null);
         }
     }
 
@@ -604,7 +603,7 @@ public class ThemeManager {
             theme.accentsByThemeId.remove(accent.info.id);
         }
         if (accent.overrideWallpaper != null) {
-            accent.overrideWallpaper.delete(context);
+            accent.overrideWallpaper.delete();
         }
         if (current) {
             ThemeAccent themeAccent = theme.themeAccents.get(0);
@@ -634,7 +633,7 @@ public class ThemeManager {
      */
     public static void saveThemeAccents(Context context, ThemeInfo theme, boolean save, boolean remove, boolean indexOnly, boolean upload, boolean migration) {
         if (save) {
-            SharedPreferences preferences = context.getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
+            SharedPreferences preferences = AndroidUtilities.getThemeConfig();
             SharedPreferences.Editor editor = preferences.edit();
             if (!indexOnly) {
                 int N = theme.themeAccents.size();
@@ -658,7 +657,7 @@ public class ThemeManager {
                 }
             }
             editor.putInt("accent_current_" + theme.assetName, theme.currentAccentId);
-            editor.commit();
+            editor.apply();
         } else {
             if (theme.prevAccentId != -1) {
                 if (remove) {
@@ -689,7 +688,7 @@ public class ThemeManager {
     }
 
     static void saveOtherThemes(Context context, boolean full, boolean migration) {
-        SharedPreferences preferences = context.getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
+        SharedPreferences preferences =AndroidUtilities.getThemeConfig();
         SharedPreferences.Editor editor = preferences.edit();
         if (full) {
             JSONArray array = new JSONArray();
@@ -1027,7 +1026,7 @@ public class ThemeManager {
         otherThemes.remove(themeInfo);
         themesDict.remove(themeInfo.name);
         if (themeInfo.overrideWallpaper != null) {
-            themeInfo.overrideWallpaper.delete(context);
+            themeInfo.overrideWallpaper.delete();
         }
         themes.remove(themeInfo);
         File file = new File(themeInfo.pathToFile);

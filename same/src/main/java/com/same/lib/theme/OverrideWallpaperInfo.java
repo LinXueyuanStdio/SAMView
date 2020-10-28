@@ -1,7 +1,5 @@
 package com.same.lib.theme;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
@@ -88,11 +86,11 @@ public class OverrideWallpaperInfo {
         return Theme.THEME_BACKGROUND_SLUG.equals(slug);
     }
 
-    public void saveOverrideWallpaper(Context context) {
+    public void saveOverrideWallpaper() {
         if (parentTheme == null || parentAccent == null && parentTheme.overrideWallpaper != this || parentAccent != null && parentAccent.overrideWallpaper != this) {
             return;
         }
-        save(context);
+        save();
     }
 
     private String getKey() {
@@ -103,10 +101,10 @@ public class OverrideWallpaperInfo {
         }
     }
 
-    void save(Context context) {
+    void save() {
         try {
             String key = getKey();
-            SharedPreferences themeConfig = context.getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
+            SharedPreferences themeConfig =AndroidUtilities.getThemeConfig();
             SharedPreferences.Editor editor = themeConfig.edit();
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("wall", fileName);
@@ -125,9 +123,9 @@ public class OverrideWallpaperInfo {
         }
     }
 
-    void delete(Context context) {
+    void delete() {
         String key = getKey();
-        SharedPreferences themeConfig = context.getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
+        SharedPreferences themeConfig = AndroidUtilities.getThemeConfig();
         themeConfig.edit().remove(key).apply();
         new File(AndroidUtilities.getFilesDirFixed(), fileName).delete();
         new File(AndroidUtilities.getFilesDirFixed(), originalFileName).delete();

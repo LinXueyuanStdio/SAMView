@@ -566,6 +566,7 @@ public class AndroidUtilities {
     public static File getFilesDirFixed() {
         return getFilesDirFixed(applicationContext);
     }
+
     public static File getFilesDirFixed(Context context) {
         for (int a = 0; a < 10; a++) {
             File path = context.getFilesDir();
@@ -634,7 +635,11 @@ public class AndroidUtilities {
     }
 
     public static SharedPreferences getGlobalMainSettings() {
-        return null;
+        return applicationContext.getSharedPreferences("globalmain", Context.MODE_PRIVATE);
+    }
+
+    public static SharedPreferences getThemeConfig() {
+        return applicationContext.getSharedPreferences("themeconfig", Context.MODE_PRIVATE);
     }
 
 
@@ -649,6 +654,7 @@ public class AndroidUtilities {
         }
         return cachePath;
     }
+
     public static File cacheDir(Context context) {
         String state = null;
         try {
