@@ -66,7 +66,7 @@ import com.same.ui.lang.MyLang;
 import com.same.ui.page.theme.cell.TextColorThemeCell;
 import com.same.ui.view.EmptyTextProgressView;
 import com.same.ui.view.RecyclerListView;
-import com.same.ui.view.T;
+import com.same.ui.view.DrawableBuilder;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -344,7 +344,7 @@ public class ThemeEditorView {
                     colorEditText[a].setCursorSize(AndroidUtilities.dp(20));
                     colorEditText[a].setCursorWidth(1.5f);
                     colorEditText[a].setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-                    colorEditText[a].setBackgroundDrawable(T.createEditTextDrawable(context, true));
+                    colorEditText[a].setBackgroundDrawable(DrawableBuilder.createEditTextDrawable(context, true));
                     colorEditText[a].setMaxLines(1);
                     colorEditText[a].setTag(a);
                     colorEditText[a].setGravity(Gravity.CENTER);

@@ -385,7 +385,7 @@ public class ThemeInfo {
         loadingThemeWallpaperName = null;
         newPathToWallpaper = null;
         addObservers();
-        FileLoader.getInstance(account).loadFile(info.document, info, 1, 1);
+//        FileLoader.getInstance(account).loadFile(info.document, info, 1, 1);TODO 文件加载
     }
 
     void addObservers() {
@@ -603,7 +603,7 @@ public class ThemeInfo {
                 canvas.setBitmap(null);
             }
             if (isBlured) {
-                bitmap = Utilities.blurWallpaper(bitmap);
+                bitmap = AndroidUtilities.blurWallpaper(bitmap);
             }
             FileOutputStream stream = new FileOutputStream(toPath);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 87, stream);

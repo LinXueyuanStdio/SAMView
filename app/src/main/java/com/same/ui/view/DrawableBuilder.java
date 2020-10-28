@@ -22,7 +22,7 @@ import com.same.ui.R;
  * @description null
  * @usage null
  */
-public class T {
+public class DrawableBuilder {
     public static Drawable createEditTextDrawable(Context context, boolean alert) {
         Resources resources = context.getResources();
         Drawable defaultDrawable = resources.getDrawable(R.drawable.search_dark).mutate();

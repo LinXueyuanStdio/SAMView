@@ -10,6 +10,8 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Build;
 
+import com.same.lib.util.AndroidUtilities;
+
 /**
  * @author 林学渊
  * @email linxy59@mail2.sysu.edu.cn
@@ -219,7 +221,7 @@ public class Bitmaps {
             array[78] = (byte) (width >> 8);
             array[79] = (byte) (width & 0x00ff);
             bitmap = BitmapFactory.decodeByteArray(array, 0, array.length, options);
-            Utilities.pinBitmap(bitmap);
+            AndroidUtilities.pinBitmap(bitmap);
             bitmap.setHasAlpha(true);
             bitmap.eraseColor(0);
         } else {

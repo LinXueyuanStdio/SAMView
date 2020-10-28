@@ -323,6 +323,18 @@ public class AndroidUtilities {
         return new File(document.file_name);
     }
 
+    public static Bitmap blurWallpaper(Bitmap bitmap) {
+        return null;
+    }
+
+    public static void drawDitheredGradient(Bitmap ditheredGradientBitmap, int[] colors, int left, int top, int right, int bottom) {
+
+    }
+
+    public static void pinBitmap(Bitmap bitmap) {
+
+    }
+
     public static class LinkMovementMethodMy extends LinkMovementMethod {
         @Override
         public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {

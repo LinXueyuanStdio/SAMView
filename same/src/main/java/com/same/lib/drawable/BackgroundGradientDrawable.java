@@ -436,7 +436,7 @@ public class BackgroundGradientDrawable extends GradientDrawable {
     private static Bitmap createDitheredGradientBitmap(Orientation orientation, int[] colors, int width, int height) {
         final Rect r = getGradientPoints(orientation, width, height);
         final Bitmap ditheredGradientBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Utilities.drawDitheredGradient(ditheredGradientBitmap, colors, r.left, r.top, r.right, r.bottom);
+        AndroidUtilities.drawDitheredGradient(ditheredGradientBitmap, colors, r.left, r.top, r.right, r.bottom);
         return ditheredGradientBitmap;
     }
 }
