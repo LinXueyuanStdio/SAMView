@@ -159,18 +159,18 @@ public class ThemeInfo {
         }
     }
 
-    public void setOverrideWallpaper(OverrideWallpaperInfo info) {
+    public void setOverrideWallpaper(Context context, OverrideWallpaperInfo info) {
         if (overrideWallpaper == info) {
             return;
         }
         ThemeAccent accent = getAccent(false);
         if (overrideWallpaper != null) {
-            overrideWallpaper.delete();
+            overrideWallpaper.delete(context);
         }
         if (info != null) {
             info.parentAccent = accent;
             info.parentTheme = this;
-            info.save();
+            info.save(context);
         }
         overrideWallpaper = info;
         if (accent != null) {
@@ -402,10 +402,10 @@ public class ThemeInfo {
 //        NotificationCenter.getInstance(account).removeObserver(this, NotificationCenter.fileDidFailToLoad);
     }
 
-    void onFinishLoadingRemoteTheme() {
+    void onFinishLoadingRemoteTheme(Context context) {
         loaded = true;
         previewParsed = false;
-        saveOtherThemes(true);
+        saveOtherThemes(context, true);
         if (this == currentTheme && previousTheme == null) {
             NotificationCenter.postNotificationName(NotificationCenter.needSetDayNightTheme, this);
         }

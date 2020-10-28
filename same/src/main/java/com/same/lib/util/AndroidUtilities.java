@@ -272,13 +272,13 @@ public class AndroidUtilities {
         return minSide <= 700;
     }
 
-    public static Typeface getTypeface(String assetPath) {
+    public static Typeface getTypeface(Context context, String assetPath) {
         synchronized (typefaceCache) {
             if (!typefaceCache.containsKey(assetPath)) {
                 try {
                     Typeface t;
                     if (Build.VERSION.SDK_INT >= 26) {
-                        Typeface.Builder builder = new Typeface.Builder(SharedConfig.applicationContext().getAssets(), assetPath);
+                        Typeface.Builder builder = new Typeface.Builder(context.getAssets(), assetPath);
                         if (assetPath.contains("medium")) {
                             builder.setWeight(700);
                         }
@@ -287,7 +287,7 @@ public class AndroidUtilities {
                         }
                         t = builder.build();
                     } else {
-                        t = Typeface.createFromAsset(SharedConfig.applicationContext().getAssets(), assetPath);
+                        t = Typeface.createFromAsset(context.getAssets(), assetPath);
                     }
                     typefaceCache.put(assetPath, t);
                 } catch (Exception e) {
@@ -564,14 +564,17 @@ public class AndroidUtilities {
 
 
     public static File getFilesDirFixed() {
+        return getFilesDirFixed(applicationContext);
+    }
+    public static File getFilesDirFixed(Context context) {
         for (int a = 0; a < 10; a++) {
-            File path = SharedConfig.applicationContext().getFilesDir();
+            File path = context.getFilesDir();
             if (path != null) {
                 return path;
             }
         }
         try {
-            ApplicationInfo info = applicationContext.getApplicationInfo();
+            ApplicationInfo info = context.getApplicationInfo();
             File path = new File(info.dataDir, "files");
             path.mkdirs();
             return path;
@@ -635,8 +638,8 @@ public class AndroidUtilities {
     }
 
 
-    public static File getCacheDir() {
-        File cachePath = AndroidUtilities.cacheDir();
+    public static File getCacheDir(Context context) {
+        File cachePath = AndroidUtilities.cacheDir(context);
         if (!cachePath.isDirectory()) {
             try {
                 cachePath.mkdirs();
@@ -646,7 +649,7 @@ public class AndroidUtilities {
         }
         return cachePath;
     }
-    public static File cacheDir() {
+    public static File cacheDir(Context context) {
         String state = null;
         try {
             state = Environment.getExternalStorageState();
@@ -655,7 +658,7 @@ public class AndroidUtilities {
         }
         if (state == null || state.startsWith(Environment.MEDIA_MOUNTED)) {
             try {
-                File file = SharedConfig.applicationContext().getExternalCacheDir();
+                File file = context.getExternalCacheDir();
                 if (file != null) {
                     return file;
                 }
@@ -664,7 +667,7 @@ public class AndroidUtilities {
             }
         }
         try {
-            File file = SharedConfig.applicationContext().getCacheDir();
+            File file = context.getCacheDir();
             if (file != null) {
                 return file;
             }
@@ -674,8 +677,8 @@ public class AndroidUtilities {
         return new File("");
     }
 
-    public static File getSharingDirectory() {
-        return new File(getCacheDir(), "sharing/");
+    public static File getSharingDirectory(Context context) {
+        return new File(getCacheDir(context), "sharing/");
     }
 
     public static byte[] getStringBytes(String src) {

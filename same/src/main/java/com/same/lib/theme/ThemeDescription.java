@@ -1,5 +1,6 @@
 package com.same.lib.theme;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -170,8 +171,8 @@ public class ThemeDescription {
         return oldDelegate;
     }
 
-    public void setColor(int color, boolean useDefault) {
-        setColor(color, useDefault, true);
+    public void setColor(Context context,int color, boolean useDefault) {
+        setColor(context, color, useDefault, true);
     }
 
     private boolean checkTag(String key, View view) {
@@ -185,9 +186,9 @@ public class ThemeDescription {
         return false;
     }
 
-    public void setColor(int color, boolean useDefault, boolean save) {
+    public void setColor(Context context, int color, boolean useDefault, boolean save) {
         if (save) {
-            Theme.setColor(currentKey, color, useDefault);
+            Theme.setColor(context, currentKey, color, useDefault);
         }
         currentColor = color;
         if (alphaOverride > 0) {
@@ -594,12 +595,12 @@ public class ThemeDescription {
         return Theme.getColor(currentKey);
     }
 
-    public void setDefaultColor() {
-        setColor(Theme.getDefaultColor(currentKey), true);
+    public void setDefaultColor(Context context) {
+        setColor(context, Theme.getDefaultColor(currentKey), true);
     }
 
-    public void setPreviousColor() {
-        setColor(previousColor, previousIsDefault[0]);
+    public void setPreviousColor(Context context) {
+        setColor(context, previousColor, previousIsDefault[0]);
     }
 
     public String getTitle() {

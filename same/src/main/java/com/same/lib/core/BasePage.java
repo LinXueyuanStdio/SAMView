@@ -16,7 +16,6 @@ import android.view.accessibility.AccessibilityManager;
 
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
-import com.same.lib.util.SharedConfig;
 
 import java.util.ArrayList;
 
@@ -451,7 +450,7 @@ public class BasePage {
 
     protected void onBecomeFullyVisible() {
         //兼容辅助模式
-        AccessibilityManager mgr = (AccessibilityManager) SharedConfig.applicationContext().getSystemService(Context.ACCESSIBILITY_SERVICE);
+        AccessibilityManager mgr = (AccessibilityManager) getParentActivity().getSystemService(Context.ACCESSIBILITY_SERVICE);
         if (mgr.isEnabled()) {
             ActionBar actionBar = getActionBar();
             if (actionBar != null) {

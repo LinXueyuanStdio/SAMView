@@ -1,5 +1,6 @@
 package com.same.lib.theme;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
 
@@ -11,8 +12,74 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 
-import static com.same.lib.theme.ThemeManager.*;
-import static com.same.lib.theme.Theme.*;
+import static com.same.lib.theme.Theme.defaultColors;
+import static com.same.lib.theme.Theme.fallbackKeys;
+import static com.same.lib.theme.Theme.key_chat_messageLinkOut;
+import static com.same.lib.theme.Theme.key_chat_messageTextOut;
+import static com.same.lib.theme.Theme.key_chat_outAudioCacheSeekbar;
+import static com.same.lib.theme.Theme.key_chat_outAudioDurationSelectedText;
+import static com.same.lib.theme.Theme.key_chat_outAudioDurationText;
+import static com.same.lib.theme.Theme.key_chat_outAudioPerformerSelectedText;
+import static com.same.lib.theme.Theme.key_chat_outAudioPerformerText;
+import static com.same.lib.theme.Theme.key_chat_outAudioProgress;
+import static com.same.lib.theme.Theme.key_chat_outAudioSeekbar;
+import static com.same.lib.theme.Theme.key_chat_outAudioSeekbarFill;
+import static com.same.lib.theme.Theme.key_chat_outAudioSeekbarSelected;
+import static com.same.lib.theme.Theme.key_chat_outAudioSelectedProgress;
+import static com.same.lib.theme.Theme.key_chat_outAudioTitleText;
+import static com.same.lib.theme.Theme.key_chat_outBubble;
+import static com.same.lib.theme.Theme.key_chat_outBubbleGradient;
+import static com.same.lib.theme.Theme.key_chat_outContactNameText;
+import static com.same.lib.theme.Theme.key_chat_outContactPhoneSelectedText;
+import static com.same.lib.theme.Theme.key_chat_outContactPhoneText;
+import static com.same.lib.theme.Theme.key_chat_outFileInfoSelectedText;
+import static com.same.lib.theme.Theme.key_chat_outFileInfoText;
+import static com.same.lib.theme.Theme.key_chat_outFileNameText;
+import static com.same.lib.theme.Theme.key_chat_outFileProgress;
+import static com.same.lib.theme.Theme.key_chat_outFileProgressSelected;
+import static com.same.lib.theme.Theme.key_chat_outForwardedNameText;
+import static com.same.lib.theme.Theme.key_chat_outInstant;
+import static com.same.lib.theme.Theme.key_chat_outInstantSelected;
+import static com.same.lib.theme.Theme.key_chat_outLoader;
+import static com.same.lib.theme.Theme.key_chat_outLoaderSelected;
+import static com.same.lib.theme.Theme.key_chat_outMediaIcon;
+import static com.same.lib.theme.Theme.key_chat_outMediaIconSelected;
+import static com.same.lib.theme.Theme.key_chat_outMenu;
+import static com.same.lib.theme.Theme.key_chat_outMenuSelected;
+import static com.same.lib.theme.Theme.key_chat_outPreviewInstantSelectedText;
+import static com.same.lib.theme.Theme.key_chat_outPreviewInstantText;
+import static com.same.lib.theme.Theme.key_chat_outPreviewLine;
+import static com.same.lib.theme.Theme.key_chat_outReplyLine;
+import static com.same.lib.theme.Theme.key_chat_outReplyMediaMessageSelectedText;
+import static com.same.lib.theme.Theme.key_chat_outReplyMediaMessageText;
+import static com.same.lib.theme.Theme.key_chat_outReplyMessageText;
+import static com.same.lib.theme.Theme.key_chat_outReplyNameText;
+import static com.same.lib.theme.Theme.key_chat_outSentCheck;
+import static com.same.lib.theme.Theme.key_chat_outSentCheckRead;
+import static com.same.lib.theme.Theme.key_chat_outSentCheckReadSelected;
+import static com.same.lib.theme.Theme.key_chat_outSentCheckSelected;
+import static com.same.lib.theme.Theme.key_chat_outSentClock;
+import static com.same.lib.theme.Theme.key_chat_outSentClockSelected;
+import static com.same.lib.theme.Theme.key_chat_outSiteNameText;
+import static com.same.lib.theme.Theme.key_chat_outTimeSelectedText;
+import static com.same.lib.theme.Theme.key_chat_outTimeText;
+import static com.same.lib.theme.Theme.key_chat_outVenueInfoSelectedText;
+import static com.same.lib.theme.Theme.key_chat_outVenueInfoText;
+import static com.same.lib.theme.Theme.key_chat_outViaBotNameText;
+import static com.same.lib.theme.Theme.key_chat_outViews;
+import static com.same.lib.theme.Theme.key_chat_outVoiceSeekbar;
+import static com.same.lib.theme.Theme.key_chat_outVoiceSeekbarFill;
+import static com.same.lib.theme.Theme.key_chat_outVoiceSeekbarSelected;
+import static com.same.lib.theme.Theme.key_chat_wallpaper;
+import static com.same.lib.theme.Theme.key_chat_wallpaper_gradient_rotation;
+import static com.same.lib.theme.Theme.key_chat_wallpaper_gradient_to;
+import static com.same.lib.theme.Theme.myMessagesColorKeys;
+import static com.same.lib.theme.Theme.themeAccentExclusionKeys;
+import static com.same.lib.theme.ThemeManager.changeColorAccent;
+import static com.same.lib.theme.ThemeManager.getAccentColor;
+import static com.same.lib.theme.ThemeManager.getTempHsv;
+import static com.same.lib.theme.ThemeManager.getThemeFileValues;
+import static com.same.lib.theme.ThemeManager.useBlackText;
 
 /**
  * @author 林学渊
@@ -235,12 +302,12 @@ public class ThemeAccent {
         return !TextUtils.isEmpty(patternSlug) ? new File(AndroidUtilities.getFilesDirFixed(), String.format(Locale.US, "%s_%d_%s.jpg", parentTheme.getKey(), id, patternSlug)) : null;
     }
 
-    public File saveToFile() {
-        File dir = AndroidUtilities.getSharingDirectory();
+    public File saveToFile(Context context) {
+        File dir = AndroidUtilities.getSharingDirectory(context);
         dir.mkdirs();
         File path = new File(dir, String.format(Locale.US, "%s_%d.attheme", parentTheme.getKey(), id));
 
-        HashMap<String, Integer> currentColorsNoAccent = getThemeFileValues(null, parentTheme.assetName, null);
+        HashMap<String, Integer> currentColorsNoAccent = getThemeFileValues(context, null, parentTheme.assetName, null);
         HashMap<String, Integer> currentColors = new HashMap<>(currentColorsNoAccent);
         fillAccentColors(currentColorsNoAccent, currentColors);
 

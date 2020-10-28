@@ -17,7 +17,7 @@ public class ThemePage extends BasePage {
     public boolean onFragmentCreate() {
         if (parentLayout != null) {
             ThemeInfo themeInfo = Theme.themes.get(0);
-            ThemeManager.applyTheme(themeInfo);
+            ThemeManager.applyTheme(getParentActivity(), themeInfo);
             parentLayout.rebuildAllFragmentViews(true, true);
             new ThemeEditorView().show(getParentActivity(), themeInfo);
         }

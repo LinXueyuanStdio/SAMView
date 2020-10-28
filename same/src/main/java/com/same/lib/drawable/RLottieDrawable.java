@@ -1,5 +1,6 @@
 package com.same.lib.drawable;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -17,7 +18,6 @@ import android.view.View;
 import com.same.lib.R;
 import com.same.lib.helper.DispatchQueuePool;
 import com.same.lib.util.AndroidUtilities;
-import com.same.lib.util.SharedConfig;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -370,20 +370,20 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         timeBetweenFrames = Math.max(shouldLimitFps ? 33 : 16, (int) (1000.0f / metaData[1]));
     }
 
-    public RLottieDrawable(int rawRes, String name, int w, int h) {
-        this(rawRes, name, w, h, true, null);
+    public RLottieDrawable(Context context, int rawRes, String name, int w, int h) {
+        this(context, rawRes, name, w, h, true, null);
     }
 
-    public RLottieDrawable(String diceEmoji, int w, int h) {
+    public RLottieDrawable(Context context, String diceEmoji, int w, int h) {
         width = w;
         height = h;
         isDice = 1;
         String jsonString;
         if ("\uD83C\uDFB2".equals(diceEmoji)) {
-            jsonString = readRes(null, R.raw.diceloop);
+            jsonString = readRes(context, null, R.raw.diceloop);
             diceSwitchFramesCount = 60;
         } else if ("\uD83C\uDFAF".equals(diceEmoji)) {
-            jsonString = readRes(null, R.raw.dartloop);
+            jsonString = readRes(context, null, R.raw.dartloop);
         } else {
             jsonString = null;
         }
@@ -400,11 +400,11 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         return isDice != 0;
     }
 
-    public boolean setBaseDice(File path) {
+    public boolean setBaseDice(Context context, File path) {
         if (nativePtr != 0) {
             return true;
         }
-        String jsonString = readRes(path, 0);
+        String jsonString = readRes(context, path, 0);
         if (TextUtils.isEmpty(jsonString)) {
             return false;
         }
@@ -421,11 +421,11 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         return nativePtr != 0;
     }
 
-    public boolean setDiceNumber(File path, boolean instant) {
+    public boolean setDiceNumber(Context context, File path, boolean instant) {
         if (secondNativePtr != 0) {
             return true;
         }
-        String jsonString = readRes(path, 0);
+        String jsonString = readRes(context, path, 0);
         if (TextUtils.isEmpty(jsonString)) {
             return false;
         }
@@ -440,11 +440,11 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         return true;
     }
 
-    public RLottieDrawable(int rawRes, String name, int w, int h, boolean startDecode, int[] colorReplacement) {
+    public RLottieDrawable(Context context, int rawRes, String name, int w, int h, boolean startDecode, int[] colorReplacement) {
         width = w;
         height = h;
         autoRepeat = 0;
-        String jsonString = readRes(null, rawRes);
+        String jsonString = readRes(context, null, rawRes);
         if (TextUtils.isEmpty(jsonString)) {
             return;
         }
@@ -456,7 +456,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         }
     }
 
-    private String readRes(File path, int rawRes) {
+    private String readRes(Context context, File path, int rawRes) {
         int totalRead = 0;
         byte[] readBuffer = readBufferLocal.get();
         if (readBuffer == null) {
@@ -468,7 +468,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
             if (path != null) {
                 inputStream = new FileInputStream(path);
             } else {
-                inputStream = SharedConfig.applicationContext().getResources().openRawResource(rawRes);
+                inputStream = context.getResources().openRawResource(rawRes);
             }
             int readLen;
             byte[] buffer = bufferLocal.get();

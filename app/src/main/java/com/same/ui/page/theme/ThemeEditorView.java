@@ -59,14 +59,13 @@ import com.same.lib.theme.ThemeDescription;
 import com.same.lib.theme.ThemeInfo;
 import com.same.lib.theme.ThemeManager;
 import com.same.lib.util.AndroidUtilities;
-import com.same.lib.util.SharedConfig;
 import com.same.ui.MainActivity;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.theme.cell.TextColorThemeCell;
+import com.same.ui.view.DrawableBuilder;
 import com.same.ui.view.EmptyTextProgressView;
 import com.same.ui.view.RecyclerListView;
-import com.same.ui.view.DrawableBuilder;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -861,7 +860,7 @@ public class ThemeEditorView {
             saveButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             bottomSaveLayout.addView(saveButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.RIGHT));
             saveButton.setOnClickListener(v -> {
-                ThemeManager.saveCurrentTheme(themeInfo, true, false, false);
+                ThemeManager.saveCurrentTheme(parentActivity, themeInfo, true, false, false);
                 setOnDismissListener(null);
                 dismiss();
                 close();
@@ -997,7 +996,7 @@ public class ThemeEditorView {
                 if (parentActivity != null) {
                     ((MainActivity) parentActivity).rebuildAllFragments(false);
                 }
-                ThemeManager.saveCurrentTheme(themeInfo, false, false, false);
+                ThemeManager.saveCurrentTheme(parentActivity, themeInfo, false, false, false);
                 if (listView.getAdapter() == listAdapter) {
                     AndroidUtilities.hideKeyboard(getCurrentFocus());
                 }
@@ -1491,7 +1490,7 @@ public class ThemeEditorView {
         };
         windowManager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
 
-        preferences = SharedConfig.applicationContext().getSharedPreferences("themeconfig", Context.MODE_PRIVATE);
+        preferences = parentActivity.getSharedPreferences("themeconfig", Context.MODE_PRIVATE);
 
         int sidex = preferences.getInt("sidex", 1);
         int sidey = preferences.getInt("sidey", 0);
@@ -1516,7 +1515,7 @@ public class ThemeEditorView {
         wallpaperUpdater = new WallpaperUpdater(activity, new WallpaperUpdater.WallpaperUpdaterDelegate() {
             @Override
             public void didSelectWallpaper(File file, Bitmap bitmap, boolean gallery) {
-                Theme.setThemeWallpaper(themeInfo, bitmap, file);
+                Theme.setThemeWallpaper(parentActivity, themeInfo, bitmap, file);
             }
 
             @Override
@@ -1711,7 +1710,7 @@ public class ThemeEditorView {
                 animatorSet.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        ThemeManager.saveCurrentTheme(themeInfo, true, false, false);
+                        ThemeManager.saveCurrentTheme(parentActivity, themeInfo, true, false, false);
                         destroy();
                     }
                 });
