@@ -34,7 +34,6 @@ import java.util.List;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.view.ViewCompat;
 
 /**
@@ -491,7 +490,7 @@ public final class Bulletin {
     @SuppressLint("ViewConstructor")
     public static class TwoLineLayout extends ButtonLayout {
 
-        public final AppCompatImageView imageView;
+        public final ImageView imageView;
         public final TextView titleTextView;
         public final TextView subtitleTextView;
 
@@ -500,7 +499,7 @@ public final class Bulletin {
 
             final int undoInfoColor = Theme.getColor(Theme.key_undo_infoColor);
 
-            addView(imageView = new AppCompatImageView(context), LayoutHelper.createFrameRelatively(29, 29, Gravity.START | Gravity.CENTER_VERTICAL, 12, 12, 12, 12));
+            addView(imageView = new ImageView(context), LayoutHelper.createFrameRelatively(29, 29, Gravity.START | Gravity.CENTER_VERTICAL, 12, 12, 12, 12));
 
             final LinearLayout linearLayout = new LinearLayout(context);
             linearLayout.setOrientation(LinearLayout.VERTICAL);

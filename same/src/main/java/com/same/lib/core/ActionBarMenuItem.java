@@ -36,8 +36,6 @@ import com.same.lib.util.AndroidUtilities;
 import com.same.lib.util.SharedConfig;
 import com.timecat.component.locale.MLang;
 
-import androidx.appcompat.widget.AppCompatImageView;
-
 /**
  * @author 林学渊
  * @email linxy59@mail2.sysu.edu.cn
@@ -825,7 +823,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 searchContainer.addView(searchFieldCaption, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 36, Gravity.CENTER_VERTICAL | Gravity.RIGHT, 0, 5.5f, 48, 0));
             }
 
-            clearButton = new AppCompatImageView(getContext()) {
+            clearButton = new ImageView(getContext()) {
                 @Override
                 protected void onDetachedFromWindow() {
                     super.onDetachedFromWindow();

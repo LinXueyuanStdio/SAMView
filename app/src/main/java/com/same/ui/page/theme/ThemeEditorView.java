@@ -32,6 +32,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -1431,6 +1432,7 @@ public class ThemeEditorView {
                                 } else {
                                     fragment = null;
                                 }
+                                Log.e("view", "...");
                                 if (fragment != null) {
                                     ArrayList<ThemeDescription> items = fragment.getThemeDescriptions();
                                     if (items != null) {

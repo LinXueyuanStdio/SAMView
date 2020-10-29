@@ -634,7 +634,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             containerView.addView(buttonsLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 52));
 
             if (positiveButtonText != null) {
-                TextView textView = new AppCompatTextView(getContext()) {
+                TextView textView = new TextView(getContext()) {
                     @Override
                     public void setEnabled(boolean enabled) {
                         super.setEnabled(enabled);
@@ -670,7 +670,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             }
 
             if (negativeButtonText != null) {
-                TextView textView = new AppCompatTextView(getContext()) {
+                TextView textView = new TextView(getContext()) {
                     @Override
                     public void setEnabled(boolean enabled) {
                         super.setEnabled(enabled);
@@ -706,7 +706,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             }
 
             if (neutralButtonText != null) {
-                TextView textView = new AppCompatTextView(getContext()) {
+                TextView textView = new TextView(getContext()) {
                     @Override
                     public void setEnabled(boolean enabled) {
                         super.setEnabled(enabled);

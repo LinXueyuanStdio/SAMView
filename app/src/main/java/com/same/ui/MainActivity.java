@@ -120,6 +120,13 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
             absTheme.createResources(this);
         }
 
+        actionBarLayout = new ContainerLayout(this) {
+            @Override
+            public void setThemeAnimationValue(float value) {
+                super.setThemeAnimationValue(value);
+                drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+            }
+        };
         FrameLayout frameLayout = new FrameLayout(this);
         setContentView(frameLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         if (Build.VERSION.SDK_INT >= 21) {
@@ -269,7 +276,9 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
         actionBarLayout.setDrawerLayoutContainer(drawerLayoutContainer);
         actionBarLayout.init(mainFragmentsStack);//使用 main fragment 栈
         actionBarLayout.setDelegate(this);//代理，监听生命周期
-        actionBarLayout.presentFragment(new ThemePage());
+        ThemePage page = new ThemePage();
+//        actionBarLayout.addFragmentToStack(page);
+        actionBarLayout.presentFragment(page);
 
         checkLayout();
         checkSystemBarColors();
@@ -359,7 +368,7 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
     }
 
     public ContainerLayout getContainerLayout() {
-        return null;
+        return actionBarLayout;
     }
 
     public ContainerLayout getRightActionBarLayout() {

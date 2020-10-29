@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.accessibility.AccessibilityNodeInfo;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.same.lib.R;
@@ -35,7 +36,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import androidx.annotation.Keep;
-import androidx.appcompat.widget.AppCompatEditText;
 
 /**
  * @author 林学渊
@@ -44,7 +44,7 @@ import androidx.appcompat.widget.AppCompatEditText;
  * @description null
  * @usage null
  */
-public class EditTextBoldCursor extends AppCompatEditText {
+public class EditTextBoldCursor extends EditText {
 
     private static Field mEditor;
     private static Field mShowCursorField;

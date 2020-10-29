@@ -41,7 +41,7 @@ public class ThemePage extends BasePage {
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
         }
-        actionBar.setTitle(MyLang.getString("AutoNightTheme", R.string.AutoNightTheme));
+        actionBar.setTitle(MyLang.getString("AutoNightTheme", R.string.Theme));
 
         FrameLayout frameLayout = new FrameLayout(context);
         frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));

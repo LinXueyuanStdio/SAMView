@@ -1,13 +1,12 @@
 package com.same.lib.core;
 
 import android.content.Context;
+import android.widget.ImageView;
 
 import com.same.lib.drawable.RLottieDrawable;
 import com.same.lib.util.AndroidUtilities;
 
 import java.util.HashMap;
-
-import androidx.appcompat.widget.AppCompatImageView;
 
 /**
  * @author 林学渊
@@ -16,7 +15,7 @@ import androidx.appcompat.widget.AppCompatImageView;
  * @description null
  * @usage null
  */
-public class RLottieImageView extends AppCompatImageView {
+public class RLottieImageView extends ImageView {
 
     private HashMap<String, Integer> layerColors;
     private RLottieDrawable drawable;

@@ -320,7 +320,13 @@ public class AndroidUtilities {
     }
 
     public static int getShadowHeight() {
-        return 0;
+        if (density >= 4.0f) {
+            return 3;
+        } else if (density >= 2.0f) {
+            return 2;
+        } else {
+            return 1;
+        }
     }
 
     public static String getAttachFileName(Document document) {

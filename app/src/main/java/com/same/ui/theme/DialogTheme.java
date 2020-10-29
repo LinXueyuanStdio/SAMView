@@ -21,7 +21,6 @@ import com.same.ui.R;
  */
 public class DialogTheme extends AbsTheme {
 
-    public static Paint dialogs_onlineCirclePaint;
     public static Paint dialogs_tabletSeletedPaint;
     public static Paint dialogs_pinnedPaint;
     public static Paint dialogs_countPaint;
@@ -94,7 +93,7 @@ public class DialogTheme extends AbsTheme {
 
             dialogs_tabletSeletedPaint = new Paint();
             dialogs_pinnedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            dialogs_onlineCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            Theme.dialogs_onlineCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             dialogs_countPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             dialogs_countGrayPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             dialogs_errorPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
