@@ -5,20 +5,29 @@ import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Shader;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.same.lib.AbsTheme;
 import com.same.lib.core.BasePage;
 import com.same.lib.core.ContainerLayout;
+import com.same.lib.core.DrawerLayoutContainer;
+import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.CommonTheme;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeRes;
@@ -52,6 +61,8 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
     private static ArrayList<BasePage> layerFragmentsStack = new ArrayList<>();
     private static ArrayList<BasePage> rightFragmentsStack = new ArrayList<>();
     private ActionMode visibleActionMode;
+    private DrawerLayoutContainer drawerLayoutContainer;
+    private ImageView themeSwitchImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,21 +116,210 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
         ThemeRes.install(new DialogTheme());
         ThemeRes.install(new ChatTheme());
         ThemeRes.install(new ProfileTheme());
-        for(AbsTheme absTheme: ThemeRes.themes) {
+        for (AbsTheme absTheme : ThemeRes.themes) {
             absTheme.createResources(this);
         }
 
-        actionBarLayout = new ContainerLayout(this);
-        actionBarLayout.init(mainFragmentsStack);
-        actionBarLayout.setDelegate(this);
+        FrameLayout frameLayout = new FrameLayout(this);
+        setContentView(frameLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        if (Build.VERSION.SDK_INT >= 21) {
+            themeSwitchImageView = new ImageView(this);
+            themeSwitchImageView.setVisibility(View.GONE);
+            frameLayout.addView(themeSwitchImageView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+        }
 
-        //        actionBarLayout.setBottomBar(createBottomBar());
-        //        actionBarLayout.setBottomBarHeight(240);
+        drawerLayoutContainer = new DrawerLayoutContainer(this);
+        drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+        frameLayout.addView(drawerLayoutContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
+        if (AndroidUtilities.isTablet()) {
+            //适配平板
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+            RelativeLayout launchLayout = new RelativeLayout(this) {
+
+                private boolean inLayout;
+
+                @Override
+                public void requestLayout() {
+                    if (inLayout) {
+                        return;
+                    }
+                    super.requestLayout();
+                }
+
+                @Override
+                protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                    inLayout = true;
+                    int width = MeasureSpec.getSize(widthMeasureSpec);
+                    int height = MeasureSpec.getSize(heightMeasureSpec);
+                    setMeasuredDimension(width, height);
+
+                    if (!AndroidUtilities.isInMultiwindow && (!AndroidUtilities.isSmallTablet() || getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
+                        tabletFullSize = false;
+                        int leftWidth = width / 100 * 35;
+                        if (leftWidth < AndroidUtilities.dp(320)) {
+                            leftWidth = AndroidUtilities.dp(320);
+                        }
+                        actionBarLayout.measure(MeasureSpec.makeMeasureSpec(leftWidth, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
+                        shadowTabletSide.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
+                        rightActionBarLayout.measure(MeasureSpec.makeMeasureSpec(width - leftWidth, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
+                    } else {
+                        tabletFullSize = true;
+                        actionBarLayout.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
+                    }
+                    backgroundTablet.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
+                    shadowTablet.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
+                    layersActionBarLayout.measure(MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(530), width), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(528), height), MeasureSpec.EXACTLY));
+
+                    inLayout = false;
+                }
+
+                @Override
+                protected void onLayout(boolean changed, int l, int t, int r, int b) {
+                    int width = r - l;
+                    int height = b - t;
+
+                    if (!AndroidUtilities.isInMultiwindow && (!AndroidUtilities.isSmallTablet() || getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
+                        int leftWidth = width / 100 * 35;
+                        if (leftWidth < AndroidUtilities.dp(320)) {
+                            leftWidth = AndroidUtilities.dp(320);
+                        }
+                        shadowTabletSide.layout(leftWidth, 0, leftWidth + shadowTabletSide.getMeasuredWidth(), shadowTabletSide.getMeasuredHeight());
+                        actionBarLayout.layout(0, 0, actionBarLayout.getMeasuredWidth(), actionBarLayout.getMeasuredHeight());
+                        rightActionBarLayout.layout(leftWidth, 0, leftWidth + rightActionBarLayout.getMeasuredWidth(), rightActionBarLayout.getMeasuredHeight());
+                    } else {
+                        actionBarLayout.layout(0, 0, actionBarLayout.getMeasuredWidth(), actionBarLayout.getMeasuredHeight());
+                    }
+                    int x = (width - layersActionBarLayout.getMeasuredWidth()) / 2;
+                    int y = (height - layersActionBarLayout.getMeasuredHeight()) / 2;
+                    layersActionBarLayout.layout(x, y, x + layersActionBarLayout.getMeasuredWidth(), y + layersActionBarLayout.getMeasuredHeight());
+                    backgroundTablet.layout(0, 0, backgroundTablet.getMeasuredWidth(), backgroundTablet.getMeasuredHeight());
+                    shadowTablet.layout(0, 0, shadowTablet.getMeasuredWidth(), shadowTablet.getMeasuredHeight());
+                }
+            };
+            drawerLayoutContainer.addView(launchLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+
+            backgroundTablet = new View(this);
+            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.catstile);
+            drawable.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+            backgroundTablet.setBackgroundDrawable(drawable);
+            launchLayout.addView(backgroundTablet, LayoutHelper.createRelative(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+
+            launchLayout.addView(actionBarLayout);
+
+            rightActionBarLayout = new ContainerLayout(this);
+            rightActionBarLayout.init(rightFragmentsStack);
+            rightActionBarLayout.setDelegate(this);
+            launchLayout.addView(rightActionBarLayout);
+
+            shadowTabletSide = new FrameLayout(this);
+            shadowTabletSide.setBackgroundColor(0x40295274);
+            launchLayout.addView(shadowTabletSide);
+
+            shadowTablet = new FrameLayout(this);
+            shadowTablet.setVisibility(layerFragmentsStack.isEmpty() ? View.GONE : View.VISIBLE);
+            shadowTablet.setBackgroundColor(0x7f000000);
+            launchLayout.addView(shadowTablet);
+            shadowTablet.setOnTouchListener((v, event) -> {
+                if (!actionBarLayout.fragmentsStack.isEmpty() && event.getAction() == MotionEvent.ACTION_UP) {
+                    float x = event.getX();
+                    float y = event.getY();
+                    int[] location = new int[2];
+                    layersActionBarLayout.getLocationOnScreen(location);
+                    int viewX = location[0];
+                    int viewY = location[1];
+
+                    if (layersActionBarLayout.checkTransitionAnimation() || x > viewX && x < viewX + layersActionBarLayout.getWidth() && y > viewY && y < viewY + layersActionBarLayout.getHeight()) {
+                        return false;
+                    } else {
+                        if (!layersActionBarLayout.fragmentsStack.isEmpty()) {
+                            for (int a = 0; a < layersActionBarLayout.fragmentsStack.size() - 1; a++) {
+                                layersActionBarLayout.removeFragmentFromStack(layersActionBarLayout.fragmentsStack.get(0));
+                                a--;
+                            }
+                            layersActionBarLayout.closeLastFragment(true);
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            });
+
+            shadowTablet.setOnClickListener(v -> {
+
+            });
+
+            layersActionBarLayout = new ContainerLayout(this);
+            layersActionBarLayout.setRemoveActionBarExtraHeight(true);
+            layersActionBarLayout.setBackgroundView(shadowTablet);
+            layersActionBarLayout.setUseAlphaAnimations(true);
+            layersActionBarLayout.setBackgroundResource(R.drawable.boxshadow);
+            layersActionBarLayout.init(layerFragmentsStack);
+            layersActionBarLayout.setDelegate(this);
+            layersActionBarLayout.setDrawerLayoutContainer(drawerLayoutContainer);
+            layersActionBarLayout.setVisibility(layerFragmentsStack.isEmpty() ? View.GONE : View.VISIBLE);
+            launchLayout.addView(layersActionBarLayout);
+        } else {
+            //手机
+            drawerLayoutContainer.addView(actionBarLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        }
+        //双向绑定
+        drawerLayoutContainer.setParentActionBarLayout(actionBarLayout);
+        actionBarLayout.setDrawerLayoutContainer(drawerLayoutContainer);
+        actionBarLayout.init(mainFragmentsStack);//使用 main fragment 栈
+        actionBarLayout.setDelegate(this);//代理，监听生命周期
         actionBarLayout.presentFragment(new ThemePage());
-        setContentView(actionBarLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         checkLayout();
+        checkSystemBarColors();
+
+        //适配各种国产 ROM
+        try {
+            String os1 = Build.DISPLAY;
+            String os2 = Build.USER;
+            if (os1 != null) {
+                os1 = os1.toLowerCase();
+            } else {
+                os1 = "";
+            }
+            if (os2 != null) {
+                os2 = os1.toLowerCase();
+            } else {
+                os2 = "";
+            }
+            if (os1.contains("flyme") || os2.contains("flyme")) {
+                AndroidUtilities.incorrectDisplaySizeFix = true;
+                final View view = getWindow().getDecorView().getRootView();
+                view.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+                    int height = view.getMeasuredHeight();
+                    if (Build.VERSION.SDK_INT >= 21) {
+                        height -= AndroidUtilities.statusBarHeight;
+                    }
+                    if (height > AndroidUtilities.dp(100) && height < AndroidUtilities.displaySize.y && height + AndroidUtilities.dp(100) > AndroidUtilities.displaySize.y) {
+                        AndroidUtilities.displaySize.y = height;
+                    }
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void checkSystemBarColors() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int color = Theme.getColor(Theme.key_actionBarDefault, null, true);
+            AndroidUtilities.setLightStatusBar(getWindow(), color == Color.WHITE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                final Window window = getWindow();
+                color = Theme.getColor(Theme.key_windowBackgroundGray, null, true);
+                if (window.getNavigationBarColor() != color) {
+                    window.setNavigationBarColor(color);
+                    final float brightness = AndroidUtilities.computePerceivedBrightness(color);
+                    AndroidUtilities.setLightNavigationBar(getWindow(), brightness >= 0.721f);
+                }
+            }
+        }
     }
 
     @Override
@@ -211,7 +411,7 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
         }
     }
 
-    
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         try {
@@ -364,7 +564,7 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
     @Override
     public boolean needPresentFragment(BasePage fragment, boolean removeLast, boolean forceWithoutAnimation, ContainerLayout layout) {
         if (AndroidUtilities.isTablet()) {
-             if (layout != layersActionBarLayout) {
+            if (layout != layersActionBarLayout) {
                 layersActionBarLayout.setVisibility(View.VISIBLE);
                 shadowTablet.setBackgroundColor(0x7f000000);
                 layersActionBarLayout.presentFragment(fragment, removeLast, forceWithoutAnimation, false, false);
@@ -373,7 +573,7 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
             return true;
         } else {
             boolean allow = true;
-            if (fragment ==null) {
+            if (fragment == null) {
                 if (mainFragmentsStack.size() == 1) {
                     allow = false;
                 }
@@ -394,7 +594,7 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
             return true;
         } else {
             boolean allow = true;
-            if (fragment==null) {
+            if (fragment == null) {
                 if (mainFragmentsStack.size() == 1) {
                     allow = false;
                 }
@@ -429,7 +629,7 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
         return true;
     }
 
-    public void onFinish(){
+    public void onFinish() {
 
     }
 

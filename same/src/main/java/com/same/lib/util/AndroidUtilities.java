@@ -25,6 +25,7 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -341,6 +342,40 @@ public class AndroidUtilities {
     public static void pinBitmap(Bitmap bitmap) {
 
     }
+
+    public static void setLightStatusBar(Window window, boolean enable) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            final View decorView = window.getDecorView();
+            int flags = decorView.getSystemUiVisibility();
+            if (enable) {
+                if ((flags & View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) == 0) {
+                    flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+                    decorView.setSystemUiVisibility(flags);
+                    window.setStatusBarColor(0x0f000000);
+                }
+            } else {
+                if ((flags & View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) != 0) {
+                    flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+                    decorView.setSystemUiVisibility(flags);
+                    window.setStatusBarColor(0x33000000);
+                }
+            }
+        }
+    }
+
+    public static void setLightNavigationBar(Window window, boolean enable) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            final View decorView = window.getDecorView();
+            int flags = decorView.getSystemUiVisibility();
+            if (enable) {
+                flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            } else {
+                flags &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            }
+            decorView.setSystemUiVisibility(flags);
+        }
+    }
+
 
     public static class LinkMovementMethodMy extends LinkMovementMethod {
         @Override
