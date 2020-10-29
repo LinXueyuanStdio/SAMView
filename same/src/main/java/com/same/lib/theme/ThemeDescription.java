@@ -26,12 +26,10 @@ import com.same.lib.component.RadioButton;
 import com.same.lib.core.ActionBar;
 import com.same.lib.core.EditTextBoldCursor;
 import com.same.lib.core.LineProgressView;
-import com.same.lib.core.RLottieImageView;
 import com.same.lib.core.RadialProgressView;
 import com.same.lib.core.SimpleTextView;
 import com.same.lib.drawable.BackDrawable;
 import com.same.lib.drawable.CombinedDrawable;
-import com.same.lib.drawable.RLottieDrawable;
 import com.same.lib.span.TypefaceSpan;
 import com.same.lib.util.AndroidUtilities;
 
@@ -127,15 +125,6 @@ public class ThemeDescription {
         delegate = themeDescriptionDelegate;
     }
 
-    public ThemeDescription(View view, int flags, Class[] classes, RLottieDrawable[] drawables, String layerName, String key) {
-        currentKey = key;
-        lottieLayerName = layerName;
-        drawablesToUpdate = drawables;
-        viewToInvalidate = view;
-        changeFlags = flags;
-        listClasses = classes;
-    }
-
     public ThemeDescription(View view, int flags, Class[] classes, String[] classesFields, Paint[] paint, Drawable[] drawables, ThemeDescriptionDelegate themeDescriptionDelegate, String key) {
         this(view, flags, classes, classesFields, paint, drawables, -1, themeDescriptionDelegate, key);
     }
@@ -210,10 +199,6 @@ public class ThemeDescription {
                 }
                 if (drawablesToUpdate[a] instanceof BackDrawable) {
                     ((BackDrawable) drawablesToUpdate[a]).setColor(color);
-                } else if (drawablesToUpdate[a] instanceof RLottieDrawable) {
-                    if (lottieLayerName != null) {
-                        ((RLottieDrawable) drawablesToUpdate[a]).setLayerColor(lottieLayerName + ".**", color);
-                    }
                 } else if (drawablesToUpdate[a] instanceof CombinedDrawable) {
                     if ((changeFlags & FLAG_BACKGROUNDFILTER) != 0) {
                         ((CombinedDrawable) drawablesToUpdate[a]).getBackground().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
@@ -465,9 +450,6 @@ public class ThemeDescription {
                                 }
                                 if (object instanceof View) {
                                     ((View) object).invalidate();
-                                }
-                                if (lottieLayerName != null && object instanceof RLottieImageView) {
-                                    ((RLottieImageView) object).setLayerColor(lottieLayerName + ".**", color);
                                 }
                                 if ((changeFlags & FLAG_USEBACKGROUNDDRAWABLE) != 0 && object instanceof View) {
                                     object = ((View) object).getBackground();

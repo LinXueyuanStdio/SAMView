@@ -579,7 +579,10 @@ public class ThemeEditorView {
                             for (int a = 0; a < currentThemeDesription.size(); a++) {
                                 ThemeDescription description = currentThemeDesription.get(a);
                                 String key = description.getCurrentKey();
-                                if (a == 0 && key.equals(Theme.key_chat_wallpaper) || key.equals(Theme.key_chat_wallpaper_gradient_to) || key.equals(Theme.key_windowBackgroundWhite) || key.equals(Theme.key_windowBackgroundGray)) {
+                                if (a == 0 && key.equals(Theme.key_chat_wallpaper)
+                                        || key.equals(Theme.key_chat_wallpaper_gradient_to)
+                                        || key.equals(Theme.key_windowBackgroundWhite)
+                                        || key.equals(Theme.key_windowBackgroundGray)) {
                                     color = 0xff000000 | color;
                                 }
                                 currentThemeDesription.get(a).setColor(getContext(), color, false);
@@ -1083,7 +1086,7 @@ public class ThemeEditorView {
 
         @Keep
         public void setScrollOffsetY(int value) {
-//            listView.setTopGlowOffset(scrollOffsetY = value);TODO
+            listView.setTopGlowOffset(scrollOffsetY = value);//TODO
             frameLayout.setTranslationY(scrollOffsetY);
             colorPicker.setTranslationY(scrollOffsetY);
             searchEmptyView.setTranslationY(scrollOffsetY);

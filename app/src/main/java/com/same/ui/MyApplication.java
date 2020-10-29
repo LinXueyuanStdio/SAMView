@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Handler;
 
+import com.same.lib.NativeLoader;
 import com.same.lib.util.AndroidUtilities;
 import com.same.ui.lang.MyLang;
 
@@ -21,6 +22,7 @@ public class MyApplication extends Application {
         super.onCreate();
         applicationContext = this;
         applicationHandler = new Handler(applicationContext.getMainLooper());
+        NativeLoader.initNativeLibs(this);
         MyLang.init(applicationContext);
         AndroidUtilities.init(this);
     }

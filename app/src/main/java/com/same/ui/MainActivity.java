@@ -48,6 +48,9 @@ import com.same.ui.theme.ProfileTheme;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity implements ContainerLayout.ActionBarLayoutDelegate {
+    /**
+     * 主容器
+     */
     private ContainerLayout actionBarLayout;
     /**
      * 适配平板的容器

@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 29
+    buildToolsVersion '29.0.3'
+    ndkVersion "21.3.6528147"
     defaultConfig {
         applicationId "com.same.ui"
         minSdkVersion 21
@@ -9,6 +11,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
     }
     buildTypes {
         release {
@@ -26,6 +29,5 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation project(':same')
 }
