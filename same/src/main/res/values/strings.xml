@@ -7,6 +7,8 @@
     <string name="StopLoading">Stop loading?</string>
     <string name="WaitMore">Wait more</string>
     <string name="Stop">Stop</string>
+    <string name="OK">OK</string>
+    <string name="PermissionOpenSettings">PermissionOpenSettings</string>
 
     <string name="ThemeDark">Dark</string>
     <string name="ThemeDarkBlue">Dark Blue</string>

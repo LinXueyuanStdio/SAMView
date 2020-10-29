@@ -28,11 +28,14 @@
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name="com.same.ui.TestActivity" />
+
+        <meta-data android:name="android.max_aspect" android:value="2.5" />
+
     </application>
 
 </manifest>

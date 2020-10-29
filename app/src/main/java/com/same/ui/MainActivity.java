@@ -3,12 +3,14 @@ package com.same.ui;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.ActionMode;
@@ -17,6 +19,7 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -24,23 +27,25 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.same.lib.AbsTheme;
+import com.same.lib.core.AlertDialog;
 import com.same.lib.core.BasePage;
 import com.same.lib.core.ContainerLayout;
 import com.same.lib.core.DrawerLayoutContainer;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.CommonTheme;
 import com.same.lib.theme.Theme;
+import com.same.lib.theme.ThemeManager;
 import com.same.lib.theme.ThemeRes;
 import com.same.lib.util.AndroidUtilities;
 import com.same.lib.util.SharedConfig;
+import com.same.ui.lang.MyLang;
+import com.same.ui.page.theme.ThemeEditorView;
 import com.same.ui.page.theme.ThemePage;
 import com.same.ui.theme.ChatTheme;
 import com.same.ui.theme.DialogTheme;
 import com.same.ui.theme.ProfileTheme;
 
 import java.util.ArrayList;
-
-import androidx.annotation.NonNull;
 
 public class MainActivity extends Activity implements ContainerLayout.ActionBarLayoutDelegate {
     private ContainerLayout actionBarLayout;
@@ -63,6 +68,7 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
     private ActionMode visibleActionMode;
     private DrawerLayoutContainer drawerLayoutContainer;
     private ImageView themeSwitchImageView;
+    private ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +111,10 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
 
         //endregion
         super.onCreate(savedInstanceState);
-
+        if (Build.VERSION.SDK_INT >= 24) {
+            //适配分屏
+            AndroidUtilities.isInMultiwindow = isInMultiWindowMode();
+        }
         //获取状态栏高度
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
@@ -276,8 +285,12 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
         actionBarLayout.setDrawerLayoutContainer(drawerLayoutContainer);
         actionBarLayout.init(mainFragmentsStack);//使用 main fragment 栈
         actionBarLayout.setDelegate(this);//代理，监听生命周期
+
+        //应用的壁纸
+        Theme.loadWallpaper(this);
+
         ThemePage page = new ThemePage();
-//        actionBarLayout.addFragmentToStack(page);
+        //        actionBarLayout.addFragmentToStack(page);
         actionBarLayout.presentFragment(page);
 
         checkLayout();
@@ -300,7 +313,7 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
             if (os1.contains("flyme") || os2.contains("flyme")) {
                 AndroidUtilities.incorrectDisplaySizeFix = true;
                 final View view = getWindow().getDecorView().getRootView();
-                view.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+                view.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener = () -> {
                     int height = view.getMeasuredHeight();
                     if (Build.VERSION.SDK_INT >= 21) {
                         height -= AndroidUtilities.statusBarHeight;
@@ -335,6 +348,10 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
     protected void onPause() {
         super.onPause();
         actionBarLayout.onPause();
+        if (AndroidUtilities.isTablet()) {
+            rightActionBarLayout.onPause();
+            layersActionBarLayout.onPause();
+        }
     }
 
     @Override
@@ -344,27 +361,104 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
     }
 
     @Override
+    protected void onDestroy() {
+        try {
+            if (onGlobalLayoutListener != null) {
+                final View view = getWindow().getDecorView().getRootView();
+                view.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onDestroy();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        ThemeEditorView editorView = ThemeEditorView.getInstance();
+        if (editorView != null) {
+            editorView.onActivityResult(requestCode, resultCode, data);
+        }
         if (actionBarLayout.fragmentsStack.size() != 0) {
-            BasePage segment = actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1);
-            segment.onActivityResultFragment(requestCode, resultCode, data);
+            BasePage fragment = actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1);
+            fragment.onActivityResultFragment(requestCode, resultCode, data);
+        }
+        if (AndroidUtilities.isTablet()) {
+            if (rightActionBarLayout.fragmentsStack.size() != 0) {
+                BasePage fragment = rightActionBarLayout.fragmentsStack.get(rightActionBarLayout.fragmentsStack.size() - 1);
+                fragment.onActivityResultFragment(requestCode, resultCode, data);
+            }
+            if (layersActionBarLayout.fragmentsStack.size() != 0) {
+                BasePage fragment = layersActionBarLayout.fragmentsStack.get(layersActionBarLayout.fragmentsStack.size() - 1);
+                fragment.onActivityResultFragment(requestCode, resultCode, data);
+            }
         }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (actionBarLayout.fragmentsStack.size() != 0) {
-            BasePage segment = actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1);
-            segment.onRequestPermissionsResultFragment(requestCode, permissions, grantResults);
+        if (grantResults == null) {
+            grantResults = new int[0];
         }
+        if (permissions == null) {
+            permissions = new String[0];
+        }
+
+        boolean granted = grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+        if (actionBarLayout.fragmentsStack.size() != 0) {
+            BasePage fragment = actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1);
+            fragment.onRequestPermissionsResultFragment(requestCode, permissions, grantResults);
+        }
+        if (AndroidUtilities.isTablet()) {
+            if (rightActionBarLayout.fragmentsStack.size() != 0) {
+                BasePage fragment = rightActionBarLayout.fragmentsStack.get(rightActionBarLayout.fragmentsStack.size() - 1);
+                fragment.onRequestPermissionsResultFragment(requestCode, permissions, grantResults);
+            }
+            if (layersActionBarLayout.fragmentsStack.size() != 0) {
+                BasePage fragment = layersActionBarLayout.fragmentsStack.get(layersActionBarLayout.fragmentsStack.size() - 1);
+                fragment.onRequestPermissionsResultFragment(requestCode, permissions, grantResults);
+            }
+        }
+    }
+
+    private void showPermissionErrorAlert(String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(MyLang.getString("AppName", R.string.AppName));
+        builder.setMessage(message);
+        builder.setNegativeButton(MyLang.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialog, which) -> {
+            try {
+                Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                intent.setData(Uri.parse("package:" + MyLang.getContext().getPackageName()));
+                startActivity(intent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        builder.setPositiveButton(MyLang.getString("OK", R.string.OK), null);
+        builder.show();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        AndroidUtilities.checkDisplaySize(this, newConfig);
         super.onConfigurationChanged(newConfig);
+        checkLayout();
         actionBarLayout.onConfigurationChanged(newConfig);
+        ThemeEditorView editorView = ThemeEditorView.getInstance();
+        if (editorView != null) {
+            editorView.onConfigurationChanged();
+        }
+        if (Theme.selectedAutoNightType == Theme.AUTO_NIGHT_TYPE_SYSTEM) {
+            ThemeManager.checkAutoNightThemeConditions(this);
+        }
+    }
+
+    @Override
+    public void onMultiWindowModeChanged(boolean isInMultiWindowMode) {
+        AndroidUtilities.isInMultiwindow = isInMultiWindowMode;
+        checkLayout();
     }
 
     public ContainerLayout getContainerLayout() {
@@ -420,6 +514,14 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
         }
     }
 
+
+    public void presentFragment(BasePage fragment) {
+        actionBarLayout.presentFragment(fragment);
+    }
+
+    public boolean presentFragment(final BasePage fragment, final boolean removeLast, boolean forceWithoutAnimation) {
+        return actionBarLayout.presentFragment(fragment, removeLast, forceWithoutAnimation, true, false);
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
