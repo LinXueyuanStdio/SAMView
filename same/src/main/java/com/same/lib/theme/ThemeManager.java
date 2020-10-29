@@ -21,6 +21,7 @@ import android.net.Uri;
 import android.os.SystemClock;
 import android.text.TextUtils;
 
+import com.same.lib.AbsTheme;
 import com.same.lib.R;
 import com.same.lib.drawable.BackgroundGradientDrawable;
 import com.same.lib.helper.Bitmaps;
@@ -472,10 +473,9 @@ public class ThemeManager {
             shouldDrawGradientIcons = accent.fillAccentColors(currentColorsNoAccent, currentColors);
         }
         reloadWallpaper(context);
-//        applyCommonTheme();
-//        applyDialogsTheme();
-//        applyProfileTheme();
-//        applyChatTheme(false);TODO apply custom theme
+        for (AbsTheme absTheme:ThemeRes.themes) {
+            absTheme.applyResources(context);
+        }
         AndroidUtilities.runOnUIThread(() -> NotificationCenter.postNotificationName(NotificationCenter.didSetNewTheme, false));
     }
 

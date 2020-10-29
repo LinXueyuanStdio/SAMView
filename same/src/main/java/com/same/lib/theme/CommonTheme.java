@@ -75,5 +75,10 @@ public class CommonTheme extends AbsTheme {
     public void createResources(Context context) {
         createCommonResources(context);
     }
+
+    @Override
+    public void applyResources(Context context) {
+        applyCommonTheme();
+    }
     //endregion
 }

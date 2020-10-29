@@ -60,7 +60,7 @@ public class LanguageSelectPage extends BasePage {
     @Override
     public boolean onFragmentCreate() {
         fillLanguages();
-        MyLang.getInstance().loadRemoteLanguages(getParentActivity(), new MLang.FinishLoadCallback() {
+        MyLang.getInstance().loadRemoteLanguages(MyLang.getContext(), new MLang.FinishLoadCallback() {
             @Override
             public void finishLoad() {
                 if (listAdapter != null) {

@@ -301,6 +301,11 @@ public class ChatTheme extends AbsTheme {
         createChatResources(context, false);
     }
 
+    @Override
+    public void applyResources(Context context) {
+        applyChatTheme(false);
+    }
+
     //endregion
 
 }

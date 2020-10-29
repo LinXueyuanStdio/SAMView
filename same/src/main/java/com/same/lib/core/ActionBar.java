@@ -283,7 +283,7 @@ public class ActionBar extends FrameLayout {
         titleTextView = new SimpleTextView(getContext());
         titleTextView.setGravity(Gravity.LEFT);
         titleTextView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultTitle));
-        titleTextView.setTypeface(AndroidUtilities.getTypeface(getContext(), "fonts/rmedium.ttf"));
+        titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         addView(titleTextView, 0, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP));
     }
 

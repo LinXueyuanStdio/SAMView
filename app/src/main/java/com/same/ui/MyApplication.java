@@ -7,7 +7,6 @@ import android.content.res.Configuration;
 import android.os.Handler;
 
 import com.same.lib.util.AndroidUtilities;
-import com.same.lib.util.Display;
 import com.same.ui.lang.MyLang;
 
 import androidx.annotation.NonNull;
@@ -30,6 +29,6 @@ public class MyApplication extends Application{
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         MyLang.onConfigurationChanged(newConfig);
-        Display.checkDisplaySize(applicationContext, newConfig);
+        AndroidUtilities.checkDisplaySize(applicationContext, newConfig);
     }
 }

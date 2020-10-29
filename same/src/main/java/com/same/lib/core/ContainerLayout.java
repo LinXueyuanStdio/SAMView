@@ -1605,7 +1605,7 @@ public class ContainerLayout  extends FrameLayout {
                 int color = Color.argb(a, r, g, b);
                 ThemeDescription description = descriptions.get(i);
                 Theme.setAnimatedColor(description.getCurrentKey(), color);
-                description.setColor(color, false, false);
+                description.setColor(getContext(), color, false, false);
             }
         }
         for (int j = 0, N = themeAnimatorDelegate.size(); j < N; j++) {
@@ -1618,7 +1618,7 @@ public class ContainerLayout  extends FrameLayout {
             for (int i = 0, N = presentingFragmentDescriptions.size(); i < N; i++) {
                 ThemeDescription description = presentingFragmentDescriptions.get(i);
                 String key = description.getCurrentKey();
-                description.setColor(Theme.getColor(key), false, false);
+                description.setColor(getContext(), Theme.getColor(key), false, false);
             }
         }
     }

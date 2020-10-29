@@ -76,6 +76,11 @@ public class ProfileTheme extends AbsTheme {
     public void createResources(Context context) {
 createProfileResources(context);
     }
+
+    @Override
+    public void applyResources(Context context) {
+        applyProfileTheme();
+    }
     //endregion
 
 }

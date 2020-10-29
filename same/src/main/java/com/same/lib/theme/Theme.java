@@ -33,6 +33,7 @@ import android.text.TextUtils;
 import android.util.StateSet;
 import android.view.View;
 
+import com.same.lib.AbsTheme;
 import com.same.lib.R;
 import com.same.lib.drawable.BackgroundGradientDrawable;
 import com.same.lib.drawable.CombinedDrawable;
@@ -1996,7 +1997,7 @@ public class Theme {
                         themesDict.put(themeInfo.getKey(), themeInfo);
                     }
                 }
-                saveOtherThemes(true, true);
+                saveOtherThemes(AndroidUtilities.applicationContext, true, true);
                 themeConfig.edit().remove("themes").apply();
             }
         }
@@ -2182,9 +2183,9 @@ public class Theme {
                 overrideWallpaper.isBlurred = preferences.getBoolean("selectedBackgroundBlurred", false);
                 overrideWallpaper.isMotion = preferences.getBoolean("selectedBackgroundMotion", false);
                 overrideWallpaper.intensity = preferences.getFloat("selectedIntensity", 0.5f);
-                currentDayTheme.setOverrideWallpaper();
+                currentDayTheme.setOverrideWallpaper(overrideWallpaper);
                 if (selectedAutoNightType != AUTO_NIGHT_TYPE_NONE) {
-                    currentNightTheme.setOverrideWallpaper();
+                    currentNightTheme.setOverrideWallpaper(overrideWallpaper);
                 }
             }
             preferences.edit().remove("overrideThemeWallpaper").remove("selectedBackground2").apply();
@@ -2642,7 +2643,9 @@ public class Theme {
 
     //region 资源管理
     public static void reloadAllResources(Context context) {
-        //TODO
+        for (AbsTheme absTheme: ThemeRes.themes) {
+            absTheme.reloadAllResources(context);
+        }
     }
 
     public static void applyChatServiceMessageColor() {

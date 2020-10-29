@@ -163,7 +163,12 @@ public class DialogTheme extends AbsTheme {
 
     @Override
     public void createResources(Context context) {
-createDialogsResources(context);
+        createDialogsResources(context);
+    }
+
+    @Override
+    public void applyResources(Context context) {
+        applyDialogsTheme();
     }
     //endregion
 
