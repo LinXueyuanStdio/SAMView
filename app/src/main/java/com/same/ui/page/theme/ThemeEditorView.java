@@ -73,8 +73,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import androidx.annotation.Keep;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import LinearLayoutManager;
+import RecyclerView;
 
 /**
  * @author 林学渊

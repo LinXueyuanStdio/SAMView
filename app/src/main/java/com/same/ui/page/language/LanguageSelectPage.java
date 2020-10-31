@@ -32,8 +32,8 @@ import java.util.Comparator;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import LinearLayoutManager;
+import RecyclerView;
 
 /**
  * @author 林学渊

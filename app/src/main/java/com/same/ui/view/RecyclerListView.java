@@ -28,15 +28,14 @@ import android.view.ViewParent;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.FrameLayout;
 
+import com.same.lib.listview.LinearLayoutManager;
+import com.same.lib.listview.RecyclerView;
 import com.same.lib.theme.Theme;
 import com.same.lib.util.AndroidUtilities;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import static com.same.lib.util.SharedConfig.isRTL;
 
