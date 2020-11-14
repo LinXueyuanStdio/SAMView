@@ -394,7 +394,6 @@ public class ThemeInfo {
 //        NotificationCenter.getInstance(account).addObserver(this, NotificationCenter.fileDidFailToLoad);
     }
 
-
     @UiThread
     void removeObservers() {
         //TODO
@@ -529,6 +528,7 @@ public class ThemeInfo {
         ThemeAccent accent = themeAccentsMap.get(id);
         return accent != null ? accent.accentColor : 0;
     }
+
     public static Bitmap getScaledBitmap(float w, float h, String path, String streamPath, int streamOffset) {
         FileInputStream stream = null;
         try {

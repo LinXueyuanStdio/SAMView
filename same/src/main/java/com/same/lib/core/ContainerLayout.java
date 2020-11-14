@@ -30,7 +30,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
 import com.same.lib.R;
-import com.same.lib.helper.CubicBezierInterpolator;
+import com.same.lib.anim.CubicBezierInterpolator;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
@@ -50,7 +50,7 @@ import androidx.annotation.Keep;
  * @description 容器 ViewGroup
  * @usage null
  */
-public class ContainerLayout  extends FrameLayout {
+public class ContainerLayout extends FrameLayout {
 
     public interface ActionBarLayoutDelegate {
         boolean onPreIme();

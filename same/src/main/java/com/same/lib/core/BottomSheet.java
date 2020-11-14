@@ -34,7 +34,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.same.lib.R;
-import com.same.lib.helper.CubicBezierInterpolator;
+import com.same.lib.anim.CubicBezierInterpolator;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;

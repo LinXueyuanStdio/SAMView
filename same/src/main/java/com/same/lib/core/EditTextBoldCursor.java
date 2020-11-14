@@ -28,7 +28,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.same.lib.R;
-import com.same.lib.helper.CubicBezierInterpolator;
+import com.same.lib.anim.CubicBezierInterpolator;
 import com.same.lib.util.AndroidUtilities;
 import com.same.lib.util.SharedConfig;
 

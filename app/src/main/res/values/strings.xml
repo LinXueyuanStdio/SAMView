@@ -11,6 +11,7 @@
     <string name="Delete">Delete</string>
     <string name="NoChats">NoChats</string>
     <string name="ChatSettings">Settings</string>
+    <string name="ShareFile">ShareFile</string>
     <string name="DeleteLocalizationTitle">Delete language pack</string>
     <string name="DeleteLocalizationText">Are you sure you want to delete **%1$s** language pack?</string>
 

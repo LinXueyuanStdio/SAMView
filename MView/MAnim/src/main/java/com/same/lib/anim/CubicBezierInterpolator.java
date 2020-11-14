@@ -1,4 +1,4 @@
-package com.same.lib.helper;
+package com.same.lib.anim;
 
 import android.graphics.PointF;
 import android.view.animation.Interpolator;
@@ -6,7 +6,7 @@ import android.view.animation.Interpolator;
 /**
  * @author 林学渊
  * @email linxy59@mail2.sysu.edu.cn
- * @date 2020/10/23
+ * @date 2020/11/14
  * @description null
  * @usage null
  */

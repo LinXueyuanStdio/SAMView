@@ -1,13 +1,11 @@
-package com.same.lib.helper;
+package com.same.lib.anim;
 
 import android.view.animation.Interpolator;
-
-import com.same.lib.helper.CubicBezierInterpolator;
 
 /**
  * @author 林学渊
  * @email linxy59@mail2.sysu.edu.cn
- * @date 2020/10/24
+ * @date 2020/11/14
  * @description null
  * @usage null
  */

@@ -66,4 +66,5 @@ dependencies {
     api project(':MView:CheckBox')
     api project(':MView:RadioButton')
     api project(':MView:MFont')
+    api project(':MView:MAnim')
 }

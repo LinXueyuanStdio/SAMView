@@ -141,7 +141,12 @@ public class AndroidUtilities {
         }
         return density * value;
     }
-
+    public static String fixFileName(String fileName) {
+        if (fileName != null) {
+            fileName = fileName.replaceAll("[\u0001-\u001f<>\u202E:\"/\\\\|?*\u007f]+", "").trim();
+        }
+        return fileName;
+    }
     public static float getPixelsInCM(float cm, boolean isX) {
         return (cm / 2.54f) * (isX ? displayMetrics.xdpi : displayMetrics.ydpi);
     }

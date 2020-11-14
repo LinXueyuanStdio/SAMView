@@ -168,19 +168,6 @@ public class ThemeManager {
         applyTheme(context, themeInfo, false, false, false);
     }
 
-    public static boolean hasCustomWallpaper() {
-        return isApplyingAccent && currentTheme.overrideWallpaper != null;
-    }
-
-    public static void resetCustomWallpaper(Context context, boolean temporary) {
-        if (temporary) {
-            isApplyingAccent = false;
-            reloadWallpaper(context);
-        } else {
-            currentTheme.setOverrideWallpaper(null);
-        }
-    }
-
     public static ThemeInfo fillThemeValues(Context context, File file, String themeName, Skin theme) {
         try {
             ThemeInfo themeInfo = new ThemeInfo();
@@ -1075,6 +1062,19 @@ public class ThemeManager {
             wallpaperLink += "&mode=" + modes.toString();
         }
         return wallpaperLink;
+    }
+
+    public static boolean hasCustomWallpaper() {
+        return isApplyingAccent && currentTheme.overrideWallpaper != null;
+    }
+
+    public static void resetCustomWallpaper(Context context, boolean temporary) {
+        if (temporary) {
+            isApplyingAccent = false;
+            reloadWallpaper(context);
+        } else {
+            currentTheme.setOverrideWallpaper(null);
+        }
     }
 
     public static void saveCurrentTheme(Context context, ThemeInfo themeInfo, boolean finalSave, boolean newTheme, boolean upload) {

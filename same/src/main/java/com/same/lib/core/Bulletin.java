@@ -21,7 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.same.lib.R;
-import com.same.lib.helper.Easings;
+import com.same.lib.anim.Easings;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.Theme;
 import com.same.lib.util.AndroidUtilities;
