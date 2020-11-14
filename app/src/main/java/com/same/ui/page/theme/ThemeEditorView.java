@@ -55,6 +55,8 @@ import com.same.lib.core.ContainerLayout;
 import com.same.lib.core.EditTextBoldCursor;
 import com.same.lib.drawable.CloseProgressDrawable2;
 import com.same.lib.helper.LayoutHelper;
+import com.same.lib.listview.LinearLayoutManager;
+import com.same.lib.listview.RecyclerView;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
 import com.same.lib.theme.ThemeInfo;
@@ -73,8 +75,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import androidx.annotation.Keep;
-import LinearLayoutManager;
-import RecyclerView;
 
 /**
  * @author 林学渊

@@ -73,7 +73,7 @@ else ifeq ($(TARGET_ARCH_ABI),$(filter $(TARGET_ARCH_ABI),arm64-v8a))
     LOCAL_SRC_FILES += ./rlottie/src/vector/pixman/pixman-arma64-neon-asm.S.neon
 endif
 
-LOCAL_STATIC_LIBRARIES := cpufeatures
+#LOCAL_STATIC_LIBRARIES := cpufeatures
 
 include $(BUILD_STATIC_LIBRARY)
 
@@ -88,7 +88,6 @@ LOCAL_CFLAGS 	+= -DANDROID_NDK -DDISABLE_IMPORTGL -fno-strict-aliasing -fprefetc
 LOCAL_CPPFLAGS 	:= -DBSD=1 -ffast-math -Os -funroll-loops -std=c++14 -DPACKAGE_NAME='"drinkless/org/ton"'
 LOCAL_LDLIBS 	:= -ljnigraphics -llog -lz -lEGL -lGLESv2 -landroid
 LOCAL_STATIC_LIBRARIES := lz4 rlottie
-#LOCAL_SHARED_LIBRARIES := rlottie
 
 LOCAL_C_INCLUDES    := \
 ./src/main/cpp/rlottie/inc \
@@ -99,4 +98,4 @@ LOCAL_SRC_FILES     += \
 ./lottie.cpp
 
 include $(BUILD_SHARED_LIBRARY)
-$(call import-module,android/cpufeatures)
+#$(call import-module,android/cpufeatures)

@@ -1,1 +1,9 @@
-include ':app', ':same', ':listview'
+include ':app', ':same'
+
+include ':MView:MFont'
+include ':MView:MLottie'
+
+include ':MView:CheckBox'
+include ':MView:ListView'
+include ':MView:RadioButton'
+

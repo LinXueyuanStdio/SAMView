@@ -21,8 +21,8 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.same.lib.component.CheckBox;
-import com.same.lib.component.RadioButton;
+import com.same.lib.checkbox.CheckBox;
+import com.same.lib.radiobutton.RadioButton;
 import com.same.lib.core.ActionBar;
 import com.same.lib.core.EditTextBoldCursor;
 import com.same.lib.core.LineProgressView;

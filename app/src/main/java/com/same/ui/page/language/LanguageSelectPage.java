@@ -14,6 +14,8 @@ import com.same.lib.core.ActionBarMenuItem;
 import com.same.lib.core.AlertDialog;
 import com.same.lib.core.BasePage;
 import com.same.lib.helper.LayoutHelper;
+import com.same.lib.listview.LinearLayoutManager;
+import com.same.lib.listview.RecyclerView;
 import com.same.lib.theme.CommonTheme;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
@@ -31,9 +33,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import LinearLayoutManager;
-import RecyclerView;
 
 /**
  * @author 林学渊
