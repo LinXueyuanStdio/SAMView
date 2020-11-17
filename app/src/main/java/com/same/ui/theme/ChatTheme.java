@@ -7,7 +7,7 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.text.TextPaint;
 
-import com.same.lib.AbsTheme;
+import com.same.lib.theme.AbsTheme;
 import com.same.lib.theme.Theme;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.SharedConfig;

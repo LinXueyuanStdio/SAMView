@@ -62,8 +62,6 @@ public class ThemeInfo {
 
     public String uploadingThumb;
     public String uploadingFile;
-    //        public TLRPC.InputFile uploadedThumb;
-    //        public TLRPC.InputFile uploadedFile;
 
     int previewBackgroundColor;
     public int previewBackgroundGradientColor;

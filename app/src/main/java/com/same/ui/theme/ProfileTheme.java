@@ -8,7 +8,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.text.TextPaint;
 
-import com.same.lib.AbsTheme;
+import com.same.lib.theme.AbsTheme;
 import com.same.lib.theme.Theme;
 import com.same.lib.base.AndroidUtilities;
 

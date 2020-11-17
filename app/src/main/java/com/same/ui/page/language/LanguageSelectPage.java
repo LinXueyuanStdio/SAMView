@@ -17,7 +17,7 @@ import com.same.lib.drawable.DrawableManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.listview.LinearLayoutManager;
 import com.same.lib.listview.RecyclerView;
-import com.same.lib.theme.CommonTheme;
+import com.same.ui.theme.CommonTheme;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
 import com.same.lib.base.AndroidUtilities;

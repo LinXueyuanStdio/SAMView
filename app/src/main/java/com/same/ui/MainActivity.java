@@ -26,13 +26,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.same.lib.AbsTheme;
+import com.same.lib.theme.AbsTheme;
 import com.same.lib.core.AlertDialog;
 import com.same.lib.core.BasePage;
 import com.same.lib.core.ContainerLayout;
 import com.same.lib.core.DrawerLayoutContainer;
 import com.same.lib.helper.LayoutHelper;
-import com.same.lib.theme.CommonTheme;
+import com.same.ui.theme.CommonTheme;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeManager;
 import com.same.lib.theme.ThemeRes;

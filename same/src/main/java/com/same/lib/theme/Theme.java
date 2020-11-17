@@ -36,7 +36,6 @@ import android.util.StateSet;
 import android.view.View;
 import android.view.Window;
 
-import com.same.lib.AbsTheme;
 import com.same.lib.R;
 import com.same.lib.drawable.BackgroundGradientDrawable;
 import com.same.lib.drawable.CombinedDrawable;
@@ -915,9 +914,9 @@ public class Theme {
     static HashMap<String, String> fallbackKeys = new HashMap<>();
     static HashSet<String> themeAccentExclusionKeys = new HashSet<>();
     static HashMap<String, Integer> currentColorsNoAccent;
-    static HashMap<String, Integer> currentColors;
+    public static HashMap<String, Integer> currentColors;
     static HashMap<String, Integer> animatingColors;
-    static boolean shouldDrawGradientIcons;
+    public static boolean shouldDrawGradientIcons;
 
     static ThreadLocal<float[]> hsvTemp1Local = new ThreadLocal<>();
     static ThreadLocal<float[]> hsvTemp2Local = new ThreadLocal<>();
