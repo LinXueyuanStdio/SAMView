@@ -29,8 +29,8 @@ import android.widget.TextView;
 
 import com.same.lib.R;
 import com.same.lib.anim.CubicBezierInterpolator;
-import com.same.lib.util.AndroidUtilities;
-import com.same.lib.util.SharedConfig;
+import com.same.lib.base.AndroidUtilities;
+import com.same.lib.base.SharedConfig;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

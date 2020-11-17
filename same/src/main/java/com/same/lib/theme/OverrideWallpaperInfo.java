@@ -3,7 +3,7 @@ package com.same.lib.theme;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
-import com.same.lib.util.AndroidUtilities;
+import com.same.lib.base.AndroidUtilities;
 
 import org.json.JSONObject;
 

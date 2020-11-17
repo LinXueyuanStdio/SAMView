@@ -4,7 +4,7 @@ import android.content.Context;
 import android.widget.ImageView;
 
 import com.same.lib.drawable.RLottieDrawable;
-import com.same.lib.util.AndroidUtilities;
+import com.same.lib.base.AndroidUtilities;
 
 import java.util.HashMap;
 

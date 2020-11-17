@@ -3,8 +3,8 @@ package com.same.lib.core;
 import android.os.Build;
 import android.view.View;
 
-import com.same.lib.util.AndroidUtilities;
-import com.same.lib.util.SharedConfig;
+import com.same.lib.base.AndroidUtilities;
+import com.same.lib.base.SharedConfig;
 
 /**
  * @author 林学渊

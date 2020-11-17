@@ -8,7 +8,7 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.view.animation.DecelerateInterpolator;
 
-import com.same.lib.util.AndroidUtilities;
+import com.same.lib.base.AndroidUtilities;
 
 /**
  * @author 林学渊

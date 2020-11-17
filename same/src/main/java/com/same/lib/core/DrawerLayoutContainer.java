@@ -25,8 +25,8 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.same.lib.R;
-import com.same.lib.util.AndroidUtilities;
-import com.same.lib.util.SharedConfig;
+import com.same.lib.base.AndroidUtilities;
+import com.same.lib.base.SharedConfig;
 
 import androidx.annotation.Keep;
 

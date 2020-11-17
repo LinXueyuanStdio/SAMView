@@ -5,7 +5,7 @@ import android.graphics.Typeface;
 import android.text.TextPaint;
 import android.text.style.MetricAffectingSpan;
 
-import com.same.lib.util.AndroidUtilities;
+import com.same.lib.base.AndroidUtilities;
 
 /**
  * @author 林学渊

@@ -25,7 +25,7 @@ import android.util.StateSet;
 
 import com.same.lib.core.KeyHub;
 import com.same.lib.theme.Theme;
-import com.same.lib.util.AndroidUtilities;
+import com.same.lib.base.AndroidUtilities;
 
 import java.lang.reflect.Method;
 

@@ -27,8 +27,8 @@ import com.same.lib.drawable.ColorManager;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.drawable.MenuDrawable;
 import com.same.lib.helper.LayoutHelper;
-import com.same.lib.util.AndroidUtilities;
-import com.same.lib.util.SharedConfig;
+import com.same.lib.base.AndroidUtilities;
+import com.same.lib.base.SharedConfig;
 import com.timecat.component.locale.MLang;
 
 import java.util.ArrayList;

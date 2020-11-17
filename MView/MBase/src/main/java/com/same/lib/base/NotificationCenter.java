@@ -1,6 +1,4 @@
-package com.same.lib.util;
-
-import com.same.lib.theme.ThemeInfo;
+package com.same.lib.base;
 
 /**
  * @author 林学渊
@@ -18,7 +16,10 @@ public class NotificationCenter {
     public static int needSetDayNightTheme = 0;
     public static int didSetNewWallpapper = 0;
     public static int themeAccentListUpdated = 0;
-    public  static  void postNotificationName(int id) {}
-    public  static  void postNotificationName(int id, boolean yes) {}
-    public  static  void postNotificationName(int id, ThemeInfo info) {}
+
+    public static void postNotificationName(int id) {}
+
+    public static void postNotificationName(int id, boolean yes) {}
+
+    public static void postNotificationName(int id, Object info) {}
 }

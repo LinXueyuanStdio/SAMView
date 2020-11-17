@@ -61,7 +61,7 @@ import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
 import com.same.lib.theme.ThemeInfo;
 import com.same.lib.theme.ThemeManager;
-import com.same.lib.util.AndroidUtilities;
+import com.same.lib.base.AndroidUtilities;
 import com.same.ui.MainActivity;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;

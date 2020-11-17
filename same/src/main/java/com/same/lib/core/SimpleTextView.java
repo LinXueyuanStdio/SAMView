@@ -20,7 +20,7 @@ import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.same.lib.theme.Theme;
-import com.same.lib.util.AndroidUtilities;
+import com.same.lib.base.AndroidUtilities;
 
 
 /**

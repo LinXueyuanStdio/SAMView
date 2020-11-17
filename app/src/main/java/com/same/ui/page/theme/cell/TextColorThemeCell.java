@@ -9,9 +9,9 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.same.lib.helper.LayoutHelper;
-import com.same.lib.util.AndroidUtilities;
+import com.same.lib.base.AndroidUtilities;
 
-import static com.same.lib.util.SharedConfig.isRTL;
+import static com.same.lib.base.SharedConfig.isRTL;
 
 /**
  * @author 林学渊

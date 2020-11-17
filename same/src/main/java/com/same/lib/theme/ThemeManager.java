@@ -24,10 +24,10 @@ import android.text.TextUtils;
 import com.same.lib.AbsTheme;
 import com.same.lib.R;
 import com.same.lib.drawable.BackgroundGradientDrawable;
-import com.same.lib.helper.Bitmaps;
-import com.same.lib.util.AndroidUtilities;
-import com.same.lib.util.NotificationCenter;
-import com.same.lib.util.SharedConfig;
+import com.same.lib.base.Bitmaps;
+import com.same.lib.base.AndroidUtilities;
+import com.same.lib.base.NotificationCenter;
+import com.same.lib.base.SharedConfig;
 import com.timecat.component.locale.time.SunDate;
 
 import org.json.JSONArray;

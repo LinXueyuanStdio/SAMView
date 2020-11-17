@@ -42,7 +42,7 @@ import android.widget.TextView;
 import com.same.lib.R;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.drawable.DrawableManager;
-import com.same.lib.util.AndroidUtilities;
+import com.same.lib.base.AndroidUtilities;
 import com.timecat.component.locale.MLang;
 
 import java.util.ArrayList;

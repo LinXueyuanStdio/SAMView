@@ -6,7 +6,7 @@ import android.graphics.Paint;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
-import com.same.lib.util.AndroidUtilities;
+import com.same.lib.base.AndroidUtilities;
 
 /**
  * @author 林学渊

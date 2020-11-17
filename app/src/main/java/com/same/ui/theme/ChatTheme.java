@@ -2,19 +2,15 @@ package com.same.ui.theme;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.text.TextPaint;
 
 import com.same.lib.AbsTheme;
 import com.same.lib.theme.Theme;
-import com.same.lib.util.AndroidUtilities;
-import com.same.lib.util.SharedConfig;
+import com.same.lib.base.AndroidUtilities;
+import com.same.lib.base.SharedConfig;
 
 /**
  * @author 林学渊

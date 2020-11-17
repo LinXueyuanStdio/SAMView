@@ -15,8 +15,8 @@ import android.util.SparseArray;
 
 import com.same.lib.R;
 import com.same.lib.drawable.BackgroundGradientDrawable;
-import com.same.lib.util.AndroidUtilities;
-import com.same.lib.util.NotificationCenter;
+import com.same.lib.base.AndroidUtilities;
+import com.same.lib.base.NotificationCenter;
 import com.timecat.component.locale.MLang;
 
 import org.json.JSONObject;

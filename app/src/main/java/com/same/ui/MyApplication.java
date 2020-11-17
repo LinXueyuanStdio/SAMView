@@ -7,7 +7,8 @@ import android.content.res.Configuration;
 import android.os.Handler;
 
 import com.same.lib.NativeLoader;
-import com.same.lib.util.AndroidUtilities;
+import com.same.lib.theme.Theme;
+import com.same.lib.base.AndroidUtilities;
 import com.same.ui.lang.MyLang;
 
 import androidx.annotation.NonNull;
@@ -32,5 +33,6 @@ public class MyApplication extends Application {
         super.onConfigurationChanged(newConfig);
         MyLang.onConfigurationChanged(newConfig);
         AndroidUtilities.checkDisplaySize(applicationContext, newConfig);
+        Theme.onConfigurationChanged(applicationContext, newConfig);
     }
 }

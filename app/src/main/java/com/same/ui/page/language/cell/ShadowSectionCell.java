@@ -8,7 +8,7 @@ import android.view.View;
 import com.same.lib.drawable.CombinedDrawable;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.theme.Theme;
-import com.same.lib.util.AndroidUtilities;
+import com.same.lib.base.AndroidUtilities;
 import com.same.ui.R;
 
 /**

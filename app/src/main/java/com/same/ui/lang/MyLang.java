@@ -7,7 +7,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 
 import com.same.lib.span.TypefaceSpan;
-import com.same.lib.util.AndroidUtilities;
+import com.same.lib.base.AndroidUtilities;
 import com.same.ui.MyApplication;
 import com.timecat.component.locale.AbsLangAction;
 import com.timecat.component.locale.MLang;

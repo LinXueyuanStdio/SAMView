@@ -1,4 +1,4 @@
-package com.same.lib.util;
+package com.same.lib.base;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -30,10 +30,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EdgeEffect;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
-import com.same.lib.helper.Bitmaps;
-import com.same.lib.helper.DispatchQueue;
-import com.same.lib.theme.Theme;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -816,13 +812,7 @@ public class AndroidUtilities {
      */
     public static void checkDisplaySize(Context context, Configuration newConfiguration) {
         try {
-            float oldDensity = density;
             density = context.getResources().getDisplayMetrics().density;
-            float newDensity = density;
-            if (firstConfigurationWas && Math.abs(oldDensity - newDensity) > 0.001) {
-                Theme.reloadAllResources(context);
-            }
-            firstConfigurationWas = true;
             Configuration configuration = newConfiguration;
             if (configuration == null) {
                 configuration = context.getResources().getConfiguration();

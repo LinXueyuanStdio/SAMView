@@ -9,7 +9,7 @@ import android.text.TextPaint;
 import com.same.lib.AbsTheme;
 import com.same.lib.theme.CommonTheme;
 import com.same.lib.theme.Theme;
-import com.same.lib.util.AndroidUtilities;
+import com.same.lib.base.AndroidUtilities;
 import com.same.ui.R;
 
 /**

@@ -1,4 +1,4 @@
-package com.same.lib.util;
+package com.same.lib.base;
 
 /**
  * @author 林学渊

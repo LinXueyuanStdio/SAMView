@@ -9,7 +9,7 @@ import android.os.SystemClock;
 import android.view.animation.DecelerateInterpolator;
 
 import com.same.lib.theme.Theme;
-import com.same.lib.util.AndroidUtilities;
+import com.same.lib.base.AndroidUtilities;
 
 
 /**

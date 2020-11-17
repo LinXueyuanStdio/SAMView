@@ -20,7 +20,7 @@ import com.same.lib.listview.RecyclerView;
 import com.same.lib.theme.CommonTheme;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
-import com.same.lib.util.AndroidUtilities;
+import com.same.lib.base.AndroidUtilities;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.language.cell.LanguageCell;

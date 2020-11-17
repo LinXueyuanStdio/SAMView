@@ -6,7 +6,7 @@ import android.os.Build;
 import android.view.View;
 
 import com.same.lib.drawable.ColorManager;
-import com.same.lib.util.AndroidUtilities;
+import com.same.lib.base.AndroidUtilities;
 
 import java.util.ArrayList;
 

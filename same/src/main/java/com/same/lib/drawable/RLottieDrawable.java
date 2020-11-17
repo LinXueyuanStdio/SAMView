@@ -17,7 +17,7 @@ import android.view.View;
 
 import com.same.lib.R;
 import com.same.lib.helper.DispatchQueuePool;
-import com.same.lib.util.AndroidUtilities;
+import com.same.lib.base.AndroidUtilities;
 
 import java.io.File;
 import java.io.FileInputStream;

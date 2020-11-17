@@ -1,4 +1,4 @@
-package com.same.lib.helper;
+package com.same.lib.base;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,8 +9,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Build;
-
-import com.same.lib.util.AndroidUtilities;
 
 /**
  * @author 林学渊
@@ -221,7 +219,7 @@ public class Bitmaps {
             array[78] = (byte) (width >> 8);
             array[79] = (byte) (width & 0x00ff);
             bitmap = BitmapFactory.decodeByteArray(array, 0, array.length, options);
-            AndroidUtilities.pinBitmap(bitmap);
+            pinBitmap(bitmap);
             bitmap.setHasAlpha(true);
             bitmap.eraseColor(0);
         } else {
@@ -231,6 +229,10 @@ public class Bitmaps {
             bitmap.eraseColor(Color.TRANSPARENT);
         }
         return bitmap;
+    }
+
+    public static void pinBitmap(Bitmap bitmap) {
+
     }
 
     private static void checkXYSign(int x, int y) {

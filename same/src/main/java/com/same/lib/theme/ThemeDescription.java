@@ -31,7 +31,7 @@ import com.same.lib.core.SimpleTextView;
 import com.same.lib.drawable.BackDrawable;
 import com.same.lib.drawable.CombinedDrawable;
 import com.same.lib.span.TypefaceSpan;
-import com.same.lib.util.AndroidUtilities;
+import com.same.lib.base.AndroidUtilities;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

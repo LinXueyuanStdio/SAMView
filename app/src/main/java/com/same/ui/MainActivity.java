@@ -36,8 +36,8 @@ import com.same.lib.theme.CommonTheme;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeManager;
 import com.same.lib.theme.ThemeRes;
-import com.same.lib.util.AndroidUtilities;
-import com.same.lib.util.SharedConfig;
+import com.same.lib.base.AndroidUtilities;
+import com.same.lib.base.SharedConfig;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.theme.ThemeEditorView;
 import com.same.ui.page.theme.ThemePage;
@@ -77,6 +77,7 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
     protected void onCreate(Bundle savedInstanceState) {
         //region onCreate前
         AndroidUtilities.checkDisplaySize(this, getResources().getConfiguration());
+        Theme.onConfigurationChanged(this, getResources().getConfiguration());
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setTheme(R.style.Theme_TMessages);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -446,6 +447,7 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         AndroidUtilities.checkDisplaySize(this, newConfig);
+        Theme.onConfigurationChanged(this, newConfig);
         super.onConfigurationChanged(newConfig);
         checkLayout();
         actionBarLayout.onConfigurationChanged(newConfig);

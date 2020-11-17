@@ -39,9 +39,9 @@ import com.same.lib.drawable.ColorManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
-import com.same.lib.util.AndroidUtilities;
-import com.same.lib.util.NotificationCenter;
-import com.same.lib.util.SharedConfig;
+import com.same.lib.base.AndroidUtilities;
+import com.same.lib.base.NotificationCenter;
+import com.same.lib.base.SharedConfig;
 
 import java.util.ArrayList;
 

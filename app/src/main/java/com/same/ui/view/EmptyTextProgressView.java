@@ -14,7 +14,7 @@ import com.same.lib.core.RadialProgressView;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.Theme;
-import com.same.lib.util.AndroidUtilities;
+import com.same.lib.base.AndroidUtilities;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
 

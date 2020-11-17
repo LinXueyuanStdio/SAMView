@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -39,9 +40,9 @@ import com.same.lib.AbsTheme;
 import com.same.lib.R;
 import com.same.lib.drawable.BackgroundGradientDrawable;
 import com.same.lib.drawable.CombinedDrawable;
-import com.same.lib.util.AndroidUtilities;
-import com.same.lib.util.NotificationCenter;
-import com.same.lib.util.SharedConfig;
+import com.same.lib.base.AndroidUtilities;
+import com.same.lib.base.NotificationCenter;
+import com.same.lib.base.SharedConfig;
 
 import org.json.JSONArray;
 
@@ -2591,6 +2592,18 @@ public class Theme {
     //endregion
 
     //region 资源管理
+    public static boolean firstConfigurationWas;
+    public static float density;
+    public static void onConfigurationChanged(Context context, Configuration newConfiguration) {
+        float oldDensity = density;
+        density = context.getResources().getDisplayMetrics().density;
+        float newDensity = density;
+        if (firstConfigurationWas && Math.abs(oldDensity - newDensity) > 0.001) {
+            Theme.reloadAllResources(context);
+        }
+        firstConfigurationWas = true;
+    }
+
     public static void reloadAllResources(Context context) {
         for (AbsTheme absTheme: ThemeRes.themes) {
             absTheme.reloadAllResources(context);

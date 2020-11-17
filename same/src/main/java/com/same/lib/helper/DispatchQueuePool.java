@@ -2,7 +2,8 @@ package com.same.lib.helper;
 
 import android.os.SystemClock;
 
-import com.same.lib.util.AndroidUtilities;
+import com.same.lib.base.DispatchQueue;
+import com.same.lib.base.AndroidUtilities;
 
 import java.util.HashMap;
 import java.util.LinkedList;

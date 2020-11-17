@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
 
-import com.same.lib.util.AndroidUtilities;
+import com.same.lib.base.AndroidUtilities;
 
 import java.io.File;
 import java.io.FileOutputStream;
