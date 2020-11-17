@@ -12,6 +12,7 @@ import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.util.StateSet;
 
+import com.same.lib.drawable.DrawableManager;
 import com.same.lib.theme.Theme;
 import com.same.ui.R;
 
@@ -33,7 +34,7 @@ public class DrawableBuilder {
             @Override
             public boolean selectDrawable(int index) {
                 if (Build.VERSION.SDK_INT < 21) {
-                    Drawable drawable = Theme.getStateDrawable(this, index);
+                    Drawable drawable = DrawableManager.getStateDrawable(this, index);
                     ColorFilter colorFilter = null;
                     if (drawable instanceof BitmapDrawable) {
                         colorFilter = ((BitmapDrawable) drawable).getPaint().getColorFilter();

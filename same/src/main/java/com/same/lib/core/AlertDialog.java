@@ -31,12 +31,13 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.same.lib.R;
+import com.same.lib.base.AndroidUtilities;
+import com.same.lib.base.SharedConfig;
 import com.same.lib.drawable.ColorManager;
+import com.same.lib.drawable.DrawableManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
-import com.same.lib.base.AndroidUtilities;
-import com.same.lib.base.SharedConfig;
 import com.timecat.component.locale.MLang;
 
 import java.util.ArrayList;
@@ -133,7 +134,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         public AlertDialogCell(Context context) {
             super(context);
 
-            setBackgroundDrawable(Theme.createSelectorDrawable(ColorManager.getColor(Theme.key_dialogButtonSelector), 2));
+            setBackgroundDrawable(DrawableManager.createSelectorDrawable(ColorManager.getColor(Theme.key_dialogButtonSelector), 2));
             setPadding(AndroidUtilities.dp(23), 0, AndroidUtilities.dp(23), 0);
 
             imageView = new ImageView(context);
@@ -505,11 +506,11 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             setCancelable(false);
 
             progressViewContainer = new FrameLayout(getContext());
-            progressViewContainer.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(18), ColorManager.getColor(Theme.key_dialog_inlineProgressBackground)));
+            progressViewContainer.setBackgroundDrawable(DrawableManager.createRoundRectDrawable(AndroidUtilities.dp(18), ColorManager.getColor(Theme.key_dialog_inlineProgressBackground)));
             containerView.addView(progressViewContainer, LayoutHelper.createLinear(86, 86, Gravity.CENTER));
 
             RadialProgressView progressView = new RadialProgressView(getContext());
-            progressView.setProgressColor(getThemeColor(Theme.key_dialog_inlineProgress));
+            progressView.setProgressColor(getThemeColor(KeyHub.key_dialog_inlineProgress));
             progressViewContainer.addView(progressView, LayoutHelper.createLinear(86, 86));
         } else {
             scrollContainer.addView(messageTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (SharedConfig.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 24, 0, 24, customView != null || items != null ? customViewOffset : 0));
@@ -643,19 +644,19 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     @Override
                     public void setTextColor(int color) {
                         super.setTextColor(color);
-                        setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(color));
+                        setBackgroundDrawable(DrawableManager.getRoundRectSelectorDrawable(color));
                     }
                 };
                 textView.setMinWidth(AndroidUtilities.dp(64));
                 textView.setTag(Dialog.BUTTON_POSITIVE);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-                textView.setTextColor(getThemeColor(Theme.key_dialogButton));
+                textView.setTextColor(getThemeColor(KeyHub.key_dialogButton));
                 textView.setGravity(Gravity.CENTER);
                 textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 //                textView.setLines(1);
                 //                textView.setSingleLine(true); //TODO
                 textView.setText(positiveButtonText.toString().toUpperCase());
-                textView.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(getThemeColor(Theme.key_dialogButton)));
+                textView.setBackgroundDrawable(DrawableManager.getRoundRectSelectorDrawable(getThemeColor(Theme.key_dialogButton)));
                 textView.setPadding(AndroidUtilities.dp(10), 0, AndroidUtilities.dp(10), 0);
                 buttonsLayout.addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 36, Gravity.TOP | Gravity.RIGHT));
                 textView.setOnClickListener(v -> {
@@ -679,7 +680,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     @Override
                     public void setTextColor(int color) {
                         super.setTextColor(color);
-                        setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(color));
+                        setBackgroundDrawable(DrawableManager.getRoundRectSelectorDrawable(color));
                     }
                 };
                 textView.setMinWidth(AndroidUtilities.dp(64));
@@ -691,7 +692,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 textView.setEllipsize(TextUtils.TruncateAt.END);
                 textView.setSingleLine(true);
                 textView.setText(negativeButtonText.toString().toUpperCase());
-                textView.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(getThemeColor(Theme.key_dialogButton)));
+                textView.setBackgroundDrawable(DrawableManager.getRoundRectSelectorDrawable(getThemeColor(Theme.key_dialogButton)));
                 textView.setPadding(AndroidUtilities.dp(10), 0, AndroidUtilities.dp(10), 0);
                 buttonsLayout.addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 36, Gravity.TOP | Gravity.RIGHT));
                 textView.setOnClickListener(v -> {
@@ -715,7 +716,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     @Override
                     public void setTextColor(int color) {
                         super.setTextColor(color);
-                        setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(color));
+                        setBackgroundDrawable(DrawableManager.getRoundRectSelectorDrawable(color));
                     }
                 };
                 textView.setMinWidth(AndroidUtilities.dp(64));
@@ -727,7 +728,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 textView.setEllipsize(TextUtils.TruncateAt.END);
                 textView.setSingleLine(true);
                 textView.setText(neutralButtonText.toString().toUpperCase());
-                textView.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(getThemeColor(Theme.key_dialogButton)));
+                textView.setBackgroundDrawable(DrawableManager.getRoundRectSelectorDrawable(getThemeColor(KeyHub.key_dialogButton)));
                 textView.setPadding(AndroidUtilities.dp(10), 0, AndroidUtilities.dp(10), 0);
                 buttonsLayout.addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 36, Gravity.TOP | Gravity.LEFT));
                 textView.setOnClickListener(v -> {

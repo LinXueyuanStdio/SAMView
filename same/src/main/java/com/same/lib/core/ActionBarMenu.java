@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.same.lib.theme.Theme;
 import com.same.lib.base.AndroidUtilities;
+import com.same.lib.drawable.DrawableManager;
 
 /**
  * @author 林学渊
@@ -36,7 +36,7 @@ public class ActionBarMenu extends LinearLayout {
         for (int a = 0; a < count; a++) {
             View view = getChildAt(a);
             if (view instanceof ActionBarMenuItem) {
-                view.setBackgroundDrawable(Theme.createSelectorDrawable(isActionMode ? parentActionBar.itemsActionModeBackgroundColor : parentActionBar.itemsBackgroundColor));
+                view.setBackgroundDrawable(DrawableManager.createSelectorDrawable(isActionMode ? parentActionBar.itemsActionModeBackgroundColor : parentActionBar.itemsBackgroundColor));
             }
         }
     }

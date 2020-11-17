@@ -23,11 +23,13 @@ import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Build;
 import android.util.StateSet;
 
-import com.same.lib.core.KeyHub;
-import com.same.lib.theme.Theme;
+import com.same.lib.R;
 import com.same.lib.base.AndroidUtilities;
+import com.same.lib.base.SharedConfig;
+import com.same.lib.core.KeyHub;
 
 import java.lang.reflect.Method;
+import java.util.Calendar;
 
 /**
  * @author 林学渊
@@ -39,6 +41,11 @@ import java.lang.reflect.Method;
 public class DrawableManager {
     static Paint maskPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     static Method StateListDrawable_getStateDrawableMethod;
+    public static Drawable dialogs_holidayDrawable;
+    static int dialogs_holidayDrawableOffsetX;
+    static int dialogs_holidayDrawableOffsetY;
+    static long lastHolidayCheckTime;
+    static boolean canStartHolidayAnimation;
 
     public static Drawable getThemedDrawable(Context context, int resId, String key) {
         return getThemedDrawable(context, resId, ColorManager.getColor(key));
@@ -78,19 +85,40 @@ public class DrawableManager {
     }
 
     public static boolean canStartHolidayAnimation() {
-        return Theme.canStartHolidayAnimation();
+        return canStartHolidayAnimation;
     }
 
     public static Drawable getCurrentHolidayDrawable(Context context) {
-        return Theme.getCurrentHolidayDrawable(context);
+        if ((System.currentTimeMillis() - lastHolidayCheckTime) >= 60 * 1000) {
+            lastHolidayCheckTime = System.currentTimeMillis();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            int monthOfYear = calendar.get(Calendar.MONTH);
+            int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+            int minutes = calendar.get(Calendar.MINUTE);
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            if (monthOfYear == 0 && dayOfMonth == 1 && minutes <= 10 && hour == 0) {
+                canStartHolidayAnimation = true;
+            } else {
+                canStartHolidayAnimation = false;
+            }
+            if (dialogs_holidayDrawable == null) {
+                if (monthOfYear == 11 && dayOfMonth >= (SharedConfig.DEBUG_PRIVATE_VERSION ? 29 : 31) && dayOfMonth <= 31 || monthOfYear == 0 && dayOfMonth == 1) {
+                    dialogs_holidayDrawable = context.getResources().getDrawable(R.drawable.newyear);
+                    dialogs_holidayDrawableOffsetX = -AndroidUtilities.dp(3);
+                    dialogs_holidayDrawableOffsetY = -AndroidUtilities.dp(1);
+                }
+            }
+        }
+        return dialogs_holidayDrawable;
     }
 
     public static int getCurrentHolidayDrawableXOffset() {
-        return Theme.getCurrentHolidayDrawableXOffset();
+        return dialogs_holidayDrawableOffsetX;
     }
 
     public static int getCurrentHolidayDrawableYOffset() {
-        return Theme.getCurrentHolidayDrawableYOffset();
+        return dialogs_holidayDrawableOffsetY;
     }
 
     public static Drawable createSimpleSelectorDrawable(Context context, int resource, int defaultColor, int pressedColor) {
@@ -107,7 +135,7 @@ public class DrawableManager {
             @Override
             public boolean selectDrawable(int index) {
                 if (Build.VERSION.SDK_INT < 21) {
-                    Drawable drawable = Theme.getStateDrawable(this, index);
+                    Drawable drawable = DrawableManager.getStateDrawable(this, index);
                     ColorFilter colorFilter = null;
                     if (drawable instanceof BitmapDrawable) {
                         colorFilter = ((BitmapDrawable) drawable).getPaint().getColorFilter();

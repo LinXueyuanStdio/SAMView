@@ -35,13 +35,14 @@ import android.widget.TextView;
 
 import com.same.lib.R;
 import com.same.lib.anim.CubicBezierInterpolator;
-import com.same.lib.drawable.ColorManager;
-import com.same.lib.helper.LayoutHelper;
-import com.same.lib.theme.Theme;
-import com.same.lib.theme.ThemeDescription;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.NotificationCenter;
 import com.same.lib.base.SharedConfig;
+import com.same.lib.drawable.ColorManager;
+import com.same.lib.drawable.DrawableManager;
+import com.same.lib.helper.LayoutHelper;
+import com.same.lib.theme.Theme;
+import com.same.lib.theme.ThemeDescription;
 
 import java.util.ArrayList;
 
@@ -574,7 +575,7 @@ public class BottomSheet extends Dialog {
             super(context);
 
             currentType = type;
-            setBackgroundDrawable(Theme.getSelectorDrawable(false));
+            setBackgroundDrawable(DrawableManager.getSelectorDrawable(false));
             //setPadding(AndroidUtilities.dp(16), 0, AndroidUtilities.dp(16), 0);
 
             imageView = new ImageView(context);
@@ -602,7 +603,7 @@ public class BottomSheet extends Dialog {
                 textView.setTextColor(ColorManager.getColor(KeyHub.key_featuredStickers_buttonText));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                 textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                textView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), ColorManager.getColor(KeyHub.key_featuredStickers_addButton), ColorManager.getColor(KeyHub.key_featuredStickers_addButtonPressed)));
+                textView.setBackground(DrawableManager.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), ColorManager.getColor(KeyHub.key_featuredStickers_addButton), ColorManager.getColor(KeyHub.key_featuredStickers_addButtonPressed)));
                 addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, 0, 16, 16, 16, 16));
             }
         }

@@ -47,6 +47,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.same.lib.base.AndroidUtilities;
 import com.same.lib.core.ActionBar;
 import com.same.lib.core.AnimationProperties;
 import com.same.lib.core.BasePage;
@@ -54,6 +55,7 @@ import com.same.lib.core.BottomSheet;
 import com.same.lib.core.ContainerLayout;
 import com.same.lib.core.EditTextBoldCursor;
 import com.same.lib.drawable.CloseProgressDrawable2;
+import com.same.lib.drawable.DrawableManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.listview.LinearLayoutManager;
 import com.same.lib.listview.RecyclerView;
@@ -61,7 +63,6 @@ import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
 import com.same.lib.theme.ThemeInfo;
 import com.same.lib.theme.ThemeManager;
-import com.same.lib.base.AndroidUtilities;
 import com.same.ui.MainActivity;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
@@ -172,7 +173,7 @@ public class ThemeEditorView {
                 super(context);
 
                 View searchBackground = new View(context);
-                searchBackground.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(18), 0xfff2f4f5));
+                searchBackground.setBackgroundDrawable(DrawableManager.createRoundRectDrawable(AndroidUtilities.dp(18), 0xfff2f4f5));
                 addView(searchBackground, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 36, Gravity.LEFT | Gravity.TOP, 14, 11, 14, 0));
 
                 ImageView searchIconImageView = new ImageView(context);
@@ -847,7 +848,7 @@ public class ThemeEditorView {
             closeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             closeButton.setTextColor(0xff19a7e8);
             closeButton.setGravity(Gravity.CENTER);
-            closeButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
+            closeButton.setBackgroundDrawable(DrawableManager.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
             closeButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
             closeButton.setText(MyLang.getString("CloseEditor", R.string.CloseEditor).toUpperCase());
             closeButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -858,7 +859,7 @@ public class ThemeEditorView {
             saveButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             saveButton.setTextColor(0xff19a7e8);
             saveButton.setGravity(Gravity.CENTER);
-            saveButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
+            saveButton.setBackgroundDrawable(DrawableManager.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
             saveButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
             saveButton.setText(MyLang.getString("SaveTheme", R.string.SaveTheme).toUpperCase());
             saveButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -879,7 +880,7 @@ public class ThemeEditorView {
             cancelButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             cancelButton.setTextColor(0xff19a7e8);
             cancelButton.setGravity(Gravity.CENTER);
-            cancelButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
+            cancelButton.setBackgroundDrawable(DrawableManager.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
             cancelButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
             cancelButton.setText(MyLang.getString("Cancel", R.string.Cancel).toUpperCase());
             cancelButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -899,7 +900,7 @@ public class ThemeEditorView {
             defaultButtom.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             defaultButtom.setTextColor(0xff19a7e8);
             defaultButtom.setGravity(Gravity.CENTER);
-            defaultButtom.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
+            defaultButtom.setBackgroundDrawable(DrawableManager.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
             defaultButtom.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
             defaultButtom.setText(MyLang.getString("Default", R.string.Default).toUpperCase());
             defaultButtom.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -915,7 +916,7 @@ public class ThemeEditorView {
             saveButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             saveButton.setTextColor(0xff19a7e8);
             saveButton.setGravity(Gravity.CENTER);
-            saveButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
+            saveButton.setBackgroundDrawable(DrawableManager.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
             saveButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
             saveButton.setText(MyLang.getString("Save", R.string.Save).toUpperCase());
             saveButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));

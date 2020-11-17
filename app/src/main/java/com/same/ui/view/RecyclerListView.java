@@ -28,10 +28,11 @@ import android.view.ViewParent;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.FrameLayout;
 
+import com.same.lib.base.AndroidUtilities;
+import com.same.lib.drawable.DrawableManager;
 import com.same.lib.listview.LinearLayoutManager;
 import com.same.lib.listview.RecyclerView;
 import com.same.lib.theme.Theme;
-import com.same.lib.base.AndroidUtilities;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -855,7 +856,7 @@ public class RecyclerListView extends RecyclerView {
     public RecyclerListView(Context context) {
         super(context);
 
-        selectorDrawable = Theme.getSelectorDrawable(false);
+        selectorDrawable = DrawableManager.getSelectorDrawable(false);
         selectorDrawable.setCallback(this);
 
         try {
@@ -968,9 +969,9 @@ public class RecyclerListView extends RecyclerView {
             selectorDrawable.setCallback(null);
         }
         if (selectorType == 2) {
-            selectorDrawable = Theme.getSelectorDrawable(color, false);
+            selectorDrawable = DrawableManager.getSelectorDrawable(color, false);
         } else {
-            selectorDrawable = Theme.createSelectorDrawable(color, selectorType);
+            selectorDrawable = DrawableManager.createSelectorDrawable(color, selectorType);
         }
         selectorDrawable.setCallback(this);
     }

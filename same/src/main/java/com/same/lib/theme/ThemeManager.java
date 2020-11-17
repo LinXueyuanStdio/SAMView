@@ -1462,7 +1462,6 @@ public class ThemeManager {
                     refreshThemeColors(context);
                     NotificationCenter.postNotificationName(NotificationCenter.needSetDayNightTheme, currentTheme);
                 }
-                PatternsLoader.createLoader(true);
             }
             accent.patternMotion = info.settings.wallpaper != null && info.settings.wallpaper.settings != null && info.settings.wallpaper.settings.motion;
             theme.previewParsed = false;

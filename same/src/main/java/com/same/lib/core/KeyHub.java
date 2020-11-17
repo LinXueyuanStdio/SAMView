@@ -8,7 +8,10 @@ package com.same.lib.core;
  * @usage null
  */
 public interface KeyHub {
-
+    public static final String key_dialogButton = "dialogButton";
+    public static final String key_dialogButtonSelector = "dialogButtonSelector";
+    public static final String key_dialog_inlineProgressBackground = "dialog_inlineProgressBackground";
+    public static final String key_dialog_inlineProgress = "dialog_inlineProgress";
     String key_actionBarDefault = "actionBarDefault";
     String key_actionBarDefaultSelector = "actionBarDefaultSelector";
     String key_actionBarWhiteSelector = "actionBarWhiteSelector";
