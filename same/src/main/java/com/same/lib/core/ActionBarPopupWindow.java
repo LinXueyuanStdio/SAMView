@@ -23,8 +23,8 @@ import android.widget.PopupWindow;
 import android.widget.ScrollView;
 
 import com.same.lib.R;
+import com.same.lib.drawable.ColorManager;
 import com.same.lib.helper.LayoutHelper;
-import com.same.lib.theme.Theme;
 import com.same.lib.util.AndroidUtilities;
 
 import java.lang.reflect.Field;
@@ -94,7 +94,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             super(context);
 
             backgroundDrawable = getResources().getDrawable(R.drawable.popup_fixed_alert2).mutate();
-            setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
+            setBackgroundColor(ColorManager.getColor(KeyHub.key_actionBarDefaultSubmenuBackground));
 
             setPadding(AndroidUtilities.dp(8), AndroidUtilities.dp(8), AndroidUtilities.dp(8), AndroidUtilities.dp(8));
             setWillNotDraw(false);

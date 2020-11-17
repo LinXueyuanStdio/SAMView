@@ -17,8 +17,6 @@ public class NotificationCenter {
     public static int goingToPreviewTheme = 0;
     public static int needSetDayNightTheme = 0;
     public static int didSetNewWallpapper = 0;
-    public static int fileDidLoad = 0;
-    public static int fileDidFailToLoad = 0;
     public static int themeAccentListUpdated = 0;
     public  static  void postNotificationName(int id) {}
     public  static  void postNotificationName(int id, boolean yes) {}

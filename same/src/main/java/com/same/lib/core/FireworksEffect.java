@@ -5,7 +5,7 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.view.View;
 
-import com.same.lib.theme.Theme;
+import com.same.lib.drawable.ColorManager;
 import com.same.lib.util.AndroidUtilities;
 
 import java.util.ArrayList;
@@ -59,7 +59,7 @@ public class FireworksEffect {
     public FireworksEffect() {
         particlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         particlePaint.setStrokeWidth(AndroidUtilities.dp(1.5f));
-        particlePaint.setColor(Theme.getColor(Theme.key_actionBarDefaultTitle) & 0xffe6e6e6);
+        particlePaint.setColor(ColorManager.getColor(KeyHub.key_actionBarDefaultTitle) & 0xffe6e6e6);
         particlePaint.setStrokeCap(Paint.Cap.ROUND);
         particlePaint.setStyle(Paint.Style.STROKE);
 

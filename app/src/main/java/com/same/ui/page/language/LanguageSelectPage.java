@@ -13,6 +13,7 @@ import com.same.lib.core.ActionBarMenu;
 import com.same.lib.core.ActionBarMenuItem;
 import com.same.lib.core.AlertDialog;
 import com.same.lib.core.BasePage;
+import com.same.lib.drawable.DrawableManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.listview.LinearLayoutManager;
 import com.same.lib.listview.RecyclerView;
@@ -400,9 +401,9 @@ public class LanguageSelectPage extends BasePage {
                 case 1: {
                     ShadowSectionCell sectionCell = (ShadowSectionCell) holder.itemView;
                     if (!unofficialLanguages.isEmpty() && position == unofficialLanguages.size()) {
-                        sectionCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        sectionCell.setBackgroundDrawable(DrawableManager.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     } else {
-                        sectionCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        sectionCell.setBackgroundDrawable(DrawableManager.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     }
                     break;
                 }

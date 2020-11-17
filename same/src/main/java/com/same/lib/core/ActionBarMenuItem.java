@@ -30,8 +30,9 @@ import android.widget.TextView;
 
 import com.same.lib.R;
 import com.same.lib.drawable.CloseProgressDrawable2;
+import com.same.lib.drawable.ColorManager;
+import com.same.lib.drawable.DrawableManager;
 import com.same.lib.helper.LayoutHelper;
-import com.same.lib.theme.Theme;
 import com.same.lib.util.AndroidUtilities;
 import com.same.lib.util.SharedConfig;
 import com.timecat.component.locale.MLang;
@@ -81,6 +82,7 @@ public class ActionBarMenuItem extends FrameLayout {
 
     public interface ActionBarSubMenuItemDelegate {
         void onShowSubMenu();
+
         void onHideSubMenu();
     }
 
@@ -129,7 +131,7 @@ public class ActionBarMenuItem extends FrameLayout {
     public ActionBarMenuItem(Context context, ActionBarMenu menu, int backgroundColor, int iconColor, boolean text) {
         super(context);
         if (backgroundColor != 0) {
-            setBackgroundDrawable(Theme.createSelectorDrawable(backgroundColor, text ? 5 : 1));
+            setBackgroundDrawable(DrawableManager.createSelectorDrawable(backgroundColor, text ? 5 : 1));
         }
         parentMenu = menu;
 
@@ -319,14 +321,14 @@ public class ActionBarMenuItem extends FrameLayout {
                 delegate.onItemClick((Integer) view1.getTag());
             }
         });
-        view.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+        view.setBackgroundDrawable(DrawableManager.getSelectorDrawable(false));
     }
 
     public TextView addSubItem(int id, CharSequence text) {
         createPopupLayout();
         TextView textView = new TextView(getContext());
-        textView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
-        textView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+        textView.setTextColor(ColorManager.getColor(KeyHub.key_actionBarDefaultSubmenuItem));
+        textView.setBackgroundDrawable(DrawableManager.getSelectorDrawable(false));
         if (!SharedConfig.isRTL) {
             textView.setGravity(Gravity.CENTER_VERTICAL);
         } else {
@@ -690,7 +692,7 @@ public class ActionBarMenuItem extends FrameLayout {
 
             searchFieldCaption = new TextView(getContext());
             searchFieldCaption.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-            searchFieldCaption.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSearch));
+            searchFieldCaption.setTextColor(ColorManager.getColor(KeyHub.key_actionBarDefaultSearch));
             searchFieldCaption.setSingleLine(true);
             searchFieldCaption.setEllipsize(TextUtils.TruncateAt.END);
             searchFieldCaption.setVisibility(GONE);
@@ -718,10 +720,10 @@ public class ActionBarMenuItem extends FrameLayout {
                 }
             };
             searchField.setCursorWidth(1.5f);
-            searchField.setCursorColor(Theme.getColor(Theme.key_actionBarDefaultSearch));
+            searchField.setCursorColor(ColorManager.getColor(KeyHub.key_actionBarDefaultSearch));
             searchField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-            searchField.setHintTextColor(Theme.getColor(Theme.key_actionBarDefaultSearchPlaceholder));
-            searchField.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSearch));
+            searchField.setHintTextColor(ColorManager.getColor(KeyHub.key_actionBarDefaultSearchPlaceholder));
+            searchField.setTextColor(ColorManager.getColor(KeyHub.key_actionBarDefaultSearch));
             searchField.setSingleLine(true);
             searchField.setBackgroundResource(0);
             searchField.setPadding(0, 0, 0, 0);

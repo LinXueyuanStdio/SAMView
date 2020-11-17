@@ -45,9 +45,8 @@ public class CheckBox2 extends View {
     public boolean isChecked() {
         return checkBoxBase.isChecked();
     }
-
-    public void setColor(String background, String background2, String check) {
-        checkBoxBase.setColor(background, background2, check);
+    public void setColor(int backgroundColor, int checkColor, int edgeColor) {
+        checkBoxBase.setColor(backgroundColor, checkColor, edgeColor);
     }
 
     @Override

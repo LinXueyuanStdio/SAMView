@@ -186,30 +186,6 @@ public class ChatTheme extends AbsTheme {
             chat_filePath[1].lineTo(AndroidUtilities.dp(19), AndroidUtilities.dp(10));
             chat_filePath[1].lineTo(AndroidUtilities.dp(14), AndroidUtilities.dp(10));
             chat_filePath[1].close();
-
-            try {
-                int bitmapSize = AndroidUtilities.roundMessageSize + AndroidUtilities.dp(6);
-                Bitmap bitmap = Bitmap.createBitmap(bitmapSize, bitmapSize, Bitmap.Config.ARGB_8888);
-                Canvas canvas = new Canvas(bitmap);
-                Paint eraserPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-                eraserPaint.setColor(0);
-                eraserPaint.setStyle(Paint.Style.FILL);
-                eraserPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-
-                Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-                paint.setShadowLayer(AndroidUtilities.dp(4), 0, 0, 0x5f000000);
-                for (int a = 0; a < 2; a++) {
-                    canvas.drawCircle(bitmapSize / 2, bitmapSize / 2, AndroidUtilities.roundMessageSize / 2 - AndroidUtilities.dp(1), a == 0 ? paint : eraserPaint);
-                }
-                try {
-                    canvas.setBitmap(null);
-                } catch (Exception ignore) {
-
-                }
-            } catch (Throwable ignore) {
-
-            }
-
             applyChatTheme(fontsOnly);
         }
 

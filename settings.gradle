@@ -4,6 +4,7 @@ include ':MView:MFont'
 include ':MView:MLottie'
 include ':MView:MAnim'
 include ':MView:MColor'
+include ':MView:MTheme'
 
 include ':MView:CheckBox'
 include ':MView:ListView'

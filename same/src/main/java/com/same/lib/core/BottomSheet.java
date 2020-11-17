@@ -35,6 +35,7 @@ import android.widget.TextView;
 
 import com.same.lib.R;
 import com.same.lib.anim.CubicBezierInterpolator;
+import com.same.lib.drawable.ColorManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
@@ -91,7 +92,7 @@ public class BottomSheet extends Dialog {
 
     protected boolean useLightStatusBar = true;
 
-    protected String behindKeyboardColorKey = Theme.key_dialogBackground;
+    protected String behindKeyboardColorKey = KeyHub.key_dialogBackground;
     protected int behindKeyboardColor;
 
     private boolean canDismissWithSwipe = true;
@@ -504,7 +505,7 @@ public class BottomSheet extends Dialog {
             super.dispatchDraw(canvas);
             if (drawNavigationBar && bottomInset != 0) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    backgroundPaint.setColor(Theme.getColor(Theme.key_windowBackgroundGray));
+                    backgroundPaint.setColor(ColorManager.getColor(KeyHub.key_windowBackgroundGray));
                 } else {
                     backgroundPaint.setColor(0xff000000);
                 }
@@ -524,7 +525,7 @@ public class BottomSheet extends Dialog {
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
             if (lastInsets != null && keyboardHeight != 0) {
-                backgroundPaint.setColor(behindKeyboardColorKey != null ? Theme.getColor(behindKeyboardColorKey) : behindKeyboardColor);
+                backgroundPaint.setColor(behindKeyboardColorKey != null ? ColorManager.getColor(behindKeyboardColorKey) : behindKeyboardColor);
                 canvas.drawRect(containerView.getLeft() + backgroundPaddingLeft, getMeasuredHeight() - keyboardHeight - (drawNavigationBar ? bottomInset : 0), containerView.getRight() - backgroundPaddingLeft, getMeasuredHeight() - (drawNavigationBar ? bottomInset : 0), backgroundPaint);
             }
             onContainerDraw(canvas);
@@ -578,7 +579,7 @@ public class BottomSheet extends Dialog {
 
             imageView = new ImageView(context);
             imageView.setScaleType(ImageView.ScaleType.CENTER);
-            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogIcon), PorterDuff.Mode.MULTIPLY));
+            imageView.setColorFilter(new PorterDuffColorFilter(ColorManager.getColor(KeyHub.key_dialogIcon), PorterDuff.Mode.MULTIPLY));
             addView(imageView, LayoutHelper.createFrame(56, 48, Gravity.CENTER_VERTICAL | (SharedConfig.isRTL ? Gravity.RIGHT : Gravity.LEFT)));
 
             textView = new TextView(context);
@@ -587,21 +588,21 @@ public class BottomSheet extends Dialog {
             textView.setGravity(Gravity.CENTER_HORIZONTAL);
             textView.setEllipsize(TextUtils.TruncateAt.END);
             if (type == 0) {
-                textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+                textView.setTextColor(ColorManager.getColor(KeyHub.key_dialogTextBlack));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                 addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (SharedConfig.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL));
             } else if (type == 1) {
                 textView.setGravity(Gravity.CENTER);
-                textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+                textView.setTextColor(ColorManager.getColor(KeyHub.key_dialogTextBlack));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                 textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
             } else if (type == 2) {
                 textView.setGravity(Gravity.CENTER);
-                textView.setTextColor(Theme.getColor(Theme.key_featuredStickers_buttonText));
+                textView.setTextColor(ColorManager.getColor(KeyHub.key_featuredStickers_buttonText));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                 textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                textView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed)));
+                textView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), ColorManager.getColor(KeyHub.key_featuredStickers_addButton), ColorManager.getColor(KeyHub.key_featuredStickers_addButtonPressed)));
                 addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, 0, 16, 16, 16, 16));
             }
         }
@@ -685,7 +686,7 @@ public class BottomSheet extends Dialog {
 
         Rect padding = new Rect();
         shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
-        shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), PorterDuff.Mode.MULTIPLY));
+        shadowDrawable.setColorFilter(new PorterDuffColorFilter(ColorManager.getColor(KeyHub.key_dialogBackground), PorterDuff.Mode.MULTIPLY));
         shadowDrawable.getPadding(padding);
         backgroundPaddingLeft = padding.left;
         backgroundPaddingTop = padding.top;
@@ -725,7 +726,7 @@ public class BottomSheet extends Dialog {
         setContentView(container, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         if (useLightStatusBar && Build.VERSION.SDK_INT >= 23) {
-            int color = Theme.getColor(Theme.key_actionBarDefault, null, true);
+            int color = ColorManager.getColor(Theme.key_actionBarDefault);
             if (color == 0xffffffff) {
                 int flags = container.getSystemUiVisibility();
                 flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
@@ -759,12 +760,12 @@ public class BottomSheet extends Dialog {
             titleView.setSingleLine(true);
             titleView.setText(title);
             if (bigTitle) {
-                titleView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+                titleView.setTextColor(ColorManager.getColor(Theme.key_dialogTextBlack));
                 titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
                 titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 titleView.setPadding(AndroidUtilities.dp(21), AndroidUtilities.dp(6), AndroidUtilities.dp(21), AndroidUtilities.dp(8));
             } else {
-                titleView.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
+                titleView.setTextColor(ColorManager.getColor(Theme.key_dialogTextGray2));
                 titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                 titleView.setPadding(AndroidUtilities.dp(16), 0, AndroidUtilities.dp(16), AndroidUtilities.dp(8));
             }

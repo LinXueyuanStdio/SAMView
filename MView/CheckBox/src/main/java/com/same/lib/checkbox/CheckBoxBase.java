@@ -58,15 +58,13 @@ public class CheckBoxBase {
 
     private boolean isChecked;
 
-    private int checkColor;
-    private String checkColorKey = "key_checkboxCheck";
+    private int checkColor = randomColor();
+    private int checkColorDisabled = randomColor();
+    private int backgroundColor = randomColor();
+    private int background2Color = randomColor();
     private String backgroundColorKey = "key_chat_serviceBackground";
-    private String background2ColorKey = "key_chat_serviceBackground";
-    private String key_checkbox = "key_checkbox";
-    private String key_checkboxCheck = "key_checkboxCheck";
     private String key_dialogBackground = "key_dialogBackground";
     private String key_chat_attachPhotoBackground = "key_chat_attachPhotoBackground";
-    private String key_checkboxDisabled = "key_checkboxDisabled";
 
     private boolean useDefaultCheck;
 
@@ -211,10 +209,10 @@ public class CheckBoxBase {
         checkAnimator.start();
     }
 
-    public void setColor(String background, String background2, String check) {
-        backgroundColorKey = background;
-        background2ColorKey = background2;
-        checkColorKey = check;
+    public void setColor(int backgroundColor, int checkColor, int edgeColor) {
+        this.backgroundColor = backgroundColor;
+        this.background2Color = edgeColor;
+        this.checkColor = checkColor;
     }
 
     public void setUseDefaultCheck(boolean value) {
@@ -276,27 +274,27 @@ public class CheckBoxBase {
         if (backgroundColorKey != null) {
             if (drawUnchecked) {
                 if (drawBackgroundAsArc == 6 || drawBackgroundAsArc == 7) {
-                    paint.setColor(getColor(background2ColorKey));
-                    backgroundPaint.setColor(getColor(checkColorKey));
+                    paint.setColor(background2Color);
+                    backgroundPaint.setColor(checkColor);
                 } else if (drawBackgroundAsArc == 10) {
-                    backgroundPaint.setColor(getColor(background2ColorKey));
+                    backgroundPaint.setColor(background2Color);
                 } else {
                     paint.setColor((getServiceMessageColor() & 0x00ffffff) | 0x28000000);
-                    backgroundPaint.setColor(getColor(checkColorKey));
+                    backgroundPaint.setColor(checkColor);
                 }
             } else {
-                backgroundPaint.setColor(ColorUtil.getOffsetColor(0x00ffffff, getColor(background2ColorKey != null ? background2ColorKey : checkColorKey), progress, backgroundAlpha));
+                backgroundPaint.setColor(ColorUtil.getOffsetColor(0x00ffffff, background2Color == 0 ? checkColor : background2Color, progress, backgroundAlpha));
             }
         } else {
             if (drawUnchecked) {
                 paint.setColor(Color.argb((int) (25 * backgroundAlpha), 0, 0, 0));
                 if (drawBackgroundAsArc == 8) {
-                    backgroundPaint.setColor(getColor(background2ColorKey));
+                    backgroundPaint.setColor(background2Color);
                 } else {
-                    backgroundPaint.setColor(ColorUtil.getOffsetColor(0xffffffff, getColor(checkColorKey), progress, backgroundAlpha));
+                    backgroundPaint.setColor(ColorUtil.getOffsetColor(0xffffffff, checkColor, progress, backgroundAlpha));
                 }
             } else {
-                backgroundPaint.setColor(ColorUtil.getOffsetColor(0x00ffffff, getColor(background2ColorKey != null ? background2ColorKey : checkColorKey), progress, backgroundAlpha));
+                backgroundPaint.setColor(ColorUtil.getOffsetColor(0x00ffffff, background2Color == 0 ? checkColor : background2Color, progress, backgroundAlpha));
             }
         }
 
@@ -310,7 +308,7 @@ public class CheckBoxBase {
                 canvas.drawCircle(cx, cy, rad, paint);
             }
         }
-        paint.setColor(getColor(checkColorKey));
+        paint.setColor(checkColor);
         if (drawBackgroundAsArc != 7 && drawBackgroundAsArc != 8 && drawBackgroundAsArc != 9 && drawBackgroundAsArc != 10) {
             if (drawBackgroundAsArc == 0 || drawBackgroundAsArc == 11) {
                 canvas.drawCircle(cx, cy, rad, backgroundPaint);
@@ -350,17 +348,13 @@ public class CheckBoxBase {
             float checkProgress = progress < 0.5f ? 0.0f : (progress - 0.5f) / 0.5f;
 
             if (drawBackgroundAsArc == 9) {
-                paint.setColor(getColor(background2ColorKey));
+                paint.setColor(background2Color);
             } else if (drawBackgroundAsArc == 11 || drawBackgroundAsArc == 6 || drawBackgroundAsArc == 7 || drawBackgroundAsArc == 10 || !drawUnchecked && backgroundColorKey != null) {
-                paint.setColor(getColor(backgroundColorKey));
+                paint.setColor(backgroundColor);
             } else {
-                paint.setColor(getColor(enabled ? key_checkbox : key_checkboxDisabled));
+                paint.setColor(enabled ? checkColor : checkColorDisabled);
             }
-            if (!useDefaultCheck && checkColorKey != null) {
-                checkPaint.setColor(getColor(checkColorKey));
-            } else {
-                checkPaint.setColor(getColor(key_checkboxCheck));
-            }
+            checkPaint.setColor(checkColor);
 
             rad -= dp(0.5f);
             bitmapCanvas.drawCircle(drawBitmap.getWidth() / 2, drawBitmap.getHeight() / 2, rad, paint);
@@ -390,7 +384,7 @@ public class CheckBoxBase {
                             y = 15.75f;
                     }
                     textPaint.setTextSize(dp(textSize));
-                    textPaint.setColor(getColor(checkColorKey));
+                    textPaint.setColor(checkColor);
                     canvas.save();
                     canvas.scale(checkProgress, 1.0f, cx, cy);
                     canvas.drawText(checkedText, cx - textPaint.measureText(checkedText) / 2f, dp(y), textPaint);
@@ -414,11 +408,15 @@ public class CheckBoxBase {
         }
     }
 
-    private int getServiceMessageColor(){
+    private int getServiceMessageColor() {
         return Color.RED;
     }
 
     private int getColor(String key) {
+        return randomColor();
+    }
+
+    private int randomColor() {
         int random = new Random().nextInt(360);
         return Color.HSVToColor(new float[]{random, 0.5f, 0.9f});
     }

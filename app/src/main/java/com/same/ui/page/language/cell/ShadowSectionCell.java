@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.same.lib.drawable.CombinedDrawable;
+import com.same.lib.drawable.DrawableManager;
 import com.same.lib.theme.Theme;
 import com.same.lib.util.AndroidUtilities;
 import com.same.ui.R;
@@ -27,13 +28,13 @@ public class ShadowSectionCell extends View {
 
     public ShadowSectionCell(Context context, int s) {
         super(context);
-        setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+        setBackgroundDrawable(DrawableManager.getThemedDrawable(context, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
         size = s;
     }
 
     public ShadowSectionCell(Context context, int s, int backgroundColor) {
         super(context);
-        Drawable shadowDrawable = Theme.getThemedDrawable(context, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow);
+        Drawable shadowDrawable = DrawableManager.getThemedDrawable(context, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow);
         Drawable background = new ColorDrawable(backgroundColor);
         CombinedDrawable combinedDrawable = new CombinedDrawable(background, shadowDrawable, 0, 0);
         combinedDrawable.setFullsize(true);

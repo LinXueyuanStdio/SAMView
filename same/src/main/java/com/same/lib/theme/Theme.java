@@ -2,6 +2,7 @@ package com.same.lib.theme;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -32,6 +33,7 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.StateSet;
 import android.view.View;
+import android.view.Window;
 
 import com.same.lib.AbsTheme;
 import com.same.lib.R;
@@ -45,7 +47,6 @@ import org.json.JSONArray;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -188,6 +189,7 @@ public class Theme {
     static long lastHolidayCheckTime;
     static boolean canStartHolidayAnimation;
 
+    //region key
     public static final String key_dialogBackground = "dialogBackground";
     public static final String key_dialogBackgroundGray = "dialogBackgroundGray";
     public static final String key_dialogTextBlack = "dialogTextBlack";
@@ -905,6 +907,7 @@ public class Theme {
     public final static String key_statisticChartLine_lightgreen = "statisticChartLine_lightgreen";
     public final static String key_statisticChartLine_orange = "statisticChartLine_orange";
     public final static String key_statisticChartLine_indigo = "statisticChartLine_indigo";
+    //endregion
 
     static HashSet<String> myMessagesColorKeys = new HashSet<>();
     static HashMap<String, Integer> defaultColors = new HashMap<>();
@@ -1963,6 +1966,7 @@ public class Theme {
         );
         themes.add(themeInfo);
         themesDict.put("Night", themeInfo);
+        //endregion
 
         for (int a = 0; a < 1; a++) {
             remoteThemesHash[a] = themeConfig.getInt("remoteThemesHash" + (a != 0 ? a : ""), 0);
@@ -2195,7 +2199,7 @@ public class Theme {
         if (switchToTheme == 2) {
             applyingTheme = currentNightTheme;
         }
-        applyTheme(AndroidUtilities.applicationContext, applyingTheme, false, false, switchToTheme == 2);
+        applyTheme(AndroidUtilities.applicationContext, applyingTheme, false, switchToTheme == 2);
         AndroidUtilities.runOnUIThread(new Runnable() {
             @Override
             public void run() {
@@ -2205,7 +2209,6 @@ public class Theme {
     }
 
     static Method StateListDrawable_getStateDrawableMethod;
-    static Field BitmapDrawable_mColorFilter;
 
     //region 创建 Drawable
 
@@ -2246,62 +2249,8 @@ public class Theme {
         }
     }
 
-    public static Drawable createEmojiIconSelectorDrawable(Context context, int resource, int defaultColor, int pressedColor) {
-        Resources resources = context.getResources();
-        Drawable defaultDrawable = resources.getDrawable(resource).mutate();
-        if (defaultColor != 0) {
-            defaultDrawable.setColorFilter(new PorterDuffColorFilter(defaultColor, PorterDuff.Mode.MULTIPLY));
-        }
-        Drawable pressedDrawable = resources.getDrawable(resource).mutate();
-        if (pressedColor != 0) {
-            pressedDrawable.setColorFilter(new PorterDuffColorFilter(pressedColor, PorterDuff.Mode.MULTIPLY));
-        }
-        StateListDrawable stateListDrawable = new StateListDrawable() {
-            @Override
-            public boolean selectDrawable(int index) {
-                if (Build.VERSION.SDK_INT < 21) {
-                    Drawable drawable = Theme.getStateDrawable(this, index);
-                    ColorFilter colorFilter = null;
-                    if (drawable instanceof BitmapDrawable) {
-                        colorFilter = ((BitmapDrawable) drawable).getPaint().getColorFilter();
-                    } else if (drawable instanceof NinePatchDrawable) {
-                        colorFilter = ((NinePatchDrawable) drawable).getPaint().getColorFilter();
-                    }
-                    boolean result = super.selectDrawable(index);
-                    if (colorFilter != null) {
-                        drawable.setColorFilter(colorFilter);
-                    }
-                    return result;
-                }
-                return super.selectDrawable(index);
-            }
-        };
-        stateListDrawable.setEnterFadeDuration(1);
-        stateListDrawable.setExitFadeDuration(200);
-        stateListDrawable.addState(new int[]{android.R.attr.state_selected}, pressedDrawable);
-        stateListDrawable.addState(new int[]{}, defaultDrawable);
-        return stateListDrawable;
-    }
-
     public static boolean canStartHolidayAnimation() {
         return canStartHolidayAnimation;
-    }
-
-    public static int getEventType() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        int monthOfYear = calendar.get(Calendar.MONTH);
-        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        int minutes = calendar.get(Calendar.MINUTE);
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-
-        int eventType = -1;
-        if (monthOfYear == 11 && dayOfMonth >= 24 && dayOfMonth <= 31 || monthOfYear == 0 && dayOfMonth == 1) {
-            eventType = 0;
-        } else if (monthOfYear == 1 && dayOfMonth == 14) {
-            eventType = 1;
-        }
-        return eventType;
     }
 
     public static Drawable getCurrentHolidayDrawable(Context context) {
@@ -2849,6 +2798,22 @@ public class Theme {
         }
     }
 
+    private void checkSystemBarColors(Activity context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int color = Theme.getColor(Theme.key_actionBarDefault, null, true);
+            AndroidUtilities.setLightStatusBar(context.getWindow(), color == Color.WHITE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                final Window window = context.getWindow();
+                color = Theme.getColor(Theme.key_windowBackgroundGray, null, true);
+                if (window.getNavigationBarColor() != color) {
+                    window.setNavigationBarColor(color);
+                    final float brightness = AndroidUtilities.computePerceivedBrightness(color);
+                    AndroidUtilities.setLightNavigationBar(context.getWindow(), brightness >= 0.721f);
+                }
+            }
+        }
+    }
+
     public static void setDefaultColor(String key, int color) {
         defaultColors.put(key, color);
     }
@@ -2889,30 +2854,6 @@ public class Theme {
             return;
         }
         setDrawableColor(drawable, getColor(key));
-    }
-
-    public static void setEmojiDrawableColor(Drawable drawable, int color, boolean selected) {
-        if (drawable instanceof StateListDrawable) {
-            try {
-                if (selected) {
-                    Drawable state = getStateDrawable(drawable, 0);
-                    if (state instanceof ShapeDrawable) {
-                        ((ShapeDrawable) state).getPaint().setColor(color);
-                    } else {
-                        state.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-                    }
-                } else {
-                    Drawable state = getStateDrawable(drawable, 1);
-                    if (state instanceof ShapeDrawable) {
-                        ((ShapeDrawable) state).getPaint().setColor(color);
-                    } else {
-                        state.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-                    }
-                }
-            } catch (Throwable ignore) {
-
-            }
-        }
     }
 
     @TargetApi(21)

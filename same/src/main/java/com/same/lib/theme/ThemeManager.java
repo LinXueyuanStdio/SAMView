@@ -132,9 +132,9 @@ public class ThemeManager {
         }
         hasPreviousTheme = false;
         if (isInNigthMode && currentNightTheme != null) {
-            applyTheme(context, currentNightTheme, true, false, true);
+            applyTheme(context, currentNightTheme, true, true);
         } else if (!isApplyingAccent) {
-            applyTheme(context, previousTheme, true, false, false);
+            applyTheme(context, previousTheme, true, false);
         }
         isApplyingAccent = false;
         previousTheme = null;
@@ -165,7 +165,7 @@ public class ThemeManager {
         previousTheme = getCurrentTheme();
         hasPreviousTheme = true;
         isApplyingAccent = accent;
-        applyTheme(context, themeInfo, false, false, false);
+        applyTheme(context, themeInfo, false, false);
     }
 
     public static ThemeInfo fillThemeValues(Context context, File file, String themeName, Skin theme) {
@@ -299,7 +299,7 @@ public class ThemeManager {
                 themesDict.put(themeInfo.getKey(), themeInfo);
                 saveOtherThemes(context, true);
 
-                applyTheme(context, themeInfo, true, true, false);
+                applyTheme(context, themeInfo, true, false);
                 return themeInfo;
             }
         } catch (Exception e) {
@@ -313,14 +313,14 @@ public class ThemeManager {
     }
 
     public static void applyTheme(Context context, ThemeInfo themeInfo) {
-        applyTheme(context, themeInfo, true, true, false);
+        applyTheme(context, themeInfo, true, false);
     }
 
     public static void applyTheme(Context context, ThemeInfo themeInfo, boolean nightTheme) {
-        applyTheme(context, themeInfo, true, true, nightTheme);
+        applyTheme(context, themeInfo, true, nightTheme);
     }
 
-    static void applyTheme(Context context, ThemeInfo themeInfo, boolean save, boolean removeWallpaperOverride, final boolean nightTheme) {
+    static void applyTheme(Context context, ThemeInfo themeInfo, boolean save, final boolean nightTheme) {
         if (themeInfo == null) {
             return;
         }
@@ -370,7 +370,6 @@ public class ThemeManager {
                                 }
                             }
                         }
-                        int intensity = AndroidUtilities.parseInt(data.getQueryParameter("intensity"));
                         themeInfo.patternBgGradientRotation = 45;
                         try {
                             String bgColor = data.getQueryParameter("bg_color");
@@ -1002,7 +1001,7 @@ public class ThemeManager {
         }
         boolean currentThemeDeleted = false;
         if (currentTheme == themeInfo) {
-            applyTheme(context, defaultTheme, true, false, false);
+            applyTheme(context, defaultTheme, true, false);
             currentThemeDeleted = true;
         }
         if (themeInfo == currentNightTheme) {

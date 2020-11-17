@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.same.lib.checkbox.CheckBox;
@@ -208,21 +209,25 @@ public class ThemePage extends BasePage {
         });
         containerLayout.addView(check);
 
-        CheckBox2 checkBox2 = new CheckBox2(context);
-        //        checkBox2.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
-        containerLayout.addView(checkBox2, LayoutHelper.createFrame(22, 22, Gravity.RIGHT | Gravity.TOP, 0, 2, 2, 0));
-        checkBox2.setChecked(true, true);
-        checkBox2.setVisibility(View.VISIBLE);
+        for (int i = 0; i < 10; i++) {
+            CheckBox2 checkBox2 = new CheckBox2(context);
+            checkBox2.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck), Theme.getColor(Theme.key_checkboxCheck));
+            checkBox2.setDrawBackgroundAsArc(i);
+            checkBox2.setDrawUnchecked(true);
+            containerLayout.addView(checkBox2, LayoutHelper.createFrame(22, 22, Gravity.RIGHT | Gravity.TOP, 0, 2, 2, 0));
+            checkBox2.setChecked(true, true);
+            checkBox2.setVisibility(View.VISIBLE);
 
-        containerLayout.addView(createButton(context, "check", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkBox2.setChecked(!checkBox2.isChecked(), true);
-            }
-        }));
+            containerLayout.addView(createButton(context, "check", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    checkBox2.setChecked(!checkBox2.isChecked(), true);
+                }
+            }));
+        }
 
         CheckBoxSquare checkBox3 = new CheckBoxSquare(context, true);
-        //        checkBox2.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
+//        checkBox3.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
         containerLayout.addView(checkBox3, LayoutHelper.createFrame(22, 22, Gravity.RIGHT | Gravity.TOP, 0, 2, 2, 0));
         checkBox3.setChecked(true, true);
         checkBox3.setVisibility(View.VISIBLE);
@@ -243,7 +248,9 @@ public class ThemePage extends BasePage {
             }
         }));
 
-        frameLayout.addView(containerLayout);
+        ScrollView scrollView = new ScrollView(getParentActivity());
+        scrollView.addView(containerLayout);
+        frameLayout.addView(scrollView);
 
         return fragmentView;
     }

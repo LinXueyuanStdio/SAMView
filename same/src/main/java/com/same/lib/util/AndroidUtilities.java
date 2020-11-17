@@ -2,15 +2,12 @@ package com.same.lib.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -22,7 +19,6 @@ import android.text.Selection;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
 import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -32,13 +28,11 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EdgeEffect;
-import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.same.lib.helper.Bitmaps;
 import com.same.lib.helper.DispatchQueue;
-import com.same.lib.theme.Document;
 import com.same.lib.theme.Theme;
 
 import java.io.File;
@@ -48,7 +42,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.security.SecureRandom;
 import java.util.Hashtable;
 import java.util.regex.Matcher;
@@ -56,32 +49,19 @@ import java.util.regex.Pattern;
 
 import androidx.viewpager.widget.ViewPager;
 
-/**
- * Created by zhanghongjun on 2018/3/15.
- */
-
 public class AndroidUtilities {
     public static volatile DispatchQueue searchQueue = new DispatchQueue("searchQueue");
     public static volatile DispatchQueue globalQueue = new DispatchQueue("globalQueue");
     private static final Hashtable<String, Typeface> typefaceCache = new Hashtable<>();
-    private static int prevOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;//-10;
-    private static boolean waitingForSms = false;
-    private static boolean waitingForCall = false;
     public static boolean mainInterfacePaused = false;
     public static boolean isScreenOn = false;
-    private static final Object smsLock = new Object();
-    private static final Object callLock = new Object();
 
     public static int statusBarHeight = 0;
     public static boolean firstConfigurationWas;
     public static float density = 1;
     public static Point displaySize = new Point();
-    public static int roundMessageSize;
-    public static int roundMessageInset;
     public static boolean incorrectDisplaySizeFix;
-    public static Integer photoSize = null;
     public static DisplayMetrics displayMetrics = new DisplayMetrics();
-    public static int leftBaseline;
     public static boolean usingHardwareInput;
     public static boolean isInMultiwindow;
 
@@ -90,11 +70,7 @@ public class AndroidUtilities {
     public static AccelerateInterpolator accelerateInterpolator = new AccelerateInterpolator();
 
     private static Boolean isTablet = null;
-    private static int adjustOwnerClassGuid = 0;
     public static float screenRefreshRate = 60;
-
-    private static Paint roundPaint;
-    private static RectF bitmapRect;
 
     public static volatile Context applicationContext;
     public static volatile Handler applicationHandler;
@@ -119,22 +95,6 @@ public class AndroidUtilities {
         return (int) Math.ceil(density * value);
     }
 
-    public static int dp2(float value) {
-        if (value == 0) {
-            return 0;
-        }
-        return (int) Math.floor(density * value);
-    }
-
-    public static int compare(int lhs, int rhs) {
-        if (lhs == rhs) {
-            return 0;
-        } else if (lhs > rhs) {
-            return 1;
-        }
-        return -1;
-    }
-
     public static float dpf2(float value) {
         if (value == 0) {
             return 0;
@@ -147,6 +107,7 @@ public class AndroidUtilities {
         }
         return fileName;
     }
+
     public static float getPixelsInCM(float cm, boolean isX) {
         return (cm / 2.54f) * (isX ? displayMetrics.xdpi : displayMetrics.ydpi);
     }
@@ -164,17 +125,6 @@ public class AndroidUtilities {
         return false;
     }
 
-    public static boolean isKeyboardShowed(View view) {
-        if (view == null) {
-            return false;
-        }
-        try {
-            InputMethodManager inputManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            return inputManager.isActive(view);
-        } catch (Exception e) {
-        }
-        return false;
-    }
 
     public static void hideKeyboard(View view) {
         if (view == null) {
@@ -214,43 +164,6 @@ public class AndroidUtilities {
         } catch (Exception e) {
         }
         return 0;
-    }
-
-    public static Point getRealScreenSize() {
-        Point size = new Point();
-        try {
-            WindowManager windowManager = (WindowManager) applicationContext.getSystemService(Context.WINDOW_SERVICE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                windowManager.getDefaultDisplay().getRealSize(size);
-            } else {
-                try {
-                    Method mGetRawW = Display.class.getMethod("getRawWidth");
-                    Method mGetRawH = Display.class.getMethod("getRawHeight");
-                    size.set((Integer) mGetRawW.invoke(windowManager.getDefaultDisplay()), (Integer) mGetRawH.invoke(windowManager.getDefaultDisplay()));
-                } catch (Exception e) {
-                    size.set(windowManager.getDefaultDisplay().getWidth(), windowManager.getDefaultDisplay().getHeight());
-                }
-            }
-        } catch (Exception e) {
-        }
-        return size;
-    }
-
-    public static CharSequence getTrimmedString(CharSequence src) {
-        if (src == null) {
-            return "";
-        }
-
-        if (src.length() == 0) {
-            return src;
-        }
-        while (src.length() > 0 && (src.charAt(0) == '\n' || src.charAt(0) == ' ')) {
-            src = src.subSequence(1, src.length());
-        }
-        while (src.length() > 0 && (src.charAt(src.length() - 1) == '\n' || src.charAt(src.length() - 1) == ' ')) {
-            src = src.subSequence(0, src.length() - 1);
-        }
-        return src;
     }
 
     public static void runOnUIThread(Runnable runnable) {
@@ -334,14 +247,6 @@ public class AndroidUtilities {
         }
     }
 
-    public static String getAttachFileName(Document document) {
-        return document.file_name;
-    }
-
-    public static File getPathToAttach(Document document, boolean b) {
-        return new File(document.file_name);
-    }
-
     public static Bitmap blurWallpaper(Bitmap bitmap) {
         return null;
     }
@@ -387,7 +292,6 @@ public class AndroidUtilities {
         }
     }
 
-
     public static class LinkMovementMethodMy extends LinkMovementMethod {
         @Override
         public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
@@ -426,28 +330,6 @@ public class AndroidUtilities {
         }
     }
 
-    public static void setScrollViewEdgeEffectColor(HorizontalScrollView scrollView, int color) {
-        if (Build.VERSION.SDK_INT >= 21) {
-            try {
-                Field field = HorizontalScrollView.class.getDeclaredField("mEdgeGlowLeft");
-                field.setAccessible(true);
-                EdgeEffect mEdgeGlowTop = (EdgeEffect) field.get(scrollView);
-                if (mEdgeGlowTop != null) {
-                    mEdgeGlowTop.setColor(color);
-                }
-
-                field = HorizontalScrollView.class.getDeclaredField("mEdgeGlowRight");
-                field.setAccessible(true);
-                EdgeEffect mEdgeGlowBottom = (EdgeEffect) field.get(scrollView);
-                if (mEdgeGlowBottom != null) {
-                    mEdgeGlowBottom.setColor(color);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     public static void setScrollViewEdgeEffectColor(ScrollView scrollView, int color) {
         if (Build.VERSION.SDK_INT >= 21) {
             try {
@@ -481,14 +363,6 @@ public class AndroidUtilities {
 
     public static void setPaddingRelative(View view, float start, float top, float end, float bottom) {
         setPadding(view, SharedConfig.isRTL ? end : start, top, SharedConfig.isRTL ? start : end, bottom);
-    }
-
-    public static int getPaddingStart(View view) {
-        return SharedConfig.isRTL ? view.getPaddingRight() : view.getPaddingLeft();
-    }
-
-    public static int getPaddingEnd(View view) {
-        return SharedConfig.isRTL ? view.getPaddingLeft() : view.getPaddingRight();
     }
 
     public static int calcBitmapColor(Bitmap bitmap) {
@@ -975,14 +849,6 @@ public class AndroidUtilities {
                 if (Math.abs(displaySize.y - newSize) > 3) {
                     displaySize.y = newSize;
                 }
-            }
-            if (roundMessageSize == 0) {
-                if (AndroidUtilities.isTablet()) {
-                    roundMessageSize = (int) (getMinTabletSide() * 0.6f);
-                } else {
-                    roundMessageSize = (int) (Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) * 0.6f);
-                }
-                roundMessageInset = AndroidUtilities.dp(2);
             }
         } catch (Exception e) {
             e.printStackTrace();

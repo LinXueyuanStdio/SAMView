@@ -133,4 +133,17 @@
     <string name="OpenInEditor">Open in editor</string>
     <string name="SaveChangesAlertTitle">Save changes?</string>
     <string name="SaveChangesAlertText">Do you want to apply the new colors you chose?</string>
+
+    <string name="Blue">Blue</string>
+    <string name="Red">Red</string>
+    <string name="Orange">Orange</string>
+    <string name="Yellow">Yellow</string>
+    <string name="Green">Green</string>
+    <string name="Teal">Teal</string>
+    <string name="Purple">Purple</string>
+    <string name="Pink">Pink</string>
+    <string name="Brown">Brown</string>
+    <string name="Black">Black</string>
+    <string name="Gray">Gray</string>
+    <string name="White">White</string>
 </resources>

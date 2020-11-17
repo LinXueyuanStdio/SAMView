@@ -23,9 +23,10 @@ import android.widget.ImageView;
 
 import com.same.lib.R;
 import com.same.lib.drawable.BackDrawable;
+import com.same.lib.drawable.ColorManager;
+import com.same.lib.drawable.DrawableManager;
 import com.same.lib.drawable.MenuDrawable;
 import com.same.lib.helper.LayoutHelper;
-import com.same.lib.theme.Theme;
 import com.same.lib.util.AndroidUtilities;
 import com.same.lib.util.SharedConfig;
 import com.timecat.component.locale.MLang;
@@ -113,7 +114,7 @@ public class ActionBar extends FrameLayout {
         }
         backButtonImageView = new ImageView(getContext());
         backButtonImageView.setScaleType(ImageView.ScaleType.CENTER);
-        backButtonImageView.setBackgroundDrawable(Theme.createSelectorDrawable(itemsBackgroundColor));
+        backButtonImageView.setBackgroundDrawable(DrawableManager.createSelectorDrawable(itemsBackgroundColor));
         if (itemsColor != 0) {
             backButtonImageView.setColorFilter(new PorterDuffColorFilter(itemsColor, PorterDuff.Mode.MULTIPLY));
         }
@@ -164,7 +165,7 @@ public class ActionBar extends FrameLayout {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         if (supportsHolidayImage && !titleOverlayShown && !SharedConfig.isRTL && ev.getAction() == MotionEvent.ACTION_DOWN) {
-            Drawable drawable = Theme.getCurrentHolidayDrawable(getContext());
+            Drawable drawable = DrawableManager.getCurrentHolidayDrawable(getContext());
             if (drawable != null && drawable.getBounds().contains((int) ev.getX(), (int) ev.getY())) {
                 manualStart = true;
                 if (snowflakesEffect == null) {
@@ -196,16 +197,16 @@ public class ActionBar extends FrameLayout {
         }
         boolean result = super.drawChild(canvas, child, drawingTime);
         if (supportsHolidayImage && !titleOverlayShown && !SharedConfig.isRTL && child == titleTextView) {
-            Drawable drawable = Theme.getCurrentHolidayDrawable(getContext());
+            Drawable drawable = DrawableManager.getCurrentHolidayDrawable(getContext());
             if (drawable != null) {
                 TextPaint textPaint = titleTextView.getTextPaint();
                 textPaint.getFontMetricsInt(fontMetricsInt);
                 textPaint.getTextBounds((String) titleTextView.getText(), 0, 1, rect);
-                int x = titleTextView.getTextStartX() + Theme.getCurrentHolidayDrawableXOffset() + (rect.width() - (drawable.getIntrinsicWidth() + Theme.getCurrentHolidayDrawableXOffset())) / 2;
-                int y = titleTextView.getTextStartY() + Theme.getCurrentHolidayDrawableYOffset() + (int) Math.ceil((titleTextView.getTextHeight() - rect.height()) / 2.0f);
+                int x = titleTextView.getTextStartX() + DrawableManager.getCurrentHolidayDrawableXOffset() + (rect.width() - (drawable.getIntrinsicWidth() + DrawableManager.getCurrentHolidayDrawableXOffset())) / 2;
+                int y = titleTextView.getTextStartY() + DrawableManager.getCurrentHolidayDrawableYOffset() + (int) Math.ceil((titleTextView.getTextHeight() - rect.height()) / 2.0f);
                 drawable.setBounds(x, y - drawable.getIntrinsicHeight(), x + drawable.getIntrinsicWidth(), y);
                 drawable.draw(canvas);
-                if (Theme.canStartHolidayAnimation()) {
+                if (DrawableManager.canStartHolidayAnimation()) {
                     if (snowflakesEffect == null) {
                         snowflakesEffect = new SnowflakesEffect();
                     }
@@ -250,7 +251,7 @@ public class ActionBar extends FrameLayout {
         subtitleTextView = new SimpleTextView(getContext());
         subtitleTextView.setGravity(Gravity.LEFT);
         subtitleTextView.setVisibility(GONE);
-        subtitleTextView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubtitle));
+        subtitleTextView.setTextColor(ColorManager.getColor(KeyHub.key_actionBarDefaultSubtitle));
         addView(subtitleTextView, 0, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP));
     }
 
@@ -282,7 +283,7 @@ public class ActionBar extends FrameLayout {
         }
         titleTextView = new SimpleTextView(getContext());
         titleTextView.setGravity(Gravity.LEFT);
-        titleTextView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultTitle));
+        titleTextView.setTextColor(ColorManager.getColor(KeyHub.key_actionBarDefaultTitle));
         titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         addView(titleTextView, 0, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP));
     }
@@ -394,7 +395,7 @@ public class ActionBar extends FrameLayout {
         actionMode = new ActionBarMenu(getContext(), this);
         actionMode.isActionMode = true;
         actionMode.setClickable(true);
-        actionMode.setBackgroundColor(Theme.getColor(Theme.key_actionBarActionModeDefault));
+        actionMode.setBackgroundColor(ColorManager.getColor(KeyHub.key_actionBarActionModeDefault));
         addView(actionMode, indexOfChild(backButtonImageView));
         actionMode.setPadding(0, occupyStatusBar ? AndroidUtilities.statusBarHeight : 0, 0, 0);
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) actionMode.getLayoutParams();
@@ -407,7 +408,7 @@ public class ActionBar extends FrameLayout {
 
         if (occupyStatusBar && needTop && actionModeTop == null) {
             actionModeTop = new View(getContext());
-            actionModeTop.setBackgroundColor(Theme.getColor(Theme.key_actionBarActionModeDefaultTop));
+            actionModeTop.setBackgroundColor(ColorManager.getColor(KeyHub.key_actionBarActionModeDefaultTop));
             addView(actionModeTop);
             layoutParams = (FrameLayout.LayoutParams) actionModeTop.getLayoutParams();
             layoutParams.height = AndroidUtilities.statusBarHeight;
@@ -504,7 +505,7 @@ public class ActionBar extends FrameLayout {
             if (drawable instanceof BackDrawable) {
                 ((BackDrawable) drawable).setRotation(1, true);
             }
-            backButtonImageView.setBackgroundDrawable(Theme.createSelectorDrawable(itemsActionModeBackgroundColor));
+            backButtonImageView.setBackgroundDrawable(DrawableManager.createSelectorDrawable(itemsActionModeBackgroundColor));
         }
     }
 
@@ -579,14 +580,14 @@ public class ActionBar extends FrameLayout {
             if (drawable instanceof BackDrawable) {
                 ((BackDrawable) drawable).setRotation(0, true);
             }
-            backButtonImageView.setBackgroundDrawable(Theme.createSelectorDrawable(itemsBackgroundColor));
+            backButtonImageView.setBackgroundDrawable(DrawableManager.createSelectorDrawable(itemsBackgroundColor));
         }
     }
 
     public void showActionModeTop() {
         if (occupyStatusBar && actionModeTop == null) {
             actionModeTop = new View(getContext());
-            actionModeTop.setBackgroundColor(Theme.getColor(Theme.key_actionBarActionModeDefaultTop));
+            actionModeTop.setBackgroundColor(ColorManager.getColor(KeyHub.key_actionBarActionModeDefaultTop));
             addView(actionModeTop);
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) actionModeTop.getLayoutParams();
             layoutParams.height = AndroidUtilities.statusBarHeight;
@@ -907,7 +908,7 @@ public class ActionBar extends FrameLayout {
             itemsActionModeBackgroundColor = color;
             if (actionModeVisible) {
                 if (backButtonImageView != null) {
-                    backButtonImageView.setBackgroundDrawable(Theme.createSelectorDrawable(itemsActionModeBackgroundColor));
+                    backButtonImageView.setBackgroundDrawable(DrawableManager.createSelectorDrawable(itemsActionModeBackgroundColor));
                 }
             }
             if (actionMode != null) {
@@ -916,7 +917,7 @@ public class ActionBar extends FrameLayout {
         } else {
             itemsBackgroundColor = color;
             if (backButtonImageView != null) {
-                backButtonImageView.setBackgroundDrawable(Theme.createSelectorDrawable(itemsBackgroundColor));
+                backButtonImageView.setBackgroundDrawable(DrawableManager.createSelectorDrawable(itemsBackgroundColor));
             }
             if (menu != null) {
                 menu.updateItemsBackgroundColor();

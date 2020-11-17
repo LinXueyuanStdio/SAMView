@@ -31,6 +31,7 @@ import android.widget.FrameLayout;
 
 import com.same.lib.R;
 import com.same.lib.anim.CubicBezierInterpolator;
+import com.same.lib.drawable.ColorManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
@@ -454,7 +455,7 @@ public class ContainerLayout extends FrameLayout {
             lastFragment.actionBar.setTitleOverlayText(titleOverlayText, titleOverlayTextId, overlayAction);
         }
         if (!lastFragment.hasOwnBackground && fragmentView.getBackground() == null) {
-            fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+            fragmentView.setBackgroundColor(ColorManager.getColor(KeyHub.key_windowBackgroundWhite));
         }
         lastFragment.onResume();
         if (themeAnimatorSet != null) {
@@ -1006,7 +1007,7 @@ public class ContainerLayout extends FrameLayout {
         fragment.onResume();
         currentActionBar = fragment.actionBar;
         if (!fragment.hasOwnBackground && fragmentView.getBackground() == null) {
-            fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+            fragmentView.setBackgroundColor(ColorManager.getColor(KeyHub.key_windowBackgroundWhite));
         }
 
         //侧滑返回功能：双指针沿栈顶移动
@@ -1360,7 +1361,7 @@ public class ContainerLayout extends FrameLayout {
             }
             currentActionBar = previousFragment.actionBar;
             if (!previousFragment.hasOwnBackground && fragmentView.getBackground() == null) {
-                fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                fragmentView.setBackgroundColor(ColorManager.getColor(KeyHub.key_windowBackgroundWhite));
             }
 
             if (!needAnimation) {
@@ -1515,7 +1516,7 @@ public class ContainerLayout extends FrameLayout {
         previousFragment.onResume();
         currentActionBar = previousFragment.actionBar;
         if (!previousFragment.hasOwnBackground && fragmentView.getBackground() == null) {
-            fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+            fragmentView.setBackgroundColor(ColorManager.getColor(KeyHub.key_windowBackgroundWhite));
         }
     }
 
@@ -1618,7 +1619,7 @@ public class ContainerLayout extends FrameLayout {
             for (int i = 0, N = presentingFragmentDescriptions.size(); i < N; i++) {
                 ThemeDescription description = presentingFragmentDescriptions.get(i);
                 String key = description.getCurrentKey();
-                description.setColor(getContext(), Theme.getColor(key), false, false);
+                description.setColor(getContext(), ColorManager.getColor(key), false, false);
             }
         }
     }

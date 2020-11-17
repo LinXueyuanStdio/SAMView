@@ -22,8 +22,9 @@ import android.widget.TextView;
 
 import com.same.lib.R;
 import com.same.lib.anim.Easings;
+import com.same.lib.drawable.ColorManager;
+import com.same.lib.drawable.DrawableManager;
 import com.same.lib.helper.LayoutHelper;
-import com.same.lib.theme.Theme;
 import com.same.lib.util.AndroidUtilities;
 import com.same.lib.util.SharedConfig;
 
@@ -238,7 +239,7 @@ public final class Bulletin {
         public Layout(@NonNull Context context) {
             super(context);
             setMinimumHeight(AndroidUtilities.dp(48));
-            setBackground(new InsetDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(6), Theme.getColor(Theme.key_undo_background)), AndroidUtilities.dp(8)));
+            setBackground(new InsetDrawable(DrawableManager.createRoundRectDrawable(AndroidUtilities.dp(6), ColorManager.getColor(KeyHub.key_undo_background)), AndroidUtilities.dp(8)));
             updateSize();
         }
 
@@ -472,7 +473,7 @@ public final class Bulletin {
         public SimpleLayout(@NonNull Context context) {
             super(context);
 
-            final int undoInfoColor = Theme.getColor(Theme.key_undo_infoColor);
+            final int undoInfoColor = ColorManager.getColor(KeyHub.key_undo_infoColor);
 
             imageView = new ImageView(context);
             imageView.setColorFilter(new PorterDuffColorFilter(undoInfoColor, PorterDuff.Mode.MULTIPLY));
@@ -497,7 +498,7 @@ public final class Bulletin {
         public TwoLineLayout(@NonNull Context context) {
             super(context);
 
-            final int undoInfoColor = Theme.getColor(Theme.key_undo_infoColor);
+            final int undoInfoColor = ColorManager.getColor(KeyHub.key_undo_infoColor);
 
             addView(imageView = new ImageView(context), LayoutHelper.createFrameRelatively(29, 29, Gravity.START | Gravity.CENTER_VERTICAL, 12, 12, 12, 12));
 
@@ -574,13 +575,13 @@ public final class Bulletin {
         public UndoButton(@NonNull Context context) {
             super(context);
 
-            final int undoCancelColor = Theme.getColor(Theme.key_undo_cancelColor);
+            final int undoCancelColor = ColorManager.getColor(KeyHub.key_undo_cancelColor);
 
             final ImageView undoImageView = new ImageView(getContext());
             undoImageView.setOnClickListener(v -> undo());
             undoImageView.setImageResource(R.drawable.chats_undo);
             undoImageView.setColorFilter(new PorterDuffColorFilter(undoCancelColor, PorterDuff.Mode.MULTIPLY));
-            undoImageView.setBackground(Theme.createSelectorDrawable((undoCancelColor & 0x00ffffff) | 0x19000000));
+            undoImageView.setBackground(DrawableManager.createSelectorDrawable((undoCancelColor & 0x00ffffff) | 0x19000000));
             AndroidUtilities.setPaddingRelative(undoImageView, 0, 12, 0, 12);
             addView(undoImageView, LayoutHelper.createFrameRelatively(56, 48, Gravity.CENTER_VERTICAL));
         }

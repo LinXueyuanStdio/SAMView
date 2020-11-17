@@ -5,7 +5,7 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.view.View;
 
-import com.same.lib.theme.Theme;
+import com.same.lib.drawable.ColorManager;
 import com.same.lib.util.AndroidUtilities;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class SnowflakesEffect {
 
     private Paint particlePaint;
     private Paint particleThinPaint;
-    private String colorKey = Theme.key_actionBarDefaultTitle;
+    private String colorKey = KeyHub.key_actionBarDefaultTitle;
 
     private long lastAnimationTime;
 
@@ -109,7 +109,7 @@ public class SnowflakesEffect {
     }
 
     public void updateColors() {
-        final int color = Theme.getColor(colorKey) & 0xffe6e6e6;
+        final int color = ColorManager.getColor(colorKey) & 0xffe6e6e6;
         if (this.color != color) {
             this.color = color;
             particlePaint.setColor(color);
