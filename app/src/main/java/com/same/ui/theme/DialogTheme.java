@@ -6,8 +6,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 
-import com.same.lib.AbsTheme;
-import com.same.lib.theme.CommonTheme;
+import com.same.lib.theme.AbsTheme;
 import com.same.lib.theme.Theme;
 import com.same.lib.base.AndroidUtilities;
 import com.same.ui.R;

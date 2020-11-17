@@ -1,4 +1,4 @@
-package com.same.lib.theme;
+package com.same.ui.theme;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -6,8 +6,9 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 
-import com.same.lib.AbsTheme;
 import com.same.lib.base.AndroidUtilities;
+import com.same.lib.theme.AbsTheme;
+import com.same.lib.theme.Theme;
 
 /**
  * @author 林学渊

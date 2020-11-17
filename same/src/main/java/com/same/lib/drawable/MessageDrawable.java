@@ -1,4 +1,4 @@
-package com.same.lib.theme;
+package com.same.lib.drawable;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -21,6 +21,7 @@ import android.os.Build;
 
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.SharedConfig;
+import com.same.lib.theme.Theme;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

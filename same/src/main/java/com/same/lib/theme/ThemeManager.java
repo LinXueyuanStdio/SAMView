@@ -21,13 +21,13 @@ import android.net.Uri;
 import android.os.SystemClock;
 import android.text.TextUtils;
 
-import com.same.lib.AbsTheme;
 import com.same.lib.R;
 import com.same.lib.drawable.BackgroundGradientDrawable;
 import com.same.lib.base.Bitmaps;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.NotificationCenter;
 import com.same.lib.base.SharedConfig;
+import com.same.lib.drawable.MessageDrawable;
 import com.timecat.component.locale.time.SunDate;
 
 import org.json.JSONArray;

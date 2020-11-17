@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.same.lib.helper.LayoutHelper;
-import com.same.lib.theme.CommonTheme;
+import com.same.ui.theme.CommonTheme;
 import com.same.lib.theme.Theme;
 import com.same.lib.base.AndroidUtilities;
 import com.same.ui.R;

@@ -1,4 +1,4 @@
-package com.same.lib;
+package com.same.lib.theme;
 
 import android.content.Context;
 
