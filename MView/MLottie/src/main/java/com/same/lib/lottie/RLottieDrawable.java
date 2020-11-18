@@ -1,4 +1,4 @@
-package com.same.lib.drawable;
+package com.same.lib.lottie;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -15,8 +15,6 @@ import android.text.TextUtils;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 
-import com.same.lib.R;
-import com.same.lib.helper.DispatchQueuePool;
 import com.same.lib.base.AndroidUtilities;
 
 import java.io.File;

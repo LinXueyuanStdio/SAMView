@@ -1,35 +1,18 @@
 package com.same.lib.theme;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.Paint;
-import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.RippleDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.StateListDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.text.TextUtils;
-import android.util.StateSet;
-import android.view.View;
 import android.view.Window;
 
 import com.same.lib.base.AndroidUtilities;
@@ -37,9 +20,6 @@ import com.same.lib.base.NotificationCenter;
 
 import org.json.JSONArray;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -49,10 +29,8 @@ import java.util.HashSet;
 import static com.same.lib.theme.ThemeManager.applyDayNightThemeMaybe;
 import static com.same.lib.theme.ThemeManager.applyTheme;
 import static com.same.lib.theme.ThemeManager.changeColorAccent;
-import static com.same.lib.theme.ThemeManager.getAssetFile;
 import static com.same.lib.theme.ThemeManager.getTempHsv;
 import static com.same.lib.theme.ThemeManager.needSwitchToTheme;
-import static com.same.lib.theme.ThemeManager.saveCurrentTheme;
 import static com.same.lib.theme.ThemeManager.saveOtherThemes;
 import static com.same.lib.theme.ThemeManager.sortThemes;
 
@@ -71,7 +49,6 @@ public class Theme {
     public static final String COLOR_BACKGROUND_SLUG = "c";
 
     //region field
-    static final Object wallpaperSync = new Object();
 
     public static final int ACTION_BAR_PHOTO_VIEWER_COLOR = 0x7f000000;
     public static final int ACTION_BAR_MEDIA_PICKER_COLOR = 0xff333333;
@@ -148,7 +125,6 @@ public class Theme {
 
     static int switchNightThemeDelay;
     static long lastDelayUpdateTime;
-    private static BackgroundGradientDrawable.Disposable backgroundGradientDisposable;
 
     public static PorterDuffColorFilter colorFilter;
     public static PorterDuffColorFilter colorPressedFilter;
@@ -163,12 +139,6 @@ public class Theme {
     static int serviceSelectedMessage2Color;
     public static int currentColor;
     static int currentSelectedColor;
-    static Drawable wallpaper;
-    static Drawable themedWallpaper;
-    static int themedWallpaperFileOffset;
-    static String themedWallpaperLink;
-    static boolean isWallpaperMotion;
-    static boolean isPatternWallpaper;
 
     public static Drawable moveUpDrawable;
 
@@ -1479,137 +1449,6 @@ public class Theme {
         });
     }
 
-    static Method StateListDrawable_getStateDrawableMethod;
-
-    //region 创建 Drawable
-    @SuppressLint("PrivateApi")
-    public static Drawable getStateDrawable(Drawable drawable, int index) {
-        if (Build.VERSION.SDK_INT >= 29 && drawable instanceof StateListDrawable) {
-            return ((StateListDrawable) drawable).getStateDrawable(index);
-        } else {
-            if (StateListDrawable_getStateDrawableMethod == null) {
-                try {
-                    StateListDrawable_getStateDrawableMethod = StateListDrawable.class.getDeclaredMethod("getStateDrawable", int.class);
-                } catch (Throwable ignore) {
-
-                }
-            }
-            if (StateListDrawable_getStateDrawableMethod == null) {
-                return null;
-            }
-            try {
-                return (Drawable) StateListDrawable_getStateDrawableMethod.invoke(drawable, index);
-            } catch (Exception ignore) {
-
-            }
-            return null;
-        }
-    }
-
-    public static Drawable getSelectorDrawable(boolean whiteBackground) {
-        return getSelectorDrawable(getColor(KeyHub.key_listSelector), whiteBackground);
-    }
-
-    public static Drawable getSelectorDrawable(int color, boolean whiteBackground) {
-        if (whiteBackground) {
-            if (Build.VERSION.SDK_INT >= 21) {
-                Drawable maskDrawable = new ColorDrawable(0xffffffff);
-                ColorStateList colorStateList = new ColorStateList(
-                        new int[][]{StateSet.WILD_CARD},
-                        new int[]{color}
-                );
-                return new RippleDrawable(colorStateList, new ColorDrawable(getColor(KeyHub.key_windowBackgroundWhite)), maskDrawable);
-            } else {
-                StateListDrawable stateListDrawable = new StateListDrawable();
-                stateListDrawable.addState(new int[]{android.R.attr.state_pressed}, new ColorDrawable(color));
-                stateListDrawable.addState(new int[]{android.R.attr.state_selected}, new ColorDrawable(color));
-                stateListDrawable.addState(StateSet.WILD_CARD, new ColorDrawable(getColor(KeyHub.key_windowBackgroundWhite)));
-                return stateListDrawable;
-            }
-        } else {
-            return createSelectorDrawable(color, 2);
-        }
-    }
-
-    public static Drawable createSelectorDrawable(int color, int maskType) {
-        return createSelectorDrawable(color, maskType, -1);
-    }
-
-    public static Drawable createSelectorDrawable(int color, int maskType, int radius) {
-        Drawable drawable;
-        if (Build.VERSION.SDK_INT >= 21) {
-            Drawable maskDrawable = null;
-            if ((maskType == 1 || maskType == 5) && Build.VERSION.SDK_INT >= 23) {
-                maskDrawable = null;
-            } else if (maskType == 1 || maskType == 3 || maskType == 4 || maskType == 5 || maskType == 6 || maskType == 7) {
-                maskPaint.setColor(0xffffffff);
-                maskDrawable = new Drawable() {
-
-                    RectF rect;
-
-                    @Override
-                    public void draw(Canvas canvas) {
-                        android.graphics.Rect bounds = getBounds();
-                        if (maskType == 7) {
-                            if (rect == null) {
-                                rect = new RectF();
-                            }
-                            rect.set(bounds);
-                            canvas.drawRoundRect(rect, AndroidUtilities.dp(6), AndroidUtilities.dp(6), maskPaint);
-                        } else {
-                            int rad;
-                            if (maskType == 1 || maskType == 6) {
-                                rad = AndroidUtilities.dp(20);
-                            } else if (maskType == 3) {
-                                rad = (Math.max(bounds.width(), bounds.height()) / 2);
-                            } else {
-                                rad = (int) Math.ceil(Math.sqrt((bounds.left - bounds.centerX()) * (bounds.left - bounds.centerX()) + (bounds.top - bounds.centerY()) * (bounds.top - bounds.centerY())));
-                            }
-                            canvas.drawCircle(bounds.centerX(), bounds.centerY(), rad, maskPaint);
-                        }
-                    }
-
-                    @Override
-                    public void setAlpha(int alpha) {
-
-                    }
-
-                    @Override
-                    public void setColorFilter(ColorFilter colorFilter) {
-
-                    }
-
-                    @Override
-                    public int getOpacity() {
-                        return PixelFormat.UNKNOWN;
-                    }
-                };
-            } else if (maskType == 2) {
-                maskDrawable = new ColorDrawable(0xffffffff);
-            }
-            ColorStateList colorStateList = new ColorStateList(
-                    new int[][]{StateSet.WILD_CARD},
-                    new int[]{color}
-            );
-            RippleDrawable rippleDrawable = new RippleDrawable(colorStateList, null, maskDrawable);
-            if (Build.VERSION.SDK_INT >= 23) {
-                if (maskType == 1) {
-                    rippleDrawable.setRadius(radius <= 0 ? AndroidUtilities.dp(20) : radius);
-                } else if (maskType == 5) {
-                    rippleDrawable.setRadius(RippleDrawable.RADIUS_AUTO);
-                }
-            }
-            return rippleDrawable;
-        } else {
-            StateListDrawable stateListDrawable = new StateListDrawable();
-            stateListDrawable.addState(new int[]{android.R.attr.state_pressed}, new ColorDrawable(color));
-            stateListDrawable.addState(new int[]{android.R.attr.state_selected}, new ColorDrawable(color));
-            stateListDrawable.addState(StateSet.WILD_CARD, new ColorDrawable(0x00000000));
-            return stateListDrawable;
-        }
-    }
-    //endregion
-
     //region 资源管理
     public static boolean firstConfigurationWas;
     public static float density;
@@ -1815,7 +1654,7 @@ public class Theme {
             case KeyHub.key_chat_wallpaper:
             case KeyHub.key_chat_wallpaper_gradient_to:
             case KeyHub.key_chat_wallpaper_gradient_rotation:
-                reloadWallpaper(context);
+                WallpaperManager.reloadWallpaper(context);
                 break;
             case KeyHub.key_actionBarDefault:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -1850,128 +1689,8 @@ public class Theme {
         defaultColors.put(key, color);
     }
 
-    public static void setThemeWallpaper(Context context, ThemeInfo themeInfo, Bitmap bitmap, File path) {
-        currentColors.remove(KeyHub.key_chat_wallpaper);
-        currentColors.remove(KeyHub.key_chat_wallpaper_gradient_to);
-        currentColors.remove(KeyHub.key_chat_wallpaper_gradient_rotation);
-        themedWallpaperLink = null;
-        themeInfo.setOverrideWallpaper(null);
-        if (bitmap != null) {
-            themedWallpaper = new BitmapDrawable(bitmap);
-            saveCurrentTheme(context, themeInfo, false, false, false);
-            calcBackgroundColor(themedWallpaper, 0);
-            applyChatServiceMessageColor();
-            NotificationCenter.postNotificationName(NotificationCenter.didSetNewWallpapper);
-        } else {
-            themedWallpaper = null;
-            wallpaper = null;
-            saveCurrentTheme(context, themeInfo, false, false, false);
-            reloadWallpaper(context);
-        }
-    }
-
-    public static void setDrawableColor(Drawable drawable, int color) {
-        if (drawable == null) {
-            return;
-        }
-        if (drawable instanceof ShapeDrawable) {
-            ((ShapeDrawable) drawable).getPaint().setColor(color);
-        } else {
-            drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-        }
-    }
-
-    public static void setDrawableColorByKey(Drawable drawable, String key) {
-        if (key == null) {
-            return;
-        }
-        setDrawableColor(drawable, getColor(key));
-    }
-
-    @TargetApi(21)
-    @SuppressLint("DiscouragedPrivateApi")
-    public static void setRippleDrawableForceSoftware(RippleDrawable drawable) {
-        if (drawable == null) {
-            return;
-        }
-        try {
-            Method method = RippleDrawable.class.getDeclaredMethod("setForceSoftware", boolean.class);
-            method.invoke(drawable, true);
-        } catch (Throwable ignore) {
-
-        }
-    }
-
-    public static void setSelectorDrawableColor(Drawable drawable, int color, boolean selected) {
-        if (drawable instanceof StateListDrawable) {
-            try {
-                if (selected) {
-                    Drawable state = getStateDrawable(drawable, 0);
-                    if (state instanceof ShapeDrawable) {
-                        ((ShapeDrawable) state).getPaint().setColor(color);
-                    } else {
-                        state.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-                    }
-                    state = getStateDrawable(drawable, 1);
-                    if (state instanceof ShapeDrawable) {
-                        ((ShapeDrawable) state).getPaint().setColor(color);
-                    } else {
-                        state.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-                    }
-                } else {
-                    Drawable state = getStateDrawable(drawable, 2);
-                    if (state instanceof ShapeDrawable) {
-                        ((ShapeDrawable) state).getPaint().setColor(color);
-                    } else {
-                        state.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-                    }
-                }
-            } catch (Throwable ignore) {
-
-            }
-        } else if (Build.VERSION.SDK_INT >= 21 && drawable instanceof RippleDrawable) {
-            RippleDrawable rippleDrawable = (RippleDrawable) drawable;
-            if (selected) {
-                rippleDrawable.setColor(new ColorStateList(
-                        new int[][]{StateSet.WILD_CARD},
-                        new int[]{color}
-                ));
-            } else {
-                if (rippleDrawable.getNumberOfLayers() > 0) {
-                    Drawable drawable1 = rippleDrawable.getDrawable(0);
-                    if (drawable1 instanceof ShapeDrawable) {
-                        ((ShapeDrawable) drawable1).getPaint().setColor(color);
-                    } else {
-                        drawable1.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-                    }
-                }
-            }
-        }
-    }
-
-    public static boolean isThemeWallpaperPublic() {
-        return !TextUtils.isEmpty(themedWallpaperLink);
-    }
-
-    public static boolean hasWallpaperFromTheme() {
-        if (currentTheme.firstAccentIsDefault && currentTheme.currentAccentId == DEFALT_THEME_ACCENT_ID) {
-            return false;
-        }
-        return currentColors.containsKey(KeyHub.key_chat_wallpaper) || themedWallpaperFileOffset > 0 || !TextUtils.isEmpty(themedWallpaperLink);
-    }
-
     public static boolean isCustomTheme() {
         return isCustomTheme;
-    }
-
-    public static void reloadWallpaper(Context context) {
-        if (backgroundGradientDisposable != null) {
-            backgroundGradientDisposable.dispose();
-            backgroundGradientDisposable = null;
-        }
-        wallpaper = null;
-        themedWallpaper = null;
-        loadWallpaper(context);
     }
 
     static void calcBackgroundColor(Drawable drawable, int save) {
@@ -1988,343 +1707,5 @@ public class Theme {
         Integer serviceColor = currentColors.get(KeyHub.key_chat_serviceBackground);
         return serviceColor == null ? serviceMessageColor : serviceColor;
     }
-
-    public static void loadWallpaper(Context context) {
-        if (wallpaper != null) {
-            return;
-        }
-        boolean defaultTheme = currentTheme.firstAccentIsDefault && currentTheme.currentAccentId == DEFALT_THEME_ACCENT_ID;
-        File wallpaperFile;
-        boolean wallpaperMotion;
-        ThemeAccent accent = currentTheme.getAccent(false);
-        if (accent != null && !hasPreviousTheme) {
-            wallpaperFile = accent.getPathToWallpaper();
-            wallpaperMotion = accent.patternMotion;
-        } else {
-            wallpaperFile = null;
-            wallpaperMotion = false;
-        }
-
-        OverrideWallpaperInfo overrideWallpaper = currentTheme.overrideWallpaper;
-        AndroidUtilities.searchQueue.postRunnable(() -> {
-            synchronized (wallpaperSync) {
-                boolean overrideTheme = (!hasPreviousTheme || isApplyingAccent) && overrideWallpaper != null;
-                if (overrideWallpaper != null) {
-                    isWallpaperMotion = overrideWallpaper != null && overrideWallpaper.isMotion;
-                    isPatternWallpaper = overrideWallpaper != null && overrideWallpaper.color != 0 && !overrideWallpaper.isDefault() && !overrideWallpaper.isColor();
-                } else {
-                    isWallpaperMotion = currentTheme.isMotion;
-                    isPatternWallpaper = currentTheme.patternBgColor != 0;
-                }
-                if (!overrideTheme) {
-                    Integer backgroundColor = defaultTheme ? null : currentColors.get(KeyHub.key_chat_wallpaper);
-                    if (wallpaperFile != null && wallpaperFile.exists()) {
-                        try {
-                            wallpaper = Drawable.createFromPath(wallpaperFile.getAbsolutePath());
-                            isWallpaperMotion = wallpaperMotion;
-                            isCustomTheme = true;
-                            isPatternWallpaper = true;
-                        } catch (Throwable e) {
-                            e.printStackTrace();
-                        }
-                    } else if (backgroundColor != null) {
-                        Integer gradientToColor = currentColors.get(KeyHub.key_chat_wallpaper_gradient_to);
-                        Integer rotation = currentColors.get(KeyHub.key_chat_wallpaper_gradient_rotation);
-                        if (rotation == null) {
-                            rotation = 45;
-                        }
-                        if (gradientToColor == null || gradientToColor.equals(backgroundColor)) {
-                            wallpaper = new ColorDrawable(backgroundColor);
-                        } else {
-                            final int[] colors = {backgroundColor, gradientToColor};
-                            final BackgroundGradientDrawable.Orientation orientation = BackgroundGradientDrawable.getGradientOrientation(rotation);
-                            final BackgroundGradientDrawable backgroundGradientDrawable = new BackgroundGradientDrawable(orientation, colors);
-                            final BackgroundGradientDrawable.Listener listener = new BackgroundGradientDrawable.ListenerAdapter() {
-                                @Override
-                                public void onSizeReady(int width, int height) {
-                                    final boolean isOrientationPortrait = AndroidUtilities.displaySize.x <= AndroidUtilities.displaySize.y;
-                                    final boolean isGradientPortrait = width <= height;
-                                    if (isOrientationPortrait == isGradientPortrait) {
-                                        NotificationCenter.postNotificationName(NotificationCenter.didSetNewWallpapper);
-                                    }
-                                }
-                            };
-                            backgroundGradientDisposable = backgroundGradientDrawable.startDithering(BackgroundGradientDrawable.Sizes.ofDeviceScreen(), listener, 100);
-                            wallpaper = backgroundGradientDrawable;
-                        }
-                        isCustomTheme = true;
-                    } else if (themedWallpaperLink != null) {
-                        try {
-                            File pathToWallpaper = new File(AndroidUtilities.getFilesDirFixed(), AndroidUtilities.MD5(themedWallpaperLink) + ".wp");
-                            Bitmap bitmap = loadScreenSizedBitmap(new FileInputStream(pathToWallpaper), 0);
-                            if (bitmap != null) {
-                                themedWallpaper = wallpaper = new BitmapDrawable(bitmap);
-                                isCustomTheme = true;
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } else if (themedWallpaperFileOffset > 0 && (currentTheme.pathToFile != null || currentTheme.assetName != null)) {
-                        try {
-                            File file;
-                            if (currentTheme.assetName != null) {
-                                file = getAssetFile(context, currentTheme.assetName);
-                            } else {
-                                file = new File(currentTheme.pathToFile);
-                            }
-                            Bitmap bitmap = loadScreenSizedBitmap(new FileInputStream(file), themedWallpaperFileOffset);
-                            if (bitmap != null) {
-                                themedWallpaper = wallpaper = new BitmapDrawable(bitmap);
-                                isCustomTheme = true;
-                            }
-                        } catch (Throwable e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-                if (wallpaper == null) {
-                    int selectedColor = overrideWallpaper != null ? overrideWallpaper.color : 0;
-                    try {
-                        if (overrideWallpaper == null || overrideWallpaper.isDefault()) {
-                            wallpaper = context.getResources().getDrawable(R.drawable.background_hd);
-                            isCustomTheme = false;
-                        } else if (!overrideWallpaper.isColor() || overrideWallpaper.gradientColor != 0) {
-                            if (selectedColor != 0 && !isPatternWallpaper) {
-                                if (overrideWallpaper.gradientColor != 0) {
-                                    final int[] colors = {selectedColor, overrideWallpaper.gradientColor};
-                                    final BackgroundGradientDrawable.Orientation orientation = BackgroundGradientDrawable.getGradientOrientation(overrideWallpaper.rotation);
-                                    final BackgroundGradientDrawable backgroundGradientDrawable = new BackgroundGradientDrawable(orientation, colors);
-                                    final BackgroundGradientDrawable.Listener listener = new BackgroundGradientDrawable.ListenerAdapter() {
-                                        @Override
-                                        public void onSizeReady(int width, int height) {
-                                            final boolean isOrientationPortrait = AndroidUtilities.displaySize.x <= AndroidUtilities.displaySize.y;
-                                            final boolean isGradientPortrait = width <= height;
-                                            if (isOrientationPortrait == isGradientPortrait) {
-                                                NotificationCenter.postNotificationName(NotificationCenter.didSetNewWallpapper);
-                                            }
-                                        }
-                                    };
-                                    backgroundGradientDisposable = backgroundGradientDrawable.startDithering(BackgroundGradientDrawable.Sizes.ofDeviceScreen(), listener, 100);
-                                    wallpaper = backgroundGradientDrawable;
-                                } else {
-                                    wallpaper = new ColorDrawable(selectedColor);
-                                }
-                            } else {
-                                File toFile = new File(AndroidUtilities.getFilesDirFixed(), overrideWallpaper.fileName);
-                                if (toFile.exists()) {
-                                    Bitmap bitmap = loadScreenSizedBitmap(new FileInputStream(toFile), 0);
-                                    if (bitmap != null) {
-                                        wallpaper = new BitmapDrawable(bitmap);
-                                        isCustomTheme = true;
-                                    }
-                                }
-                                if (wallpaper == null) {
-                                    wallpaper = context.getResources().getDrawable(R.drawable.background_hd);
-                                    isCustomTheme = false;
-                                }
-                            }
-                        }
-                    } catch (Throwable throwable) {
-                        //ignore
-                    }
-                    if (wallpaper == null) {
-                        if (selectedColor == 0) {
-                            selectedColor = -2693905;
-                        }
-                        wallpaper = new ColorDrawable(selectedColor);
-                    }
-                }
-                calcBackgroundColor(wallpaper, 1);
-                AndroidUtilities.runOnUIThread(() -> {
-                    applyChatServiceMessageColor();
-                    NotificationCenter.postNotificationName(NotificationCenter.didSetNewWallpapper);
-                });
-            }
-        });
-    }
-
-    static Bitmap loadScreenSizedBitmap(FileInputStream stream, int offset) {
-        try {
-            BitmapFactory.Options opts = new BitmapFactory.Options();
-            opts.inSampleSize = 1;
-            opts.inJustDecodeBounds = true;
-            stream.getChannel().position(offset);
-            BitmapFactory.decodeStream(stream, null, opts);
-            float photoW = opts.outWidth;
-            float photoH = opts.outHeight;
-            float scaleFactor;
-            int w_filter = AndroidUtilities.dp(360);
-            int h_filter = AndroidUtilities.dp(640);
-            if (w_filter >= h_filter && photoW > photoH) {
-                scaleFactor = Math.max(photoW / w_filter, photoH / h_filter);
-            } else {
-                scaleFactor = Math.min(photoW / w_filter, photoH / h_filter);
-            }
-            if (scaleFactor < 1.2f) {
-                scaleFactor = 1;
-            }
-            opts.inJustDecodeBounds = false;
-            if (scaleFactor > 1.0f && (photoW > w_filter || photoH > h_filter)) {
-                int sample = 1;
-                do {
-                    sample *= 2;
-                } while (sample * 2 < scaleFactor);
-                opts.inSampleSize = sample;
-            } else {
-                opts.inSampleSize = (int) scaleFactor;
-            }
-            stream.getChannel().position(offset);
-            return BitmapFactory.decodeStream(stream, null, opts);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (stream != null) {
-                    stream.close();
-                }
-            } catch (Exception ignore) {
-
-            }
-        }
-        return null;
-    }
     //endregion
-
-    public static Drawable getThemedWallpaper(Context context, boolean thumb, View ownerView) {
-        Integer backgroundColor = currentColors.get(KeyHub.key_chat_wallpaper);
-        File file = null;
-        int offset = 0;
-        if (backgroundColor != null) {
-            Integer gradientToColor = currentColors.get(KeyHub.key_chat_wallpaper_gradient_to);
-            Integer rotation = currentColors.get(KeyHub.key_chat_wallpaper_gradient_rotation);
-            if (rotation == null) {
-                rotation = 45;
-            }
-            if (gradientToColor == null) {
-                return new ColorDrawable(backgroundColor);
-            } else {
-                ThemeAccent accent = currentTheme.getAccent(false);
-                if (accent != null && !TextUtils.isEmpty(accent.patternSlug) && previousTheme == null) {
-                    File wallpaperFile = accent.getPathToWallpaper();
-                    if (wallpaperFile != null && wallpaperFile.exists()) {
-                        file = wallpaperFile;
-                    }
-                }
-                if (file == null) {
-                    final int[] colors = {backgroundColor, gradientToColor};
-                    final GradientDrawable.Orientation orientation = BackgroundGradientDrawable.getGradientOrientation(rotation);
-                    final BackgroundGradientDrawable backgroundGradientDrawable = new BackgroundGradientDrawable(orientation, colors);
-                    final BackgroundGradientDrawable.Sizes sizes;
-                    if (!thumb) {
-                        sizes = BackgroundGradientDrawable.Sizes.ofDeviceScreen();
-                    } else {
-                        sizes = BackgroundGradientDrawable.Sizes.ofDeviceScreen(BackgroundGradientDrawable.DEFAULT_COMPRESS_RATIO / 4f, BackgroundGradientDrawable.Sizes.Orientation.PORTRAIT);
-                    }
-                    final BackgroundGradientDrawable.Listener listener;
-                    if (ownerView != null) {
-                        listener = new BackgroundGradientDrawable.ListenerAdapter() {
-                            @Override
-                            public void onSizeReady(int width, int height) {
-                                if (!thumb) {
-                                    final boolean isOrientationPortrait = AndroidUtilities.displaySize.x <= AndroidUtilities.displaySize.y;
-                                    final boolean isGradientPortrait = width <= height;
-                                    if (isOrientationPortrait == isGradientPortrait) {
-                                        ownerView.invalidate();
-                                    }
-                                } else {
-                                    ownerView.invalidate();
-                                }
-                            }
-                        };
-                    } else {
-                        listener = null;
-                    }
-                    backgroundGradientDrawable.startDithering(sizes, listener);
-                    return backgroundGradientDrawable;
-                }
-            }
-        } else if (themedWallpaperFileOffset > 0 && (currentTheme.pathToFile != null || currentTheme.assetName != null)) {
-            if (currentTheme.assetName != null) {
-                file = getAssetFile(context, currentTheme.assetName);
-            } else {
-                file = new File(currentTheme.pathToFile);
-            }
-            offset = themedWallpaperFileOffset;
-        }
-        if (file != null) {
-            FileInputStream stream = null;
-            try {
-                int currentPosition = 0;
-                stream = new FileInputStream(file);
-                stream.getChannel().position(offset);
-                BitmapFactory.Options opts = new BitmapFactory.Options();
-                int scaleFactor = 1;
-                if (thumb) {
-                    opts.inJustDecodeBounds = true;
-                    float photoW = opts.outWidth;
-                    float photoH = opts.outHeight;
-                    int maxWidth = AndroidUtilities.dp(100);
-                    while (photoW > maxWidth || photoH > maxWidth) {
-                        scaleFactor *= 2;
-                        photoW /= 2;
-                        photoH /= 2;
-                    }
-                }
-                opts.inJustDecodeBounds = false;
-                opts.inSampleSize = scaleFactor;
-                Bitmap bitmap = BitmapFactory.decodeStream(stream, null, opts);
-                if (bitmap != null) {
-                    return new BitmapDrawable(bitmap);
-                }
-            } catch (Throwable e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (stream != null) {
-                        stream.close();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return null;
-    }
-
-    public static String getSelectedBackgroundSlug() {
-        if (currentTheme.overrideWallpaper != null) {
-            return currentTheme.overrideWallpaper.slug;
-        }
-        if (hasWallpaperFromTheme()) {
-            return THEME_BACKGROUND_SLUG;
-        }
-        return DEFAULT_BACKGROUND_SLUG;
-    }
-
-    public static Drawable getCachedWallpaper() {
-        synchronized (wallpaperSync) {
-            if (themedWallpaper != null) {
-                return themedWallpaper;
-            } else {
-                return wallpaper;
-            }
-        }
-    }
-
-    public static Drawable getCachedWallpaperNonBlocking() {
-        if (themedWallpaper != null) {
-            return themedWallpaper;
-        } else {
-            return wallpaper;
-        }
-    }
-
-    public static boolean isWallpaperMotion() {
-        return isWallpaperMotion;
-    }
-
-    public static boolean isPatternWallpaper() {
-        return isPatternWallpaper;
-    }
-
 }

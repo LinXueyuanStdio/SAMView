@@ -1,9 +1,8 @@
-package com.same.lib.core;
+package com.same.lib.lottie;
 
 import android.content.Context;
 import android.widget.ImageView;
 
-import com.same.lib.drawable.RLottieDrawable;
 import com.same.lib.base.AndroidUtilities;
 
 import java.util.HashMap;

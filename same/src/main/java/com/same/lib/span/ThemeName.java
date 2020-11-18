@@ -33,7 +33,6 @@ public class ThemeName {
         return info != null ? info.title : name;
     }
 
-
     public static String getCurrentThemeName(Context context) {
         String text = getName(context, ThemeManager.getCurrentDayTheme());
         if (text.toLowerCase().endsWith(".attheme")) {

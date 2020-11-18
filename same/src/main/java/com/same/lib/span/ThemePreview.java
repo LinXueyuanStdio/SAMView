@@ -16,6 +16,7 @@ import com.same.lib.R;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.Bitmaps;
 import com.same.lib.base.SharedConfig;
+import com.same.lib.drawable.DrawableManager;
 import com.same.lib.drawable.MessageDrawable;
 import com.same.lib.theme.BackgroundGradientDrawable;
 import com.same.lib.theme.KeyHub;
@@ -26,7 +27,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.HashMap;
 
-import static com.same.lib.theme.Theme.setDrawableColor;
 import static com.same.lib.theme.ThemeManager.getThemeFileValues;
 
 /**
@@ -67,13 +67,13 @@ public class ThemePreview {
             Integer gradientToColor = colors.get(KeyHub.key_chat_wallpaper_gradient_to);
 
             Drawable backDrawable = context.getResources().getDrawable(R.drawable.preview_back).mutate();
-            setDrawableColor(backDrawable, actionBarIconColor);
+            DrawableManager.setDrawableColor(backDrawable, actionBarIconColor);
             Drawable otherDrawable = context.getResources().getDrawable(R.drawable.preview_dots).mutate();
-            setDrawableColor(otherDrawable, actionBarIconColor);
+            DrawableManager.setDrawableColor(otherDrawable, actionBarIconColor);
             Drawable emojiDrawable = context.getResources().getDrawable(R.drawable.preview_smile).mutate();
-            setDrawableColor(emojiDrawable, messageFieldIconColor);
+            DrawableManager.setDrawableColor(emojiDrawable, messageFieldIconColor);
             Drawable micDrawable = context.getResources().getDrawable(R.drawable.preview_mic).mutate();
-            setDrawableColor(micDrawable, messageFieldIconColor);
+            DrawableManager.setDrawableColor(micDrawable, messageFieldIconColor);
 
             MessageDrawable[] msgDrawable = new MessageDrawable[2];
             for (int a = 0; a < 2; a++) {
@@ -88,7 +88,7 @@ public class ThemePreview {
                         return colors.get(key);
                     }
                 };
-                setDrawableColor(msgDrawable[a], a == 0 ? messageInColor : messageOutColor);
+                DrawableManager.setDrawableColor(msgDrawable[a], a == 0 ? messageInColor : messageOutColor);
             }
 
             RectF rect = new RectF();

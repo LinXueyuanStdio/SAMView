@@ -1183,7 +1183,7 @@ public class RecyclerListView extends RecyclerView {
     }
 
     public void setListSelectorColor(int color) {
-        Theme.setSelectorDrawableColor(selectorDrawable, color, true);
+        DrawableManager.setSelectorDrawableColor(selectorDrawable, color, true);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {

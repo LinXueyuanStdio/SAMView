@@ -22,6 +22,8 @@ import com.same.lib.core.LineProgressView;
 import com.same.lib.core.RadialProgressView;
 import com.same.lib.core.SimpleTextView;
 import com.same.lib.drawable.CombinedDrawable;
+import com.same.lib.drawable.DrawableManager;
+import com.same.lib.lottie.RLottieImageView;
 import com.same.lib.radiobutton.RadioButton;
 import com.same.lib.span.TypefaceSpan;
 import com.same.lib.theme.ColorApply;
@@ -100,7 +102,7 @@ public class ChildColorDelegate implements ColorApply.ColorDelegate {
                                 if (drawable instanceof CombinedDrawable) {
                                     drawable = ((CombinedDrawable) drawable).getIcon();
                                 } else if (drawable instanceof StateListDrawable || Build.VERSION.SDK_INT >= 21 && drawable instanceof RippleDrawable) {
-                                    Theme.setSelectorDrawableColor(drawable, color, (changeFlags & FLAG_DRAWABLESELECTEDSTATE) != 0);
+                                    DrawableManager.setSelectorDrawableColor(drawable, color, (changeFlags & FLAG_DRAWABLESELECTEDSTATE) != 0);
                                 }
                                 drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
                             }
@@ -117,9 +119,9 @@ public class ChildColorDelegate implements ColorApply.ColorDelegate {
                             background.setColorFilter(Theme.colorFilter);
                         }
                     } else if ((changeFlags & FLAG_SELECTOR) != 0) {
-                        child.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                        child.setBackgroundDrawable(DrawableManager.getSelectorDrawable(false));
                     } else if ((changeFlags & FLAG_SELECTORWHITE) != 0) {
-                        child.setBackgroundDrawable(Theme.getSelectorDrawable(true));
+                        child.setBackgroundDrawable(DrawableManager.getSelectorDrawable(true));
                     }
                 } else {
                     passedCheck = false;
@@ -146,6 +148,9 @@ public class ChildColorDelegate implements ColorApply.ColorDelegate {
                                 }
                                 if (object instanceof View) {
                                     ((View) object).invalidate();
+                                }
+                                if (description.lottieLayerName != null && object instanceof RLottieImageView) {
+                                    ((RLottieImageView) object).setLayerColor(description.lottieLayerName + ".**", color);
                                 }
                                 if ((changeFlags & FLAG_USEBACKGROUNDDRAWABLE) != 0 && object instanceof View) {
                                     object = ((View) object).getBackground();
@@ -206,7 +211,7 @@ public class ChildColorDelegate implements ColorApply.ColorDelegate {
                                             ((CombinedDrawable) object).getIcon().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
                                         }
                                     } else if (object instanceof StateListDrawable || Build.VERSION.SDK_INT >= 21 && object instanceof RippleDrawable) {
-                                        Theme.setSelectorDrawableColor((Drawable) object, color, (changeFlags & FLAG_DRAWABLESELECTEDSTATE) != 0);
+                                        DrawableManager.setSelectorDrawableColor((Drawable) object, color, (changeFlags & FLAG_DRAWABLESELECTEDSTATE) != 0);
                                     } else if (object instanceof GradientDrawable) {
                                         ((GradientDrawable) object).setColor(color);
                                     } else {

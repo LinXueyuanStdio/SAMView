@@ -49,7 +49,7 @@ typedef struct LottieInfo {
     volatile uint32_t framesAvailableInCache = 0;
 };
 
-jlong Java_com_same_lib_drawable_RLottieDrawable_create(JNIEnv *env, jclass clazz, jstring src, jint w, jint h, jintArray data, jboolean precache, jintArray colorReplacement, jboolean limitFps) {
+jlong Java_com_same_lib_lottie_RLottieDrawable_create(JNIEnv *env, jclass clazz, jstring src, jint w, jint h, jintArray data, jboolean precache, jintArray colorReplacement, jboolean limitFps) {
     LottieInfo *info = new LottieInfo();
 
     std::map<int32_t, int32_t> *colors = nullptr;
@@ -133,7 +133,7 @@ jlong Java_com_same_lib_drawable_RLottieDrawable_create(JNIEnv *env, jclass claz
     return (jlong) (intptr_t) info;
 }
 
-jlong Java_com_same_lib_drawable_RLottieDrawable_createWithJson(JNIEnv *env, jclass clazz, jstring json, jstring name, jintArray data, jintArray colorReplacement) {
+jlong Java_com_same_lib_lottie_RLottieDrawable_createWithJson(JNIEnv *env, jclass clazz, jstring json, jstring name, jintArray data, jintArray colorReplacement) {
     std::map<int32_t, int32_t> *colors = nullptr;
     if (colorReplacement != nullptr) {
         jint *arr = env->GetIntArrayElements(colorReplacement, 0);
@@ -175,7 +175,7 @@ jlong Java_com_same_lib_drawable_RLottieDrawable_createWithJson(JNIEnv *env, jcl
     return (jlong) (intptr_t) info;
 }
 
-void Java_com_same_lib_drawable_RLottieDrawable_destroy(JNIEnv *env, jclass clazz, jlong ptr) {
+void Java_com_same_lib_lottie_RLottieDrawable_destroy(JNIEnv *env, jclass clazz, jlong ptr) {
     if (ptr == NULL) {
         return;
     }
@@ -183,7 +183,7 @@ void Java_com_same_lib_drawable_RLottieDrawable_destroy(JNIEnv *env, jclass claz
     delete info;
 }
 
-void Java_com_same_lib_drawable_RLottieDrawable_setLayerColor(JNIEnv *env, jclass clazz, jlong ptr, jstring layer, jint color) {
+void Java_com_same_lib_lottie_RLottieDrawable_setLayerColor(JNIEnv *env, jclass clazz, jlong ptr, jstring layer, jint color) {
     if (ptr == NULL || layer == nullptr) {
         return;
     }
@@ -195,7 +195,7 @@ void Java_com_same_lib_drawable_RLottieDrawable_setLayerColor(JNIEnv *env, jclas
     }
 }
 
-void Java_com_same_lib_drawable_RLottieDrawable_replaceColors(JNIEnv *env, jclass clazz, jlong ptr, jintArray colorReplacement) {
+void Java_com_same_lib_lottie_RLottieDrawable_replaceColors(JNIEnv *env, jclass clazz, jlong ptr, jintArray colorReplacement) {
     if (ptr == NULL || colorReplacement == nullptr) {
         return;
     }
@@ -256,7 +256,7 @@ void CacheWriteThreadProc() {
     }
 }
 
-void Java_com_same_lib_drawable_RLottieDrawable_createCache(JNIEnv *env, jclass clazz, jlong ptr, jint w, jint h) {
+void Java_com_same_lib_lottie_RLottieDrawable_createCache(JNIEnv *env, jclass clazz, jlong ptr, jint w, jint h) {
     if (ptr == NULL) {
         return;
     }
@@ -328,7 +328,7 @@ void Java_com_same_lib_drawable_RLottieDrawable_createCache(JNIEnv *env, jclass 
     }
 }
 
-jint Java_com_same_lib_drawable_RLottieDrawable_getFrame(JNIEnv *env, jclass clazz, jlong ptr, jint frame, jobject bitmap, jint w, jint h, jint stride) {
+jint Java_com_same_lib_lottie_RLottieDrawable_getFrame(JNIEnv *env, jclass clazz, jlong ptr, jint frame, jobject bitmap, jint w, jint h, jint stride) {
     if (ptr == NULL || bitmap == nullptr) {
         return 0;
     }

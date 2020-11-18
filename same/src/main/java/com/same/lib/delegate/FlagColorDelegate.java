@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.same.lib.core.EditTextBoldCursor;
 import com.same.lib.core.SimpleTextView;
+import com.same.lib.drawable.DrawableManager;
 import com.same.lib.theme.ColorApply;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
@@ -77,7 +78,7 @@ public class FlagColorDelegate implements ColorApply.ColorDelegate {
                     if ((changeFlags & FLAG_USEBACKGROUNDDRAWABLE) != 0) {
                         Drawable drawable = ((ImageView) viewToInvalidate).getDrawable();
                         if (drawable instanceof StateListDrawable || Build.VERSION.SDK_INT >= 21 && drawable instanceof RippleDrawable) {
-                            Theme.setSelectorDrawableColor(drawable, color, (changeFlags & FLAG_DRAWABLESELECTEDSTATE) != 0);
+                            DrawableManager.setSelectorDrawableColor(drawable, color, (changeFlags & FLAG_DRAWABLESELECTEDSTATE) != 0);
                         }
                     } else {
                         ((ImageView) viewToInvalidate).setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));

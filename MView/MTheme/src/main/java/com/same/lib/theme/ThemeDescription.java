@@ -154,13 +154,6 @@ public class ThemeDescription {
             color = Color.argb(alphaOverride, Color.red(color), Color.green(color), Color.blue(color));
         }
         ColorApply.setColor(this, context, color, useDefault, save);
-        if (viewToInvalidate != null && (listClasses == null || listClasses.length == 0)) {
-            if ((changeFlags & FLAG_SELECTOR) != 0) {
-                viewToInvalidate.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            } else if ((changeFlags & FLAG_SELECTORWHITE) != 0) {
-                viewToInvalidate.setBackgroundDrawable(Theme.getSelectorDrawable(true));
-            }
-        }
         if (delegate != null) {
             delegate.didSetColor();
         }

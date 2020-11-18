@@ -36,8 +36,8 @@ import com.same.lib.base.SharedConfig;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.helper.LayoutHelper;
+import com.same.lib.lottie.RLottieImageView;
 import com.same.lib.theme.KeyHub;
-import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
 import com.timecat.component.locale.MLang;
 

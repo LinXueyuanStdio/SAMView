@@ -12,6 +12,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -24,7 +25,9 @@ import com.same.lib.checkbox.CheckBoxSquare;
 import com.same.lib.core.AlertDialog;
 import com.same.lib.core.BasePage;
 import com.same.lib.helper.LayoutHelper;
+import com.same.lib.lottie.RLottieImageView;
 import com.same.lib.radiobutton.RadioButton;
+import com.same.lib.span.ThemeName;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeInfo;
@@ -53,7 +56,7 @@ public class ThemePage extends BasePage {
 
         return super.onFragmentCreate();
     }
-
+    Button currentTheme;
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_baseline_menu_24);
@@ -195,6 +198,35 @@ public class ThemePage extends BasePage {
                 }
             }
         }));
+        currentTheme = createButton(context, ThemeName.getCurrentThemeName(getParentActivity()), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentTheme.setText(ThemeName.getCurrentThemeName(getParentActivity()));
+            }
+        });
+        containerLayout.addView(currentTheme);
+
+
+        RLottieImageView imageView = new RLottieImageView(context);
+        imageView.setAnimation(R.raw.filters, 90, 90);
+        imageView.setScaleType(ImageView.ScaleType.CENTER);
+        imageView.playAnimation();
+        containerLayout.addView(imageView, LayoutHelper.createFrame(90, 90, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 14, 0, 0));
+        imageView.setOnClickListener(v -> {
+            if (!imageView.isPlaying()) {
+                imageView.setProgress(0.0f);
+                imageView.playAnimation();
+            }
+        });
+        containerLayout.addView(createButton(context, "check", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!imageView.isPlaying()) {
+                    imageView.setProgress(0.0f);
+                    imageView.playAnimation();
+                }
+            }
+        }));
 
         CheckBox checkBox = new CheckBox(context, R.drawable.ic_baseline_check_24);
         checkBox.setColor(Theme.getColor(KeyHub.key_checkbox), Theme.getColor(KeyHub.key_checkboxCheck));
@@ -232,13 +264,13 @@ public class ThemePage extends BasePage {
         containerLayout.addView(checkBox3, LayoutHelper.createFrame(22, 22, Gravity.RIGHT | Gravity.TOP, 0, 2, 2, 0));
         checkBox3.setChecked(true, true);
         checkBox3.setVisibility(View.VISIBLE);
-
         containerLayout.addView(createButton(context, "check", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 checkBox3.setChecked(!checkBox3.isChecked(), true);
             }
         }));
+
         RadioButton button = new RadioButton(context);
         button.setSize(AndroidUtilities.dp(20));
         containerLayout.addView(button, LayoutHelper.createFrame(22, 22, Gravity.RIGHT | Gravity.TOP, 0, 2, 2, 0));

@@ -1,7 +1,30 @@
 apply from: "../../library.gradle"
 
+android {
+    compileSdkVersion 29
+    ndkVersion "21.3.6528147"
+
+    sourceSets.main.jniLibs.srcDirs = ['./src/main/cpp/']
+
+    externalNativeBuild {
+        ndkBuild {
+            path "src/main/cpp/Android.mk"
+        }
+    }
+
+    defaultConfig {
+        externalNativeBuild {
+            ndkBuild {
+                arguments "NDK_APPLICATION_MK:=src/main/cpp/Application.mk", "APP_PLATFORM:=android-16", "--jobs=8", "LOCAL_ARM_NEON:=false"
+                abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+            }
+        }
+    }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
+    api project(':MView:MBase')
 }

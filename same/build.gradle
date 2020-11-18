@@ -1,62 +1,4 @@
-apply plugin: 'com.android.library'
-
-android {
-    compileSdkVersion 29
-    ndkVersion "21.3.6528147"
-
-    sourceSets.main.jniLibs.srcDirs = ['./src/main/cpp/']
-
-    externalNativeBuild {
-        ndkBuild {
-            path "src/main/cpp/Android.mk"
-        }
-    }
-
-    defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-        vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
-
-        externalNativeBuild {
-            ndkBuild {
-                arguments "NDK_APPLICATION_MK:=src/main/cpp/Application.mk", "APP_PLATFORM:=android-16", "--jobs=8", "LOCAL_ARM_NEON:=false"
-                abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
-            }
-        }
-    }
-
-    buildTypes {
-        debug {
-            debuggable true
-            jniDebuggable true
-            minifyEnabled true
-            multiDexEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    lintOptions {
-        disable 'MissingTranslation'
-        disable 'ExtraTranslation'
-        disable 'BlockedPrivateApi'
-    }
-
-    dexOptions {
-        jumboMode = true
-    }
-}
+apply from: "../library.gradle"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -68,4 +10,5 @@ dependencies {
     api project(':MView:MFont')
     api project(':MView:MAnim')
     api project(':MView:MTheme')
+    api project(':MView:MLottie')
 }

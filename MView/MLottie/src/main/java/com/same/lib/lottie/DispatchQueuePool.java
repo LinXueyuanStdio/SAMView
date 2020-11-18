@@ -1,4 +1,4 @@
-package com.same.lib.helper;
+package com.same.lib.lottie;
 
 import android.os.SystemClock;
 

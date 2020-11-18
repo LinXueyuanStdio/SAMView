@@ -19,8 +19,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 
-import com.same.lib.theme.Theme;
 import com.same.lib.base.AndroidUtilities;
+import com.same.lib.drawable.DrawableManager;
 
 
 /**
@@ -314,8 +314,8 @@ public class SimpleTextView extends View implements Drawable.Callback {
     }
 
     public void setSideDrawablesColor(int color) {
-        Theme.setDrawableColor(rightDrawable, color);
-        Theme.setDrawableColor(leftDrawable, color);
+        DrawableManager.setDrawableColor(rightDrawable, color);
+        DrawableManager.setDrawableColor(leftDrawable, color);
     }
 
     public boolean setText(CharSequence value) {

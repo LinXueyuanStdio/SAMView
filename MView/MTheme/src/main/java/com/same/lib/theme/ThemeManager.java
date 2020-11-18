@@ -75,7 +75,6 @@ import static com.same.lib.theme.Theme.loadingCurrentTheme;
 import static com.same.lib.theme.Theme.loadingRemoteThemes;
 import static com.same.lib.theme.Theme.otherThemes;
 import static com.same.lib.theme.Theme.previousTheme;
-import static com.same.lib.theme.Theme.reloadWallpaper;
 import static com.same.lib.theme.Theme.remoteThemesHash;
 import static com.same.lib.theme.Theme.selectedAutoNightType;
 import static com.same.lib.theme.Theme.sensorManager;
@@ -86,12 +85,8 @@ import static com.same.lib.theme.Theme.switchNightBrightnessRunnable;
 import static com.same.lib.theme.Theme.switchNightRunnableScheduled;
 import static com.same.lib.theme.Theme.switchNightThemeDelay;
 import static com.same.lib.theme.Theme.switchingNightTheme;
-import static com.same.lib.theme.Theme.themedWallpaper;
-import static com.same.lib.theme.Theme.themedWallpaperFileOffset;
-import static com.same.lib.theme.Theme.themedWallpaperLink;
 import static com.same.lib.theme.Theme.themes;
 import static com.same.lib.theme.Theme.themesDict;
-import static com.same.lib.theme.Theme.wallpaper;
 
 /**
  * @author 林学渊
@@ -208,7 +203,7 @@ public class ThemeManager {
                     e.printStackTrace();
                 }
             } else {
-                themedWallpaperLink = null;
+                WallpaperManager.themedWallpaperLink = null;
             }
 
             return themeInfo;
@@ -316,10 +311,10 @@ public class ThemeManager {
                     currentColorsNoAccent = getThemeFileValues(context, new File(themeInfo.pathToFile), null, wallpaperLink);
                 }
                 Integer offset = currentColorsNoAccent.get("wallpaperFileOffset");
-                themedWallpaperFileOffset = offset != null ? offset : -1;
+                WallpaperManager.themedWallpaperFileOffset = offset != null ? offset : -1;
                 if (!TextUtils.isEmpty(wallpaperLink[0])) {
-                    themedWallpaperLink = wallpaperLink[0];
-                    String newPathToFile = new File(AndroidUtilities.getFilesDirFixed(), AndroidUtilities.MD5(themedWallpaperLink) + ".wp").getAbsolutePath();
+                    WallpaperManager.themedWallpaperLink = wallpaperLink[0];
+                    String newPathToFile = new File(AndroidUtilities.getFilesDirFixed(), AndroidUtilities.MD5(WallpaperManager.themedWallpaperLink) + ".wp").getAbsolutePath();
                     try {
                         if (themeInfo.pathToWallpaper != null && !themeInfo.pathToWallpaper.equals(newPathToFile)) {
                             new File(themeInfo.pathToWallpaper).delete();
@@ -329,7 +324,7 @@ public class ThemeManager {
                     }
                     themeInfo.pathToWallpaper = newPathToFile;
                     try {
-                        Uri data = Uri.parse(themedWallpaperLink);
+                        Uri data = Uri.parse(WallpaperManager.themedWallpaperLink);
                         themeInfo.slug = data.getQueryParameter("slug");
 
                         String mode = data.getQueryParameter("mode");
@@ -378,7 +373,7 @@ public class ThemeManager {
 
                     }
                     themeInfo.pathToWallpaper = null;
-                    themedWallpaperLink = null;
+                    WallpaperManager.themedWallpaperLink = null;
                 }
             } else {
                 if (!nightTheme && save) {
@@ -388,10 +383,10 @@ public class ThemeManager {
                     editor.apply();
                 }
                 currentColorsNoAccent.clear();
-                themedWallpaperFileOffset = 0;
-                themedWallpaperLink = null;
-                wallpaper = null;
-                themedWallpaper = null;
+                WallpaperManager.themedWallpaperFileOffset = 0;
+                WallpaperManager.themedWallpaperLink = null;
+                WallpaperManager.wallpaper = null;
+                WallpaperManager.themedWallpaper = null;
             }
             if (!nightTheme && previousTheme == null) {
                 currentDayTheme = themeInfo;
@@ -434,8 +429,8 @@ public class ThemeManager {
         if (accent != null) {
             shouldDrawGradientIcons = accent.fillAccentColors(currentColorsNoAccent, currentColors);
         }
-        reloadWallpaper(context);
-        for (AbsTheme absTheme:ThemeRes.themes) {
+        WallpaperManager.reloadWallpaper(context);
+        for (AbsTheme absTheme : ThemeRes.themes) {
             absTheme.applyResources(context);
         }
         AndroidUtilities.runOnUIThread(() -> NotificationCenter.postNotificationName(NotificationCenter.didSetNewTheme, false));
@@ -650,7 +645,7 @@ public class ThemeManager {
     }
 
     static void saveOtherThemes(Context context, boolean full, boolean migration) {
-        SharedPreferences preferences =AndroidUtilities.getThemeConfig();
+        SharedPreferences preferences = AndroidUtilities.getThemeConfig();
         SharedPreferences.Editor editor = preferences.edit();
         if (full) {
             JSONArray array = new JSONArray();
@@ -708,7 +703,6 @@ public class ThemeManager {
         return previousTheme;
     }
 
-
     public static ThemeInfo getCurrentTheme() {
         return currentDayTheme != null ? currentDayTheme : defaultTheme;
     }
@@ -716,6 +710,7 @@ public class ThemeManager {
     public static ThemeInfo getCurrentNightTheme() {
         return currentNightTheme;
     }
+
     public static ThemeInfo getCurrentDayTheme() {
         return currentDayTheme;
     }
@@ -986,7 +981,7 @@ public class ThemeManager {
         ThemeInfo newTheme = new ThemeInfo();
         newTheme.pathToFile = new File(AndroidUtilities.getFilesDirFixed(), "theme" + AndroidUtilities.random.nextLong() + ".attheme").getAbsolutePath();
         newTheme.name = name;
-        themedWallpaperLink = getWallpaperUrl(currentTheme.overrideWallpaper);
+        WallpaperManager.themedWallpaperLink = getWallpaperUrl(currentTheme.overrideWallpaper);
         newTheme.account = 0;
         saveCurrentTheme(context, newTheme, true, true, false);
         return newTheme;
@@ -1031,7 +1026,7 @@ public class ThemeManager {
     public static void resetCustomWallpaper(Context context, boolean temporary) {
         if (temporary) {
             isApplyingAccent = false;
-            reloadWallpaper(context);
+            WallpaperManager.reloadWallpaper(context);
         } else {
             currentTheme.setOverrideWallpaper(null);
         }
@@ -1043,12 +1038,12 @@ public class ThemeManager {
         if (wallpaperInfo != null) {
             wallpaperLink = getWallpaperUrl(wallpaperInfo);
         } else {
-            wallpaperLink = themedWallpaperLink;
+            wallpaperLink = WallpaperManager.themedWallpaperLink;
         }
 
-        Drawable wallpaperToSave = newTheme ? wallpaper : themedWallpaper;
+        Drawable wallpaperToSave = newTheme ? WallpaperManager.wallpaper : WallpaperManager.themedWallpaper;
         if (newTheme && wallpaperToSave != null) {
-            themedWallpaper = wallpaper;
+            WallpaperManager.themedWallpaper = WallpaperManager.wallpaper;
         }
         ThemeAccent accent = currentTheme.getAccent(false);
         HashMap<String, Integer> colorsMap = currentTheme.firstAccentIsDefault && accent.id == DEFALT_THEME_ACCENT_ID ? defaultColors : currentColors;
@@ -1098,7 +1093,7 @@ public class ThemeManager {
                     stream.write(new byte[]{'\n', 'W', 'P', 'E', '\n'});
                 }
                 if (finalSave && !upload) {
-                    wallpaper = wallpaperToSave;
+                    WallpaperManager.wallpaper = wallpaperToSave;
                     calcBackgroundColor(wallpaperToSave, 2);
                 }
             }
@@ -1480,7 +1475,6 @@ public class ThemeManager {
     }
 
 
-
     public static HashMap<String, Integer> getThemeFileValues(Context context, File file, String assetName, String[] wallpaperLink) {
         FileInputStream stream = null;
         HashMap<String, Integer> stringMap = new HashMap<>();
@@ -1554,5 +1548,4 @@ public class ThemeManager {
         return stringMap;
     }
     //endregion
-
 }

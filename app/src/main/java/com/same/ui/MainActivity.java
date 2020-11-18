@@ -38,6 +38,7 @@ import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeManager;
 import com.same.lib.theme.ThemeRes;
+import com.same.lib.theme.WallpaperManager;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.theme.ThemeEditorView;
 import com.same.ui.page.theme.ThemePage;
@@ -292,7 +293,7 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
         actionBarLayout.setDelegate(this);//代理，监听生命周期
 
         //应用的壁纸
-        Theme.loadWallpaper(this);
+        WallpaperManager.loadWallpaper(this);
 
         ThemePage page = new ThemePage();
         //        actionBarLayout.addFragmentToStack(page);

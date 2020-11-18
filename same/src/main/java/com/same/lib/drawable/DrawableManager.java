@@ -1,6 +1,7 @@
 package com.same.lib.drawable;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
@@ -27,6 +28,7 @@ import com.same.lib.R;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.SharedConfig;
 import com.same.lib.theme.KeyHub;
+import com.same.lib.theme.Theme;
 
 import java.lang.reflect.Method;
 import java.util.Calendar;
@@ -423,4 +425,85 @@ public class DrawableManager {
             return stateListDrawable;
         }
     }
+
+
+    public static void setDrawableColor(Drawable drawable, int color) {
+        if (drawable == null) {
+            return;
+        }
+        if (drawable instanceof ShapeDrawable) {
+            ((ShapeDrawable) drawable).getPaint().setColor(color);
+        } else {
+            drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+        }
+    }
+
+    public static void setDrawableColorByKey(Drawable drawable, String key) {
+        if (key == null) {
+            return;
+        }
+        setDrawableColor(drawable, Theme.getColor(key));
+    }
+
+    @TargetApi(21)
+    @SuppressLint("DiscouragedPrivateApi")
+    public static void setRippleDrawableForceSoftware(RippleDrawable drawable) {
+        if (drawable == null) {
+            return;
+        }
+        try {
+            Method method = RippleDrawable.class.getDeclaredMethod("setForceSoftware", boolean.class);
+            method.invoke(drawable, true);
+        } catch (Throwable ignore) {
+
+        }
+    }
+
+    public static void setSelectorDrawableColor(Drawable drawable, int color, boolean selected) {
+        if (drawable instanceof StateListDrawable) {
+            try {
+                if (selected) {
+                    Drawable state = getStateDrawable(drawable, 0);
+                    if (state instanceof ShapeDrawable) {
+                        ((ShapeDrawable) state).getPaint().setColor(color);
+                    } else {
+                        state.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+                    }
+                    state = getStateDrawable(drawable, 1);
+                    if (state instanceof ShapeDrawable) {
+                        ((ShapeDrawable) state).getPaint().setColor(color);
+                    } else {
+                        state.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+                    }
+                } else {
+                    Drawable state = getStateDrawable(drawable, 2);
+                    if (state instanceof ShapeDrawable) {
+                        ((ShapeDrawable) state).getPaint().setColor(color);
+                    } else {
+                        state.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+                    }
+                }
+            } catch (Throwable ignore) {
+
+            }
+        } else if (Build.VERSION.SDK_INT >= 21 && drawable instanceof RippleDrawable) {
+            RippleDrawable rippleDrawable = (RippleDrawable) drawable;
+            if (selected) {
+                rippleDrawable.setColor(new ColorStateList(
+                        new int[][]{StateSet.WILD_CARD},
+                        new int[]{color}
+                ));
+            } else {
+                if (rippleDrawable.getNumberOfLayers() > 0) {
+                    Drawable drawable1 = rippleDrawable.getDrawable(0);
+                    if (drawable1 instanceof ShapeDrawable) {
+                        ((ShapeDrawable) drawable1).getPaint().setColor(color);
+                    } else {
+                        drawable1.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+                    }
+                }
+            }
+        }
+    }
+
 }

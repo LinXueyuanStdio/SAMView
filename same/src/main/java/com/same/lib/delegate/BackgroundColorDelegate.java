@@ -12,8 +12,8 @@ import android.view.View;
 
 import com.same.lib.core.EditTextBoldCursor;
 import com.same.lib.drawable.CombinedDrawable;
+import com.same.lib.drawable.DrawableManager;
 import com.same.lib.theme.ColorApply;
-import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
 
 import static com.same.lib.theme.ThemeDescription.FLAG_BACKGROUND;
@@ -57,7 +57,7 @@ public class BackgroundColorDelegate implements ColorApply.ColorDelegate {
                         }
                         if (drawable != null) {
                             if (drawable instanceof StateListDrawable || Build.VERSION.SDK_INT >= 21 && drawable instanceof RippleDrawable) {
-                                Theme.setSelectorDrawableColor(drawable, color, (changeFlags & FLAG_DRAWABLESELECTEDSTATE) != 0);
+                                DrawableManager.setSelectorDrawableColor(drawable, color, (changeFlags & FLAG_DRAWABLESELECTEDSTATE) != 0);
                             } else if (drawable instanceof ShapeDrawable) {
                                 ((ShapeDrawable) drawable).getPaint().setColor(color);
                             } else {

@@ -20,5 +20,6 @@ public class ColorDelegateLoader {
         ColorApply.install(new ScrollViewColorDelegate());
         ColorApply.install(new ViewPagerColorDelegate());
         ColorApply.install(new ChildColorDelegate());
+        ColorApply.install(new SelectorColorDelegate());
     }
 }
