@@ -19,8 +19,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:theme="@style/Theme.TMessages.Start"
-        android:supportsRtl="true">
+        android:supportsRtl="true"
+        android:theme="@style/Theme.TMessages.Start">
         <activity
             android:name="com.same.ui.MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
@@ -29,13 +29,20 @@
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name="com.same.ui.TestActivity" />
+        <activity
+            android:name="com.same.ui.intro.IntroActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
+            android:launchMode="singleTask" />
 
-        <meta-data android:name="android.max_aspect" android:value="2.5" />
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.5" />
 
     </application>
 

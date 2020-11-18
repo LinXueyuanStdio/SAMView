@@ -73,6 +73,13 @@ public class ThemePage extends BasePage {
         LinearLayout containerLayout = new LinearLayout(context);
         containerLayout.setOrientation(LinearLayout.VERTICAL);
 
+        containerLayout.addView(createButton(context, "分享主题", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getParentActivity(), IntroActivity.class);
+                getParentActivity().startActivity(intent);
+            }
+        }));
         containerLayout.addView(createButton(context, "选择语言", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
