@@ -50,7 +50,6 @@
                 <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.same.ui.TestActivity" />
         <activity
             android:name="com.same.ui.intro.IntroActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
