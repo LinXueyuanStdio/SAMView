@@ -15,6 +15,7 @@ import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.SharedConfig;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.helper.LayoutHelper;
+import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 
 
@@ -31,9 +32,9 @@ public class ActionBarMenuSubItem extends FrameLayout {
     private TextView textView;
     private ImageView imageView;
 
-    private int textColor = Theme.getColor(Theme.key_actionBarDefaultSubmenuItem);
-    private int iconColor = Theme.getColor(Theme.key_actionBarDefaultSubmenuItemIcon);
-    private int selectorColor = Theme.getColor(Theme.key_dialogButtonSelector);
+    private int textColor = Theme.getColor(KeyHub.key_actionBarDefaultSubmenuItem);
+    private int iconColor = Theme.getColor(KeyHub.key_actionBarDefaultSubmenuItemIcon);
+    private int selectorColor = Theme.getColor(KeyHub.key_dialogButtonSelector);
 
     public ActionBarMenuSubItem(Context context) {
         super(context);

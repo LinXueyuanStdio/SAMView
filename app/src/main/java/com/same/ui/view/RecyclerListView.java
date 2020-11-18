@@ -32,6 +32,7 @@ import com.same.lib.base.AndroidUtilities;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.listview.LinearLayoutManager;
 import com.same.lib.listview.RecyclerView;
+import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 
 import java.lang.reflect.Field;
@@ -328,10 +329,10 @@ public class RecyclerListView extends RecyclerView {
         }
 
         private void updateColors() {
-            int inactive = Theme.getColor(Theme.key_fastScrollInactive);
-            int active = Theme.getColor(Theme.key_fastScrollActive);
+            int inactive = Theme.getColor(KeyHub.key_fastScrollInactive);
+            int active = Theme.getColor(KeyHub.key_fastScrollActive);
             paint.setColor(inactive);
-            letterPaint.setColor(Theme.getColor(Theme.key_fastScrollText));
+            letterPaint.setColor(Theme.getColor(KeyHub.key_fastScrollText));
             colors[0] = Color.red(inactive);
             colors[1] = Color.red(active);
             colors[2] = Color.green(inactive);

@@ -6,9 +6,10 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 
-import com.same.lib.theme.AbsTheme;
-import com.same.lib.theme.Theme;
 import com.same.lib.base.AndroidUtilities;
+import com.same.lib.theme.AbsTheme;
+import com.same.lib.theme.KeyHub;
+import com.same.lib.theme.Theme;
 import com.same.ui.R;
 
 /**
@@ -117,41 +118,41 @@ public class DialogTheme extends AbsTheme {
             return;
         }
         for (int a = 0; a < 2; a++) {
-            dialogs_namePaint[a].setColor(Theme.getColor(Theme.key_chats_name));
-            dialogs_nameEncryptedPaint[a].setColor(Theme.getColor(Theme.key_chats_secretName));
-            dialogs_messagePaint[a].setColor(dialogs_messagePaint[a].linkColor = Theme.getColor(Theme.key_chats_message));
-            dialogs_messagePrintingPaint[a].setColor(Theme.getColor(Theme.key_chats_actionMessage));
+            dialogs_namePaint[a].setColor(Theme.getColor(KeyHub.key_chats_name));
+            dialogs_nameEncryptedPaint[a].setColor(Theme.getColor(KeyHub.key_chats_secretName));
+            dialogs_messagePaint[a].setColor(dialogs_messagePaint[a].linkColor = Theme.getColor(KeyHub.key_chats_message));
+            dialogs_messagePrintingPaint[a].setColor(Theme.getColor(KeyHub.key_chats_actionMessage));
         }
-        dialogs_searchNamePaint.setColor(Theme.getColor(Theme.key_chats_name));
-        dialogs_searchNameEncryptedPaint.setColor(Theme.getColor(Theme.key_chats_secretName));
-        dialogs_messageNamePaint.setColor(dialogs_messageNamePaint.linkColor = Theme.getColor(Theme.key_chats_nameMessage_threeLines));
-        dialogs_tabletSeletedPaint.setColor(Theme.getColor(Theme.key_chats_tabletSelectedOverlay));
-        dialogs_pinnedPaint.setColor(Theme.getColor(Theme.key_chats_pinnedOverlay));
-        dialogs_timePaint.setColor(Theme.getColor(Theme.key_chats_date));
-        dialogs_countTextPaint.setColor(Theme.getColor(Theme.key_chats_unreadCounterText));
-        dialogs_archiveTextPaint.setColor(Theme.getColor(Theme.key_chats_archiveText));
-        dialogs_countPaint.setColor(Theme.getColor(Theme.key_chats_unreadCounter));
-        dialogs_countGrayPaint.setColor(Theme.getColor(Theme.key_chats_unreadCounterMuted));
-        dialogs_errorPaint.setColor(Theme.getColor(Theme.key_chats_sentError));
-        dialogs_onlinePaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText3));
-        dialogs_offlinePaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
+        dialogs_searchNamePaint.setColor(Theme.getColor(KeyHub.key_chats_name));
+        dialogs_searchNameEncryptedPaint.setColor(Theme.getColor(KeyHub.key_chats_secretName));
+        dialogs_messageNamePaint.setColor(dialogs_messageNamePaint.linkColor = Theme.getColor(KeyHub.key_chats_nameMessage_threeLines));
+        dialogs_tabletSeletedPaint.setColor(Theme.getColor(KeyHub.key_chats_tabletSelectedOverlay));
+        dialogs_pinnedPaint.setColor(Theme.getColor(KeyHub.key_chats_pinnedOverlay));
+        dialogs_timePaint.setColor(Theme.getColor(KeyHub.key_chats_date));
+        dialogs_countTextPaint.setColor(Theme.getColor(KeyHub.key_chats_unreadCounterText));
+        dialogs_archiveTextPaint.setColor(Theme.getColor(KeyHub.key_chats_archiveText));
+        dialogs_countPaint.setColor(Theme.getColor(KeyHub.key_chats_unreadCounter));
+        dialogs_countGrayPaint.setColor(Theme.getColor(KeyHub.key_chats_unreadCounterMuted));
+        dialogs_errorPaint.setColor(Theme.getColor(KeyHub.key_chats_sentError));
+        dialogs_onlinePaint.setColor(Theme.getColor(KeyHub.key_windowBackgroundWhiteBlueText3));
+        dialogs_offlinePaint.setColor(Theme.getColor(KeyHub.key_windowBackgroundWhiteGrayText3));
 
-        Theme.setDrawableColorByKey(dialogs_lockDrawable, Theme.key_chats_secretIcon);
-        Theme.setDrawableColorByKey(dialogs_checkDrawable, Theme.key_chats_sentCheck);
-        Theme.setDrawableColorByKey(dialogs_checkReadDrawable, Theme.key_chats_sentReadCheck);
-        Theme.setDrawableColorByKey(dialogs_halfCheckDrawable, Theme.key_chats_sentReadCheck);
-        Theme.setDrawableColorByKey(dialogs_clockDrawable, Theme.key_chats_sentClock);
-        Theme.setDrawableColorByKey(dialogs_errorDrawable, Theme.key_chats_sentErrorIcon);
-        Theme.setDrawableColorByKey(dialogs_groupDrawable, Theme.key_chats_nameIcon);
-        Theme.setDrawableColorByKey(dialogs_broadcastDrawable, Theme.key_chats_nameIcon);
-        Theme.setDrawableColorByKey(dialogs_botDrawable, Theme.key_chats_nameIcon);
-        Theme.setDrawableColorByKey(dialogs_pinnedDrawable, Theme.key_chats_pinnedIcon);
-        Theme.setDrawableColorByKey(dialogs_reorderDrawable, Theme.key_chats_pinnedIcon);
-        Theme.setDrawableColorByKey(dialogs_muteDrawable, Theme.key_chats_muteIcon);
-        Theme.setDrawableColorByKey(dialogs_mentionDrawable, Theme.key_chats_mentionIcon);
-        Theme.setDrawableColorByKey(dialogs_verifiedDrawable, Theme.key_chats_verifiedBackground);
-        Theme.setDrawableColorByKey(dialogs_verifiedCheckDrawable, Theme.key_chats_verifiedCheck);
-        Theme.setDrawableColorByKey(Theme.dialogs_holidayDrawable, Theme.key_actionBarDefaultTitle);
+        Theme.setDrawableColorByKey(dialogs_lockDrawable, KeyHub.key_chats_secretIcon);
+        Theme.setDrawableColorByKey(dialogs_checkDrawable, KeyHub.key_chats_sentCheck);
+        Theme.setDrawableColorByKey(dialogs_checkReadDrawable, KeyHub.key_chats_sentReadCheck);
+        Theme.setDrawableColorByKey(dialogs_halfCheckDrawable, KeyHub.key_chats_sentReadCheck);
+        Theme.setDrawableColorByKey(dialogs_clockDrawable, KeyHub.key_chats_sentClock);
+        Theme.setDrawableColorByKey(dialogs_errorDrawable, KeyHub.key_chats_sentErrorIcon);
+        Theme.setDrawableColorByKey(dialogs_groupDrawable, KeyHub.key_chats_nameIcon);
+        Theme.setDrawableColorByKey(dialogs_broadcastDrawable, KeyHub.key_chats_nameIcon);
+        Theme.setDrawableColorByKey(dialogs_botDrawable, KeyHub.key_chats_nameIcon);
+        Theme.setDrawableColorByKey(dialogs_pinnedDrawable, KeyHub.key_chats_pinnedIcon);
+        Theme.setDrawableColorByKey(dialogs_reorderDrawable, KeyHub.key_chats_pinnedIcon);
+        Theme.setDrawableColorByKey(dialogs_muteDrawable, KeyHub.key_chats_muteIcon);
+        Theme.setDrawableColorByKey(dialogs_mentionDrawable, KeyHub.key_chats_mentionIcon);
+        Theme.setDrawableColorByKey(dialogs_verifiedDrawable, KeyHub.key_chats_verifiedBackground);
+        Theme.setDrawableColorByKey(dialogs_verifiedCheckDrawable, KeyHub.key_chats_verifiedCheck);
+        Theme.setDrawableColorByKey(Theme.dialogs_holidayDrawable, KeyHub.key_actionBarDefaultTitle);
     }
 
     @Override

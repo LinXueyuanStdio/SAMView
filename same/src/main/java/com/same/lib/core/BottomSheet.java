@@ -41,6 +41,7 @@ import com.same.lib.base.SharedConfig;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.helper.LayoutHelper;
+import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
 
@@ -727,7 +728,7 @@ public class BottomSheet extends Dialog {
         setContentView(container, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         if (useLightStatusBar && Build.VERSION.SDK_INT >= 23) {
-            int color = ColorManager.getColor(Theme.key_actionBarDefault);
+            int color = ColorManager.getColor(KeyHub.key_actionBarDefault);
             if (color == 0xffffffff) {
                 int flags = container.getSystemUiVisibility();
                 flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
@@ -761,12 +762,12 @@ public class BottomSheet extends Dialog {
             titleView.setSingleLine(true);
             titleView.setText(title);
             if (bigTitle) {
-                titleView.setTextColor(ColorManager.getColor(Theme.key_dialogTextBlack));
+                titleView.setTextColor(ColorManager.getColor(KeyHub.key_dialogTextBlack));
                 titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
                 titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 titleView.setPadding(AndroidUtilities.dp(21), AndroidUtilities.dp(6), AndroidUtilities.dp(21), AndroidUtilities.dp(8));
             } else {
-                titleView.setTextColor(ColorManager.getColor(Theme.key_dialogTextGray2));
+                titleView.setTextColor(ColorManager.getColor(KeyHub.key_dialogTextGray2));
                 titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                 titleView.setPadding(AndroidUtilities.dp(16), 0, AndroidUtilities.dp(16), AndroidUtilities.dp(8));
             }

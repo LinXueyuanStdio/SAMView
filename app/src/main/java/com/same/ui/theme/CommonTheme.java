@@ -8,6 +8,7 @@ import android.graphics.PorterDuffXfermode;
 
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.theme.AbsTheme;
+import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 
 /**
@@ -59,8 +60,8 @@ public class CommonTheme extends AbsTheme {
         if (dividerPaint == null) {
             return;
         }
-        dividerPaint.setColor(Theme.getColor(Theme.key_divider));
-        linkSelectionPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkSelection));
+        dividerPaint.setColor(Theme.getColor(KeyHub.key_divider));
+        linkSelectionPaint.setColor(Theme.getColor(KeyHub.key_windowBackgroundWhiteLinkSelection));
 
         dialogs_archiveAvatarDrawableRecolored = false;
         dialogs_hidePsaDrawableRecolored = false;

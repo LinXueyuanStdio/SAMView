@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.same.lib.base.AndroidUtilities;
 import com.same.lib.core.ActionBar;
 import com.same.lib.core.ActionBarMenu;
 import com.same.lib.core.ActionBarMenuItem;
@@ -17,14 +18,14 @@ import com.same.lib.drawable.DrawableManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.listview.LinearLayoutManager;
 import com.same.lib.listview.RecyclerView;
-import com.same.ui.theme.CommonTheme;
+import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
-import com.same.lib.base.AndroidUtilities;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.language.cell.LanguageCell;
 import com.same.ui.page.language.cell.ShadowSectionCell;
+import com.same.ui.theme.CommonTheme;
 import com.same.ui.view.EmptyTextProgressView;
 import com.same.ui.view.RecyclerListView;
 import com.timecat.component.locale.MLang;
@@ -131,7 +132,7 @@ public class LanguageSelectPage extends BasePage {
         searchListViewAdapter = new ListAdapter(context, true);
 
         fragmentView = new FrameLayout(context);
-        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+        fragmentView.setBackgroundColor(Theme.getColor(KeyHub.key_windowBackgroundGray));
         FrameLayout frameLayout = (FrameLayout) fragmentView;
 
         emptyView = new EmptyTextProgressView(context);
@@ -196,7 +197,7 @@ public class LanguageSelectPage extends BasePage {
             showDialog(alertDialog);
             TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
             if (button != null) {
-                button.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
+                button.setTextColor(Theme.getColor(KeyHub.key_dialogTextRed2));
             }
             return true;
         });
@@ -358,7 +359,7 @@ public class LanguageSelectPage extends BasePage {
             switch (viewType) {
                 case 0: {
                     view = new LanguageCell(mContext, false);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    view.setBackgroundColor(Theme.getColor(KeyHub.key_windowBackgroundWhite));
                     break;
                 }
                 case 1:
@@ -401,9 +402,9 @@ public class LanguageSelectPage extends BasePage {
                 case 1: {
                     ShadowSectionCell sectionCell = (ShadowSectionCell) holder.itemView;
                     if (!unofficialLanguages.isEmpty() && position == unofficialLanguages.size()) {
-                        sectionCell.setBackgroundDrawable(DrawableManager.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        sectionCell.setBackgroundDrawable(DrawableManager.getThemedDrawable(mContext, R.drawable.greydivider, KeyHub.key_windowBackgroundGrayShadow));
                     } else {
-                        sectionCell.setBackgroundDrawable(DrawableManager.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        sectionCell.setBackgroundDrawable(DrawableManager.getThemedDrawable(mContext, R.drawable.greydivider_bottom, KeyHub.key_windowBackgroundGrayShadow));
                     }
                     break;
                 }
@@ -423,25 +424,25 @@ public class LanguageSelectPage extends BasePage {
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> d = new ArrayList<>();
 
-        d.add(new ThemeDescription(fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray));
+        d.add(new ThemeDescription(fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, KeyHub.key_windowBackgroundGray));
 
-        d.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault));
-        d.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon));
-        d.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle));
-        d.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector));
-        d.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SEARCH, null, null, null, null, Theme.key_actionBarDefaultSearch));
-        d.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, null, null, null, null, Theme.key_actionBarDefaultSearchPlaceholder));
+        d.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, KeyHub.key_actionBarDefault));
+        d.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, KeyHub.key_actionBarDefaultIcon));
+        d.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, KeyHub.key_actionBarDefaultTitle));
+        d.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, KeyHub.key_actionBarDefaultSelector));
+        d.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SEARCH, null, null, null, null, KeyHub.key_actionBarDefaultSearch));
+        d.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, null, null, null, null, KeyHub.key_actionBarDefaultSearchPlaceholder));
 
-        d.add(new ThemeDescription(emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_emptyListPlaceholder));
+        d.add(new ThemeDescription(emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, KeyHub.key_emptyListPlaceholder));
 
-        d.add(new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{LanguageCell.class}, null, null, null, Theme.key_windowBackgroundWhite));
-        d.add(new ThemeDescription(listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault));
-        d.add(new ThemeDescription(listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector));
-        d.add(new ThemeDescription(listView, 0, new Class[]{View.class}, CommonTheme.dividerPaint, null, null, Theme.key_divider));
-        d.add(new ThemeDescription(listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow));
-        d.add(new ThemeDescription(listView, 0, new Class[]{LanguageCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
-        d.add(new ThemeDescription(listView, 0, new Class[]{LanguageCell.class}, new String[]{"textView2"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3));
-        d.add(new ThemeDescription(listView, 0, new Class[]{LanguageCell.class}, new String[]{"checkImage"}, null, null, null, Theme.key_featuredStickers_addedIcon));
+        d.add(new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{LanguageCell.class}, null, null, null, KeyHub.key_windowBackgroundWhite));
+        d.add(new ThemeDescription(listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, KeyHub.key_actionBarDefault));
+        d.add(new ThemeDescription(listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, KeyHub.key_listSelector));
+        d.add(new ThemeDescription(listView, 0, new Class[]{View.class}, CommonTheme.dividerPaint, null, null, KeyHub.key_divider));
+        d.add(new ThemeDescription(listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, KeyHub.key_windowBackgroundGrayShadow));
+        d.add(new ThemeDescription(listView, 0, new Class[]{LanguageCell.class}, new String[]{"textView"}, null, null, null, KeyHub.key_windowBackgroundWhiteBlackText));
+        d.add(new ThemeDescription(listView, 0, new Class[]{LanguageCell.class}, new String[]{"textView2"}, null, null, null, KeyHub.key_windowBackgroundWhiteGrayText3));
+        d.add(new ThemeDescription(listView, 0, new Class[]{LanguageCell.class}, new String[]{"checkImage"}, null, null, null, KeyHub.key_featuredStickers_addedIcon));
 
         return d;
     }

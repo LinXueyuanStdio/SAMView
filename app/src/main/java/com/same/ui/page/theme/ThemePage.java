@@ -16,6 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.same.lib.base.AndroidUtilities;
+import com.same.lib.base.NotificationCenter;
 import com.same.lib.checkbox.CheckBox;
 import com.same.lib.checkbox.CheckBox2;
 import com.same.lib.checkbox.CheckBoxSquare;
@@ -23,11 +25,10 @@ import com.same.lib.core.AlertDialog;
 import com.same.lib.core.BasePage;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.radiobutton.RadioButton;
+import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeInfo;
 import com.same.lib.theme.ThemeManager;
-import com.same.lib.base.AndroidUtilities;
-import com.same.lib.base.NotificationCenter;
 import com.same.ui.BuildConfig;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
@@ -63,7 +64,7 @@ public class ThemePage extends BasePage {
         actionBar.setTitle(MyLang.getString("AutoNightTheme", R.string.Theme));
 
         FrameLayout frameLayout = new FrameLayout(context);
-        frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+        frameLayout.setBackgroundColor(Theme.getColor(KeyHub.key_windowBackgroundGray));
         fragmentView = frameLayout;
 
         LinearLayout containerLayout = new LinearLayout(context);
@@ -122,7 +123,7 @@ public class ThemePage extends BasePage {
                 showDialog(alertDialog);
                 TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
                 if (button != null) {
-                    button.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
+                    button.setTextColor(Theme.getColor(KeyHub.key_dialogTextRed2));
                 }
             }
         }));
@@ -196,7 +197,7 @@ public class ThemePage extends BasePage {
         }));
 
         CheckBox checkBox = new CheckBox(context, R.drawable.ic_baseline_check_24);
-        checkBox.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
+        checkBox.setColor(Theme.getColor(KeyHub.key_checkbox), Theme.getColor(KeyHub.key_checkboxCheck));
         containerLayout.addView(checkBox, LayoutHelper.createFrame(22, 22, Gravity.RIGHT | Gravity.TOP, 0, 2, 2, 0));
         checkBox.setChecked(true, true);
         checkBox.setVisibility(View.VISIBLE);
@@ -211,7 +212,7 @@ public class ThemePage extends BasePage {
 
         for (int i = 0; i < 10; i++) {
             CheckBox2 checkBox2 = new CheckBox2(context);
-            checkBox2.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck), Theme.getColor(Theme.key_checkboxCheck));
+            checkBox2.setColor(Theme.getColor(KeyHub.key_checkbox), Theme.getColor(KeyHub.key_checkboxCheck), Theme.getColor(KeyHub.key_checkboxCheck));
             checkBox2.setDrawBackgroundAsArc(i);
             checkBox2.setDrawUnchecked(true);
             containerLayout.addView(checkBox2, LayoutHelper.createFrame(22, 22, Gravity.RIGHT | Gravity.TOP, 0, 2, 2, 0));

@@ -13,6 +13,7 @@ import android.os.Build;
 import android.util.StateSet;
 
 import com.same.lib.drawable.DrawableManager;
+import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 import com.same.ui.R;
 
@@ -27,9 +28,9 @@ public class DrawableBuilder {
     public static Drawable createEditTextDrawable(Context context, boolean alert) {
         Resources resources = context.getResources();
         Drawable defaultDrawable = resources.getDrawable(R.drawable.search_dark).mutate();
-        defaultDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(alert ? Theme.key_dialogInputField : Theme.key_windowBackgroundWhiteInputField), PorterDuff.Mode.MULTIPLY));
+        defaultDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(alert ? KeyHub.key_dialogInputField : KeyHub.key_windowBackgroundWhiteInputField), PorterDuff.Mode.MULTIPLY));
         Drawable pressedDrawable = resources.getDrawable(R.drawable.search_dark_activated).mutate();
-        pressedDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(alert ?Theme. key_dialogInputFieldActivated : Theme.key_windowBackgroundWhiteInputFieldActivated), PorterDuff.Mode.MULTIPLY));
+        pressedDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(alert ? KeyHub.key_dialogInputFieldActivated : KeyHub.key_windowBackgroundWhiteInputFieldActivated), PorterDuff.Mode.MULTIPLY));
         StateListDrawable stateListDrawable = new StateListDrawable() {
             @Override
             public boolean selectDrawable(int index) {

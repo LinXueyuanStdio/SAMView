@@ -8,9 +8,10 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.text.TextPaint;
 
-import com.same.lib.theme.AbsTheme;
-import com.same.lib.theme.Theme;
 import com.same.lib.base.AndroidUtilities;
+import com.same.lib.theme.AbsTheme;
+import com.same.lib.theme.KeyHub;
+import com.same.lib.theme.Theme;
 
 /**
  * @author 林学渊
@@ -42,8 +43,8 @@ public class ProfileTheme extends AbsTheme {
             return;
         }
 
-        profile_aboutTextPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        profile_aboutTextPaint.linkColor = Theme.getColor(Theme.key_windowBackgroundWhiteLinkText);
+        profile_aboutTextPaint.setColor(Theme.getColor(KeyHub.key_windowBackgroundWhiteBlackText));
+        profile_aboutTextPaint.linkColor = Theme.getColor(KeyHub.key_windowBackgroundWhiteLinkText);
     }
 
     static ColorFilter currentShareColorFilter;

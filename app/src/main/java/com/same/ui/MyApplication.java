@@ -7,8 +7,9 @@ import android.content.res.Configuration;
 import android.os.Handler;
 
 import com.same.lib.NativeLoader;
-import com.same.lib.theme.Theme;
 import com.same.lib.base.AndroidUtilities;
+import com.same.lib.delegate.ColorDelegateLoader;
+import com.same.lib.theme.Theme;
 import com.same.ui.lang.MyLang;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,7 @@ public class MyApplication extends Application {
         applicationHandler = new Handler(applicationContext.getMainLooper());
         NativeLoader.initNativeLibs(this);
         MyLang.init(applicationContext);
+        ColorDelegateLoader.init();
         AndroidUtilities.init(this);
     }
 

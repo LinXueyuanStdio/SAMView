@@ -36,6 +36,7 @@ import com.same.lib.base.SharedConfig;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.helper.LayoutHelper;
+import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
 import com.timecat.component.locale.MLang;
@@ -134,12 +135,12 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         public AlertDialogCell(Context context) {
             super(context);
 
-            setBackgroundDrawable(DrawableManager.createSelectorDrawable(ColorManager.getColor(Theme.key_dialogButtonSelector), 2));
+            setBackgroundDrawable(DrawableManager.createSelectorDrawable(ColorManager.getColor(KeyHub.key_dialogButtonSelector), 2));
             setPadding(AndroidUtilities.dp(23), 0, AndroidUtilities.dp(23), 0);
 
             imageView = new ImageView(context);
             imageView.setScaleType(ImageView.ScaleType.CENTER);
-            imageView.setColorFilter(new PorterDuffColorFilter(ColorManager.getColor(Theme.key_dialogIcon), PorterDuff.Mode.MULTIPLY));
+            imageView.setColorFilter(new PorterDuffColorFilter(ColorManager.getColor(KeyHub.key_dialogIcon), PorterDuff.Mode.MULTIPLY));
             addView(imageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 40, Gravity.CENTER_VERTICAL | (SharedConfig.isRTL ? Gravity.RIGHT : Gravity.LEFT)));
 
             textView = new TextView(context);
@@ -147,7 +148,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             textView.setSingleLine(true);
             textView.setGravity(Gravity.CENTER_HORIZONTAL);
             textView.setEllipsize(TextUtils.TruncateAt.END);
-            textView.setTextColor(ColorManager.getColor(Theme.key_dialogTextBlack));
+            textView.setTextColor(ColorManager.getColor(KeyHub.key_dialogTextBlack));
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
             addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (SharedConfig.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL));
         }
@@ -184,7 +185,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         backgroundPaddings = new Rect();
         if (progressStyle != 3) {
             shadowDrawable = context.getResources().getDrawable(R.drawable.popup_fixed_alert).mutate();
-            shadowDrawable.setColorFilter(new PorterDuffColorFilter(getThemeColor(Theme.key_dialogBackground), PorterDuff.Mode.MULTIPLY));
+            shadowDrawable.setColorFilter(new PorterDuffColorFilter(getThemeColor(KeyHub.key_dialogBackground), PorterDuff.Mode.MULTIPLY));
             shadowDrawable.getPadding(backgroundPaddings);
         }
 
@@ -407,7 +408,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
 
             titleTextView = new TextView(getContext());
             titleTextView.setText(title);
-            titleTextView.setTextColor(getThemeColor(Theme.key_dialogTextBlack));
+            titleTextView.setTextColor(getThemeColor(KeyHub.key_dialogTextBlack));
             titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
             titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             titleTextView.setGravity((SharedConfig.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
@@ -417,7 +418,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         if (secondTitle != null && title != null) {
             secondTitleTextView = new TextView(getContext());
             secondTitleTextView.setText(secondTitle);
-            secondTitleTextView.setTextColor(getThemeColor(Theme.key_dialogTextGray3));
+            secondTitleTextView.setTextColor(getThemeColor(KeyHub.key_dialogTextGray3));
             secondTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
             secondTitleTextView.setGravity((SharedConfig.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP);
             titleContainer.addView(secondTitleTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (SharedConfig.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP, 0, 21, 0, 0));
@@ -426,7 +427,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         if (subtitle != null) {
             subtitleTextView = new TextView(getContext());
             subtitleTextView.setText(subtitle);
-            subtitleTextView.setTextColor(getThemeColor(Theme.key_dialogIcon));
+            subtitleTextView.setTextColor(getThemeColor(KeyHub.key_dialogIcon));
             subtitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             subtitleTextView.setGravity((SharedConfig.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
             containerView.addView(subtitleTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (SharedConfig.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 24, 0, 24, items != null ? 14 : 10));
@@ -456,7 +457,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 }
             };
             contentScrollView.setVerticalScrollBarEnabled(false);
-            AndroidUtilities.setScrollViewEdgeEffectColor(contentScrollView, getThemeColor(Theme.key_dialogScrollGlow));
+            AndroidUtilities.setScrollViewEdgeEffectColor(contentScrollView, getThemeColor(KeyHub.key_dialogScrollGlow));
             containerView.addView(contentScrollView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 0, 0, 0));
 
             scrollContainer = new LinearLayout(getContext());
@@ -465,10 +466,10 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         }
 
         messageTextView = new TextView(getContext());
-        messageTextView.setTextColor(getThemeColor(Theme.key_dialogTextBlack));
+        messageTextView.setTextColor(getThemeColor(KeyHub.key_dialogTextBlack));
         messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         messageTextView.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
-        messageTextView.setLinkTextColor(getThemeColor(Theme.key_dialogTextLink));
+        messageTextView.setLinkTextColor(getThemeColor(KeyHub.key_dialogTextLink));
         if (!messageTextViewClickable) {
             messageTextView.setClickable(false);
             messageTextView.setEnabled(false);
@@ -479,7 +480,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             containerView.addView(progressViewContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 44, Gravity.LEFT | Gravity.TOP, 23, title == null ? 24 : 0, 23, 24));
 
             RadialProgressView progressView = new RadialProgressView(getContext());
-            progressView.setProgressColor(getThemeColor(Theme.key_dialogProgressCircle));
+            progressView.setProgressColor(getThemeColor(KeyHub.key_dialogProgressCircle));
             progressViewContainer.addView(progressView, LayoutHelper.createFrame(44, 44, (SharedConfig.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP));
 
             messageTextView.setLines(1);
@@ -490,14 +491,14 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
 
             lineProgressView = new LineProgressView(getContext());
             lineProgressView.setProgress(currentProgress / 100.0f, false);
-            lineProgressView.setProgressColor(getThemeColor(Theme.key_dialogLineProgress));
-            lineProgressView.setBackColor(getThemeColor(Theme.key_dialogLineProgressBackground));
+            lineProgressView.setProgressColor(getThemeColor(KeyHub.key_dialogLineProgress));
+            lineProgressView.setBackColor(getThemeColor(KeyHub.key_dialogLineProgressBackground));
             containerView.addView(lineProgressView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 4, Gravity.LEFT | Gravity.CENTER_VERTICAL, 24, 0, 24, 0));
 
             lineProgressViewPercent = new TextView(getContext());
             lineProgressViewPercent.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             lineProgressViewPercent.setGravity((SharedConfig.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
-            lineProgressViewPercent.setTextColor(getThemeColor(Theme.key_dialogTextGray2));
+            lineProgressViewPercent.setTextColor(getThemeColor(KeyHub.key_dialogTextGray2));
             lineProgressViewPercent.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             containerView.addView(lineProgressViewPercent, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (SharedConfig.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 23, 4, 23, 24));
             updateLineProgressTextView();
@@ -506,7 +507,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             setCancelable(false);
 
             progressViewContainer = new FrameLayout(getContext());
-            progressViewContainer.setBackgroundDrawable(DrawableManager.createRoundRectDrawable(AndroidUtilities.dp(18), ColorManager.getColor(Theme.key_dialog_inlineProgressBackground)));
+            progressViewContainer.setBackgroundDrawable(DrawableManager.createRoundRectDrawable(AndroidUtilities.dp(18), ColorManager.getColor(KeyHub.key_dialog_inlineProgressBackground)));
             containerView.addView(progressViewContainer, LayoutHelper.createLinear(86, 86, Gravity.CENTER));
 
             RadialProgressView progressView = new RadialProgressView(getContext());
@@ -656,7 +657,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 //                textView.setLines(1);
                 //                textView.setSingleLine(true); //TODO
                 textView.setText(positiveButtonText.toString().toUpperCase());
-                textView.setBackgroundDrawable(DrawableManager.getRoundRectSelectorDrawable(getThemeColor(Theme.key_dialogButton)));
+                textView.setBackgroundDrawable(DrawableManager.getRoundRectSelectorDrawable(getThemeColor(KeyHub.key_dialogButton)));
                 textView.setPadding(AndroidUtilities.dp(10), 0, AndroidUtilities.dp(10), 0);
                 buttonsLayout.addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 36, Gravity.TOP | Gravity.RIGHT));
                 textView.setOnClickListener(v -> {
@@ -686,13 +687,13 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 textView.setMinWidth(AndroidUtilities.dp(64));
                 textView.setTag(Dialog.BUTTON_NEGATIVE);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-                textView.setTextColor(getThemeColor(Theme.key_dialogButton));
+                textView.setTextColor(getThemeColor(KeyHub.key_dialogButton));
                 textView.setGravity(Gravity.CENTER);
                 textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 textView.setEllipsize(TextUtils.TruncateAt.END);
                 textView.setSingleLine(true);
                 textView.setText(negativeButtonText.toString().toUpperCase());
-                textView.setBackgroundDrawable(DrawableManager.getRoundRectSelectorDrawable(getThemeColor(Theme.key_dialogButton)));
+                textView.setBackgroundDrawable(DrawableManager.getRoundRectSelectorDrawable(getThemeColor(KeyHub.key_dialogButton)));
                 textView.setPadding(AndroidUtilities.dp(10), 0, AndroidUtilities.dp(10), 0);
                 buttonsLayout.addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 36, Gravity.TOP | Gravity.RIGHT));
                 textView.setOnClickListener(v -> {
@@ -722,7 +723,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 textView.setMinWidth(AndroidUtilities.dp(64));
                 textView.setTag(Dialog.BUTTON_NEUTRAL);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-                textView.setTextColor(getThemeColor(Theme.key_dialogButton));
+                textView.setTextColor(getThemeColor(KeyHub.key_dialogButton));
                 textView.setGravity(Gravity.CENTER);
                 textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 textView.setEllipsize(TextUtils.TruncateAt.END);

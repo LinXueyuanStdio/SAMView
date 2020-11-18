@@ -14,9 +14,10 @@ import android.text.TextPaint;
 import android.util.Property;
 import android.view.View;
 
-import com.same.lib.core.AnimationProperties;
-import com.same.lib.theme.Theme;
 import com.same.lib.base.AndroidUtilities;
+import com.same.lib.core.AnimationProperties;
+import com.same.lib.theme.KeyHub;
+import com.same.lib.theme.Theme;
 import com.same.ui.theme.ChatTheme;
 
 /**
@@ -122,7 +123,7 @@ public class WallpaperCheckBoxView extends View {
         rect.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
         canvas.drawRoundRect(rect, AndroidUtilities.dp(4), AndroidUtilities.dp(4), ChatTheme.chat_actionBackgroundPaint);
 
-        textPaint.setColor(Theme.getColor(Theme.key_chat_serviceText));
+        textPaint.setColor(Theme.getColor(KeyHub.key_chat_serviceText));
         int x = (getMeasuredWidth() - currentTextSize - AndroidUtilities.dp(28)) / 2;
         canvas.drawText(currentText, x + AndroidUtilities.dp(28), AndroidUtilities.dp(21), textPaint);
 
@@ -142,7 +143,7 @@ public class WallpaperCheckBoxView extends View {
             rect.set(bounce, bounce, AndroidUtilities.dp(18) - bounce, AndroidUtilities.dp(18) - bounce);
 
             drawBitmap.eraseColor(0);
-            backgroundPaint.setColor(Theme.getColor(Theme.key_chat_serviceText));
+            backgroundPaint.setColor(Theme.getColor(KeyHub.key_chat_serviceText));
             drawCanvas.drawRoundRect(rect, rect.width() / 2, rect.height() / 2, backgroundPaint);
 
             if (checkProgress != 1) {

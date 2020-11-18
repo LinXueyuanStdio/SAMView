@@ -13,11 +13,8 @@ import android.text.TextUtils;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
 
-import com.same.lib.R;
-import com.same.lib.drawable.BackgroundGradientDrawable;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.NotificationCenter;
-import com.timecat.component.locale.MLang;
 
 import org.json.JSONObject;
 
@@ -174,21 +171,6 @@ public class ThemeInfo {
         if (accent != null) {
             accent.overrideWallpaper = info;
         }
-    }
-
-    public String getName(Context context) {
-        if ("Blue".equals(name)) {
-            return MLang.getString(context, "ThemeClassic", R.string.ThemeClassic);
-        } else if ("Dark Blue".equals(name)) {
-            return MLang.getString(context,"ThemeDark", R.string.ThemeDark);
-        } else if ("Arctic Blue".equals(name)) {
-            return MLang.getString(context,"ThemeArcticBlue", R.string.ThemeArcticBlue);
-        } else if ("Day".equals(name)) {
-            return MLang.getString(context,"ThemeDay", R.string.ThemeDay);
-        } else if ("Night".equals(name)) {
-            return MLang.getString(context,"ThemeNight", R.string.ThemeNight);
-        }
-        return info != null ? info.title : name;
     }
 
     public void setCurrentAccentId(int id) {

@@ -11,11 +11,12 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.same.lib.helper.LayoutHelper;
-import com.same.ui.theme.CommonTheme;
-import com.same.lib.theme.Theme;
 import com.same.lib.base.AndroidUtilities;
+import com.same.lib.helper.LayoutHelper;
+import com.same.lib.theme.KeyHub;
+import com.same.lib.theme.Theme;
 import com.same.ui.R;
+import com.same.ui.theme.CommonTheme;
 import com.timecat.component.locale.MLang;
 
 import static com.same.lib.base.SharedConfig.isRTL;
@@ -43,7 +44,7 @@ public class LanguageCell extends FrameLayout {
         isDialog = dialog;
 
         textView = new TextView(context);
-        textView.setTextColor(Theme.getColor(dialog ? Theme.key_dialogTextBlack : Theme.key_windowBackgroundWhiteBlackText));
+        textView.setTextColor(Theme.getColor(dialog ? KeyHub.key_dialogTextBlack : KeyHub.key_windowBackgroundWhiteBlackText));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         textView.setLines(1);
         textView.setMaxLines(1);
@@ -53,7 +54,7 @@ public class LanguageCell extends FrameLayout {
         addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (MLang.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, MLang.isRTL ? 23 + 48 : 23, (isDialog ? 4 : 7), MLang.isRTL ? 23 : 23 + 48, 0));
 
         textView2 = new TextView(context);
-        textView2.setTextColor(Theme.getColor(dialog ? Theme.key_dialogTextGray3 : Theme.key_windowBackgroundWhiteGrayText3));
+        textView2.setTextColor(Theme.getColor(dialog ? KeyHub.key_dialogTextGray3 : KeyHub.key_windowBackgroundWhiteGrayText3));
         textView2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
         textView2.setLines(1);
         textView2.setMaxLines(1);
@@ -63,7 +64,7 @@ public class LanguageCell extends FrameLayout {
         addView(textView2, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (MLang.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, MLang.isRTL ? 23 + 48 : 23, (isDialog ? 25 : 29), MLang.isRTL ? 23 : 23 + 48, 0));
 
         checkImage = new ImageView(context);
-        checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), PorterDuff.Mode.MULTIPLY));
+        checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(KeyHub.key_featuredStickers_addedIcon), PorterDuff.Mode.MULTIPLY));
         checkImage.setImageResource(R.mipmap.sticker_added);
         addView(checkImage, LayoutHelper.createFrame(19, 14, (MLang.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, 23, 0, 23, 0));
     }

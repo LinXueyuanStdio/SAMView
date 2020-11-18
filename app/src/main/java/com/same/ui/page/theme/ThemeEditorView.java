@@ -59,6 +59,7 @@ import com.same.lib.drawable.DrawableManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.listview.LinearLayoutManager;
 import com.same.lib.listview.RecyclerView;
+import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
 import com.same.lib.theme.ThemeInfo;
@@ -580,10 +581,10 @@ public class ThemeEditorView {
                             for (int a = 0; a < currentThemeDesription.size(); a++) {
                                 ThemeDescription description = currentThemeDesription.get(a);
                                 String key = description.getCurrentKey();
-                                if (a == 0 && key.equals(Theme.key_chat_wallpaper)
-                                        || key.equals(Theme.key_chat_wallpaper_gradient_to)
-                                        || key.equals(Theme.key_windowBackgroundWhite)
-                                        || key.equals(Theme.key_windowBackgroundGray)) {
+                                if (a == 0 && key.equals(KeyHub.key_chat_wallpaper)
+                                        || key.equals(KeyHub.key_chat_wallpaper_gradient_to)
+                                        || key.equals(KeyHub.key_windowBackgroundWhite)
+                                        || key.equals(KeyHub.key_windowBackgroundGray)) {
                                     color = 0xff000000 | color;
                                 }
                                 currentThemeDesription.get(a).setColor(getContext(), color, false);
@@ -795,7 +796,7 @@ public class ThemeEditorView {
                 currentThemeDesriptionPosition = position;
                 for (int a = 0; a < currentThemeDesription.size(); a++) {
                     ThemeDescription description = currentThemeDesription.get(a);
-                    if (description.getCurrentKey().equals(Theme.key_chat_wallpaper)) {
+                    if (description.getCurrentKey().equals(KeyHub.key_chat_wallpaper)) {
                         wallpaperUpdater.showAlert(true);
                         return;
                     }
@@ -1273,7 +1274,7 @@ public class ThemeEditorView {
                     ArrayList<ThemeDescription> arrayList = searchResult.get(position - 1);
                     ThemeDescription description = arrayList.get(0);
                     int color;
-                    if (description.getCurrentKey().equals(Theme.key_chat_wallpaper)) {
+                    if (description.getCurrentKey().equals(KeyHub.key_chat_wallpaper)) {
                         color = 0;
                     } else {
                         color = description.getSetColor();
@@ -1311,9 +1312,9 @@ public class ThemeEditorView {
                     }
                     arrayList.add(description);
                 }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !itemsMap.containsKey(Theme.key_windowBackgroundGray)) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !itemsMap.containsKey(KeyHub.key_windowBackgroundGray)) {
                     final ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-                    arrayList.add(new ThemeDescription(null, 0, null, null, null, null, Theme.key_windowBackgroundGray));
+                    arrayList.add(new ThemeDescription(null, 0, null, null, null, null, KeyHub.key_windowBackgroundGray));
                     items.add(arrayList);
                 }
             }
@@ -1358,7 +1359,7 @@ public class ThemeEditorView {
                     ArrayList<ThemeDescription> arrayList = items.get(position - 1);
                     ThemeDescription description = arrayList.get(0);
                     int color;
-                    if (description.getCurrentKey().equals(Theme.key_chat_wallpaper)) {
+                    if (description.getCurrentKey().equals(KeyHub.key_chat_wallpaper)) {
                         color = 0;
                     } else {
                         color = description.getSetColor();

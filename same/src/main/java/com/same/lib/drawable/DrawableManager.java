@@ -26,7 +26,7 @@ import android.util.StateSet;
 import com.same.lib.R;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.SharedConfig;
-import com.same.lib.core.KeyHub;
+import com.same.lib.theme.KeyHub;
 
 import java.lang.reflect.Method;
 import java.util.Calendar;

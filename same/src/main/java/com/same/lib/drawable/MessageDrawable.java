@@ -21,6 +21,7 @@ import android.os.Build;
 
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.SharedConfig;
+import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 
 import java.nio.ByteBuffer;
@@ -108,14 +109,14 @@ public class MessageDrawable extends Drawable {
         int color;
         Integer gradientColor;
         if (isOut) {
-            color = getColor(isSelected ? Theme.key_chat_outBubbleSelected : Theme.key_chat_outBubble);
-            gradientColor = getCurrentColor(Theme.key_chat_outBubbleGradient);
+            color = getColor(isSelected ? KeyHub.key_chat_outBubbleSelected : KeyHub.key_chat_outBubble);
+            gradientColor = getCurrentColor(KeyHub.key_chat_outBubbleGradient);
         } else {
-            color = getColor(isSelected ? Theme.key_chat_inBubbleSelected : Theme.key_chat_inBubble);
+            color = getColor(isSelected ? KeyHub.key_chat_inBubbleSelected : KeyHub.key_chat_inBubble);
             gradientColor = null;
         }
         if (gradientColor != null) {
-            color = getColor(Theme.key_chat_outBubble);
+            color = getColor(KeyHub.key_chat_outBubble);
         }
         if (gradientColor == null) {
             gradientColor = 0;
@@ -172,7 +173,7 @@ public class MessageDrawable extends Drawable {
         boolean forceSetColor = false;
 
         boolean drawWithShadow = gradientShader == null && !isSelected;
-        int shadowColor = getColor(isOut ? Theme.key_chat_outBubbleShadow : Theme.key_chat_inBubbleShadow);
+        int shadowColor = getColor(isOut ? KeyHub.key_chat_outBubbleShadow : KeyHub.key_chat_inBubbleShadow);
         if (currentBackgroundDrawableRadius[idx2][idx] != newRad || (drawWithShadow && shadowDrawableColor[idx] != shadowColor)) {
             currentBackgroundDrawableRadius[idx2][idx] = newRad;
             try {
@@ -221,9 +222,9 @@ public class MessageDrawable extends Drawable {
         }
         int color;
         if (isSelected) {
-            color = getColor(isOut ? Theme.key_chat_outBubbleSelected : Theme.key_chat_inBubbleSelected);
+            color = getColor(isOut ? KeyHub.key_chat_outBubbleSelected : KeyHub.key_chat_inBubbleSelected);
         } else {
-            color = getColor(isOut ? Theme.key_chat_outBubble : Theme.key_chat_inBubble);
+            color = getColor(isOut ? KeyHub.key_chat_outBubble : KeyHub.key_chat_inBubble);
         }
         if (backgroundDrawable[idx2][idx] != null && (backgroundDrawableColor[idx2][idx] != color || forceSetColor)) {
             backgroundDrawable[idx2][idx].setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
@@ -281,7 +282,7 @@ public class MessageDrawable extends Drawable {
 
             }
         }
-        int color = getColor(isOut ? Theme.key_chat_outBubbleShadow : Theme.key_chat_inBubbleShadow);
+        int color = getColor(isOut ? KeyHub.key_chat_outBubbleShadow : KeyHub.key_chat_inBubbleShadow);
         if (shadowDrawable[idx] != null && (shadowDrawableColor[idx] != color || forceSetColor)) {
             shadowDrawable[idx].setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
             shadowDrawableColor[idx] = color;
@@ -477,7 +478,7 @@ public class MessageDrawable extends Drawable {
 
         canvas.drawPath(path, p);
         if (gradientShader != null && isSelected) {
-            selectedPaint.setColor(getColor(Theme.key_chat_outBubbleGradientSelectedOverlay));
+            selectedPaint.setColor(getColor(KeyHub.key_chat_outBubbleGradientSelectedOverlay));
             canvas.drawPath(path, selectedPaint);
         }
     }
@@ -488,7 +489,7 @@ public class MessageDrawable extends Drawable {
             this.alpha = alpha;
             paint.setAlpha(alpha);
             if (isOut) {
-                selectedPaint.setAlpha((int) (Color.alpha(getColor(Theme.key_chat_outBubbleGradientSelectedOverlay)) * (alpha / 255.0f)));
+                selectedPaint.setAlpha((int) (Color.alpha(getColor(KeyHub.key_chat_outBubbleGradientSelectedOverlay)) * (alpha / 255.0f)));
             }
         }
         if (gradientShader == null) {

@@ -7,10 +7,11 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.text.TextPaint;
 
-import com.same.lib.theme.AbsTheme;
-import com.same.lib.theme.Theme;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.SharedConfig;
+import com.same.lib.theme.AbsTheme;
+import com.same.lib.theme.KeyHub;
+import com.same.lib.theme.Theme;
 
 /**
  * @author 林学渊
@@ -235,21 +236,21 @@ public class ChatTheme extends AbsTheme {
         }
 
         if ( !fontsOnly) {
-            chat_gamePaint.setColor(Theme.getColor(Theme.key_chat_previewGameText));
-            chat_durationPaint.setColor(Theme.getColor(Theme.key_chat_previewDurationText));
-            chat_botButtonPaint.setColor(Theme.getColor(Theme.key_chat_botButtonText));
-            chat_urlPaint.setColor(Theme.getColor(Theme.key_chat_linkSelectBackground));
-            chat_botProgressPaint.setColor(Theme.getColor(Theme.key_chat_botProgress));
-            chat_deleteProgressPaint.setColor(Theme.getColor(Theme.key_chat_secretTimeText));
-            chat_textSearchSelectionPaint.setColor(Theme.getColor(Theme.key_chat_textSelectBackground));
-            chat_msgErrorPaint.setColor(Theme.getColor(Theme.key_chat_sentError));
-            chat_statusPaint.setColor(Theme.getColor(Theme.key_chat_status));
-            chat_statusRecordPaint.setColor(Theme.getColor(Theme.key_chat_status));
-            chat_actionTextPaint.setColor(Theme.getColor(Theme.key_chat_serviceText));
-            chat_actionTextPaint.linkColor = Theme.getColor(Theme.key_chat_serviceLink);
-            chat_contextResult_titleTextPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-            chat_composeBackgroundPaint.setColor(Theme.getColor(Theme.key_chat_messagePanelBackground));
-            chat_timeBackgroundPaint.setColor(Theme.getColor(Theme.key_chat_mediaTimeBackground));
+            chat_gamePaint.setColor(Theme.getColor(KeyHub.key_chat_previewGameText));
+            chat_durationPaint.setColor(Theme.getColor(KeyHub.key_chat_previewDurationText));
+            chat_botButtonPaint.setColor(Theme.getColor(KeyHub.key_chat_botButtonText));
+            chat_urlPaint.setColor(Theme.getColor(KeyHub.key_chat_linkSelectBackground));
+            chat_botProgressPaint.setColor(Theme.getColor(KeyHub.key_chat_botProgress));
+            chat_deleteProgressPaint.setColor(Theme.getColor(KeyHub.key_chat_secretTimeText));
+            chat_textSearchSelectionPaint.setColor(Theme.getColor(KeyHub.key_chat_textSelectBackground));
+            chat_msgErrorPaint.setColor(Theme.getColor(KeyHub.key_chat_sentError));
+            chat_statusPaint.setColor(Theme.getColor(KeyHub.key_chat_status));
+            chat_statusRecordPaint.setColor(Theme.getColor(KeyHub.key_chat_status));
+            chat_actionTextPaint.setColor(Theme.getColor(KeyHub.key_chat_serviceText));
+            chat_actionTextPaint.linkColor = Theme.getColor(KeyHub.key_chat_serviceLink);
+            chat_contextResult_titleTextPaint.setColor(Theme.getColor(KeyHub.key_windowBackgroundWhiteBlackText));
+            chat_composeBackgroundPaint.setColor(Theme.getColor(KeyHub.key_chat_messagePanelBackground));
+            chat_timeBackgroundPaint.setColor(Theme.getColor(KeyHub.key_chat_mediaTimeBackground));
             Theme.applyChatServiceMessageColor();
             refreshAttachButtonsColors();
         }

@@ -10,11 +10,11 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.same.lib.base.AndroidUtilities;
 import com.same.lib.core.RadialProgressView;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.helper.LayoutHelper;
-import com.same.lib.theme.Theme;
-import com.same.lib.base.AndroidUtilities;
+import com.same.lib.theme.KeyHub;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
 
@@ -41,7 +41,7 @@ public class EmptyTextProgressView extends FrameLayout {
 
         textView = new TextView(context);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-        textView.setTextColor(ColorManager.getColor(Theme.key_emptyListPlaceholder));
+        textView.setTextColor(ColorManager.getColor(KeyHub.key_emptyListPlaceholder));
         textView.setGravity(Gravity.CENTER);
         textView.setVisibility(INVISIBLE);
         textView.setPadding(AndroidUtilities.dp(20), 0, AndroidUtilities.dp(20), 0);
@@ -79,7 +79,7 @@ public class EmptyTextProgressView extends FrameLayout {
         } else {
             Drawable drawable = getContext().getResources().getDrawable(resId).mutate();
             if (drawable != null) {
-                drawable.setColorFilter(new PorterDuffColorFilter(ColorManager.getColor(Theme.key_emptyListPlaceholder), PorterDuff.Mode.MULTIPLY));
+                drawable.setColorFilter(new PorterDuffColorFilter(ColorManager.getColor(KeyHub.key_emptyListPlaceholder), PorterDuff.Mode.MULTIPLY));
             }
             textView.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
             textView.setCompoundDrawablePadding(AndroidUtilities.dp(1));

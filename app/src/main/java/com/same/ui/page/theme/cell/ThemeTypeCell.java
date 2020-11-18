@@ -11,11 +11,12 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.same.lib.helper.LayoutHelper;
-import com.same.ui.theme.CommonTheme;
-import com.same.lib.theme.Theme;
 import com.same.lib.base.AndroidUtilities;
+import com.same.lib.helper.LayoutHelper;
+import com.same.lib.theme.KeyHub;
+import com.same.lib.theme.Theme;
 import com.same.ui.R;
+import com.same.ui.theme.CommonTheme;
 
 import static com.same.lib.base.SharedConfig.isRTL;
 
@@ -38,7 +39,7 @@ public class ThemeTypeCell extends FrameLayout {
         setWillNotDraw(false);
 
         textView = new TextView(context);
-        textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        textView.setTextColor(Theme.getColor(KeyHub.key_windowBackgroundWhiteBlackText));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         textView.setLines(1);
         textView.setMaxLines(1);
@@ -48,7 +49,7 @@ public class ThemeTypeCell extends FrameLayout {
         addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, isRTL ? 23 + 48 : 21, 0, isRTL ? 21 : 23, 0));
 
         checkImage = new ImageView(context);
-        checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), PorterDuff.Mode.MULTIPLY));
+        checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(KeyHub.key_featuredStickers_addedIcon), PorterDuff.Mode.MULTIPLY));
         checkImage.setImageResource(R.mipmap.sticker_added);
         addView(checkImage, LayoutHelper.createFrame(19, 14, (isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, 23, 0, 23, 0));
     }

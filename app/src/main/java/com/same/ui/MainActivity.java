@@ -26,22 +26,23 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.same.lib.theme.AbsTheme;
+import com.same.lib.base.AndroidUtilities;
+import com.same.lib.base.SharedConfig;
 import com.same.lib.core.AlertDialog;
 import com.same.lib.core.BasePage;
 import com.same.lib.core.ContainerLayout;
 import com.same.lib.core.DrawerLayoutContainer;
 import com.same.lib.helper.LayoutHelper;
-import com.same.ui.theme.CommonTheme;
+import com.same.lib.theme.AbsTheme;
+import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeManager;
 import com.same.lib.theme.ThemeRes;
-import com.same.lib.base.AndroidUtilities;
-import com.same.lib.base.SharedConfig;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.theme.ThemeEditorView;
 import com.same.ui.page.theme.ThemePage;
 import com.same.ui.theme.ChatTheme;
+import com.same.ui.theme.CommonTheme;
 import com.same.ui.theme.DialogTheme;
 import com.same.ui.theme.ProfileTheme;
 
@@ -82,7 +83,7 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
         setTheme(R.style.Theme_TMessages);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             try {
-                setTaskDescription(new ActivityManager.TaskDescription(null, null, Theme.getColor(Theme.key_actionBarDefault) | 0xff000000));
+                setTaskDescription(new ActivityManager.TaskDescription(null, null, Theme.getColor(KeyHub.key_actionBarDefault) | 0xff000000));
             } catch (Exception ignore) {
 
             }
@@ -104,7 +105,7 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
             public void draw(Canvas canvas) {
                 if (SharedConfig.smoothKeyboard) {
                     int color = getColor();
-                    int newColor = Theme.getColor(Theme.key_windowBackgroundWhite);
+                    int newColor = Theme.getColor(KeyHub.key_windowBackgroundWhite);
                     if (color != newColor) {
                         setColor(newColor);
                     }
@@ -137,7 +138,7 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
             @Override
             public void setThemeAnimationValue(float value) {
                 super.setThemeAnimationValue(value);
-                drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(KeyHub.key_windowBackgroundWhite));
             }
         };
         FrameLayout frameLayout = new FrameLayout(this);
@@ -149,7 +150,7 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
         }
 
         drawerLayoutContainer = new DrawerLayoutContainer(this);
-        drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+        drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(KeyHub.key_windowBackgroundWhite));
         frameLayout.addView(drawerLayoutContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
         if (AndroidUtilities.isTablet()) {
@@ -334,11 +335,11 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
 
     private void checkSystemBarColors() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int color = Theme.getColor(Theme.key_actionBarDefault, null, true);
+            int color = Theme.getColor(KeyHub.key_actionBarDefault, null, true);
             AndroidUtilities.setLightStatusBar(getWindow(), color == Color.WHITE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 final Window window = getWindow();
-                color = Theme.getColor(Theme.key_windowBackgroundGray, null, true);
+                color = Theme.getColor(KeyHub.key_windowBackgroundGray, null, true);
                 if (window.getNavigationBarColor() != color) {
                     window.setNavigationBarColor(color);
                     final float brightness = AndroidUtilities.computePerceivedBrightness(color);
