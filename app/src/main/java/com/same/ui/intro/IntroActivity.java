@@ -31,6 +31,7 @@ import com.same.lib.base.DispatchQueue;
 import com.same.lib.base.SharedConfig;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.helper.LayoutHelper;
+import com.same.lib.intro.Intro;
 import com.same.ui.MainActivity;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;

@@ -36,6 +36,7 @@ import com.same.ui.BuildConfig;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.language.LanguageSelectPage;
+import com.same.ui.intro.IntroActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -73,7 +74,7 @@ public class ThemePage extends BasePage {
         LinearLayout containerLayout = new LinearLayout(context);
         containerLayout.setOrientation(LinearLayout.VERTICAL);
 
-        containerLayout.addView(createButton(context, "分享主题", new View.OnClickListener() {
+        containerLayout.addView(createButton(context, "intro", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getParentActivity(), IntroActivity.class);

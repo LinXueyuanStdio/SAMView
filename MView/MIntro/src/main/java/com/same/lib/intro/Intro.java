@@ -1,4 +1,4 @@
-package com.same.ui.intro;
+package com.same.lib.intro;
 
 /**
  * @author 林学渊
