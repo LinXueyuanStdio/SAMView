@@ -121,7 +121,7 @@ public class ThemeInfo {
 
     void loadOverrideWallpaper(SharedPreferences sharedPreferences, ThemeAccent accent, String key) {
         try {
-            String json = sharedPreferences.getString(key,  null);
+            String json = sharedPreferences.getString(key, null);
             if (TextUtils.isEmpty(json)) {
                 return;
             }
@@ -365,20 +365,20 @@ public class ThemeInfo {
         loadingThemeWallpaperName = null;
         newPathToWallpaper = null;
         addObservers();
-//        FileLoader.getInstance(account).loadFile(info.document, info, 1, 1);TODO 文件加载
+        //        FileLoader.getInstance(account).loadFile(info.document, info, 1, 1);TODO 文件加载
     }
 
     void addObservers() {
         //TODO
-//        NotificationCenter.getInstance(account).addObserver(this, NotificationCenter.fileDidLoad);
-//        NotificationCenter.getInstance(account).addObserver(this, NotificationCenter.fileDidFailToLoad);
+        //        NotificationCenter.getInstance(account).addObserver(this, NotificationCenter.fileDidLoad);
+        //        NotificationCenter.getInstance(account).addObserver(this, NotificationCenter.fileDidFailToLoad);
     }
 
     @UiThread
     void removeObservers() {
         //TODO
-//        NotificationCenter.getInstance(account).removeObserver(this, NotificationCenter.fileDidLoad);
-//        NotificationCenter.getInstance(account).removeObserver(this, NotificationCenter.fileDidFailToLoad);
+        //        NotificationCenter.getInstance(account).removeObserver(this, NotificationCenter.fileDidLoad);
+        //        NotificationCenter.getInstance(account).removeObserver(this, NotificationCenter.fileDidFailToLoad);
     }
 
     void onFinishLoadingRemoteTheme(Context context) {
@@ -533,7 +533,8 @@ public class ThemeInfo {
                 if (scale > 1.0f) {
                     do {
                         options.inSampleSize *= 2;
-                    } while (options.inSampleSize < scale);
+                    }
+                    while (options.inSampleSize < scale);
                 }
                 options.inJustDecodeBounds = false;
                 Bitmap wallpaper;
@@ -595,58 +596,58 @@ public class ThemeInfo {
         return false;
     }
 
-//    @Override TODO 文件加载？
-//    public void didReceivedNotification(int id, int account, Object... args) {
-//        if (id == NotificationCenter.fileDidLoad || id == NotificationCenter.fileDidFailToLoad) {
-//            String location = (String) args[0];
-//            if (info != null && info.document != null) {
-//                if (location.equals(loadingThemeWallpaperName)) {
-//                    loadingThemeWallpaperName = null;
-//                    File file = (File) args[1];
-//                    AndroidUtilities.globalQueue.postRunnable(() -> {
-//                        createBackground(file, newPathToWallpaper);
-//                        AndroidUtilities.runOnUIThread(this::onFinishLoadingRemoteTheme);
-//                    });
-//                } else {
-//                    String name = AndroidUtilities.getAttachFileName(info.document);
-//                    if (location.equals(name)) {
-//                        removeObservers();
-//                        if (id == NotificationCenter.fileDidLoad) {
-//                            File locFile = new File(pathToFile);
-//                            ThemeInfo themeInfo = fillThemeValues(locFile, info.title, info);
-//                            if (themeInfo != null && themeInfo.pathToWallpaper != null) {
-//                                File file = new File(themeInfo.pathToWallpaper);
-//                                if (!file.exists()) {
-//                                    patternBgColor = themeInfo.patternBgColor;
-//                                    patternBgGradientColor = themeInfo.patternBgGradientColor;
-//                                    patternBgGradientRotation = themeInfo.patternBgGradientRotation;
-//                                    isBlured = themeInfo.isBlured;
-//                                    patternIntensity = themeInfo.patternIntensity;
-//                                    newPathToWallpaper = themeInfo.pathToWallpaper;
-//
-//                                    //TODO 发起请求
-//                                    //                                        TLRPC.TL_account_getWallPaper req = new TLRPC.TL_account_getWallPaper();
-//                                    //                                        TLRPC.TL_inputWallPaperSlug inputWallPaperSlug = new TLRPC.TL_inputWallPaperSlug();
-//                                    //                                        inputWallPaperSlug.slug = themeInfo.slug;
-//                                    //                                        req.wallpaper = inputWallPaperSlug;
-//                                    //                                        ConnectionsManager.getInstance(themeInfo.account).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
-//                                    //                                            if (response instanceof WallPaper) {
-//                                    //                                                WallPaper wallPaper = (WallPaper) response;
-//                                    //                                                loadingThemeWallpaperName = FileLoader.getAttachFileName(wallPaper.document);
-//                                    //                                                addObservers();
-//                                    //                                                FileLoader.getInstance(themeInfo.account).loadFile(wallPaper.document, wallPaper, 1, 1);
-//                                    //                                            } else {
-//                                    //                                                onFinishLoadingRemoteTheme();
-//                                    //                                            }
-//                                    //                                        }));
-//                                    return;
-//                                }
-//                            }
-//                            onFinishLoadingRemoteTheme();
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
+    //    @Override TODO 文件加载？
+    //    public void didReceivedNotification(int id, int account, Object... args) {
+    //        if (id == NotificationCenter.fileDidLoad || id == NotificationCenter.fileDidFailToLoad) {
+    //            String location = (String) args[0];
+    //            if (info != null && info.document != null) {
+    //                if (location.equals(loadingThemeWallpaperName)) {
+    //                    loadingThemeWallpaperName = null;
+    //                    File file = (File) args[1];
+    //                    AndroidUtilities.globalQueue.postRunnable(() -> {
+    //                        createBackground(file, newPathToWallpaper);
+    //                        AndroidUtilities.runOnUIThread(this::onFinishLoadingRemoteTheme);
+    //                    });
+    //                } else {
+    //                    String name = AndroidUtilities.getAttachFileName(info.document);
+    //                    if (location.equals(name)) {
+    //                        removeObservers();
+    //                        if (id == NotificationCenter.fileDidLoad) {
+    //                            File locFile = new File(pathToFile);
+    //                            ThemeInfo themeInfo = fillThemeValues(locFile, info.title, info);
+    //                            if (themeInfo != null && themeInfo.pathToWallpaper != null) {
+    //                                File file = new File(themeInfo.pathToWallpaper);
+    //                                if (!file.exists()) {
+    //                                    patternBgColor = themeInfo.patternBgColor;
+    //                                    patternBgGradientColor = themeInfo.patternBgGradientColor;
+    //                                    patternBgGradientRotation = themeInfo.patternBgGradientRotation;
+    //                                    isBlured = themeInfo.isBlured;
+    //                                    patternIntensity = themeInfo.patternIntensity;
+    //                                    newPathToWallpaper = themeInfo.pathToWallpaper;
+    //
+    //                                    //TODO 发起请求
+    //                                    //                                        TLRPC.TL_account_getWallPaper req = new TLRPC.TL_account_getWallPaper();
+    //                                    //                                        TLRPC.TL_inputWallPaperSlug inputWallPaperSlug = new TLRPC.TL_inputWallPaperSlug();
+    //                                    //                                        inputWallPaperSlug.slug = themeInfo.slug;
+    //                                    //                                        req.wallpaper = inputWallPaperSlug;
+    //                                    //                                        ConnectionsManager.getInstance(themeInfo.account).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+    //                                    //                                            if (response instanceof WallPaper) {
+    //                                    //                                                WallPaper wallPaper = (WallPaper) response;
+    //                                    //                                                loadingThemeWallpaperName = FileLoader.getAttachFileName(wallPaper.document);
+    //                                    //                                                addObservers();
+    //                                    //                                                FileLoader.getInstance(themeInfo.account).loadFile(wallPaper.document, wallPaper, 1, 1);
+    //                                    //                                            } else {
+    //                                    //                                                onFinishLoadingRemoteTheme();
+    //                                    //                                            }
+    //                                    //                                        }));
+    //                                    return;
+    //                                }
+    //                            }
+    //                            onFinishLoadingRemoteTheme();
+    //                        }
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
 }

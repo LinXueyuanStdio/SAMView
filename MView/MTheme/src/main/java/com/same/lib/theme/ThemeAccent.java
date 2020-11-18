@@ -12,8 +12,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 
-import static com.same.lib.theme.Theme.defaultColors;
-import static com.same.lib.theme.Theme.fallbackKeys;
 import static com.same.lib.theme.KeyHub.key_chat_messageLinkOut;
 import static com.same.lib.theme.KeyHub.key_chat_messageTextOut;
 import static com.same.lib.theme.KeyHub.key_chat_outAudioCacheSeekbar;
@@ -73,6 +71,8 @@ import static com.same.lib.theme.KeyHub.key_chat_outVoiceSeekbarSelected;
 import static com.same.lib.theme.KeyHub.key_chat_wallpaper;
 import static com.same.lib.theme.KeyHub.key_chat_wallpaper_gradient_rotation;
 import static com.same.lib.theme.KeyHub.key_chat_wallpaper_gradient_to;
+import static com.same.lib.theme.Theme.defaultColors;
+import static com.same.lib.theme.Theme.fallbackKeys;
 import static com.same.lib.theme.Theme.myMessagesColorKeys;
 import static com.same.lib.theme.Theme.themeAccentExclusionKeys;
 import static com.same.lib.theme.ThemeManager.changeColorAccent;
@@ -373,7 +373,7 @@ public class ThemeAccent {
         return path;
     }
 
-    public static ThemeAccent fromJson(){
+    public static ThemeAccent fromJson() {
         return new ThemeAccent();
     }
 }

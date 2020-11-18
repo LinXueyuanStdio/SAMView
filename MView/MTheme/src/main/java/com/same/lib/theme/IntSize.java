@@ -32,12 +32,12 @@ public class IntSize {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
 
         IntSize intSize = (IntSize) o;
 
-        if (width != intSize.width) return false;
+        if (width != intSize.width) { return false; }
         return height == intSize.height;
     }
 

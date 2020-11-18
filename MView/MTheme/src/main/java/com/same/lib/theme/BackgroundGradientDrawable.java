@@ -35,6 +35,7 @@ public class BackgroundGradientDrawable extends GradientDrawable {
 
     public interface Listener {
         void onSizeReady(int width, int height);
+
         void onAllSizesReady();
     }
 
@@ -42,6 +43,7 @@ public class BackgroundGradientDrawable extends GradientDrawable {
         @Override
         public void onSizeReady(int width, int height) {
         }
+
         @Override
         public void onAllSizesReady() {
         }

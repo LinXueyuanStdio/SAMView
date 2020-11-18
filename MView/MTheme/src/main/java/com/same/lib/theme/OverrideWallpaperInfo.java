@@ -104,7 +104,7 @@ public class OverrideWallpaperInfo {
     void save() {
         try {
             String key = getKey();
-            SharedPreferences themeConfig =AndroidUtilities.getThemeConfig();
+            SharedPreferences themeConfig = AndroidUtilities.getThemeConfig();
             SharedPreferences.Editor editor = themeConfig.edit();
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("wall", fileName);

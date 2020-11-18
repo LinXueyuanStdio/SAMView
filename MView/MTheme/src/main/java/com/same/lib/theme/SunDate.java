@@ -19,7 +19,7 @@ public class SunDate {
     }
 
     private static long days_since_2000_Jan_0(int y, int m, int d) {
-        return 367L * (long)y - (long)(7 * (y + (m + 9) / 12) / 4) + (long)(275 * m / 9) + (long)d - 730530L;
+        return 367L * (long) y - (long) (7 * (y + (m + 9) / 12) / 4) + (long) (275 * m / 9) + (long) d - 730530L;
     }
 
     private static double revolution(double x) {
@@ -87,7 +87,7 @@ public class SunDate {
         double[] sdec = new double[1];
         double[] sr = new double[1];
         int rc = 0;
-        double d = (double)days_since_2000_Jan_0(year, month, day) + 0.5D - lon / 360.0D;
+        double d = (double) days_since_2000_Jan_0(year, month, day) + 0.5D - lon / 360.0D;
         double sidtime = revolution(GMST0(d) + 180.0D + lon);
         sun_RA_decAtDay(d, sRA, sdec, sr);
         double tsouth = 12.0D - rev180(sidtime - sRA[0]) / 15.0D;
@@ -123,8 +123,8 @@ public class SunDate {
         double[] sun = new double[2];
         sunRiseSetForYear(calendar.get(1), calendar.get(2) + 1, calendar.get(5), lon, lat, sun);
         int timeZoneOffset = TimeZone.getDefault().getOffset(System.currentTimeMillis()) / 1000 / 60;
-        int sunrise = (int)(sun[0] * 60.0D) + timeZoneOffset;
-        int sunset = (int)(sun[1] * 60.0D) + timeZoneOffset;
+        int sunrise = (int) (sun[0] * 60.0D) + timeZoneOffset;
+        int sunset = (int) (sun[1] * 60.0D) + timeZoneOffset;
         if (sunrise < 0) {
             sunrise += 1440;
         } else if (sunrise > 1440) {

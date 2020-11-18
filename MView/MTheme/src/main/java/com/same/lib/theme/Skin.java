@@ -29,8 +29,9 @@ public class Skin {
     }
 
     public String toJson() {
-        return  "";
+        return "";
     }
+
     public static Skin fromJson(String json) {
         return new Skin();
     }

@@ -11,6 +11,8 @@ import android.content.Context;
  */
 public interface ThemeAction {
     void destroyResources();
+
     void createResources(Context context);
+
     void applyResources(Context context);
 }
