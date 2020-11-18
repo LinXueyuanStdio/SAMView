@@ -7,7 +7,7 @@ package com.same.lib.theme;
  * @description null
  * @usage null
  */
-public class WallPaper {
+public class Wallpaper {
 
     public long id;
     public int flags;
@@ -18,9 +18,9 @@ public class WallPaper {
     public long access_hash;
     public String slug;
     public Document document;
-    public WallPaperSettings settings;
+    public WallpaperSettings settings;
 
-    public static class WallPaperSettings {
+    public static class WallpaperSettings {
         public int flags;
         public boolean blur;
         public boolean motion;

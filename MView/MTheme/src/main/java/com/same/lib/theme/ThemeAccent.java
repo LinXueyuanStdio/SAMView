@@ -104,7 +104,7 @@ public class ThemeAccent {
     public boolean patternMotion;
 
     public Skin info;
-    public WallPaper pattern;
+    public Wallpaper pattern;
     public int account;
 
     public String pathToFile;

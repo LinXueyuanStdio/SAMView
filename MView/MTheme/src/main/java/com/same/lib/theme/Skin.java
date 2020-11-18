@@ -25,7 +25,7 @@ public class Skin {
         public int accent_color;
         public int message_top_color;
         public int message_bottom_color;
-        public WallPaper wallpaper;
+        public Wallpaper wallpaper;
     }
 
     public String toJson() {
