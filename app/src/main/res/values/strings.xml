@@ -15,6 +15,9 @@
     <string name="DeleteLocalizationTitle">Delete language pack</string>
     <string name="DeleteLocalizationText">Are you sure you want to delete **%1$s** language pack?</string>
 
+    <string name="CheckBoxPageName">CheckBoxPageName</string>
+    <string name="SAMView">SAMView</string>
+
     <!--theme view-->
     <string name="Theme">Theme</string>
     <string name="AutoNightTheme">Auto-Night Mode</string>

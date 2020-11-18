@@ -1,10 +1,13 @@
 package com.same.ui;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Shader;
@@ -18,6 +21,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
@@ -26,6 +30,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.same.lib.anim.Easings;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.SharedConfig;
 import com.same.lib.core.AlertDialog;
@@ -36,10 +41,12 @@ import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.AbsTheme;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
+import com.same.lib.theme.ThemeInfo;
 import com.same.lib.theme.ThemeManager;
 import com.same.lib.theme.ThemeRes;
 import com.same.lib.theme.WallpaperManager;
 import com.same.ui.lang.MyLang;
+import com.same.ui.page.main.MainPage;
 import com.same.ui.page.theme.ThemeEditorView;
 import com.same.ui.page.theme.ThemePage;
 import com.same.ui.theme.ChatTheme;
@@ -295,7 +302,7 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
         //应用的壁纸
         WallpaperManager.loadWallpaper(this);
 
-        ThemePage page = new ThemePage();
+        MainPage page = new MainPage();
         //        actionBarLayout.addFragmentToStack(page);
         actionBarLayout.presentFragment(page);
 
@@ -521,6 +528,43 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
         }
     }
 
+    private void needSetDayNightTheme(ThemeInfo theme, boolean nigthTheme, int[] pos, int accentId) {
+        boolean instant = false;
+        if (Build.VERSION.SDK_INT >= 21 && pos != null) {
+            if (themeSwitchImageView.getVisibility() == View.VISIBLE) {
+                return;
+            }
+            try {
+                int w = drawerLayoutContainer.getMeasuredWidth();
+                int h = drawerLayoutContainer.getMeasuredHeight();
+                Bitmap bitmap = Bitmap.createBitmap(drawerLayoutContainer.getMeasuredWidth(), drawerLayoutContainer.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(bitmap);
+                drawerLayoutContainer.draw(canvas);
+                themeSwitchImageView.setImageBitmap(bitmap);
+                themeSwitchImageView.setVisibility(View.VISIBLE);
+                float finalRadius = (float) Math.max(Math.sqrt((w - pos[0]) * (w - pos[0]) + (h - pos[1]) * (h - pos[1])), Math.sqrt(pos[0] * pos[0] + (h - pos[1]) * (h - pos[1])));
+                Animator anim = ViewAnimationUtils.createCircularReveal(drawerLayoutContainer, pos[0], pos[1], 0, finalRadius);
+                anim.setDuration(400);
+                anim.setInterpolator(Easings.easeInOutQuad);
+                anim.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        themeSwitchImageView.setImageDrawable(null);
+                        themeSwitchImageView.setVisibility(View.GONE);
+                    }
+                });
+                anim.start();
+                instant = true;
+            } catch (Throwable ignore) {
+
+            }
+        }
+        actionBarLayout.animateThemedValues(theme, accentId, nigthTheme, instant);
+        if (AndroidUtilities.isTablet()) {
+            layersActionBarLayout.animateThemedValues(theme, accentId, nigthTheme, instant);
+            rightActionBarLayout.animateThemedValues(theme, accentId, nigthTheme, instant);
+        }
+    }
 
     public void presentFragment(BasePage fragment) {
         actionBarLayout.presentFragment(fragment);

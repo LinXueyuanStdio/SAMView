@@ -11,10 +11,8 @@ import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.same.lib.base.AndroidUtilities;
@@ -23,7 +21,6 @@ import com.same.lib.checkbox.CheckBox;
 import com.same.lib.checkbox.CheckBox2;
 import com.same.lib.checkbox.CheckBoxSquare;
 import com.same.lib.core.AlertDialog;
-import com.same.lib.core.BasePage;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.lottie.RLottieImageView;
 import com.same.lib.radiobutton.RadioButton;
@@ -35,8 +32,7 @@ import com.same.lib.theme.ThemeManager;
 import com.same.ui.BuildConfig;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
-import com.same.ui.page.language.LanguageSelectPage;
-import com.same.ui.intro.IntroActivity;
+import com.same.ui.page.base.BaseActionBarPage;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -51,43 +47,17 @@ import androidx.core.content.FileProvider;
  * @description null
  * @usage null
  */
-public class ThemePage extends BasePage {
-    @Override
-    public boolean onFragmentCreate() {
+public class ThemePage extends BaseActionBarPage {
 
-        return super.onFragmentCreate();
-    }
     Button currentTheme;
+
     @Override
-    public View createView(Context context) {
-        actionBar.setBackButtonImage(R.drawable.ic_baseline_menu_24);
-        actionBar.setAllowOverlayTitle(false);
-        if (AndroidUtilities.isTablet()) {
-            actionBar.setOccupyStatusBar(false);
-        }
-        actionBar.setTitle(MyLang.getString("AutoNightTheme", R.string.Theme));
+    protected String title() {
+        return MyLang.getString("Theme", R.string.Theme);
+    }
 
-        FrameLayout frameLayout = new FrameLayout(context);
-        frameLayout.setBackgroundColor(Theme.getColor(KeyHub.key_windowBackgroundGray));
-        fragmentView = frameLayout;
-
-        LinearLayout containerLayout = new LinearLayout(context);
-        containerLayout.setOrientation(LinearLayout.VERTICAL);
-
-        containerLayout.addView(createButton(context, "intro", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getParentActivity(), IntroActivity.class);
-                getParentActivity().startActivity(intent);
-            }
-        }));
-        containerLayout.addView(createButton(context, "选择语言", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presentFragment(new LanguageSelectPage());
-            }
-        }));
-
+    @Override
+    protected void fillInContainerLayout(Context context, LinearLayout containerLayout) {
         containerLayout.addView(createButton(context, "创建新主题", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -214,6 +184,15 @@ public class ThemePage extends BasePage {
         });
         containerLayout.addView(currentTheme);
 
+        for (ThemeInfo themeInfo : Theme.themes) {
+            containerLayout.addView(createButton(context, ThemeName.getName(getParentActivity(), themeInfo), new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ThemeManager.applyTheme(getParentActivity(), themeInfo);
+                    parentLayout.rebuildAllFragmentViews(true, true);
+                }
+            }));
+        }
 
         RLottieImageView imageView = new RLottieImageView(context);
         imageView.setAnimation(R.raw.filters, 90, 90);
@@ -268,7 +247,7 @@ public class ThemePage extends BasePage {
         }
 
         CheckBoxSquare checkBox3 = new CheckBoxSquare(context, true);
-//        checkBox3.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
+        //        checkBox3.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
         containerLayout.addView(checkBox3, LayoutHelper.createFrame(22, 22, Gravity.RIGHT | Gravity.TOP, 0, 2, 2, 0));
         checkBox3.setChecked(true, true);
         checkBox3.setVisibility(View.VISIBLE);
@@ -288,21 +267,6 @@ public class ThemePage extends BasePage {
                 button.setChecked(!button.isChecked(), true);
             }
         }));
-
-        ScrollView scrollView = new ScrollView(getParentActivity());
-        scrollView.addView(containerLayout);
-        frameLayout.addView(scrollView);
-
-        return fragmentView;
     }
 
-    private Button createButton(Context context, String text, View.OnClickListener clickListener) {
-        Button button = new Button(context);
-        button.setPadding(20, 20, 20, 20);
-        button.setTextSize(18);
-        button.setGravity(Gravity.CENTER);
-        button.setText(text);
-        button.setOnClickListener(clickListener);
-        return button;
-    }
 }
