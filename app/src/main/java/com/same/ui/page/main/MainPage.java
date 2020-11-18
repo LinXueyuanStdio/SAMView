@@ -11,6 +11,7 @@ import com.same.ui.lang.MyLang;
 import com.same.ui.page.base.BaseActionBarPage;
 import com.same.ui.page.language.LanguageSelectPage;
 import com.same.ui.page.theme.ThemePage;
+import com.same.ui.page.widget.checkbox.CheckBoxPage;
 
 /**
  * @author 林学渊
@@ -44,6 +45,12 @@ public class MainPage extends BaseActionBarPage {
             @Override
             public void onClick(View v) {
                 presentFragment(new ThemePage());
+            }
+        }));
+        containerLayout.addView(createButton(context, "CheckBox", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presentFragment(new CheckBoxPage());
             }
         }));
     }

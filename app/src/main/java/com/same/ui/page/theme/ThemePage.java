@@ -17,19 +17,14 @@ import android.widget.TextView;
 
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.NotificationCenter;
-import com.same.lib.checkbox.CheckBox;
-import com.same.lib.checkbox.CheckBox2;
-import com.same.lib.checkbox.CheckBoxSquare;
 import com.same.lib.core.AlertDialog;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.lottie.RLottieImageView;
-import com.same.lib.radiobutton.RadioButton;
 import com.same.lib.span.ThemeName;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeInfo;
 import com.same.lib.theme.ThemeManager;
-import com.same.ui.BuildConfig;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.base.BaseActionBarPage;
@@ -121,59 +116,8 @@ public class ThemePage extends BaseActionBarPage {
                         }
                     }
                 }
-                ThemeInfo themeInfo = (ThemeInfo) ThemeManager.getCurrentTheme();
-                File currentFile;
-                if (themeInfo.pathToFile == null && themeInfo.assetName == null) {
-                    StringBuilder result = new StringBuilder();
-                    for (HashMap.Entry<String, Integer> entry : ThemeManager.getDefaultColors().entrySet()) {
-                        result.append(entry.getKey()).append("=").append(entry.getValue()).append("\n");
-                    }
-                    currentFile = new File(AndroidUtilities.getFilesDirFixed(), "default_theme.attheme");
-                    FileOutputStream stream = null;
-                    try {
-                        stream = new FileOutputStream(currentFile);
-                        stream.write(AndroidUtilities.getStringBytes(result.toString()));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    } finally {
-                        try {
-                            if (stream != null) {
-                                stream.close();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                } else if (themeInfo.assetName != null) {
-                    currentFile = ThemeManager.getAssetFile(context, themeInfo.assetName);
-                } else {
-                    currentFile = new File(themeInfo.pathToFile);
-                }
-                String name = themeInfo.name;
-                if (!name.endsWith(".attheme")) {
-                    name += ".attheme";
-                }
-                File finalFile = new File(AndroidUtilities.getFilesDirFixed(), AndroidUtilities.fixFileName(name));
-                try {
-                    if (!AndroidUtilities.copyFile(currentFile, finalFile)) {
-                        return;
-                    }
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType("text/xml");
-                    if (Build.VERSION.SDK_INT >= 24) {
-                        try {
-                            intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(getParentActivity(), BuildConfig.APPLICATION_ID + ".provider", finalFile));
-                            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        } catch (Exception ignore) {
-                            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(finalFile));
-                        }
-                    } else {
-                        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(finalFile));
-                    }
-                    startActivityForResult(Intent.createChooser(intent, MyLang.getString("ShareFile", R.string.ShareFile)), 500);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                ThemeInfo themeInfo = ThemeManager.getCurrentTheme();
+                shareTheme(context, themeInfo);
             }
         }));
         currentTheme = createButton(context, ThemeName.getCurrentThemeName(getParentActivity()), new View.OnClickListener() {
@@ -215,58 +159,61 @@ public class ThemePage extends BaseActionBarPage {
             }
         }));
 
-        CheckBox checkBox = new CheckBox(context, R.drawable.ic_baseline_check_24);
-        checkBox.setColor(Theme.getColor(KeyHub.key_checkbox), Theme.getColor(KeyHub.key_checkboxCheck));
-        containerLayout.addView(checkBox, LayoutHelper.createFrame(22, 22, Gravity.RIGHT | Gravity.TOP, 0, 2, 2, 0));
-        checkBox.setChecked(true, true);
-        checkBox.setVisibility(View.VISIBLE);
-
-        Button check = createButton(context, "check", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkBox.setChecked(!checkBox.isChecked(), true);
-            }
-        });
-        containerLayout.addView(check);
-
-        for (int i = 0; i < 10; i++) {
-            CheckBox2 checkBox2 = new CheckBox2(context);
-            checkBox2.setColor(Theme.getColor(KeyHub.key_checkbox), Theme.getColor(KeyHub.key_checkboxCheck), Theme.getColor(KeyHub.key_checkboxCheck));
-            checkBox2.setDrawBackgroundAsArc(i);
-            checkBox2.setDrawUnchecked(true);
-            containerLayout.addView(checkBox2, LayoutHelper.createFrame(22, 22, Gravity.RIGHT | Gravity.TOP, 0, 2, 2, 0));
-            checkBox2.setChecked(true, true);
-            checkBox2.setVisibility(View.VISIBLE);
-
-            containerLayout.addView(createButton(context, "check", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    checkBox2.setChecked(!checkBox2.isChecked(), true);
-                }
-            }));
-        }
-
-        CheckBoxSquare checkBox3 = new CheckBoxSquare(context, true);
-        //        checkBox3.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
-        containerLayout.addView(checkBox3, LayoutHelper.createFrame(22, 22, Gravity.RIGHT | Gravity.TOP, 0, 2, 2, 0));
-        checkBox3.setChecked(true, true);
-        checkBox3.setVisibility(View.VISIBLE);
-        containerLayout.addView(createButton(context, "check", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkBox3.setChecked(!checkBox3.isChecked(), true);
-            }
-        }));
-
-        RadioButton button = new RadioButton(context);
-        button.setSize(AndroidUtilities.dp(20));
-        containerLayout.addView(button, LayoutHelper.createFrame(22, 22, Gravity.RIGHT | Gravity.TOP, 0, 2, 2, 0));
-        containerLayout.addView(createButton(context, "check", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                button.setChecked(!button.isChecked(), true);
-            }
-        }));
     }
 
+    private void shareTheme(Context context, ThemeInfo themeInfo) {
+        File currentFile;
+        if (themeInfo.pathToFile == null && themeInfo.assetName == null) {
+            StringBuilder result = new StringBuilder();
+            for (HashMap.Entry<String, Integer> entry : ThemeManager.getDefaultColors().entrySet()) {
+                result.append(entry.getKey()).append("=").append(entry.getValue()).append("\n");
+            }
+            currentFile = new File(AndroidUtilities.getFilesDirFixed(), "default_theme.attheme");
+            FileOutputStream stream = null;
+            try {
+                stream = new FileOutputStream(currentFile);
+                stream.write(AndroidUtilities.getStringBytes(result.toString()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (stream != null) {
+                        stream.close();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if (themeInfo.assetName != null) {
+            currentFile = ThemeManager.getAssetFile(context, themeInfo.assetName);
+        } else {
+            currentFile = new File(themeInfo.pathToFile);
+        }
+        String name = themeInfo.name;
+        if (!name.endsWith(".attheme")) {
+            name += ".attheme";
+        }
+        File finalFile = new File(AndroidUtilities.getFilesDirFixed(), AndroidUtilities.fixFileName(name));
+        try {
+            if (!AndroidUtilities.copyFile(currentFile, finalFile)) {
+                return;
+            }
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/xml");
+            if (Build.VERSION.SDK_INT >= 24) {
+                try {
+                    intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(getParentActivity(), "com.same.ui.provider", finalFile));
+                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                } catch (Exception ignore) {
+                    ignore.printStackTrace();
+                    intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(finalFile));
+                }
+            } else {
+                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(finalFile));
+            }
+            startActivityForResult(Intent.createChooser(intent, MyLang.getString("ShareFile", R.string.ShareFile)), 500);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
