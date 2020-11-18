@@ -89,9 +89,9 @@ public class ThemePage extends BaseActionBarPage {
                     ThemeInfo currentTheme = ThemeManager.getCurrentTheme();
                     if (themeInfo != currentTheme) {
                         themeInfo.setCurrentAccentId(Theme.DEFALT_THEME_ACCENT_ID);
-                        ThemeManager.saveThemeAccents(getParentActivity(), themeInfo, true, false, true, false);
+                        ThemeManager.saveThemeAccents(getParentActivity(), themeInfo, true, false, true);
                     } else if (themeInfo.currentAccentId != Theme.DEFALT_THEME_ACCENT_ID) {
-                        NotificationCenter.postNotificationName(NotificationCenter.needSetDayNightTheme, currentTheme);
+                        NotificationCenter.post(NotificationCenter.needSetDayNightTheme, currentTheme);
                     }
                 });
                 builder1.setNegativeButton(MyLang.getString("Cancel", R.string.Cancel), null);

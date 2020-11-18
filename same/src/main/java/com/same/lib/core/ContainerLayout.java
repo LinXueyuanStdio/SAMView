@@ -1695,7 +1695,7 @@ public class ContainerLayout extends FrameLayout {
                 if (i == 0) {
                     if (accentId != -1) {
                         theme.setCurrentAccentId(accentId);
-                        ThemeManager.saveThemeAccents(getContext(), theme, true, false, true, false);
+                        ThemeManager.saveThemeAccents(getContext(), theme, true, false, true);
                     }
                     ThemeManager.applyTheme(getContext(), theme, nightTheme);
                 }

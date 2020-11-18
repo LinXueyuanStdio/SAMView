@@ -1637,7 +1637,10 @@ public class Theme {
     }
 
     public static void setColor(Context context, String key, int color, boolean useDefault) {
-        if (key.equals(KeyHub.key_chat_wallpaper) || key.equals(KeyHub.key_chat_wallpaper_gradient_to) || key.equals(KeyHub.key_windowBackgroundWhite) || key.equals(KeyHub.key_windowBackgroundGray)) {
+        if (key.equals(KeyHub.key_chat_wallpaper)
+                || key.equals(KeyHub.key_chat_wallpaper_gradient_to)
+                || key.equals(KeyHub.key_windowBackgroundWhite)
+                || key.equals(KeyHub.key_windowBackgroundGray)) {
             color = 0xff000000 | color;
         }
 
@@ -1659,12 +1662,12 @@ public class Theme {
                 break;
             case KeyHub.key_actionBarDefault:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    NotificationCenter.postNotificationName(NotificationCenter.needCheckSystemBarColors);
+                    NotificationCenter.post(NotificationCenter.needCheckSystemBarColors);
                 }
                 break;
             case KeyHub.key_windowBackgroundGray:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    NotificationCenter.postNotificationName(NotificationCenter.needCheckSystemBarColors);
+                    NotificationCenter.post(NotificationCenter.needCheckSystemBarColors);
                 }
                 break;
         }

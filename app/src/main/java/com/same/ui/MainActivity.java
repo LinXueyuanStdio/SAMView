@@ -32,6 +32,7 @@ import android.widget.RelativeLayout;
 
 import com.same.lib.anim.Easings;
 import com.same.lib.base.AndroidUtilities;
+import com.same.lib.base.NotificationCenter;
 import com.same.lib.base.SharedConfig;
 import com.same.lib.core.AlertDialog;
 import com.same.lib.core.BasePage;
@@ -48,7 +49,6 @@ import com.same.lib.theme.WallpaperManager;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.main.MainPage;
 import com.same.ui.page.theme.ThemeEditorView;
-import com.same.ui.page.theme.ThemePage;
 import com.same.ui.theme.ChatTheme;
 import com.same.ui.theme.CommonTheme;
 import com.same.ui.theme.DialogTheme;
@@ -81,6 +81,29 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
     private DrawerLayoutContainer drawerLayoutContainer;
     private ImageView themeSwitchImageView;
     private ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener;
+    private NotificationCenter.NotificationCenterDelegate notificationCenterDelegate = new NotificationCenter.NotificationCenterDelegate() {
+        @Override
+        public void didReceivedNotification(int id, int account, Object... args) {
+            if (id == NotificationCenter.didSetNewTheme) {
+                didSetNewTheme((Boolean) args[0]);
+            } else if (id == NotificationCenter.needSetDayNightTheme) {
+                ThemeInfo theme = (ThemeInfo) args[0];
+                boolean nigthTheme = (boolean) args[1];
+                int[] pos = (int[]) args[2];
+                int accentId = (int) args[3];
+                needSetDayNightTheme(theme, nigthTheme, pos, accentId);
+            } else if (id == NotificationCenter.needCheckSystemBarColors) {
+                checkSystemBarColors();
+            } else if (id == NotificationCenter.didSetNewWallpaper) {
+//                if (sideMenu != null) {
+//                    View child = sideMenu.getChildAt(0);
+//                    if (child != null) {
+//                        child.invalidate();
+//                    }
+//                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -302,6 +325,12 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
         //应用的壁纸
         WallpaperManager.loadWallpaper(this);
 
+        //注册通知中心，使用观察者模式处理应用内部的通知（消息）
+        NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.didSetNewTheme);
+        NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.needSetDayNightTheme);
+        NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.needCheckSystemBarColors);
+        NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.didSetNewWallpaper);
+
         MainPage page = new MainPage();
         //        actionBarLayout.addFragmentToStack(page);
         actionBarLayout.presentFragment(page);
@@ -360,6 +389,7 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
     @Override
     protected void onPause() {
         super.onPause();
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, 4096);
         actionBarLayout.onPause();
         if (AndroidUtilities.isTablet()) {
             rightActionBarLayout.onPause();
@@ -370,6 +400,7 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
     @Override
     protected void onResume() {
         super.onResume();
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 4096);
         actionBarLayout.onResume();
     }
 
@@ -526,6 +557,26 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
             rightActionBarLayout.setVisibility(View.GONE);
             backgroundTablet.setVisibility(!actionBarLayout.fragmentsStack.isEmpty() ? View.GONE : View.VISIBLE);
         }
+    }
+
+    private void didSetNewTheme(Boolean nightTheme) {
+        if (!nightTheme) {
+            //            if (sideMenu != null) {
+            //                sideMenu.setBackgroundColor(Theme.getColor(KeyHub.key_chats_menuBackground));
+            //                sideMenu.setGlowColor(Theme.getColor(KeyHub.key_chats_menuBackground));
+            //                sideMenu.setListSelectorColor(Theme.getColor(KeyHub.key_listSelector));
+            //                sideMenu.getAdapter().notifyDataSetChanged();
+            //            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                try {
+                    setTaskDescription(new ActivityManager.TaskDescription(null, null, Theme.getColor(KeyHub.key_actionBarDefault) | 0xff000000));
+                } catch (Exception ignore) {
+
+                }
+            }
+        }
+        drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(KeyHub.key_windowBackgroundWhite));
+        checkSystemBarColors();
     }
 
     private void needSetDayNightTheme(ThemeInfo theme, boolean nigthTheme, int[] pos, int accentId) {
@@ -792,6 +843,10 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
     }
 
     public void onFinish() {
+        NotificationCenter.getGlobalInstance().removeObserver(notificationCenterDelegate, NotificationCenter.didSetNewWallpaper);
+        NotificationCenter.getGlobalInstance().removeObserver(notificationCenterDelegate, NotificationCenter.didSetNewTheme);
+        NotificationCenter.getGlobalInstance().removeObserver(notificationCenterDelegate, NotificationCenter.needSetDayNightTheme);
+        NotificationCenter.getGlobalInstance().removeObserver(notificationCenterDelegate, NotificationCenter.needCheckSystemBarColors);
 
     }
 

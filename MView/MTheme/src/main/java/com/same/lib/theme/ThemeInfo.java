@@ -386,7 +386,7 @@ public class ThemeInfo {
         previewParsed = false;
         saveOtherThemes(context, true);
         if (this == currentTheme && previousTheme == null) {
-            NotificationCenter.postNotificationName(NotificationCenter.needSetDayNightTheme, this);
+            NotificationCenter.post(NotificationCenter.needSetDayNightTheme, this);
         }
     }
 

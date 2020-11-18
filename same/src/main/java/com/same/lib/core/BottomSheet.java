@@ -42,7 +42,6 @@ import com.same.lib.drawable.ColorManager;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.KeyHub;
-import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
 
 import java.util.ArrayList;
@@ -252,10 +251,10 @@ public class BottomSheet extends Dialog {
                         if (currentAnimation != null && currentAnimation.equals(animation)) {
                             currentAnimation = null;
                         }
-                        NotificationCenter.postNotificationName(NotificationCenter.startAllHeavyOperations);
+                        NotificationCenter.post(NotificationCenter.startAllHeavyOperations);
                     }
                 });
-                NotificationCenter.postNotificationName(NotificationCenter.stopAllHeavyOperations);
+                NotificationCenter.post(NotificationCenter.stopAllHeavyOperations);
                 currentAnimation.start();
             }
         }
@@ -1005,7 +1004,7 @@ public class BottomSheet extends Dialog {
                             getWindow().setAttributes(params);
                         }
                     }
-                    NotificationCenter.postNotificationName(NotificationCenter.startAllHeavyOperations);
+                    NotificationCenter.post(NotificationCenter.startAllHeavyOperations);
                 }
 
                 @Override
@@ -1016,7 +1015,7 @@ public class BottomSheet extends Dialog {
                     }
                 }
             });
-            NotificationCenter.postNotificationName(NotificationCenter.stopAllHeavyOperations);
+            NotificationCenter.post(NotificationCenter.stopAllHeavyOperations);
             currentSheetAnimation.start();
         }
     }
@@ -1106,7 +1105,7 @@ public class BottomSheet extends Dialog {
                         }
                     });
                 }
-                NotificationCenter.postNotificationName(NotificationCenter.startAllHeavyOperations);
+                NotificationCenter.post(NotificationCenter.startAllHeavyOperations);
             }
 
             @Override
@@ -1117,7 +1116,7 @@ public class BottomSheet extends Dialog {
                 }
             }
         });
-        NotificationCenter.postNotificationName(NotificationCenter.stopAllHeavyOperations);
+        NotificationCenter.post(NotificationCenter.stopAllHeavyOperations);
         currentSheetAnimation.start();
     }
 
@@ -1160,7 +1159,7 @@ public class BottomSheet extends Dialog {
                             }
                         });
                     }
-                    NotificationCenter.postNotificationName(NotificationCenter.startAllHeavyOperations);
+                    NotificationCenter.post(NotificationCenter.startAllHeavyOperations);
                 }
 
                 @Override
@@ -1171,7 +1170,7 @@ public class BottomSheet extends Dialog {
                     }
                 }
             });
-            NotificationCenter.postNotificationName(NotificationCenter.stopAllHeavyOperations);
+            NotificationCenter.post(NotificationCenter.stopAllHeavyOperations);
             currentSheetAnimation.start();
         }
     }

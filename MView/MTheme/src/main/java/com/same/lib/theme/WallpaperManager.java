@@ -111,7 +111,7 @@ public class WallpaperManager {
             saveCurrentTheme(context, themeInfo, false, false, false);
             Theme.calcBackgroundColor(themedWallpaper, 0);
             Theme.applyChatServiceMessageColor();
-            NotificationCenter.postNotificationName(NotificationCenter.didSetNewWallpapper);
+            NotificationCenter.post(NotificationCenter.didSetNewWallpaper);
         } else {
             themedWallpaper = null;
             wallpaper = null;
@@ -186,7 +186,7 @@ public class WallpaperManager {
                                     final boolean isOrientationPortrait = AndroidUtilities.displaySize.x <= AndroidUtilities.displaySize.y;
                                     final boolean isGradientPortrait = width <= height;
                                     if (isOrientationPortrait == isGradientPortrait) {
-                                        NotificationCenter.postNotificationName(NotificationCenter.didSetNewWallpapper);
+                                        NotificationCenter.post(NotificationCenter.didSetNewWallpaper);
                                     }
                                 }
                             };
@@ -241,7 +241,7 @@ public class WallpaperManager {
                                             final boolean isOrientationPortrait = AndroidUtilities.displaySize.x <= AndroidUtilities.displaySize.y;
                                             final boolean isGradientPortrait = width <= height;
                                             if (isOrientationPortrait == isGradientPortrait) {
-                                                NotificationCenter.postNotificationName(NotificationCenter.didSetNewWallpapper);
+                                                NotificationCenter.post(NotificationCenter.didSetNewWallpaper);
                                             }
                                         }
                                     };
@@ -278,7 +278,7 @@ public class WallpaperManager {
                 Theme.calcBackgroundColor(wallpaper, 1);
                 AndroidUtilities.runOnUIThread(() -> {
                     Theme.applyChatServiceMessageColor();
-                    NotificationCenter.postNotificationName(NotificationCenter.didSetNewWallpapper);
+                    NotificationCenter.post(NotificationCenter.didSetNewWallpaper);
                 });
             }
         });

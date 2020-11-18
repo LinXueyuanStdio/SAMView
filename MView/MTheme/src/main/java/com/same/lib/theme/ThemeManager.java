@@ -227,7 +227,6 @@ public class ThemeManager {
                 themeName += ".attheme";
             }
             if (temporary) {
-                NotificationCenter.postNotificationName(NotificationCenter.goingToPreviewTheme);
                 ThemeInfo themeInfo = new ThemeInfo();
                 themeInfo.name = themeName;
                 themeInfo.info = theme;
@@ -433,7 +432,7 @@ public class ThemeManager {
         for (AbsTheme absTheme : ThemeRes.themes) {
             absTheme.applyResources(context);
         }
-        AndroidUtilities.runOnUIThread(() -> NotificationCenter.postNotificationName(NotificationCenter.didSetNewTheme, false));
+        AndroidUtilities.runOnUIThread(() -> NotificationCenter.post(NotificationCenter.didSetNewTheme, false));
     }
 
     public static int changeColorAccent(ThemeInfo themeInfo, int accent, int color) {
@@ -567,7 +566,7 @@ public class ThemeManager {
             theme.setCurrentAccentId(themeAccent.id);
         }
         if (save) {
-            saveThemeAccents(context, theme, true, false, false, false);
+            saveThemeAccents(context, theme, true, false, false);
             if (accent.info != null) {
                 //                MessagesController.getInstance(accent.account).saveTheme(theme, accent, current && theme == currentNightTheme, true);
             }
@@ -575,20 +574,7 @@ public class ThemeManager {
         return current;
     }
 
-    public static void saveThemeAccents(Context context, ThemeInfo theme, boolean save, boolean remove, boolean indexOnly, boolean upload) {
-        saveThemeAccents(context, theme, save, remove, indexOnly, upload, false);
-    }
-
-    /**
-     * TODO
-     * @param theme
-     * @param save
-     * @param remove
-     * @param indexOnly
-     * @param upload
-     * @param migration
-     */
-    public static void saveThemeAccents(Context context, ThemeInfo theme, boolean save, boolean remove, boolean indexOnly, boolean upload, boolean migration) {
+    public static void saveThemeAccents(Context context, ThemeInfo theme, boolean save, boolean remove, boolean indexOnly) {
         if (save) {
             SharedPreferences preferences = AndroidUtilities.getThemeConfig();
             SharedPreferences.Editor editor = preferences.edit();
@@ -606,12 +592,6 @@ public class ThemeManager {
                     themeAccentList.list.add(accent);
                 }
                 editor.putString("accents_" + theme.assetName, themeAccentList.toJson());
-                if (!migration) {
-                    NotificationCenter.postNotificationName(NotificationCenter.themeAccentListUpdated);
-                }
-                if (upload) {
-                    //                    MessagesController.getInstance(0).saveThemeToServer(theme, theme.getAccent(false));
-                }
             }
             editor.putInt("accent_current_" + theme.assetName, theme.currentAccentId);
             editor.apply();
@@ -690,7 +670,7 @@ public class ThemeManager {
                 if (info == null || info.themeAccents == null || info.themeAccents.isEmpty()) {
                     continue;
                 }
-                saveThemeAccents(context, info, true, false, false, false, migration);
+                saveThemeAccents(context, info, true, false, false);
             }
         }
     }
@@ -937,7 +917,7 @@ public class ThemeManager {
                 isInNigthMode = true;
                 lastThemeSwitchTime = SystemClock.elapsedRealtime();
                 switchingNightTheme = true;
-                NotificationCenter.postNotificationName(NotificationCenter.needSetDayNightTheme, currentNightTheme);
+                NotificationCenter.post(NotificationCenter.needSetDayNightTheme, currentNightTheme);
                 switchingNightTheme = false;
             }
         } else {
@@ -945,7 +925,7 @@ public class ThemeManager {
                 isInNigthMode = false;
                 lastThemeSwitchTime = SystemClock.elapsedRealtime();
                 switchingNightTheme = true;
-                NotificationCenter.postNotificationName(NotificationCenter.needSetDayNightTheme, currentDayTheme);
+                NotificationCenter.post(NotificationCenter.needSetDayNightTheme, currentDayTheme);
                 switchingNightTheme = false;
             }
         }
@@ -1416,7 +1396,7 @@ public class ThemeManager {
                 ThemeInfo.fillAccentValues(accent, info.settings);
                 if (currentTheme == theme && currentTheme.currentAccentId == accent.id) {
                     refreshThemeColors(context);
-                    NotificationCenter.postNotificationName(NotificationCenter.needSetDayNightTheme, currentTheme);
+                    NotificationCenter.post(NotificationCenter.needSetDayNightTheme, currentTheme);
                 }
             }
             accent.patternMotion = info.settings.wallpaper != null && info.settings.wallpaper.settings != null && info.settings.wallpaper.settings.motion;
