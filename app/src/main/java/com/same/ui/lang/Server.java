@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 public class Server {
     public static ArrayList<LangPackString> englishStrings() {
         ArrayList<LangPackString> list = new ArrayList<>();
+        list.add(new LangPackString("Theme", "Theme"));
         list.add(new LangPackString("LanguageName", "English"));
         list.add(new LangPackString("LanguageNameInEnglish", "English"));
         list.add(new LangPackString("local_string", "remote string in english"));
@@ -28,6 +29,7 @@ public class Server {
 
     public static ArrayList<LangPackString> chineseStrings() {
         ArrayList<LangPackString> list = new ArrayList<>();
+        list.add(new LangPackString("Theme", "主题"));
         list.add(new LangPackString("LanguageName", "中文简体"));
         list.add(new LangPackString("LanguageNameInEnglish", "Chinese"));
         list.add(new LangPackString("local_string", "中文的云端字符串"));
@@ -37,6 +39,7 @@ public class Server {
 
     public static ArrayList<LangPackString> frenchStrings() {
         ArrayList<LangPackString> list = new ArrayList<>();
+        list.add(new LangPackString("Theme", "主题"));
         list.add(new LangPackString("LanguageName", "法语"));
         list.add(new LangPackString("LanguageNameInEnglish", "French"));
         list.add(new LangPackString("local_string", "法语的云端字符串"));
