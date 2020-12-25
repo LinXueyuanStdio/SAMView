@@ -28,6 +28,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     api project(':MView:MBase')
 }
+
 ext {
     DIST_PATH = "${project.rootDir}/dist"
     PUBLISH_GROUP_ID = 'com.timecat.component'

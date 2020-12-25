@@ -12,6 +12,7 @@ dependencies {
     api project(':MView:MTheme')
     api project(':MView:MLottie')
 }
+
 ext {
     DIST_PATH = "${project.rootDir}/dist"
     PUBLISH_GROUP_ID = 'com.timecat.component'

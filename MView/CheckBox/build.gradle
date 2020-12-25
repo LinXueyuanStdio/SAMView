@@ -9,6 +9,7 @@ dependencies {
     api project(':MView:MColor')
 
 }
+
 ext {
     DIST_PATH = "${project.rootDir}/dist"
     PUBLISH_GROUP_ID = 'com.timecat.component'

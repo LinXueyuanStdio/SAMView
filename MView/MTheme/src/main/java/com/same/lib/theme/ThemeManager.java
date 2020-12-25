@@ -96,7 +96,6 @@ import static com.same.lib.theme.Theme.themesDict;
  * @usage null
  */
 public class ThemeManager {
-    //region 主题管理
     public static void applyPreviousTheme(Context context) {
         if (previousTheme == null) {
             return;
@@ -1454,7 +1453,6 @@ public class ThemeManager {
         return file;
     }
 
-
     public static HashMap<String, Integer> getThemeFileValues(Context context, File file, String assetName, String[] wallpaperLink) {
         FileInputStream stream = null;
         HashMap<String, Integer> stringMap = new HashMap<>();
@@ -1527,5 +1525,4 @@ public class ThemeManager {
         }
         return stringMap;
     }
-    //endregion
 }
