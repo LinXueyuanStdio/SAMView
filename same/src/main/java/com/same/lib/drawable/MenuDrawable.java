@@ -12,6 +12,8 @@ import com.same.lib.base.AndroidUtilities;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 
+import androidx.annotation.NonNull;
+
 
 /**
  * @author 林学渊
@@ -64,7 +66,7 @@ public class MenuDrawable extends Drawable {
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(@NonNull Canvas canvas) {
         if (currentRotation != finalRotation) {
             long newTime = SystemClock.elapsedRealtime();
             if (lastFrameTime != 0) {
