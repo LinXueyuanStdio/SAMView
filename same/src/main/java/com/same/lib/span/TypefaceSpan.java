@@ -1,11 +1,12 @@
 package com.same.lib.span;
 
+import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.text.TextPaint;
 import android.text.style.MetricAffectingSpan;
 
-import com.same.lib.base.AndroidUtilities;
+import com.same.lib.font.FontManager;
 
 /**
  * @author 林学渊
@@ -49,12 +50,12 @@ public class TypefaceSpan extends MetricAffectingSpan {
         return typeface == Typeface.MONOSPACE;
     }
 
-    public boolean isBold() {
-        return typeface == AndroidUtilities.getTypeface("fonts/rmedium.ttf");
+    public boolean isBold(Context context) {
+        return typeface == FontManager.getTypeface(context, "fonts/rmedium.ttf");
     }
 
-    public boolean isItalic() {
-        return typeface == AndroidUtilities.getTypeface("fonts/ritalic.ttf");
+    public boolean isItalic(Context context) {
+        return typeface == FontManager.getTypeface(context, "fonts/ritalic.ttf");
     }
 
     @Override

@@ -1,4 +1,4 @@
-apply from: "../../library.gradle"
+apply from: "${project.rootDir}/gradle/library.gradle"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -6,4 +6,10 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     api project(':MView:MBase')
 
+}
+ext {
+    DIST_PATH = "${project.rootDir}/dist"
+    PUBLISH_GROUP_ID = 'com.timecat.component'
+    PUBLISH_ARTIFACT_ID = 'MView-theme'
+    PUBLISH_VERSION = "1.0.0"
 }

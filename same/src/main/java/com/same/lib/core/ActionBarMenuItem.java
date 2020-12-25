@@ -32,6 +32,7 @@ import com.same.lib.R;
 import com.same.lib.drawable.CloseProgressDrawable2;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.drawable.DrawableManager;
+import com.same.lib.font.FontManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.SharedConfig;
@@ -139,7 +140,7 @@ public class ActionBarMenuItem extends FrameLayout {
         if (text) {
             textView = new TextView(context);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-            textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            textView.setTypeface(FontManager.getMediumTypeface(context));
             textView.setGravity(Gravity.CENTER);
             textView.setPadding(AndroidUtilities.dp(4), 0, AndroidUtilities.dp(4), 0);
             if (iconColor != 0) {

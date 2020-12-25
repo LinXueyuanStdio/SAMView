@@ -30,6 +30,7 @@ import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.DispatchQueue;
 import com.same.lib.base.SharedConfig;
 import com.same.lib.drawable.DrawableManager;
+import com.same.lib.font.FontManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.intro.Intro;
 import com.same.ui.MainActivity;
@@ -45,6 +46,7 @@ import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 
+import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -65,8 +67,6 @@ public class IntroActivity extends Activity {
             Log.e("log", text);
         }
     }
-
-    private int currentAccount = 0;
 
     private ViewPager viewPager;
     private BottomPagesView bottomPages;
@@ -222,7 +222,7 @@ public class IntroActivity extends Activity {
         startMessagingButton.setText(MyLang.getString("StartMessaging", R.string.StartMessaging));
         startMessagingButton.setGravity(Gravity.CENTER);
         startMessagingButton.setTextColor(0xffffffff);
-        startMessagingButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        startMessagingButton.setTypeface(FontManager.getMediumTypeface(this));
         startMessagingButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         startMessagingButton.setBackgroundDrawable(DrawableManager.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), 0xff50a8eb, 0xff439bde));
         startMessagingButton.setPadding(AndroidUtilities.dp(34), 0, AndroidUtilities.dp(34), 0);
@@ -377,6 +377,7 @@ public class IntroActivity extends Activity {
             return titles.length;
         }
 
+        @NonNull
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             TextView headerTextView = new TextView(container.getContext());
@@ -410,25 +411,25 @@ public class IntroActivity extends Activity {
             container.addView(frameLayout, 0);
 
             headerTextView.setText(titles[position]);
-            messageTextView.setText(MyLang.replaceTags(messages[position]));
+            messageTextView.setText(MyLang.replaceTags(IntroActivity.this, messages[position]));
 
             return frameLayout;
         }
 
         @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
+        public void destroyItem(ViewGroup container, int position, @NonNull Object object) {
             container.removeView((View) object);
         }
 
         @Override
-        public void setPrimaryItem(ViewGroup container, int position, Object object) {
+        public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
             super.setPrimaryItem(container, position, object);
             bottomPages.setCurrentPage(position);
             currentViewPagerPage = position;
         }
 
         @Override
-        public boolean isViewFromObject(View view, Object object) {
+        public boolean isViewFromObject(View view, @NonNull Object object) {
             return view.equals(object);
         }
 

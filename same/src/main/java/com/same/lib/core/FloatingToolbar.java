@@ -40,9 +40,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.same.lib.R;
+import com.same.lib.base.AndroidUtilities;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.drawable.DrawableManager;
-import com.same.lib.base.AndroidUtilities;
+import com.same.lib.font.FontManager;
 import com.same.lib.theme.KeyHub;
 import com.timecat.component.locale.MLang;
 
@@ -1184,7 +1185,7 @@ public final class FloatingToolbar {
         textView.setGravity(Gravity.CENTER);
         textView.setSingleLine(true);
         textView.setEllipsize(TextUtils.TruncateAt.END);
-        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        textView.setTypeface(FontManager.getMediumTypeface(context));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         textView.setFocusable(false);
         textView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);

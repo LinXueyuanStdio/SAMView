@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -39,7 +38,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.security.SecureRandom;
-import java.util.Hashtable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,7 +46,6 @@ import androidx.viewpager.widget.ViewPager;
 public class AndroidUtilities {
     public static volatile DispatchQueue searchQueue = new DispatchQueue("searchQueue");
     public static volatile DispatchQueue globalQueue = new DispatchQueue("globalQueue");
-    private static final Hashtable<String, Typeface> typefaceCache = new Hashtable<>();
     public static boolean mainInterfacePaused = false;
     public static boolean isScreenOn = false;
 
@@ -188,37 +185,6 @@ public class AndroidUtilities {
     public static boolean isSmallTablet() {
         float minSide = Math.min(displaySize.x, displaySize.y) / density;
         return minSide <= 700;
-    }
-
-    public static Typeface getTypeface(String assetPath) {
-        return getTypeface(applicationContext, assetPath);
-    }
-
-    public static Typeface getTypeface(Context context, String assetPath) {
-        synchronized (typefaceCache) {
-            if (!typefaceCache.containsKey(assetPath)) {
-                try {
-                    Typeface t;
-                    if (Build.VERSION.SDK_INT >= 26) {
-                        Typeface.Builder builder = new Typeface.Builder(context.getAssets(), assetPath);
-                        if (assetPath.contains("medium")) {
-                            builder.setWeight(700);
-                        }
-                        if (assetPath.contains("italic")) {
-                            builder.setItalic(true);
-                        }
-                        t = builder.build();
-                    } else {
-                        t = Typeface.createFromAsset(context.getAssets(), assetPath);
-                    }
-                    typefaceCache.put(assetPath, t);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            }
-            return typefaceCache.get(assetPath);
-        }
     }
 
     public static int getOffsetColor(int color1, int color2, float offset, float alpha) {

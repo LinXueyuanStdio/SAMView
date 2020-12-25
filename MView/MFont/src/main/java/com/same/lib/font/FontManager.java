@@ -16,6 +16,10 @@ import java.util.Hashtable;
 public class FontManager {
     private static final Hashtable<String, Typeface> typefaceCache = new Hashtable<>();
 
+    public static Typeface getMediumTypeface(Context context) {
+        return getTypeface(context, "fonts/rmedium.ttf");
+    }
+
     public static Typeface getTypeface(Context context, String assetPath) {
         synchronized (typefaceCache) {
             if (!typefaceCache.containsKey(assetPath)) {

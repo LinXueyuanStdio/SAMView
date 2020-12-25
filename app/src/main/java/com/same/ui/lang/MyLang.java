@@ -6,8 +6,8 @@ import android.content.res.Configuration;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 
+import com.same.lib.font.FontManager;
 import com.same.lib.span.TypefaceSpan;
-import com.same.lib.base.AndroidUtilities;
 import com.same.ui.MyApplication;
 import com.timecat.component.locale.AbsLangAction;
 import com.timecat.component.locale.MLang;
@@ -257,11 +257,11 @@ public class MyLang {
     public static final int FLAG_TAG_URL = 8;
     public static final int FLAG_TAG_ALL = FLAG_TAG_BR | FLAG_TAG_BOLD | FLAG_TAG_URL;
 
-    public static SpannableStringBuilder replaceTags(String str) {
-        return replaceTags(str, FLAG_TAG_ALL);
+    public static SpannableStringBuilder replaceTags(Context context, String str) {
+        return replaceTags(context, str, FLAG_TAG_ALL);
     }
 
-    public static SpannableStringBuilder replaceTags(String str, int flag, Object... args) {
+    public static SpannableStringBuilder replaceTags(Context context, String str, int flag, Object... args) {
         try {
             int start;
             int end;
@@ -309,7 +309,7 @@ public class MyLang {
             }
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(stringBuilder);
             for (int a = 0; a < bolds.size() / 2; a++) {
-                spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), bolds.get(a * 2), bolds.get(a * 2 + 1), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannableStringBuilder.setSpan(new TypefaceSpan(FontManager.getTypeface(context, "fonts/rmedium.ttf")), bolds.get(a * 2), bolds.get(a * 2 + 1), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             return spannableStringBuilder;
         } catch (Exception e) {

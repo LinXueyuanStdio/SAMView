@@ -22,13 +22,14 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.same.lib.R;
+import com.same.lib.base.AndroidUtilities;
+import com.same.lib.base.SharedConfig;
 import com.same.lib.drawable.BackDrawable;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.drawable.MenuDrawable;
+import com.same.lib.font.FontManager;
 import com.same.lib.helper.LayoutHelper;
-import com.same.lib.base.AndroidUtilities;
-import com.same.lib.base.SharedConfig;
 import com.same.lib.theme.KeyHub;
 import com.timecat.component.locale.MLang;
 
@@ -285,7 +286,7 @@ public class ActionBar extends FrameLayout {
         titleTextView = new SimpleTextView(getContext());
         titleTextView.setGravity(Gravity.LEFT);
         titleTextView.setTextColor(ColorManager.getColor(KeyHub.key_actionBarDefaultTitle));
-        titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        titleTextView.setTypeface(FontManager.getMediumTypeface(getContext()));
         addView(titleTextView, 0, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP));
     }
 
