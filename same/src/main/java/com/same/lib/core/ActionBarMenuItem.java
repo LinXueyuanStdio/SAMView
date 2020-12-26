@@ -30,13 +30,13 @@ import android.widget.TextView;
 
 import com.same.lib.R;
 import com.same.lib.base.AndroidUtilities;
-import com.same.lib.base.SharedConfig;
 import com.same.lib.drawable.CloseProgressDrawable2;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.font.FontManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.KeyHub;
+import com.same.lib.util.Keyboard;
 import com.same.lib.util.Space;
 import com.same.lib.util.Store;
 import com.timecat.component.locale.MLang;
@@ -551,7 +551,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 listener.onSearchCollapse();
             }
             if (openKeyboard) {
-                AndroidUtilities.hideKeyboard(searchField);
+                Keyboard.hideKeyboard(searchField);
             }
             if (clearsTextOnSearchCollapse) {
                 searchField.setText("");
@@ -566,7 +566,7 @@ public class ActionBarMenuItem extends FrameLayout {
             searchField.setText("");
             searchField.requestFocus();
             if (openKeyboard) {
-                AndroidUtilities.showKeyboard(searchField);
+                Keyboard.showKeyboard(searchField);
             }
             return true;
         }
@@ -715,7 +715,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 @Override
                 public boolean onTouchEvent(MotionEvent event) {
                     if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        if (!AndroidUtilities.showKeyboard(this)) {
+                        if (!Keyboard.showKeyboard(this)) {
                             clearFocus();
                             requestFocus();
                         }
@@ -754,7 +754,7 @@ public class ActionBarMenuItem extends FrameLayout {
             }
             searchField.setOnEditorActionListener((v, actionId, event) -> {
                 if (event != null && (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_SEARCH || event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                    AndroidUtilities.hideKeyboard(searchField);
+                    Keyboard.hideKeyboard(searchField);
                     if (listener != null) {
                         listener.onSearchPressed(searchField);
                     }
@@ -865,7 +865,7 @@ public class ActionBarMenuItem extends FrameLayout {
                     }
                 }
                 searchField.requestFocus();
-                AndroidUtilities.showKeyboard(searchField);
+                Keyboard.showKeyboard(searchField);
             });
             clearButton.setContentDescription(MLang.getString(getContext(), "ClearButton", R.string.ClearButton));
             searchContainer.addView(clearButton, LayoutHelper.createFrame(48, LayoutHelper.MATCH_PARENT, Gravity.CENTER_VERTICAL | Gravity.RIGHT));
@@ -1056,13 +1056,13 @@ public class ActionBarMenuItem extends FrameLayout {
     public void requestFocusOnSearchView() {
         if (searchContainer.getWidth() != 0 && !searchField.isFocused()) {
             searchField.requestFocus();
-            AndroidUtilities.showKeyboard(searchField);
+            Keyboard.showKeyboard(searchField);
         }
     }
 
     public void clearFocusOnSearchView() {
         searchField.clearFocus();
-        AndroidUtilities.hideKeyboard(searchField);
+        Keyboard.hideKeyboard(searchField);
     }
 
     public FrameLayout getSearchContainer() {

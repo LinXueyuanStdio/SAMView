@@ -40,6 +40,7 @@ import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
 import com.same.lib.theme.ThemeInfo;
 import com.same.lib.theme.ThemeManager;
+import com.same.lib.util.Keyboard;
 import com.same.lib.util.Space;
 
 import java.util.ArrayList;
@@ -497,7 +498,7 @@ public class ContainerLayout extends FrameLayout {
                     } else if (startedTracking) {
                         if (!beginTrackingSent) {
                             if (parentActivity.getCurrentFocus() != null) {
-                                AndroidUtilities.hideKeyboard(parentActivity.getCurrentFocus());
+                                Keyboard.hideKeyboard(parentActivity.getCurrentFocus());
                             }
                             BasePage currentFragment = fragmentsStack.get(fragmentsStack.size() - 1);
                             currentFragment.onBeginSlide();
@@ -519,7 +520,7 @@ public class ContainerLayout extends FrameLayout {
                             prepareForMoving(ev);
                             if (!beginTrackingSent) {
                                 if (((Activity) getContext()).getCurrentFocus() != null) {
-                                    AndroidUtilities.hideKeyboard(((Activity) getContext()).getCurrentFocus());
+                                    Keyboard.hideKeyboard(((Activity) getContext()).getCurrentFocus());
                                 }
                                 beginTrackingSent = true;
                             }
@@ -964,7 +965,7 @@ public class ContainerLayout extends FrameLayout {
         }
         fragment.setInPreviewMode(preview);
         if (parentActivity.getCurrentFocus() != null && fragment.hideKeyboardOnShow()) {
-            AndroidUtilities.hideKeyboard(parentActivity.getCurrentFocus());
+            Keyboard.hideKeyboard(parentActivity.getCurrentFocus());
         }
         boolean needAnimation = preview || !forceWithoutAnimation && SharedConfig.view_animations;
 
@@ -1301,7 +1302,7 @@ public class ContainerLayout extends FrameLayout {
             return;
         }
         if (parentActivity.getCurrentFocus() != null) {
-            AndroidUtilities.hideKeyboard(parentActivity.getCurrentFocus());
+            Keyboard.hideKeyboard(parentActivity.getCurrentFocus());
         }
         setInnerTranslationX(0);
         boolean needAnimation = inPreviewMode || transitionAnimationPreviewMode || animated && SharedConfig.view_animations;

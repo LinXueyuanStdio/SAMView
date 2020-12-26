@@ -60,6 +60,25 @@ public class Space {
         }
     }
 
+    public static int getMinTabletSide() {
+        if (!isSmallTablet()) {
+            int smallSide = Math.min(displaySize.x, displaySize.y);
+            int leftSide = smallSide * 35 / 100;
+            if (leftSide < dp(320)) {
+                leftSide = dp(320);
+            }
+            return smallSide - leftSide;
+        } else {
+            int smallSide = Math.min(displaySize.x, displaySize.y);
+            int maxSide = Math.max(displaySize.x, displaySize.y);
+            int leftSide = maxSide * 35 / 100;
+            if (leftSide < dp(320)) {
+                leftSide = dp(320);
+            }
+            return Math.min(smallSide, maxSide - leftSide);
+        }
+    }
+
     public static float getPixelsInCM(float cm, boolean isX) {
         return (cm / 2.54f) * (isX ? displayMetrics.xdpi : displayMetrics.ydpi);
     }

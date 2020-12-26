@@ -3,7 +3,6 @@ package com.same.lib.core;
 import android.os.Build;
 import android.view.View;
 
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.util.Space;
 import com.same.lib.util.Store;
 
@@ -44,7 +43,7 @@ public class AdjustPanLayoutHelper {
         if (parentView.getVisibility() != View.VISIBLE || parentView.getParent() == null) {
             return;
         }
-        if (!AndroidUtilities.usingHardwareInput && Store.smoothKeyboard) {
+        if (!Space.usingHardwareInput && Store.smoothKeyboard) {
             parentView.getLocationInWindow(loc);
             if (loc[1] <= 0) {
                 loc[1] -= parentView.getTranslationY();

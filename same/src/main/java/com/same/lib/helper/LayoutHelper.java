@@ -7,7 +7,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
-import com.same.lib.base.SharedConfig;
 import com.same.lib.util.Space;
 import com.same.lib.util.Store;
 

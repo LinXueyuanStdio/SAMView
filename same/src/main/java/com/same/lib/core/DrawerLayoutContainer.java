@@ -25,8 +25,8 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.same.lib.R;
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.SharedConfig;
+import com.same.lib.util.Keyboard;
 import com.same.lib.util.Space;
 import com.same.lib.util.Store;
 
@@ -194,7 +194,7 @@ public class DrawerLayoutContainer extends FrameLayout {
             return;
         }
         if (Space.isTablet() && parentActionBarLayout != null && parentActionBarLayout.parentActivity != null) {
-            AndroidUtilities.hideKeyboard(parentActionBarLayout.parentActivity.getCurrentFocus());
+            Keyboard.hideKeyboard(parentActionBarLayout.parentActivity.getCurrentFocus());
         }
         cancelCurrentAnimation();
         AnimatorSet animatorSet = new AnimatorSet();
@@ -345,7 +345,7 @@ public class DrawerLayoutContainer extends FrameLayout {
                     } else if (startedTracking) {
                         if (!beginTrackingSent) {
                             if (((Activity) getContext()).getCurrentFocus() != null) {
-                                AndroidUtilities.hideKeyboard(((Activity) getContext()).getCurrentFocus());
+                                Keyboard.hideKeyboard(((Activity) getContext()).getCurrentFocus());
                             }
                             beginTrackingSent = true;
                         }

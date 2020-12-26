@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EdgeEffect;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -43,6 +44,7 @@ import com.same.lib.util.Space;
 import com.same.lib.util.Store;
 import com.timecat.component.locale.MLang;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
@@ -460,7 +462,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 }
             };
             contentScrollView.setVerticalScrollBarEnabled(false);
-            AndroidUtilities.setScrollViewEdgeEffectColor(contentScrollView, getThemeColor(KeyHub.key_dialogScrollGlow));
+            setScrollViewEdgeEffectColor(contentScrollView, getThemeColor(KeyHub.key_dialogScrollGlow));
             containerView.addView(contentScrollView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 0, 0, 0));
 
             scrollContainer = new LinearLayout(context);
@@ -1046,6 +1048,28 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         return null;
+    }
+
+    public static void setScrollViewEdgeEffectColor(ScrollView scrollView, int color) {
+        if (Build.VERSION.SDK_INT >= 21) {
+            try {
+                Field field = ScrollView.class.getDeclaredField("mEdgeGlowTop");
+                field.setAccessible(true);
+                EdgeEffect mEdgeGlowTop = (EdgeEffect) field.get(scrollView);
+                if (mEdgeGlowTop != null) {
+                    mEdgeGlowTop.setColor(color);
+                }
+
+                field = ScrollView.class.getDeclaredField("mEdgeGlowBottom");
+                field.setAccessible(true);
+                EdgeEffect mEdgeGlowBottom = (EdgeEffect) field.get(scrollView);
+                if (mEdgeGlowBottom != null) {
+                    mEdgeGlowBottom.setColor(color);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static class Builder {
