@@ -18,7 +18,7 @@ import java.util.HashMap;
  * @description 主题描述
  * @usage null
  */
-public class ThemeDescription implements com.same.lib.core.ThemeDescription {
+public class MyThemeDescription implements com.same.lib.core.ThemeDescription {
 
     public static int FLAG_BACKGROUND = 0x00000001;
     public static int FLAG_LINKCOLOR = 0x00000002;
@@ -75,7 +75,7 @@ public class ThemeDescription implements com.same.lib.core.ThemeDescription {
 //        void didSetColor();
 //    }
 
-    public ThemeDescription(View view, int flags, Class[] classes, Paint[] paint, Drawable[] drawables, ThemeDescriptionDelegate themeDescriptionDelegate, String key, Object unused) {
+    public MyThemeDescription(View view, int flags, Class[] classes, Paint[] paint, Drawable[] drawables, ThemeDescriptionDelegate themeDescriptionDelegate, String key, Object unused) {
         currentKey = key;
         paintToUpdate = paint;
         drawablesToUpdate = drawables;
@@ -85,7 +85,7 @@ public class ThemeDescription implements com.same.lib.core.ThemeDescription {
         delegate = themeDescriptionDelegate;
     }
 
-    public ThemeDescription(View view, int flags, Class[] classes, Paint paint, Drawable[] drawables, ThemeDescriptionDelegate themeDescriptionDelegate, String key) {
+    public MyThemeDescription(View view, int flags, Class[] classes, Paint paint, Drawable[] drawables, ThemeDescriptionDelegate themeDescriptionDelegate, String key) {
         currentKey = key;
         if (paint != null) {
             paintToUpdate = new Paint[]{paint};
@@ -97,11 +97,11 @@ public class ThemeDescription implements com.same.lib.core.ThemeDescription {
         delegate = themeDescriptionDelegate;
     }
 
-    public ThemeDescription(View view, int flags, Class[] classes, String[] classesFields, Paint[] paint, Drawable[] drawables, ThemeDescriptionDelegate themeDescriptionDelegate, String key) {
+    public MyThemeDescription(View view, int flags, Class[] classes, String[] classesFields, Paint[] paint, Drawable[] drawables, ThemeDescriptionDelegate themeDescriptionDelegate, String key) {
         this(view, flags, classes, classesFields, paint, drawables, -1, themeDescriptionDelegate, key);
     }
 
-    public ThemeDescription(View view, int flags, Class[] classes, String[] classesFields, Paint[] paint, Drawable[] drawables, int alpha, ThemeDescriptionDelegate themeDescriptionDelegate, String key) {
+    public MyThemeDescription(View view, int flags, Class[] classes, String[] classesFields, Paint[] paint, Drawable[] drawables, int alpha, ThemeDescriptionDelegate themeDescriptionDelegate, String key) {
         currentKey = key;
         paintToUpdate = paint;
         drawablesToUpdate = drawables;
@@ -115,7 +115,7 @@ public class ThemeDescription implements com.same.lib.core.ThemeDescription {
         notFoundCachedFields = new HashMap<>();
     }
 
-    public ThemeDescription(View view, int flags, Class[] classes, String[] classesFields, String layerName, String key) {
+    public MyThemeDescription(View view, int flags, Class[] classes, String[] classesFields, String layerName, String key) {
         currentKey = key;
         lottieLayerName = layerName;
         viewToInvalidate = view;

@@ -17,17 +17,17 @@ import com.same.lib.core.SimpleTextView;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.theme.ColorApply;
 import com.same.lib.theme.Theme;
-import com.same.lib.theme.ThemeDescription;
+import com.same.lib.theme.MyThemeDescription;
 
-import static com.same.lib.theme.ThemeDescription.FLAG_CHECKTAG;
-import static com.same.lib.theme.ThemeDescription.FLAG_CURSORCOLOR;
-import static com.same.lib.theme.ThemeDescription.FLAG_DRAWABLESELECTEDSTATE;
-import static com.same.lib.theme.ThemeDescription.FLAG_HINTTEXTCOLOR;
-import static com.same.lib.theme.ThemeDescription.FLAG_IMAGECOLOR;
-import static com.same.lib.theme.ThemeDescription.FLAG_PROGRESSBAR;
-import static com.same.lib.theme.ThemeDescription.FLAG_SERVICEBACKGROUND;
-import static com.same.lib.theme.ThemeDescription.FLAG_TEXTCOLOR;
-import static com.same.lib.theme.ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE;
+import static com.same.lib.theme.MyThemeDescription.FLAG_CHECKTAG;
+import static com.same.lib.theme.MyThemeDescription.FLAG_CURSORCOLOR;
+import static com.same.lib.theme.MyThemeDescription.FLAG_DRAWABLESELECTEDSTATE;
+import static com.same.lib.theme.MyThemeDescription.FLAG_HINTTEXTCOLOR;
+import static com.same.lib.theme.MyThemeDescription.FLAG_IMAGECOLOR;
+import static com.same.lib.theme.MyThemeDescription.FLAG_PROGRESSBAR;
+import static com.same.lib.theme.MyThemeDescription.FLAG_SERVICEBACKGROUND;
+import static com.same.lib.theme.MyThemeDescription.FLAG_TEXTCOLOR;
+import static com.same.lib.theme.MyThemeDescription.FLAG_USEBACKGROUNDDRAWABLE;
 
 /**
  * @author 林学渊
@@ -38,7 +38,7 @@ import static com.same.lib.theme.ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE;
  */
 public class FlagColorDelegate implements ColorApply.ColorDelegate {
     @Override
-    public void apply(ThemeDescription description, Context context, int color, boolean useDefault, boolean save) {
+    public void apply(MyThemeDescription description, Context context, int color, boolean useDefault, boolean save) {
         View viewToInvalidate = description.viewToInvalidate;
         int changeFlags = description.changeFlags;
         if ((changeFlags & FLAG_TEXTCOLOR) != 0) {

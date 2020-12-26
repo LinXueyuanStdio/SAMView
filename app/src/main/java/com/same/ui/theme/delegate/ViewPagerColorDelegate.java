@@ -5,11 +5,11 @@ import android.view.View;
 
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.theme.ColorApply;
-import com.same.lib.theme.ThemeDescription;
+import com.same.lib.theme.MyThemeDescription;
 
 import androidx.viewpager.widget.ViewPager;
 
-import static com.same.lib.theme.ThemeDescription.FLAG_LISTGLOWCOLOR;
+import static com.same.lib.theme.MyThemeDescription.FLAG_LISTGLOWCOLOR;
 
 /**
  * @author 林学渊
@@ -20,7 +20,7 @@ import static com.same.lib.theme.ThemeDescription.FLAG_LISTGLOWCOLOR;
  */
 public class ViewPagerColorDelegate implements ColorApply.ColorDelegate {
     @Override
-    public void apply(ThemeDescription description, Context context, int color, boolean useDefault, boolean save) {
+    public void apply(MyThemeDescription description, Context context, int color, boolean useDefault, boolean save) {
         View viewToInvalidate = description.viewToInvalidate;
         int changeFlags = description.changeFlags;
         if (viewToInvalidate instanceof ViewPager) {

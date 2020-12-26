@@ -5,21 +5,21 @@ import android.view.View;
 
 import com.same.lib.core.ActionBar;
 import com.same.lib.theme.ColorApply;
-import com.same.lib.theme.ThemeDescription;
+import com.same.lib.theme.MyThemeDescription;
 
-import static com.same.lib.theme.ThemeDescription.FLAG_AB_AM_BACKGROUND;
-import static com.same.lib.theme.ThemeDescription.FLAG_AB_AM_ITEMSCOLOR;
-import static com.same.lib.theme.ThemeDescription.FLAG_AB_AM_SELECTORCOLOR;
-import static com.same.lib.theme.ThemeDescription.FLAG_AB_AM_TOPBACKGROUND;
-import static com.same.lib.theme.ThemeDescription.FLAG_AB_ITEMSCOLOR;
-import static com.same.lib.theme.ThemeDescription.FLAG_AB_SEARCH;
-import static com.same.lib.theme.ThemeDescription.FLAG_AB_SEARCHPLACEHOLDER;
-import static com.same.lib.theme.ThemeDescription.FLAG_AB_SELECTORCOLOR;
-import static com.same.lib.theme.ThemeDescription.FLAG_AB_SUBMENUBACKGROUND;
-import static com.same.lib.theme.ThemeDescription.FLAG_AB_SUBMENUITEM;
-import static com.same.lib.theme.ThemeDescription.FLAG_AB_SUBTITLECOLOR;
-import static com.same.lib.theme.ThemeDescription.FLAG_AB_TITLECOLOR;
-import static com.same.lib.theme.ThemeDescription.FLAG_IMAGECOLOR;
+import static com.same.lib.theme.MyThemeDescription.FLAG_AB_AM_BACKGROUND;
+import static com.same.lib.theme.MyThemeDescription.FLAG_AB_AM_ITEMSCOLOR;
+import static com.same.lib.theme.MyThemeDescription.FLAG_AB_AM_SELECTORCOLOR;
+import static com.same.lib.theme.MyThemeDescription.FLAG_AB_AM_TOPBACKGROUND;
+import static com.same.lib.theme.MyThemeDescription.FLAG_AB_ITEMSCOLOR;
+import static com.same.lib.theme.MyThemeDescription.FLAG_AB_SEARCH;
+import static com.same.lib.theme.MyThemeDescription.FLAG_AB_SEARCHPLACEHOLDER;
+import static com.same.lib.theme.MyThemeDescription.FLAG_AB_SELECTORCOLOR;
+import static com.same.lib.theme.MyThemeDescription.FLAG_AB_SUBMENUBACKGROUND;
+import static com.same.lib.theme.MyThemeDescription.FLAG_AB_SUBMENUITEM;
+import static com.same.lib.theme.MyThemeDescription.FLAG_AB_SUBTITLECOLOR;
+import static com.same.lib.theme.MyThemeDescription.FLAG_AB_TITLECOLOR;
+import static com.same.lib.theme.MyThemeDescription.FLAG_IMAGECOLOR;
 
 /**
  * @author 林学渊
@@ -30,7 +30,7 @@ import static com.same.lib.theme.ThemeDescription.FLAG_IMAGECOLOR;
  */
 public class ActionBarColorDelegate implements ColorApply.ColorDelegate {
     @Override
-    public void apply(ThemeDescription description, Context context, int color, boolean useDefault, boolean save) {
+    public void apply(MyThemeDescription description, Context context, int color, boolean useDefault, boolean save) {
         View viewToInvalidate = description.viewToInvalidate;
         int changeFlags = description.changeFlags;
         if (viewToInvalidate instanceof ActionBar) {

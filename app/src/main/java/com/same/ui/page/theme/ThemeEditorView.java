@@ -49,6 +49,7 @@ import android.widget.TextView;
 
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.core.ActionBar;
+import com.same.lib.theme.MyThemeDescription;
 import com.same.ui.theme.AnimationProperties;
 import com.same.lib.core.BasePage;
 import com.same.ui.theme.dialog.BottomSheet;
@@ -1316,7 +1317,7 @@ public class ThemeEditorView {
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !itemsMap.containsKey(KeyHub.key_windowBackgroundGray)) {
                     final ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-                    arrayList.add(new com.same.lib.theme.ThemeDescription(null, 0, null, null, null, null, KeyHub.key_windowBackgroundGray));
+                    arrayList.add(new MyThemeDescription(null, 0, null, null, null, null, KeyHub.key_windowBackgroundGray));
                     items.add(arrayList);
                 }
             }

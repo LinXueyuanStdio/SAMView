@@ -5,9 +5,9 @@ import android.graphics.Paint;
 import android.text.TextPaint;
 
 import com.same.lib.theme.ColorApply;
-import com.same.lib.theme.ThemeDescription;
+import com.same.lib.theme.MyThemeDescription;
 
-import static com.same.lib.theme.ThemeDescription.FLAG_LINKCOLOR;
+import static com.same.lib.theme.MyThemeDescription.FLAG_LINKCOLOR;
 
 /**
  * @author 林学渊
@@ -18,7 +18,7 @@ import static com.same.lib.theme.ThemeDescription.FLAG_LINKCOLOR;
  */
 public class PaintColorDelegate implements ColorApply.ColorDelegate {
     @Override
-    public void apply(ThemeDescription description, Context context, int color, boolean useDefault, boolean save) {
+    public void apply(MyThemeDescription description, Context context, int color, boolean useDefault, boolean save) {
         if (description.paintToUpdate != null) {
             Paint[] paintToUpdate = description.paintToUpdate;
             for (int a = 0; a < paintToUpdate.length; a++) {

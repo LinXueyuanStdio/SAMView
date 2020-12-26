@@ -13,6 +13,7 @@ import com.same.lib.base.AndroidUtilities;
 import com.same.lib.core.BasePage;
 import com.same.lib.core.ThemeDescription;
 import com.same.lib.theme.KeyHub;
+import com.same.lib.theme.MyThemeDescription;
 import com.same.lib.theme.Theme;
 import com.same.ui.R;
 import com.same.ui.theme.dialog.AlertDialog;
@@ -60,6 +61,7 @@ public abstract class BaseActionBarPage extends BasePage {
         Button button = new Button(context);
         button.setPadding(20, 20, 20, 20);
         button.setTextSize(18);
+        button.setAllCaps(false);
         button.setGravity(Gravity.CENTER);
         button.setText(text);
         button.setOnClickListener(clickListener);
@@ -91,14 +93,14 @@ public abstract class BaseActionBarPage extends BasePage {
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> d = new ArrayList<>();
 
-        d.add(new com.same.lib.theme.ThemeDescription(fragmentView, com.same.lib.theme.ThemeDescription.FLAG_BACKGROUND, null, null, null, null, KeyHub.key_windowBackgroundGray));
+        d.add(new MyThemeDescription(fragmentView, MyThemeDescription.FLAG_BACKGROUND, null, null, null, null, KeyHub.key_windowBackgroundGray));
 
-        d.add(new com.same.lib.theme.ThemeDescription(actionBar, com.same.lib.theme.ThemeDescription.FLAG_BACKGROUND, null, null, null, null, KeyHub.key_actionBarDefault));
-        d.add(new com.same.lib.theme.ThemeDescription(actionBar, com.same.lib.theme.ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, KeyHub.key_actionBarDefaultIcon));
-        d.add(new com.same.lib.theme.ThemeDescription(actionBar, com.same.lib.theme.ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, KeyHub.key_actionBarDefaultTitle));
-        d.add(new com.same.lib.theme.ThemeDescription(actionBar, com.same.lib.theme.ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, KeyHub.key_actionBarDefaultSelector));
-        d.add(new com.same.lib.theme.ThemeDescription(actionBar, com.same.lib.theme.ThemeDescription.FLAG_AB_SEARCH, null, null, null, null, KeyHub.key_actionBarDefaultSearch));
-        d.add(new com.same.lib.theme.ThemeDescription(actionBar, com.same.lib.theme.ThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, null, null, null, null, KeyHub.key_actionBarDefaultSearchPlaceholder));
+        d.add(new MyThemeDescription(actionBar, MyThemeDescription.FLAG_BACKGROUND, null, null, null, null, KeyHub.key_actionBarDefault));
+        d.add(new MyThemeDescription(actionBar, MyThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, KeyHub.key_actionBarDefaultIcon));
+        d.add(new MyThemeDescription(actionBar, MyThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, KeyHub.key_actionBarDefaultTitle));
+        d.add(new MyThemeDescription(actionBar, MyThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, KeyHub.key_actionBarDefaultSelector));
+        d.add(new MyThemeDescription(actionBar, MyThemeDescription.FLAG_AB_SEARCH, null, null, null, null, KeyHub.key_actionBarDefaultSearch));
+        d.add(new MyThemeDescription(actionBar, MyThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, null, null, null, null, KeyHub.key_actionBarDefaultSearchPlaceholder));
         return d;
     }
 }

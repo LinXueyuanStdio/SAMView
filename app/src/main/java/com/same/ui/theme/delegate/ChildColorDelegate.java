@@ -28,27 +28,27 @@ import com.same.lib.radiobutton.RadioButton;
 import com.same.ui.theme.span.TypefaceSpan;
 import com.same.lib.theme.ColorApply;
 import com.same.lib.theme.Theme;
-import com.same.lib.theme.ThemeDescription;
+import com.same.lib.theme.MyThemeDescription;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
-import static com.same.lib.theme.ThemeDescription.FLAG_BACKGROUND;
-import static com.same.lib.theme.ThemeDescription.FLAG_BACKGROUNDFILTER;
-import static com.same.lib.theme.ThemeDescription.FLAG_CELLBACKGROUNDCOLOR;
-import static com.same.lib.theme.ThemeDescription.FLAG_CHECKBOX;
-import static com.same.lib.theme.ThemeDescription.FLAG_CHECKBOXCHECK;
-import static com.same.lib.theme.ThemeDescription.FLAG_CHECKTAG;
-import static com.same.lib.theme.ThemeDescription.FLAG_DRAWABLESELECTEDSTATE;
-import static com.same.lib.theme.ThemeDescription.FLAG_FASTSCROLL;
-import static com.same.lib.theme.ThemeDescription.FLAG_IMAGECOLOR;
-import static com.same.lib.theme.ThemeDescription.FLAG_LINKCOLOR;
-import static com.same.lib.theme.ThemeDescription.FLAG_PROGRESSBAR;
-import static com.same.lib.theme.ThemeDescription.FLAG_SELECTOR;
-import static com.same.lib.theme.ThemeDescription.FLAG_SELECTORWHITE;
-import static com.same.lib.theme.ThemeDescription.FLAG_SERVICEBACKGROUND;
-import static com.same.lib.theme.ThemeDescription.FLAG_TEXTCOLOR;
-import static com.same.lib.theme.ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE;
+import static com.same.lib.theme.MyThemeDescription.FLAG_BACKGROUND;
+import static com.same.lib.theme.MyThemeDescription.FLAG_BACKGROUNDFILTER;
+import static com.same.lib.theme.MyThemeDescription.FLAG_CELLBACKGROUNDCOLOR;
+import static com.same.lib.theme.MyThemeDescription.FLAG_CHECKBOX;
+import static com.same.lib.theme.MyThemeDescription.FLAG_CHECKBOXCHECK;
+import static com.same.lib.theme.MyThemeDescription.FLAG_CHECKTAG;
+import static com.same.lib.theme.MyThemeDescription.FLAG_DRAWABLESELECTEDSTATE;
+import static com.same.lib.theme.MyThemeDescription.FLAG_FASTSCROLL;
+import static com.same.lib.theme.MyThemeDescription.FLAG_IMAGECOLOR;
+import static com.same.lib.theme.MyThemeDescription.FLAG_LINKCOLOR;
+import static com.same.lib.theme.MyThemeDescription.FLAG_PROGRESSBAR;
+import static com.same.lib.theme.MyThemeDescription.FLAG_SELECTOR;
+import static com.same.lib.theme.MyThemeDescription.FLAG_SELECTORWHITE;
+import static com.same.lib.theme.MyThemeDescription.FLAG_SERVICEBACKGROUND;
+import static com.same.lib.theme.MyThemeDescription.FLAG_TEXTCOLOR;
+import static com.same.lib.theme.MyThemeDescription.FLAG_USEBACKGROUNDDRAWABLE;
 
 /**
  * @author 林学渊
@@ -59,7 +59,7 @@ import static com.same.lib.theme.ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE;
  */
 public class ChildColorDelegate implements ColorApply.ColorDelegate {
     @Override
-    public void apply(ThemeDescription description, Context context, int color, boolean useDefault, boolean save) {
+    public void apply(MyThemeDescription description, Context context, int color, boolean useDefault, boolean save) {
         View viewToInvalidate = description.viewToInvalidate;
         Class[] listClasses = description.listClasses;
         if (listClasses != null) {
@@ -74,7 +74,7 @@ public class ChildColorDelegate implements ColorApply.ColorDelegate {
         }
     }
 
-    private static void processViewColor(ThemeDescription description,View child, int color) {
+    private static void processViewColor(MyThemeDescription description,View child, int color) {
         View viewToInvalidate = description.viewToInvalidate;
         Class[] listClasses = description.listClasses;
         String[] listClassesFieldName = description.listClassesFieldName;

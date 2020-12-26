@@ -19,6 +19,7 @@ import com.same.lib.helper.LayoutHelper;
 import com.same.lib.listview.LinearLayoutManager;
 import com.same.lib.listview.RecyclerView;
 import com.same.lib.theme.KeyHub;
+import com.same.lib.theme.MyThemeDescription;
 import com.same.lib.theme.Theme;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
@@ -426,25 +427,25 @@ public class LanguageSelectPage extends BasePage {
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> d = new ArrayList<>();
 
-        d.add(new com.same.lib.theme.ThemeDescription(fragmentView, com.same.lib.theme.ThemeDescription.FLAG_BACKGROUND, null, null, null, null, KeyHub.key_windowBackgroundGray));
+        d.add(new MyThemeDescription(fragmentView, MyThemeDescription.FLAG_BACKGROUND, null, null, null, null, KeyHub.key_windowBackgroundGray));
 
-        d.add(new com.same.lib.theme.ThemeDescription(actionBar, com.same.lib.theme.ThemeDescription.FLAG_BACKGROUND, null, null, null, null, KeyHub.key_actionBarDefault));
-        d.add(new com.same.lib.theme.ThemeDescription(actionBar, com.same.lib.theme.ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, KeyHub.key_actionBarDefaultIcon));
-        d.add(new com.same.lib.theme.ThemeDescription(actionBar, com.same.lib.theme.ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, KeyHub.key_actionBarDefaultTitle));
-        d.add(new com.same.lib.theme.ThemeDescription(actionBar, com.same.lib.theme.ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, KeyHub.key_actionBarDefaultSelector));
-        d.add(new com.same.lib.theme.ThemeDescription(actionBar, com.same.lib.theme.ThemeDescription.FLAG_AB_SEARCH, null, null, null, null, KeyHub.key_actionBarDefaultSearch));
-        d.add(new com.same.lib.theme.ThemeDescription(actionBar, com.same.lib.theme.ThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, null, null, null, null, KeyHub.key_actionBarDefaultSearchPlaceholder));
+        d.add(new MyThemeDescription(actionBar, MyThemeDescription.FLAG_BACKGROUND, null, null, null, null, KeyHub.key_actionBarDefault));
+        d.add(new MyThemeDescription(actionBar, MyThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, KeyHub.key_actionBarDefaultIcon));
+        d.add(new MyThemeDescription(actionBar, MyThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, KeyHub.key_actionBarDefaultTitle));
+        d.add(new MyThemeDescription(actionBar, MyThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, KeyHub.key_actionBarDefaultSelector));
+        d.add(new MyThemeDescription(actionBar, MyThemeDescription.FLAG_AB_SEARCH, null, null, null, null, KeyHub.key_actionBarDefaultSearch));
+        d.add(new MyThemeDescription(actionBar, MyThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, null, null, null, null, KeyHub.key_actionBarDefaultSearchPlaceholder));
 
-        d.add(new com.same.lib.theme.ThemeDescription(emptyView, com.same.lib.theme.ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, KeyHub.key_emptyListPlaceholder));
+        d.add(new MyThemeDescription(emptyView, MyThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, KeyHub.key_emptyListPlaceholder));
 
-        d.add(new com.same.lib.theme.ThemeDescription(listView, com.same.lib.theme.ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{LanguageCell.class}, null, null, null, KeyHub.key_windowBackgroundWhite));
-        d.add(new com.same.lib.theme.ThemeDescription(listView, com.same.lib.theme.ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, KeyHub.key_actionBarDefault));
-        d.add(new com.same.lib.theme.ThemeDescription(listView, com.same.lib.theme.ThemeDescription.FLAG_SELECTOR, null, null, null, null, KeyHub.key_listSelector));
-        d.add(new com.same.lib.theme.ThemeDescription(listView, 0, new Class[]{View.class}, CommonTheme.dividerPaint, null, null, KeyHub.key_divider));
-        d.add(new com.same.lib.theme.ThemeDescription(listView, com.same.lib.theme.ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, KeyHub.key_windowBackgroundGrayShadow));
-        d.add(new com.same.lib.theme.ThemeDescription(listView, 0, new Class[]{LanguageCell.class}, new String[]{"textView"}, null, null, null, KeyHub.key_windowBackgroundWhiteBlackText));
-        d.add(new com.same.lib.theme.ThemeDescription(listView, 0, new Class[]{LanguageCell.class}, new String[]{"textView2"}, null, null, null, KeyHub.key_windowBackgroundWhiteGrayText3));
-        d.add(new com.same.lib.theme.ThemeDescription(listView, 0, new Class[]{LanguageCell.class}, new String[]{"checkImage"}, null, null, null, KeyHub.key_featuredStickers_addedIcon));
+        d.add(new MyThemeDescription(listView, MyThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{LanguageCell.class}, null, null, null, KeyHub.key_windowBackgroundWhite));
+        d.add(new MyThemeDescription(listView, MyThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, KeyHub.key_actionBarDefault));
+        d.add(new MyThemeDescription(listView, MyThemeDescription.FLAG_SELECTOR, null, null, null, null, KeyHub.key_listSelector));
+        d.add(new MyThemeDescription(listView, 0, new Class[]{View.class}, CommonTheme.dividerPaint, null, null, KeyHub.key_divider));
+        d.add(new MyThemeDescription(listView, MyThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, KeyHub.key_windowBackgroundGrayShadow));
+        d.add(new MyThemeDescription(listView, 0, new Class[]{LanguageCell.class}, new String[]{"textView"}, null, null, null, KeyHub.key_windowBackgroundWhiteBlackText));
+        d.add(new MyThemeDescription(listView, 0, new Class[]{LanguageCell.class}, new String[]{"textView2"}, null, null, null, KeyHub.key_windowBackgroundWhiteGrayText3));
+        d.add(new MyThemeDescription(listView, 0, new Class[]{LanguageCell.class}, new String[]{"checkImage"}, null, null, null, KeyHub.key_featuredStickers_addedIcon));
 
         return d;
     }

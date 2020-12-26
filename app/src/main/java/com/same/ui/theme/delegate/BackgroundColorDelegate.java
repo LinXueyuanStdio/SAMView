@@ -14,13 +14,13 @@ import com.same.lib.core.EditTextBoldCursor;
 import com.same.lib.drawable.CombinedDrawable;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.theme.ColorApply;
-import com.same.lib.theme.ThemeDescription;
+import com.same.lib.theme.MyThemeDescription;
 
-import static com.same.lib.theme.ThemeDescription.FLAG_BACKGROUND;
-import static com.same.lib.theme.ThemeDescription.FLAG_BACKGROUNDFILTER;
-import static com.same.lib.theme.ThemeDescription.FLAG_CHECKTAG;
-import static com.same.lib.theme.ThemeDescription.FLAG_DRAWABLESELECTEDSTATE;
-import static com.same.lib.theme.ThemeDescription.FLAG_PROGRESSBAR;
+import static com.same.lib.theme.MyThemeDescription.FLAG_BACKGROUND;
+import static com.same.lib.theme.MyThemeDescription.FLAG_BACKGROUNDFILTER;
+import static com.same.lib.theme.MyThemeDescription.FLAG_CHECKTAG;
+import static com.same.lib.theme.MyThemeDescription.FLAG_DRAWABLESELECTEDSTATE;
+import static com.same.lib.theme.MyThemeDescription.FLAG_PROGRESSBAR;
 
 /**
  * @author 林学渊
@@ -31,7 +31,7 @@ import static com.same.lib.theme.ThemeDescription.FLAG_PROGRESSBAR;
  */
 public class BackgroundColorDelegate implements ColorApply.ColorDelegate {
     @Override
-    public void apply(ThemeDescription description, Context context, int color, boolean useDefault, boolean save) {
+    public void apply(MyThemeDescription description, Context context, int color, boolean useDefault, boolean save) {
         View viewToInvalidate = description.viewToInvalidate;
         Class[] listClasses = description.listClasses;
         String[] listClassesFieldName = description.listClassesFieldName;

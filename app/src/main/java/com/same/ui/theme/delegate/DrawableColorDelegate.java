@@ -8,9 +8,9 @@ import android.graphics.drawable.Drawable;
 import com.same.lib.drawable.BackDrawable;
 import com.same.lib.drawable.CombinedDrawable;
 import com.same.lib.theme.ColorApply;
-import com.same.lib.theme.ThemeDescription;
+import com.same.lib.theme.MyThemeDescription;
 
-import static com.same.lib.theme.ThemeDescription.FLAG_BACKGROUNDFILTER;
+import static com.same.lib.theme.MyThemeDescription.FLAG_BACKGROUNDFILTER;
 
 /**
  * @author 林学渊
@@ -21,7 +21,7 @@ import static com.same.lib.theme.ThemeDescription.FLAG_BACKGROUNDFILTER;
  */
 public class DrawableColorDelegate implements ColorApply.ColorDelegate {
     @Override
-    public void apply(ThemeDescription description, Context context, int color, boolean useDefault, boolean save) {
+    public void apply(MyThemeDescription description, Context context, int color, boolean useDefault, boolean save) {
         if (description.drawablesToUpdate != null) {
             Drawable[] drawablesToUpdate = description.drawablesToUpdate;
             for (int a = 0; a < drawablesToUpdate.length; a++) {
