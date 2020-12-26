@@ -40,11 +40,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.same.lib.R;
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.font.FontManager;
 import com.same.lib.theme.KeyHub;
+import com.same.lib.util.Space;
 import com.timecat.component.locale.MLang;
 
 import java.util.ArrayList;
@@ -306,10 +306,10 @@ public final class FloatingToolbar {
             mContext = context;
             mContentContainer = createContentContainer(context);
             mPopupWindow = createPopupWindow(mContentContainer);
-            mMarginHorizontal = AndroidUtilities.dp(16);
-            mMarginVertical = AndroidUtilities.dp(8);
-            mLineHeight = AndroidUtilities.dp(48);
-            mIconTextSpacing = AndroidUtilities.dp(8);
+            mMarginHorizontal = Space.dp(16);
+            mMarginVertical = Space.dp(8);
+            mLineHeight = Space.dp(48);
+            mIconTextSpacing = Space.dp(8);
 
             mLogAccelerateInterpolator = new LogAccelerateInterpolator();
             mFastOutSlowInInterpolator = AnimationUtils.loadInterpolator(mContext, android.R.interpolator.fast_out_slow_in);
@@ -762,9 +762,9 @@ public final class FloatingToolbar {
         private int getAdjustedToolbarWidth(int suggestedWidth) {
             int width = suggestedWidth;
             refreshViewPort();
-            int maximumWidth = mViewPortOnScreen.width() - 2 * AndroidUtilities.dp(16);
+            int maximumWidth = mViewPortOnScreen.width() - 2 * Space.dp(16);
             if (width <= 0) {
-                width = AndroidUtilities.dp(400);
+                width = Space.dp(400);
             }
             return Math.min(width, maximumWidth);
         }
@@ -973,8 +973,8 @@ public final class FloatingToolbar {
 
         private ImageButton createOverflowButton() {
             final ImageButton overflowButton = new ImageButton(mContext);
-            overflowButton.setLayoutParams(new ViewGroup.LayoutParams(AndroidUtilities.dp(56), AndroidUtilities.dp(48)));
-            overflowButton.setPaddingRelative(AndroidUtilities.dp(16), AndroidUtilities.dp(12), AndroidUtilities.dp(16), AndroidUtilities.dp(12));
+            overflowButton.setLayoutParams(new ViewGroup.LayoutParams(Space.dp(56), Space.dp(48)));
+            overflowButton.setPaddingRelative(Space.dp(16), Space.dp(12), Space.dp(16), Space.dp(12));
             overflowButton.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             overflowButton.setImageDrawable(mOverflow);
             int color;
@@ -1095,7 +1095,7 @@ public final class FloatingToolbar {
                 setOutlineProvider(new ViewOutlineProvider() {
                     @Override
                     public void getOutline(View view, Outline outline) {
-                        outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), AndroidUtilities.dp(6));
+                        outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), Space.dp(6));
                     }
                 });
                 setClipToOutline(true);
@@ -1145,7 +1145,7 @@ public final class FloatingToolbar {
             public OverflowPanelViewHelper(Context context, int iconTextSpacing) {
                 mContext = context;
                 mIconTextSpacing = iconTextSpacing;
-                mSidePadding = AndroidUtilities.dp(18);
+                mSidePadding = Space.dp(18);
                 mCalculator = createMenuButton(null);
             }
 
@@ -1177,9 +1177,9 @@ public final class FloatingToolbar {
         LinearLayout menuItemButton = new LinearLayout(context);
         menuItemButton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         menuItemButton.setOrientation(LinearLayout.HORIZONTAL);
-        menuItemButton.setMinimumWidth(AndroidUtilities.dp(48));
-        menuItemButton.setMinimumHeight(AndroidUtilities.dp(48));
-        menuItemButton.setPaddingRelative(AndroidUtilities.dp(16), 0, AndroidUtilities.dp(16), 0);
+        menuItemButton.setMinimumWidth(Space.dp(48));
+        menuItemButton.setMinimumHeight(Space.dp(48));
+        menuItemButton.setPaddingRelative(Space.dp(16), 0, Space.dp(16), 0);
 
         TextView textView = new TextView(context);
         textView.setGravity(Gravity.CENTER);
@@ -1200,8 +1200,8 @@ public final class FloatingToolbar {
             textView.setTextColor(ColorManager.getColor(KeyHub.key_windowBackgroundWhiteBlackText));
             menuItemButton.setBackgroundDrawable(DrawableManager.getSelectorDrawable(false));
         }
-        textView.setPaddingRelative(AndroidUtilities.dp(11), 0, 0, 0);
-        menuItemButton.addView(textView, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, AndroidUtilities.dp(48)));
+        textView.setPaddingRelative(Space.dp(11), 0, 0, 0);
+        menuItemButton.addView(textView, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, Space.dp(48)));
         if (menuItem != null) {
             updateMenuItemButton(menuItemButton, menuItem, iconTextSpacing);
         }
@@ -1230,14 +1230,14 @@ public final class FloatingToolbar {
     private ViewGroup createContentContainer(Context context) {
         RelativeLayout contentContainer = new RelativeLayout(context);
         ViewGroup.MarginLayoutParams layoutParams = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.bottomMargin = layoutParams.leftMargin = layoutParams.topMargin = layoutParams.rightMargin = AndroidUtilities.dp(20);
+        layoutParams.bottomMargin = layoutParams.leftMargin = layoutParams.topMargin = layoutParams.rightMargin = Space.dp(20);
         contentContainer.setLayoutParams(layoutParams);
-        contentContainer.setElevation(AndroidUtilities.dp(2));
+        contentContainer.setElevation(Space.dp(2));
         contentContainer.setFocusable(true);
         contentContainer.setFocusableInTouchMode(true);
         GradientDrawable shape = new GradientDrawable();
         shape.setShape(GradientDrawable.RECTANGLE);
-        int r = AndroidUtilities.dp(6);
+        int r = Space.dp(6);
         shape.setCornerRadii(new float[] { r, r, r, r, r, r, r, r });
         if (currentStyle == STYLE_DIALOG) {
             shape.setColor(ColorManager.getColor(KeyHub.key_dialogBackground));

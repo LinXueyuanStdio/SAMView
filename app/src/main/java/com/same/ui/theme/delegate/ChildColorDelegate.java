@@ -1,4 +1,4 @@
-package com.same.lib.delegate;
+package com.same.ui.theme.delegate;
 
 import android.content.Context;
 import android.graphics.Paint;
@@ -25,7 +25,7 @@ import com.same.lib.drawable.CombinedDrawable;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.lottie.RLottieImageView;
 import com.same.lib.radiobutton.RadioButton;
-import com.same.lib.span.TypefaceSpan;
+import com.same.ui.theme.span.TypefaceSpan;
 import com.same.lib.theme.ColorApply;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;

@@ -6,7 +6,7 @@ import android.graphics.Paint;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
-import com.same.lib.base.AndroidUtilities;
+import com.same.lib.util.Space;
 
 /**
  * @author 林学渊
@@ -37,7 +37,7 @@ public class LineProgressView extends View {
             decelerateInterpolator = new DecelerateInterpolator();
             progressPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             progressPaint.setStrokeCap(Paint.Cap.ROUND);
-            progressPaint.setStrokeWidth(AndroidUtilities.dp(2));
+            progressPaint.setStrokeWidth(Space.dp(2));
         }
     }
 

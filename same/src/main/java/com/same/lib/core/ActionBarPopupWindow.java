@@ -25,8 +25,8 @@ import android.widget.ScrollView;
 import com.same.lib.R;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.helper.LayoutHelper;
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.theme.KeyHub;
+import com.same.lib.util.Space;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -97,7 +97,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             backgroundDrawable = getResources().getDrawable(R.drawable.popup_fixed_alert2).mutate();
             setBackgroundColor(ColorManager.getColor(KeyHub.key_actionBarDefaultSubmenuBackground));
 
-            setPadding(AndroidUtilities.dp(8), AndroidUtilities.dp(8), AndroidUtilities.dp(8), AndroidUtilities.dp(8));
+            setPadding(Space.dp(8), Space.dp(8), Space.dp(8), Space.dp(8));
             setWillNotDraw(false);
 
             try {
@@ -155,7 +155,7 @@ public class ActionBarPopupWindow extends PopupWindow {
         public void setBackScaleY(float value) {
             backScaleY = value;
             if (animationEnabled) {
-                int height = getMeasuredHeight() - AndroidUtilities.dp(16);
+                int height = getMeasuredHeight() - Space.dp(16);
                 if (showedFromBotton) {
                     for (int a = lastStartedChild; a >= 0; a--) {
                         View child = getItemAt(a);
@@ -163,7 +163,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                             continue;
                         }
                         Integer position = positions.get(child);
-                        if (position != null && height - (position * AndroidUtilities.dp(48) + AndroidUtilities.dp(32)) > value * height) {
+                        if (position != null && height - (position * Space.dp(48) + Space.dp(32)) > value * height) {
                             break;
                         }
                         lastStartedChild = a - 1;
@@ -177,7 +177,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                             continue;
                         }
                         Integer position = positions.get(child);
-                        if (position != null && (position + 1) * AndroidUtilities.dp(48) - AndroidUtilities.dp(24) > value * height) {
+                        if (position != null && (position + 1) * Space.dp(48) - Space.dp(24) > value * height) {
                             break;
                         }
                         lastStartedChild = a + 1;
@@ -198,7 +198,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                 AnimatorSet animatorSet = new AnimatorSet();
                 animatorSet.playTogether(
                         ObjectAnimator.ofFloat(child, View.ALPHA, 0.0f, 1.0f),
-                        ObjectAnimator.ofFloat(child, View.TRANSLATION_Y, AndroidUtilities.dp(showedFromBotton ? 6 : -6), 0));
+                        ObjectAnimator.ofFloat(child, View.TRANSLATION_Y, Space.dp(showedFromBotton ? 6 : -6), 0));
                 animatorSet.setDuration(180);
                 animatorSet.addListener(new AnimatorListenerAdapter() {
                     @Override
@@ -489,7 +489,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             }
             windowAnimatorSet = new AnimatorSet();
             windowAnimatorSet.playTogether(
-                    ObjectAnimator.ofFloat(content, View.TRANSLATION_Y, AndroidUtilities.dp(content.showedFromBotton ? 5 : -5)),
+                    ObjectAnimator.ofFloat(content, View.TRANSLATION_Y, Space.dp(content.showedFromBotton ? 5 : -5)),
                     ObjectAnimator.ofFloat(content, View.ALPHA, 0.0f));
             windowAnimatorSet.setDuration(dismissAnimationDuration);
             windowAnimatorSet.addListener(new Animator.AnimatorListener() {

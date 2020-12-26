@@ -27,6 +27,8 @@ import android.widget.ListView;
 import com.same.lib.R;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.SharedConfig;
+import com.same.lib.util.Space;
+import com.same.lib.util.Store;
 
 import androidx.annotation.Keep;
 
@@ -85,7 +87,7 @@ public class DrawerLayoutContainer extends FrameLayout {
         //适配软键盘
         adjustPanLayoutHelper = new AdjustPanLayoutHelper(this);
 
-        minDrawerMargin = (int) (MIN_DRAWER_MARGIN * AndroidUtilities.density + 0.5f);
+        minDrawerMargin = (int) (MIN_DRAWER_MARGIN * Space.density + 0.5f);
         setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
         setFocusableInTouchMode(true);
 
@@ -93,10 +95,10 @@ public class DrawerLayoutContainer extends FrameLayout {
             setFitsSystemWindows(true);
             setOnApplyWindowInsetsListener((v, insets) -> {
                 final DrawerLayoutContainer drawerLayout = (DrawerLayoutContainer) v;
-                if (AndroidUtilities.statusBarHeight != insets.getSystemWindowInsetTop()) {
+                if (Space.statusBarHeight != insets.getSystemWindowInsetTop()) {
                     drawerLayout.requestLayout();
                 }
-                AndroidUtilities.statusBarHeight = insets.getSystemWindowInsetTop();
+                Space.statusBarHeight = insets.getSystemWindowInsetTop();
                 lastInsets = insets;
                 drawerLayout.setWillNotDraw(insets.getSystemWindowInsetTop() <= 0 && getBackground() == null);
 
@@ -191,7 +193,7 @@ public class DrawerLayoutContainer extends FrameLayout {
         if (!allowOpenDrawer) {
             return;
         }
-        if (AndroidUtilities.isTablet() && parentActionBarLayout != null && parentActionBarLayout.parentActivity != null) {
+        if (Space.isTablet() && parentActionBarLayout != null && parentActionBarLayout.parentActivity != null) {
             AndroidUtilities.hideKeyboard(parentActionBarLayout.parentActivity.getCurrentFocus());
         }
         cancelCurrentAnimation();
@@ -457,11 +459,11 @@ public class DrawerLayoutContainer extends FrameLayout {
         setMeasuredDimension(widthSize, heightSize);
         if (Build.VERSION.SDK_INT < 21) {
             inLayout = true;
-            if (heightSize == AndroidUtilities.displaySize.y + AndroidUtilities.statusBarHeight) {
+            if (heightSize == Space.displaySize.y + Space.statusBarHeight) {
                 if (getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-                    setPadding(0, AndroidUtilities.statusBarHeight, 0, 0);
+                    setPadding(0, Space.statusBarHeight, 0, 0);
                 }
-                heightSize = AndroidUtilities.displaySize.y;
+                heightSize = Space.displaySize.y;
             } else {
                 if (getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
                     setPadding(0, 0, 0, 0);
@@ -469,9 +471,9 @@ public class DrawerLayoutContainer extends FrameLayout {
             }
             inLayout = false;
         } else {
-            int newSize = heightSize - AndroidUtilities.statusBarHeight;
+            int newSize = heightSize - Space.statusBarHeight;
             if (newSize > 0 && newSize < 4096) {
-                AndroidUtilities.displaySize.y = newSize;
+                Space.displaySize.y = newSize;
             }
         }
 
@@ -559,7 +561,7 @@ public class DrawerLayoutContainer extends FrameLayout {
                 canvas.drawRect(clipLeft, 0, clipRight, getHeight(), scrimPaint);
             }
         } else if (shadowLeft != null) {
-            final float alpha = Math.max(0, Math.min(drawerPosition / AndroidUtilities.dp(20), 1.0f));
+            final float alpha = Math.max(0, Math.min(drawerPosition / Space.dp(20), 1.0f));
             if (alpha != 0) {
                 shadowLeft.setBounds((int) drawerPosition, child.getTop(), (int) drawerPosition + shadowLeft.getIntrinsicWidth(), child.getBottom());
                 shadowLeft.setAlpha((int) (0xff * alpha));
@@ -574,7 +576,7 @@ public class DrawerLayoutContainer extends FrameLayout {
         if (Build.VERSION.SDK_INT >= 21 && lastInsets != null) {
             WindowInsets insets = (WindowInsets) lastInsets;
 
-            if (!SharedConfig.smoothKeyboard) {
+            if (!Store.smoothKeyboard) {
                 int bottomInset = insets.getSystemWindowInsetBottom();
                 if (bottomInset > 0) {
                     backgroundPaint.setColor(behindKeyboardColor);

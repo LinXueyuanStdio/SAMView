@@ -29,6 +29,7 @@ import com.same.lib.drawable.DrawableManager;
 import com.same.lib.font.FontManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.KeyHub;
+import com.same.lib.util.Space;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -240,8 +241,8 @@ public final class Bulletin {
 
         public Layout(@NonNull Context context) {
             super(context);
-            setMinimumHeight(AndroidUtilities.dp(48));
-            setBackground(new InsetDrawable(DrawableManager.createRoundRectDrawable(AndroidUtilities.dp(6), ColorManager.getColor(KeyHub.key_undo_background)), AndroidUtilities.dp(8)));
+            setMinimumHeight(Space.dp(48));
+            setBackground(new InsetDrawable(DrawableManager.createRoundRectDrawable(Space.dp(6), ColorManager.getColor(KeyHub.key_undo_background)), Space.dp(8)));
             updateSize();
         }
 
@@ -252,9 +253,9 @@ public final class Bulletin {
         }
 
         private void updateSize() {
-            final boolean isPortrait = AndroidUtilities.displaySize.x < AndroidUtilities.displaySize.y;
-            final boolean matchParentWidth = !AndroidUtilities.isTablet() && isPortrait;
-            setMinimumWidth(matchParentWidth ? 0 : AndroidUtilities.dp(344));
+            final boolean isPortrait = Space.displaySize.x < Space.displaySize.y;
+            final boolean matchParentWidth = !Space.isTablet() && isPortrait;
+            setMinimumWidth(matchParentWidth ? 0 : Space.dp(344));
             setLayoutParams(LayoutHelper.createFrame(matchParentWidth ? LayoutHelper.MATCH_PARENT : LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL));
         }
 
@@ -441,7 +442,7 @@ public final class Bulletin {
         @Override
         protected void measureChildWithMargins(View child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
             if (button != null && child != button) {
-                widthUsed += button.getMeasuredWidth() - AndroidUtilities.dp(12);
+                widthUsed += button.getMeasuredWidth() - Space.dp(12);
             }
             super.measureChildWithMargins(child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
             if (child != button) {

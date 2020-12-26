@@ -7,11 +7,12 @@ import android.content.res.Configuration;
 import android.os.Handler;
 
 import com.same.lib.base.AndroidUtilities;
-import com.same.lib.delegate.ColorDelegateLoader;
 import com.same.lib.intro.IntroLoader;
 import com.same.lib.lottie.NativeLoader;
 import com.same.lib.theme.Theme;
+import com.same.lib.util.Space;
 import com.same.ui.lang.MyLang;
+import com.same.ui.theme.delegate.ColorDelegateLoader;
 
 import androidx.annotation.NonNull;
 
@@ -37,6 +38,7 @@ public class MyApplication extends Application {
         super.onConfigurationChanged(newConfig);
         MyLang.onConfigurationChanged(newConfig);
         AndroidUtilities.checkDisplaySize(applicationContext, newConfig);
+        Space.checkDisplaySize(applicationContext, newConfig);
         Theme.onConfigurationChanged(applicationContext, newConfig);
     }
 }

@@ -19,10 +19,10 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.NinePatchDrawable;
 import android.os.Build;
 
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.SharedConfig;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
+import com.same.lib.util.Space;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -145,7 +145,7 @@ public class MessageDrawable extends Drawable {
         if (currentType == TYPE_PREVIEW) {
             return (int) Math.ceil(3 * value);
         } else {
-            return AndroidUtilities.dp(value);
+            return Space.dp(value);
         }
     }
 
@@ -158,7 +158,7 @@ public class MessageDrawable extends Drawable {
     }
 
     public Drawable getBackgroundDrawable() {
-        int newRad = AndroidUtilities.dp(SharedConfig.bubbleRadius);
+        int newRad = Space.dp(SharedConfig.bubbleRadius);
         int idx;
         if (isTopNear && isBottomNear) {
             idx = 3;
@@ -192,14 +192,14 @@ public class MessageDrawable extends Drawable {
                     shadowPaint.setColorFilter(new PorterDuffColorFilter(shadowColor, PorterDuff.Mode.MULTIPLY));
 
                     shadowPaint.setShadowLayer(2, 0, 1, 0xffffffff);
-                    if (AndroidUtilities.density > 1) {
+                    if (Space.density > 1) {
                         setBounds(-1, -1, bitmap.getWidth() + 1, bitmap.getHeight() + 1);
                     } else {
                         setBounds(0, 0, bitmap.getWidth(), bitmap.getHeight());
                     }
                     draw(canvas, shadowPaint);
 
-                    if (AndroidUtilities.density > 1) {
+                    if (Space.density > 1) {
                         shadowPaint.setColor(0);
                         shadowPaint.setShadowLayer(0, 0, 0, 0);
                         shadowPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
@@ -237,7 +237,7 @@ public class MessageDrawable extends Drawable {
         if (gradientShader == null && !isSelected) {
             return null;
         }
-        int newRad = AndroidUtilities.dp(SharedConfig.bubbleRadius);
+        int newRad = Space.dp(SharedConfig.bubbleRadius);
         int idx;
         if (isTopNear && isBottomNear) {
             idx = 3;
@@ -261,14 +261,14 @@ public class MessageDrawable extends Drawable {
                 shadowPaint.setShader(gradientShader);
 
                 shadowPaint.setShadowLayer(2, 0, 1, 0xffffffff);
-                if (AndroidUtilities.density > 1) {
+                if (Space.density > 1) {
                     setBounds(-1, -1, bitmap.getWidth() + 1, bitmap.getHeight() + 1);
                 } else {
                     setBounds(0, 0, bitmap.getWidth(), bitmap.getHeight());
                 }
                 draw(canvas, shadowPaint);
 
-                if (AndroidUtilities.density > 1) {
+                if (Space.density > 1) {
                     shadowPaint.setColor(0);
                     shadowPaint.setShadowLayer(0, 0, 0, 0);
                     shadowPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));

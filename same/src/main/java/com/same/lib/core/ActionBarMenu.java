@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.drawable.DrawableManager;
+import com.same.lib.util.Space;
 
 /**
  * @author 林学渊
@@ -52,7 +52,7 @@ public class ActionBarMenu extends LinearLayout {
     }
 
     public ActionBarMenuItem addItem(int id, Drawable drawable) {
-        return addItem(id, 0, null, isActionMode ? parentActionBar.itemsActionModeBackgroundColor : parentActionBar.itemsBackgroundColor, drawable, AndroidUtilities.dp(48), null);
+        return addItem(id, 0, null, isActionMode ? parentActionBar.itemsActionModeBackgroundColor : parentActionBar.itemsBackgroundColor, drawable, Space.dp(48), null);
     }
 
     public ActionBarMenuItem addItem(int id, int icon) {
@@ -64,7 +64,7 @@ public class ActionBarMenu extends LinearLayout {
     }
 
     public ActionBarMenuItem addItem(int id, int icon, int backgroundColor) {
-        return addItem(id, icon, null, backgroundColor, null, AndroidUtilities.dp(48), null);
+        return addItem(id, icon, null, backgroundColor, null, Space.dp(48), null);
     }
 
     public ActionBarMenuItem addItemWithWidth(int id, int icon, int width) {
@@ -81,7 +81,7 @@ public class ActionBarMenu extends LinearLayout {
         if (text != null) {
             menuItem.textView.setText(text);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width != 0 ? width : ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            layoutParams.leftMargin = layoutParams.rightMargin = AndroidUtilities.dp(14);
+            layoutParams.leftMargin = layoutParams.rightMargin = Space.dp(14);
             addView(menuItem, layoutParams);
         } else {
             if (drawable != null) {

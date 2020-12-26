@@ -1,4 +1,4 @@
-package com.same.lib.delegate;
+package com.same.ui.theme.delegate;
 
 import android.content.Context;
 import android.graphics.PorterDuff;

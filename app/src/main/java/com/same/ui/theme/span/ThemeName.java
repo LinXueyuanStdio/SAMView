@@ -1,4 +1,4 @@
-package com.same.lib.span;
+package com.same.ui.theme.span;
 
 import android.content.Context;
 

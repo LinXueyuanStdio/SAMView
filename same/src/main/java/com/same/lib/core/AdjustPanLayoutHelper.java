@@ -4,7 +4,7 @@ import android.os.Build;
 import android.view.View;
 
 import com.same.lib.base.AndroidUtilities;
-import com.same.lib.base.SharedConfig;
+import com.same.lib.util.Store;
 
 /**
  * @author 林学渊
@@ -30,7 +30,7 @@ public class AdjustPanLayoutHelper {
     }
 
     private void onUpdate() {
-        if (!SharedConfig.smoothKeyboard) {
+        if (!Store.smoothKeyboard) {
             return;
         }
         //prevMovement = Integer.MAX_VALUE;
@@ -43,7 +43,7 @@ public class AdjustPanLayoutHelper {
         if (parentView.getVisibility() != View.VISIBLE || parentView.getParent() == null) {
             return;
         }
-        if (!AndroidUtilities.usingHardwareInput && SharedConfig.smoothKeyboard) {
+        if (!AndroidUtilities.usingHardwareInput && Store.smoothKeyboard) {
             parentView.getLocationInWindow(loc);
             if (loc[1] <= 0) {
                 loc[1] -= parentView.getTranslationY();

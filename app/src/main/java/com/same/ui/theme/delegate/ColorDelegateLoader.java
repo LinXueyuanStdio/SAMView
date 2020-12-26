@@ -1,4 +1,4 @@
-package com.same.lib.delegate;
+package com.same.ui.theme.delegate;
 
 import com.same.lib.theme.ColorApply;
 

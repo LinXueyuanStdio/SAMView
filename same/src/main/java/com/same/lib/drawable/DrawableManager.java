@@ -25,13 +25,15 @@ import android.os.Build;
 import android.util.StateSet;
 
 import com.same.lib.R;
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.SharedConfig;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
+import com.same.lib.util.Space;
 
 import java.lang.reflect.Method;
 import java.util.Calendar;
+
+import androidx.annotation.ColorInt;
 
 /**
  * @author 林学渊
@@ -107,8 +109,8 @@ public class DrawableManager {
             if (dialogs_holidayDrawable == null) {
                 if (monthOfYear == 11 && dayOfMonth >= (SharedConfig.DEBUG_PRIVATE_VERSION ? 29 : 31) && dayOfMonth <= 31 || monthOfYear == 0 && dayOfMonth == 1) {
                     dialogs_holidayDrawable = context.getResources().getDrawable(R.drawable.newyear);
-                    dialogs_holidayDrawableOffsetX = -AndroidUtilities.dp(3);
-                    dialogs_holidayDrawableOffsetY = -AndroidUtilities.dp(1);
+                    dialogs_holidayDrawableOffsetX = -Space.dp(3);
+                    dialogs_holidayDrawableOffsetY = -Space.dp(1);
                 }
             }
         }
@@ -191,7 +193,7 @@ public class DrawableManager {
         paint.setColor(0xffffffff);
         if (stroke == 1) {
             paint.setStyle(Paint.Style.STROKE);
-            paint.setStrokeWidth(AndroidUtilities.dp(2));
+            paint.setStrokeWidth(Space.dp(2));
         } else if (stroke == 2) {
             paint.setAlpha(0);
         }
@@ -287,7 +289,7 @@ public class DrawableManager {
 
     public static Drawable getRoundRectSelectorDrawable(int color) {
         if (Build.VERSION.SDK_INT >= 21) {
-            Drawable maskDrawable = createRoundRectDrawable(AndroidUtilities.dp(3), 0xffffffff);
+            Drawable maskDrawable = createRoundRectDrawable(Space.dp(3), 0xffffffff);
             ColorStateList colorStateList = new ColorStateList(
                     new int[][]{StateSet.WILD_CARD},
                     new int[]{(color & 0x00ffffff) | 0x19000000}
@@ -295,8 +297,8 @@ public class DrawableManager {
             return new RippleDrawable(colorStateList, null, maskDrawable);
         } else {
             StateListDrawable stateListDrawable = new StateListDrawable();
-            stateListDrawable.addState(new int[]{android.R.attr.state_pressed}, createRoundRectDrawable(AndroidUtilities.dp(3), (color & 0x00ffffff) | 0x19000000));
-            stateListDrawable.addState(new int[]{android.R.attr.state_selected}, createRoundRectDrawable(AndroidUtilities.dp(3), (color & 0x00ffffff) | 0x19000000));
+            stateListDrawable.addState(new int[]{android.R.attr.state_pressed}, createRoundRectDrawable(Space.dp(3), (color & 0x00ffffff) | 0x19000000));
+            stateListDrawable.addState(new int[]{android.R.attr.state_selected}, createRoundRectDrawable(Space.dp(3), (color & 0x00ffffff) | 0x19000000));
             stateListDrawable.addState(StateSet.WILD_CARD, new ColorDrawable(0x00000000));
             return stateListDrawable;
         }
@@ -372,11 +374,11 @@ public class DrawableManager {
                                 rect = new RectF();
                             }
                             rect.set(bounds);
-                            canvas.drawRoundRect(rect, AndroidUtilities.dp(6), AndroidUtilities.dp(6), maskPaint);
+                            canvas.drawRoundRect(rect, Space.dp(6), Space.dp(6), maskPaint);
                         } else {
                             int rad;
                             if (maskType == 1 || maskType == 6) {
-                                rad = AndroidUtilities.dp(20);
+                                rad = Space.dp(20);
                             } else if (maskType == 3) {
                                 rad = (Math.max(bounds.width(), bounds.height()) / 2);
                             } else {
@@ -411,7 +413,7 @@ public class DrawableManager {
             RippleDrawable rippleDrawable = new RippleDrawable(colorStateList, null, maskDrawable);
             if (Build.VERSION.SDK_INT >= 23) {
                 if (maskType == 1) {
-                    rippleDrawable.setRadius(radius <= 0 ? AndroidUtilities.dp(20) : radius);
+                    rippleDrawable.setRadius(radius <= 0 ? Space.dp(20) : radius);
                 } else if (maskType == 5) {
                     rippleDrawable.setRadius(RippleDrawable.RADIUS_AUTO);
                 }
@@ -427,7 +429,7 @@ public class DrawableManager {
     }
 
 
-    public static void setDrawableColor(Drawable drawable, int color) {
+    public static void setDrawableColor(Drawable drawable, @ColorInt int color) {
         if (drawable == null) {
             return;
         }

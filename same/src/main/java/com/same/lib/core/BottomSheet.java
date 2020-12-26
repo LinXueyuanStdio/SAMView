@@ -44,6 +44,7 @@ import com.same.lib.font.FontManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.ThemeDescription;
+import com.same.lib.util.Space;
 
 import java.util.ArrayList;
 
@@ -343,16 +344,16 @@ public class BottomSheet extends Dialog {
             View rootView = getRootView();
             getWindowVisibleDisplayFrame(rect);
             if (rect.bottom != 0 && rect.top != 0) {
-                int usableViewHeight = rootView.getHeight() - (rect.top != 0 ? AndroidUtilities.statusBarHeight : 0) - AndroidUtilities.getViewInset(rootView);
+                int usableViewHeight = rootView.getHeight() - (rect.top != 0 ? Space.statusBarHeight : 0) - AndroidUtilities.getViewInset(rootView);
                 keyboardHeight = Math.max(0, usableViewHeight - (rect.bottom - rect.top));
-                if (keyboardHeight < AndroidUtilities.dp(20)) {
+                if (keyboardHeight < Space.dp(20)) {
                     keyboardHeight = 0;
                 }
                 bottomInset -= keyboardHeight;
             } else {
                 keyboardHeight = 0;
             }
-            keyboardVisible = keyboardHeight > AndroidUtilities.dp(20);
+            keyboardVisible = keyboardHeight > Space.dp(20);
             if (lastInsets != null && Build.VERSION.SDK_INT >= 21) {
                 bottomInset = lastInsets.getSystemWindowInsetBottom();
                 if (Build.VERSION.SDK_INT >= 29) {
@@ -381,10 +382,10 @@ public class BottomSheet extends Dialog {
             if (containerView != null) {
                 if (!fullWidth) {
                     int widthSpec;
-                    if (AndroidUtilities.isTablet()) {
-                        widthSpec = MeasureSpec.makeMeasureSpec((int) (Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) * 0.8f) + backgroundPaddingLeft * 2, MeasureSpec.EXACTLY);
+                    if (Space.isTablet()) {
+                        widthSpec = MeasureSpec.makeMeasureSpec((int) (Math.min(Space.displaySize.x, Space.displaySize.y) * 0.8f) + backgroundPaddingLeft * 2, MeasureSpec.EXACTLY);
                     } else {
-                        widthSpec = MeasureSpec.makeMeasureSpec(isPortrait ? width + backgroundPaddingLeft * 2 : (int) Math.max(width * 0.8f, Math.min(AndroidUtilities.dp(480), width)) + backgroundPaddingLeft * 2, MeasureSpec.EXACTLY);
+                        widthSpec = MeasureSpec.makeMeasureSpec(isPortrait ? width + backgroundPaddingLeft * 2 : (int) Math.max(width * 0.8f, Math.min(Space.dp(480), width)) + backgroundPaddingLeft * 2, MeasureSpec.EXACTLY);
                     }
                     containerView.measure(widthSpec, MeasureSpec.makeMeasureSpec(height, MeasureSpec.AT_MOST));
                 } else {
@@ -577,12 +578,12 @@ public class BottomSheet extends Dialog {
 
             currentType = type;
             setBackgroundDrawable(DrawableManager.getSelectorDrawable(false));
-            //setPadding(AndroidUtilities.dp(16), 0, AndroidUtilities.dp(16), 0);
+            //setPadding(Space.dp(16), 0, Space.dp(16), 0);
 
             imageView = new ImageView(context);
             imageView.setScaleType(ImageView.ScaleType.CENTER);
             imageView.setColorFilter(new PorterDuffColorFilter(ColorManager.getColor(KeyHub.key_dialogIcon), PorterDuff.Mode.MULTIPLY));
-            addView(imageView, LayoutHelper.createFrame(56, 48, Gravity.CENTER_VERTICAL | (SharedConfig.isRTL ? Gravity.RIGHT : Gravity.LEFT)));
+            addView(imageView, LayoutHelper.createFrame(56, 48, Gravity.CENTER_VERTICAL | (Store.isRTL ? Gravity.RIGHT : Gravity.LEFT)));
 
             textView = new TextView(context);
             textView.setLines(1);
@@ -592,7 +593,7 @@ public class BottomSheet extends Dialog {
             if (type == 0) {
                 textView.setTextColor(ColorManager.getColor(KeyHub.key_dialogTextBlack));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-                addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (SharedConfig.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL));
+                addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (Store.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL));
             } else if (type == 1) {
                 textView.setGravity(Gravity.CENTER);
                 textView.setTextColor(ColorManager.getColor(KeyHub.key_dialogTextBlack));
@@ -604,7 +605,7 @@ public class BottomSheet extends Dialog {
                 textView.setTextColor(ColorManager.getColor(KeyHub.key_featuredStickers_buttonText));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                 textView.setTypeface(FontManager.getMediumTypeface(context));
-                textView.setBackground(DrawableManager.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), ColorManager.getColor(KeyHub.key_featuredStickers_addButton), ColorManager.getColor(KeyHub.key_featuredStickers_addButtonPressed)));
+                textView.setBackground(DrawableManager.createSimpleSelectorRoundRectDrawable(Space.dp(4), ColorManager.getColor(KeyHub.key_featuredStickers_addButton), ColorManager.getColor(KeyHub.key_featuredStickers_addButtonPressed)));
                 addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, 0, 16, 16, 16, 16));
             }
         }
@@ -615,7 +616,7 @@ public class BottomSheet extends Dialog {
             if (currentType == 0) {
                 widthMeasureSpec = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY);
             }
-            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(height), MeasureSpec.EXACTLY));
+            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(Space.dp(height), MeasureSpec.EXACTLY));
         }
 
         public void setTextColor(int color) {
@@ -644,15 +645,15 @@ public class BottomSheet extends Dialog {
                 }
                 imageView.setVisibility(VISIBLE);
                 if (bigTitle) {
-                    textView.setPadding(AndroidUtilities.dp(SharedConfig.isRTL ? 21 : 72), 0, AndroidUtilities.dp(SharedConfig.isRTL ? 72 : 21), 0);
-                    imageView.setPadding(SharedConfig.isRTL ? 0 : AndroidUtilities.dp(5), 0, SharedConfig.isRTL ? AndroidUtilities.dp(5) : 5, 0);
+                    textView.setPadding(Space.dp(Store.isRTL ? 21 : 72), 0, Space.dp(Store.isRTL ? 72 : 21), 0);
+                    imageView.setPadding(Store.isRTL ? 0 : Space.dp(5), 0, Store.isRTL ? Space.dp(5) : 5, 0);
                 } else {
-                    textView.setPadding(AndroidUtilities.dp(SharedConfig.isRTL ? 16 : 72), 0, AndroidUtilities.dp(SharedConfig.isRTL ? 72 : 16), 0);
+                    textView.setPadding(Space.dp(Store.isRTL ? 16 : 72), 0, Space.dp(Store.isRTL ? 72 : 16), 0);
                     imageView.setPadding(0, 0, 0, 0);
                 }
             } else {
                 imageView.setVisibility(INVISIBLE);
-                textView.setPadding(AndroidUtilities.dp(bigTitle ? 21 : 16), 0, AndroidUtilities.dp(bigTitle ? 21 : 16), 0);
+                textView.setPadding(Space.dp(bigTitle ? 21 : 16), 0, Space.dp(bigTitle ? 21 : 16), 0);
             }
         }
 
@@ -751,7 +752,7 @@ public class BottomSheet extends Dialog {
                 }
             };
             containerView.setBackgroundDrawable(shadowDrawable);
-            containerView.setPadding(backgroundPaddingLeft, (applyTopPadding ? AndroidUtilities.dp(8) : 0) + backgroundPaddingTop - 1, backgroundPaddingLeft, (applyBottomPadding ? AndroidUtilities.dp(8) : 0));
+            containerView.setPadding(backgroundPaddingLeft, (applyTopPadding ? Space.dp(8) : 0) + backgroundPaddingTop - 1, backgroundPaddingLeft, (applyBottomPadding ? Space.dp(8) : 0));
         }
         containerView.setVisibility(View.INVISIBLE);
         container.addView(containerView, 0, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM));
@@ -766,11 +767,11 @@ public class BottomSheet extends Dialog {
                 titleView.setTextColor(ColorManager.getColor(KeyHub.key_dialogTextBlack));
                 titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
                 titleView.setTypeface(FontManager.getMediumTypeface(context));
-                titleView.setPadding(AndroidUtilities.dp(21), AndroidUtilities.dp(6), AndroidUtilities.dp(21), AndroidUtilities.dp(8));
+                titleView.setPadding(Space.dp(21), Space.dp(6), Space.dp(21), Space.dp(8));
             } else {
                 titleView.setTextColor(ColorManager.getColor(KeyHub.key_dialogTextGray2));
                 titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-                titleView.setPadding(AndroidUtilities.dp(16), 0, AndroidUtilities.dp(16), AndroidUtilities.dp(8));
+                titleView.setPadding(Space.dp(16), 0, Space.dp(16), Space.dp(8));
             }
             titleView.setEllipsize(TextUtils.TruncateAt.MIDDLE);
             titleView.setGravity(Gravity.CENTER_VERTICAL);
@@ -866,7 +867,7 @@ public class BottomSheet extends Dialog {
         }
         dismissed = false;
         cancelSheetAnimation();
-        containerView.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.x + backgroundPaddingLeft * 2, View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.y, View.MeasureSpec.AT_MOST));
+        containerView.measure(View.MeasureSpec.makeMeasureSpec(Space.displaySize.x + backgroundPaddingLeft * 2, View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(Space.displaySize.y, View.MeasureSpec.AT_MOST));
         if (showWithoutAnimation) {
             backDrawable.setAlpha(dimBehind ? 51 : 0);
             containerView.setTranslationY(0);
@@ -1085,7 +1086,7 @@ public class BottomSheet extends Dialog {
         currentSheetAnimationType = 2;
         currentSheetAnimation = new AnimatorSet();
         currentSheetAnimation.playTogether(
-                ObjectAnimator.ofFloat(containerView, View.TRANSLATION_Y, containerView.getMeasuredHeight() + AndroidUtilities.dp(10)),
+                ObjectAnimator.ofFloat(containerView, View.TRANSLATION_Y, containerView.getMeasuredHeight() + Space.dp(10)),
                 ObjectAnimator.ofInt(backDrawable, AnimationProperties.COLOR_DRAWABLE_ALPHA, 0)
         );
         currentSheetAnimation.setDuration(180);
@@ -1136,7 +1137,7 @@ public class BottomSheet extends Dialog {
             currentSheetAnimationType = 2;
             currentSheetAnimation = new AnimatorSet();
             currentSheetAnimation.playTogether(
-                    ObjectAnimator.ofFloat(containerView, View.TRANSLATION_Y, containerView.getMeasuredHeight() + AndroidUtilities.dp(10)),
+                    ObjectAnimator.ofFloat(containerView, View.TRANSLATION_Y, containerView.getMeasuredHeight() + Space.dp(10)),
                     ObjectAnimator.ofInt(backDrawable, AnimationProperties.COLOR_DRAWABLE_ALPHA, 0)
             );
             if (useFastDismiss) {

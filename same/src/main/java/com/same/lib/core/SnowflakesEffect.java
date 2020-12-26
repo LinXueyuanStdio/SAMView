@@ -5,9 +5,10 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.view.View;
 
-import com.same.lib.drawable.ColorManager;
 import com.same.lib.base.AndroidUtilities;
+import com.same.lib.drawable.ColorManager;
 import com.same.lib.theme.KeyHub;
+import com.same.lib.util.Space;
 
 import java.util.ArrayList;
 
@@ -53,9 +54,9 @@ public class SnowflakesEffect {
 
                     float angle = (float) -Math.PI / 2;
 
-                    float px = AndroidUtilities.dpf2(2.0f) * 2 * scale;
-                    float px1 = -AndroidUtilities.dpf2(0.57f) * 2 * scale;
-                    float py1 = AndroidUtilities.dpf2(1.55f) * 2 * scale;
+                    float px = Space.dpf2(2.0f) * 2 * scale;
+                    float px1 = -Space.dpf2(0.57f) * 2 * scale;
+                    float py1 = Space.dpf2(1.55f) * 2 * scale;
                     for (int a = 0; a < 6; a++) {
                         float x1 = (float) Math.cos(angle) * px;
                         float y1 = (float) Math.sin(angle) * px;
@@ -88,12 +89,12 @@ public class SnowflakesEffect {
 
     public SnowflakesEffect() {
         particlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        particlePaint.setStrokeWidth(AndroidUtilities.dp(1.5f));
+        particlePaint.setStrokeWidth(Space.dp(1.5f));
         particlePaint.setStrokeCap(Paint.Cap.ROUND);
         particlePaint.setStyle(Paint.Style.STROKE);
 
         particleThinPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        particleThinPaint.setStrokeWidth(AndroidUtilities.dp(0.5f));
+        particleThinPaint.setStrokeWidth(Space.dp(0.5f));
         particleThinPaint.setStrokeCap(Paint.Cap.ROUND);
         particleThinPaint.setStyle(Paint.Style.STROKE);
 
@@ -154,9 +155,9 @@ public class SnowflakesEffect {
         }
 
         if (AndroidUtilities.random.nextFloat() > 0.7f && particles.size() < 100) {
-            int statusBarHeight = (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+            int statusBarHeight = (Build.VERSION.SDK_INT >= 21 ? Space.statusBarHeight : 0);
             float cx = AndroidUtilities.random.nextFloat() * parent.getMeasuredWidth();
-            float cy = statusBarHeight + AndroidUtilities.random.nextFloat() * (parent.getMeasuredHeight() - AndroidUtilities.dp(20) - statusBarHeight);
+            float cy = statusBarHeight + AndroidUtilities.random.nextFloat() * (parent.getMeasuredHeight() - Space.dp(20) - statusBarHeight);
 
             int angle = AndroidUtilities.random.nextInt(40) - 20 + 90;
             float vx = (float) Math.cos(Math.PI / 180.0 * angle);

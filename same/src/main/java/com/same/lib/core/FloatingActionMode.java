@@ -15,7 +15,7 @@ import android.view.WindowManager;
 import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 
-import com.same.lib.base.AndroidUtilities;
+import com.same.lib.util.Space;
 
 import java.util.Arrays;
 
@@ -87,7 +87,7 @@ public final class FloatingActionMode extends ActionMode {
         mScreenRect = new Rect();
         mOriginatingView = originatingView;
         mOriginatingView.getLocationOnScreen(mViewPositionOnScreen);
-        mBottomAllowance = AndroidUtilities.dp(20);
+        mBottomAllowance = Space.dp(20);
         mDisplaySize = new Point();
         setFloatingToolbar(floatingToolbar);
     }

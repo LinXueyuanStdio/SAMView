@@ -1,7 +1,6 @@
 package com.same.ui.theme;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
@@ -38,7 +37,6 @@ public class CommonTheme extends AbsTheme {
             dividerPaint.setStrokeWidth(1);
 
             avatar_backgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
             checkboxSquare_checkPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             checkboxSquare_checkPaint.setStyle(Paint.Style.STROKE);
             checkboxSquare_checkPaint.setStrokeWidth(AndroidUtilities.dp(2));
@@ -47,11 +45,7 @@ public class CommonTheme extends AbsTheme {
             checkboxSquare_eraserPaint.setColor(0);
             checkboxSquare_eraserPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
             checkboxSquare_backgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
             linkSelectionPaint = new Paint();
-
-            Resources resources = context.getResources();
-
             applyCommonTheme();
         }
     }

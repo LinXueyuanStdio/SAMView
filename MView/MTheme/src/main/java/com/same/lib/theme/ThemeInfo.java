@@ -2,13 +2,6 @@ package com.same.lib.theme;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.GradientDrawable;
 import android.text.TextUtils;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
@@ -18,9 +11,6 @@ import com.same.lib.base.NotificationCenter;
 
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import androidx.annotation.UiThread;
@@ -507,93 +497,6 @@ public class ThemeInfo {
     public int getAccentColor(int id) {
         ThemeAccent accent = themeAccentsMap.get(id);
         return accent != null ? accent.accentColor : 0;
-    }
-
-    public static Bitmap getScaledBitmap(float w, float h, String path, String streamPath, int streamOffset) {
-        FileInputStream stream = null;
-        try {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-
-            if (path != null) {
-                BitmapFactory.decodeFile(path, options);
-            } else {
-                stream = new FileInputStream(streamPath);
-                stream.getChannel().position(streamOffset);
-                BitmapFactory.decodeStream(stream, null, options);
-            }
-            if (options.outWidth > 0 && options.outHeight > 0) {
-                if (w > h && options.outWidth < options.outHeight) {
-                    float temp = w;
-                    w = h;
-                    h = temp;
-                }
-                float scale = Math.min(options.outWidth / w, options.outHeight / h);
-                options.inSampleSize = 1;
-                if (scale > 1.0f) {
-                    do {
-                        options.inSampleSize *= 2;
-                    }
-                    while (options.inSampleSize < scale);
-                }
-                options.inJustDecodeBounds = false;
-                Bitmap wallpaper;
-                if (path != null) {
-                    wallpaper = BitmapFactory.decodeFile(path, options);
-                } else {
-                    stream.getChannel().position(streamOffset);
-                    wallpaper = BitmapFactory.decodeStream(stream, null, options);
-                }
-                return wallpaper;
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (stream != null) {
-                    stream.close();
-                }
-            } catch (Exception e2) {
-                e2.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-    public boolean createBackground(File file, String toPath) {
-        try {
-            Bitmap bitmap = getScaledBitmap(AndroidUtilities.dp(640), AndroidUtilities.dp(360), file.getAbsolutePath(), null, 0);
-            if (bitmap != null && patternBgColor != 0) {
-                Bitmap finalBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
-                Canvas canvas = new Canvas(finalBitmap);
-                int patternColor;
-                if (patternBgGradientColor != 0) {
-                    patternColor = AndroidUtilities.getAverageColor(patternBgColor, patternBgGradientColor);
-                    GradientDrawable gradientDrawable = new GradientDrawable(BackgroundGradientDrawable.getGradientOrientation(patternBgGradientRotation), new int[]{patternBgColor, patternBgGradientColor});
-                    gradientDrawable.setBounds(0, 0, finalBitmap.getWidth(), finalBitmap.getHeight());
-                    gradientDrawable.draw(canvas);
-                } else {
-                    patternColor = AndroidUtilities.getPatternColor(patternBgColor);
-                    canvas.drawColor(patternBgColor);
-                }
-                Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
-                paint.setColorFilter(new PorterDuffColorFilter(patternColor, PorterDuff.Mode.SRC_IN));
-                paint.setAlpha((int) (patternIntensity / 100.0f * 255));
-                canvas.drawBitmap(bitmap, 0, 0, paint);
-                bitmap = finalBitmap;
-                canvas.setBitmap(null);
-            }
-            if (isBlured) {
-                bitmap = AndroidUtilities.blurWallpaper(bitmap);
-            }
-            FileOutputStream stream = new FileOutputStream(toPath);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 87, stream);
-            stream.close();
-            return true;
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     //    @Override TODO 文件加载？

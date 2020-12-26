@@ -31,6 +31,7 @@ import com.same.lib.R;
 import com.same.lib.anim.CubicBezierInterpolator;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.SharedConfig;
+import com.same.lib.util.Space;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -163,7 +164,7 @@ public class EditTextBoldCursor extends EditText {
     private void init() {
         linePaint = new Paint();
         errorPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        errorPaint.setTextSize(AndroidUtilities.dp(11));
+        errorPaint.setTextSize(Space.dp(11));
         if (Build.VERSION.SDK_INT >= 26) {
             setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO);
         }
@@ -211,7 +212,7 @@ public class EditTextBoldCursor extends EditText {
         } catch (Throwable ignore) {
 
         }
-        cursorSize = AndroidUtilities.dp(24);
+        cursorSize = Space.dp(24);
     }
 
     @SuppressLint("PrivateApi")
@@ -357,7 +358,7 @@ public class EditTextBoldCursor extends EditText {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         if (hintLayout != null) {
-            lineY = (getMeasuredHeight() - hintLayout.getHeight()) / 2.0f + hintLayout.getHeight() + AndroidUtilities.dp(6);
+            lineY = (getMeasuredHeight() - hintLayout.getHeight()) / 2.0f + hintLayout.getHeight() + Space.dp(6);
         }
     }
 
@@ -365,7 +366,7 @@ public class EditTextBoldCursor extends EditText {
         if (text == null) {
             text = "";
         }
-        hintLayout = new StaticLayout(text, getPaint(), AndroidUtilities.dp(1000), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        hintLayout = new StaticLayout(text, getPaint(), Space.dp(1000), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
     }
 
     public Layout getHintLayoutEx() {
@@ -491,15 +492,15 @@ public class EditTextBoldCursor extends EditText {
             if (lineLeft != 0) {
                 left -= lineLeft;
             }
-            if (supportRtlHint && SharedConfig.isRTL) {
+            if (supportRtlHint && Store.isRTL) {
                 float offset = getMeasuredWidth() - hintWidth;
-                canvas.translate(left + getScrollX() + offset, lineY - hintLayout.getHeight() - AndroidUtilities.dp(6));
+                canvas.translate(left + getScrollX() + offset, lineY - hintLayout.getHeight() - Space.dp(6));
             } else {
-                canvas.translate(left + getScrollX(), lineY - hintLayout.getHeight() - AndroidUtilities.dp(6));
+                canvas.translate(left + getScrollX(), lineY - hintLayout.getHeight() - Space.dp(6));
             }
             if (transformHintToHeader) {
                 float scale = 1.0f - 0.3f * headerAnimationProgress;
-                float translation = -AndroidUtilities.dp(22) * headerAnimationProgress;
+                float translation = -Space.dp(22) * headerAnimationProgress;
                 int rF = Color.red(headerHintColor);
                 int gF = Color.green(headerHintColor);
                 int bF = Color.blue(headerHintColor);
@@ -509,7 +510,7 @@ public class EditTextBoldCursor extends EditText {
                 int bS = Color.blue(hintColor);
                 int aS = Color.alpha(hintColor);
 
-                if (supportRtlHint && SharedConfig.isRTL) {
+                if (supportRtlHint && Store.isRTL) {
                     canvas.translate((hintWidth + lineLeft) - (hintWidth + lineLeft) * scale, 0);
                 } else if (lineLeft != 0) {
                     canvas.translate(lineLeft * (1.0f - scale), 0);
@@ -548,7 +549,7 @@ public class EditTextBoldCursor extends EditText {
                     updateCursorPosition();
                     Rect bounds = gradientDrawable.getBounds();
                     rect.left = bounds.left;
-                    rect.right = bounds.left + AndroidUtilities.dp(cursorWidth);
+                    rect.right = bounds.left + Space.dp(cursorWidth);
                     rect.bottom = bounds.bottom;
                     rect.top = bounds.top;
                     if (lineSpacingExtra != 0 && line < lineCount - 1) {
@@ -568,19 +569,19 @@ public class EditTextBoldCursor extends EditText {
             int h;
             if (!TextUtils.isEmpty(errorText)) {
                 linePaint.setColor(errorLineColor);
-                h = AndroidUtilities.dp(2);
+                h = Space.dp(2);
             } else if (isFocused()) {
                 linePaint.setColor(activeLineColor);
-                h = AndroidUtilities.dp(2);
+                h = Space.dp(2);
             } else {
                 linePaint.setColor(lineColor);
-                h = AndroidUtilities.dp(1);
+                h = Space.dp(1);
             }
             canvas.drawRect(getScrollX(), (int) lineY, getScrollX() + getMeasuredWidth(), lineY + h, linePaint);
         }
         /*if (errorLayout != null) {
             canvas.save();
-            canvas.translate(getScrollX(), lineY + AndroidUtilities.dp(3));
+            canvas.translate(getScrollX(), lineY + Space.dp(3));
             errorLayout.draw(canvas);
             canvas.restore();
         }*/
@@ -629,7 +630,7 @@ public class EditTextBoldCursor extends EditText {
 
     private void updateCursorPosition(int top, int bottom, float horizontal) {
         final int left = clampHorizontalPosition(gradientDrawable, horizontal);
-        final int width = AndroidUtilities.dp(cursorWidth);
+        final int width = Space.dp(cursorWidth);
         gradientDrawable.setBounds(left, top - mTempRect.top, left + width, bottom + mTempRect.bottom);
     }
 

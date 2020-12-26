@@ -8,7 +8,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.view.animation.DecelerateInterpolator;
 
-import com.same.lib.base.AndroidUtilities;
+import com.same.lib.util.Space;
 
 /**
  * @author 林学渊
@@ -30,10 +30,10 @@ public class CloseProgressDrawable2 extends Drawable {
     public CloseProgressDrawable2() {
         super();
         paint.setColor(0xffffffff);
-        paint.setStrokeWidth(AndroidUtilities.dp(2));
+        paint.setStrokeWidth(Space.dp(2));
         paint.setStrokeCap(Paint.Cap.ROUND);
         paint.setStyle(Paint.Style.STROKE);
-        side = AndroidUtilities.dp(8);
+        side = Space.dp(8);
     }
 
     public void startAnimation() {
@@ -146,11 +146,11 @@ public class CloseProgressDrawable2 extends Drawable {
 
     @Override
     public int getIntrinsicWidth() {
-        return AndroidUtilities.dp(24);
+        return Space.dp(24);
     }
 
     @Override
     public int getIntrinsicHeight() {
-        return AndroidUtilities.dp(24);
+        return Space.dp(24);
     }
 }

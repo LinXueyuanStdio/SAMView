@@ -7,8 +7,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.SharedConfig;
+import com.same.lib.util.Space;
+import com.same.lib.util.Store;
 
 import androidx.core.view.ViewCompat;
 
@@ -18,23 +19,23 @@ public class LayoutHelper {
     public static final int WRAP_CONTENT = -2;
 
     private static int getSize(float size) {
-        return (int) (size < 0 ? size : AndroidUtilities.dp(size));
+        return (int) (size < 0 ? size : Space.dp(size));
     }
 
     //region Gravity
 
     private static int getAbsoluteGravity(int gravity) {
-        return Gravity.getAbsoluteGravity(gravity, SharedConfig.isRTL ? ViewCompat.LAYOUT_DIRECTION_RTL : ViewCompat.LAYOUT_DIRECTION_LTR);
+        return Gravity.getAbsoluteGravity(gravity, Store.isRTL ? ViewCompat.LAYOUT_DIRECTION_RTL : ViewCompat.LAYOUT_DIRECTION_LTR);
     }
 
     @SuppressLint("RtlHardcoded")
     public static int getAbsoluteGravityStart() {
-        return SharedConfig.isRTL ? Gravity.RIGHT : Gravity.LEFT;
+        return Store.isRTL ? Gravity.RIGHT : Gravity.LEFT;
     }
 
     @SuppressLint("RtlHardcoded")
     public static int getAbsoluteGravityEnd() {
-        return SharedConfig.isRTL ? Gravity.LEFT : Gravity.RIGHT;
+        return Store.isRTL ? Gravity.LEFT : Gravity.RIGHT;
     }
 
     //endregion
@@ -47,10 +48,10 @@ public class LayoutHelper {
 
     public static ScrollView.LayoutParams createScroll(int width, int height, int gravity, float leftMargin, float topMargin, float rightMargin, float bottomMargin) {
         ScrollView.LayoutParams layoutParams = new ScrollView.LayoutParams(getSize(width), getSize(height), gravity);
-        layoutParams.leftMargin = AndroidUtilities.dp(leftMargin);
-        layoutParams.topMargin = AndroidUtilities.dp(topMargin);
-        layoutParams.rightMargin = AndroidUtilities.dp(rightMargin);
-        layoutParams.bottomMargin = AndroidUtilities.dp(bottomMargin);
+        layoutParams.leftMargin = Space.dp(leftMargin);
+        layoutParams.topMargin = Space.dp(topMargin);
+        layoutParams.rightMargin = Space.dp(rightMargin);
+        layoutParams.bottomMargin = Space.dp(bottomMargin);
         return layoutParams;
     }
 
@@ -60,7 +61,7 @@ public class LayoutHelper {
 
     public static FrameLayout.LayoutParams createFrame(int width, float height, int gravity, float leftMargin, float topMargin, float rightMargin, float bottomMargin) {
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(getSize(width), getSize(height), gravity);
-        layoutParams.setMargins(AndroidUtilities.dp(leftMargin), AndroidUtilities.dp(topMargin), AndroidUtilities.dp(rightMargin), AndroidUtilities.dp(bottomMargin));
+        layoutParams.setMargins(Space.dp(leftMargin), Space.dp(topMargin), Space.dp(rightMargin), Space.dp(bottomMargin));
         return layoutParams;
     }
 
@@ -78,10 +79,10 @@ public class LayoutHelper {
 
     public static FrameLayout.LayoutParams createFrameRelatively(float width, float height, int gravity, float startMargin, float topMargin, float endMargin, float bottomMargin) {
         final FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(getSize(width), getSize(height), getAbsoluteGravity(gravity));
-        layoutParams.leftMargin = AndroidUtilities.dp(SharedConfig.isRTL ? endMargin : startMargin);
-        layoutParams.topMargin = AndroidUtilities.dp(topMargin);
-        layoutParams.rightMargin = AndroidUtilities.dp(SharedConfig.isRTL ? startMargin : endMargin);
-        layoutParams.bottomMargin = AndroidUtilities.dp(bottomMargin);
+        layoutParams.leftMargin = Space.dp(Store.isRTL ? endMargin : startMargin);
+        layoutParams.topMargin = Space.dp(topMargin);
+        layoutParams.rightMargin = Space.dp(Store.isRTL ? startMargin : endMargin);
+        layoutParams.bottomMargin = Space.dp(bottomMargin);
         return layoutParams;
     }
 
@@ -101,10 +102,10 @@ public class LayoutHelper {
         if (alignRelative >= 0 && anchorRelative >= 0) {
             layoutParams.addRule(alignRelative, anchorRelative);
         }
-        layoutParams.leftMargin = AndroidUtilities.dp(leftMargin);
-        layoutParams.topMargin = AndroidUtilities.dp(topMargin);
-        layoutParams.rightMargin = AndroidUtilities.dp(rightMargin);
-        layoutParams.bottomMargin = AndroidUtilities.dp(bottomMargin);
+        layoutParams.leftMargin = Space.dp(leftMargin);
+        layoutParams.topMargin = Space.dp(topMargin);
+        layoutParams.rightMargin = Space.dp(rightMargin);
+        layoutParams.bottomMargin = Space.dp(bottomMargin);
         return layoutParams;
     }
 
@@ -142,27 +143,27 @@ public class LayoutHelper {
 
     public static LinearLayout.LayoutParams createLinear(int width, int height, float weight, int gravity, int leftMargin, int topMargin, int rightMargin, int bottomMargin) {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(getSize(width), getSize(height), weight);
-        layoutParams.setMargins(AndroidUtilities.dp(leftMargin), AndroidUtilities.dp(topMargin), AndroidUtilities.dp(rightMargin), AndroidUtilities.dp(bottomMargin));
+        layoutParams.setMargins(Space.dp(leftMargin), Space.dp(topMargin), Space.dp(rightMargin), Space.dp(bottomMargin));
         layoutParams.gravity = gravity;
         return layoutParams;
     }
 
     public static LinearLayout.LayoutParams createLinear(int width, int height, float weight, int leftMargin, int topMargin, int rightMargin, int bottomMargin) {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(getSize(width), getSize(height), weight);
-        layoutParams.setMargins(AndroidUtilities.dp(leftMargin), AndroidUtilities.dp(topMargin), AndroidUtilities.dp(rightMargin), AndroidUtilities.dp(bottomMargin));
+        layoutParams.setMargins(Space.dp(leftMargin), Space.dp(topMargin), Space.dp(rightMargin), Space.dp(bottomMargin));
         return layoutParams;
     }
 
     public static LinearLayout.LayoutParams createLinear(int width, int height, int gravity, int leftMargin, int topMargin, int rightMargin, int bottomMargin) {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(getSize(width), getSize(height));
-        layoutParams.setMargins(AndroidUtilities.dp(leftMargin), AndroidUtilities.dp(topMargin), AndroidUtilities.dp(rightMargin), AndroidUtilities.dp(bottomMargin));
+        layoutParams.setMargins(Space.dp(leftMargin), Space.dp(topMargin), Space.dp(rightMargin), Space.dp(bottomMargin));
         layoutParams.gravity = gravity;
         return layoutParams;
     }
 
     public static LinearLayout.LayoutParams createLinear(int width, int height, float leftMargin, float topMargin, float rightMargin, float bottomMargin) {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(getSize(width), getSize(height));
-        layoutParams.setMargins(AndroidUtilities.dp(leftMargin), AndroidUtilities.dp(topMargin), AndroidUtilities.dp(rightMargin), AndroidUtilities.dp(bottomMargin));
+        layoutParams.setMargins(Space.dp(leftMargin), Space.dp(topMargin), Space.dp(rightMargin), Space.dp(bottomMargin));
         return layoutParams;
     }
 
@@ -188,10 +189,10 @@ public class LayoutHelper {
 
     public static LinearLayout.LayoutParams createLinearRelatively(float width, float height, int gravity, float startMargin, float topMargin, float endMargin, float bottomMargin) {
         final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(getSize(width), getSize(height), getAbsoluteGravity(gravity));
-        layoutParams.leftMargin = AndroidUtilities.dp(SharedConfig.isRTL ? endMargin : startMargin);
-        layoutParams.topMargin = AndroidUtilities.dp(topMargin);
-        layoutParams.rightMargin = AndroidUtilities.dp(SharedConfig.isRTL ? startMargin : endMargin);
-        layoutParams.bottomMargin = AndroidUtilities.dp(bottomMargin);
+        layoutParams.leftMargin = Space.dp(Store.isRTL ? endMargin : startMargin);
+        layoutParams.topMargin = Space.dp(topMargin);
+        layoutParams.rightMargin = Space.dp(Store.isRTL ? startMargin : endMargin);
+        layoutParams.bottomMargin = Space.dp(bottomMargin);
         return layoutParams;
     }
 

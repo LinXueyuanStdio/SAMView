@@ -5,9 +5,10 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.view.View;
 
-import com.same.lib.drawable.ColorManager;
 import com.same.lib.base.AndroidUtilities;
+import com.same.lib.drawable.ColorManager;
 import com.same.lib.theme.KeyHub;
+import com.same.lib.util.Space;
 
 import java.util.ArrayList;
 
@@ -43,7 +44,7 @@ public class FireworksEffect {
             switch (type) {
                 case 0: {
                     particlePaint.setColor(color);
-                    particlePaint.setStrokeWidth(AndroidUtilities.dp(1.5f) * scale);
+                    particlePaint.setStrokeWidth(Space.dp(1.5f) * scale);
                     particlePaint.setAlpha((int) (255 * alpha));
                     canvas.drawPoint(x, y, particlePaint);
                     break;
@@ -59,7 +60,7 @@ public class FireworksEffect {
 
     public FireworksEffect() {
         particlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        particlePaint.setStrokeWidth(AndroidUtilities.dp(1.5f));
+        particlePaint.setStrokeWidth(Space.dp(1.5f));
         particlePaint.setColor(ColorManager.getColor(KeyHub.key_actionBarDefaultTitle) & 0xffe6e6e6);
         particlePaint.setStrokeCap(Paint.Cap.ROUND);
         particlePaint.setStyle(Paint.Style.STROKE);
@@ -102,9 +103,9 @@ public class FireworksEffect {
         }
 
         if (AndroidUtilities.random.nextBoolean() && particles.size() + 8 < 150) {
-            int statusBarHeight = (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+            int statusBarHeight = (Build.VERSION.SDK_INT >= 21 ? Space.statusBarHeight : 0);
             float cx = AndroidUtilities.random.nextFloat() * parent.getMeasuredWidth();
-            float cy = statusBarHeight + AndroidUtilities.random.nextFloat() * (parent.getMeasuredHeight() - AndroidUtilities.dp(20) - statusBarHeight);
+            float cy = statusBarHeight + AndroidUtilities.random.nextFloat() * (parent.getMeasuredHeight() - Space.dp(20) - statusBarHeight);
             int color;
 
             switch (AndroidUtilities.random.nextInt(4)) {

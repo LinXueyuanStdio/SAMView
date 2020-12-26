@@ -11,6 +11,7 @@ import android.view.animation.DecelerateInterpolator;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
+import com.same.lib.util.Space;
 
 import androidx.annotation.NonNull;
 
@@ -36,7 +37,7 @@ public class MenuDrawable extends Drawable {
 
     public MenuDrawable() {
         super();
-        paint.setStrokeWidth(AndroidUtilities.dp(2));
+        paint.setStrokeWidth(Space.dp(2));
     }
 
     public void setRotateToBack(boolean value) {
@@ -97,20 +98,20 @@ public class MenuDrawable extends Drawable {
         if (rotateToBack) {
             canvas.rotate(currentRotation * (reverseAngle ? -180 : 180));
             paint.setColor(color1);
-            canvas.drawLine(-AndroidUtilities.dp(9), 0, AndroidUtilities.dp(9) - AndroidUtilities.dp(3.0f) * currentRotation, 0, paint);
-            endYDiff = AndroidUtilities.dp(5) * (1 - Math.abs(currentRotation)) - AndroidUtilities.dp(0.5f) * Math.abs(currentRotation);
-            endXDiff = AndroidUtilities.dp(9) - AndroidUtilities.dp(2.5f) * Math.abs(currentRotation);
-            startYDiff = AndroidUtilities.dp(5) + AndroidUtilities.dp(2.0f) * Math.abs(currentRotation);
-            startXDiff = -AndroidUtilities.dp(9) + AndroidUtilities.dp(7.5f) * Math.abs(currentRotation);
+            canvas.drawLine(-Space.dp(9), 0, Space.dp(9) - Space.dp(3.0f) * currentRotation, 0, paint);
+            endYDiff = Space.dp(5) * (1 - Math.abs(currentRotation)) - Space.dp(0.5f) * Math.abs(currentRotation);
+            endXDiff = Space.dp(9) - Space.dp(2.5f) * Math.abs(currentRotation);
+            startYDiff = Space.dp(5) + Space.dp(2.0f) * Math.abs(currentRotation);
+            startXDiff = -Space.dp(9) + Space.dp(7.5f) * Math.abs(currentRotation);
         } else {
             canvas.rotate(currentRotation * (reverseAngle ? -225 : 135));
             int color2 = Theme.getColor(KeyHub.key_actionBarActionModeDefaultIcon);
             paint.setColor(AndroidUtilities.getOffsetColor(color1, color2, currentRotation, 1.0f));
-            canvas.drawLine(-AndroidUtilities.dp(9) + AndroidUtilities.dp(1) * currentRotation, 0, AndroidUtilities.dp(9) - AndroidUtilities.dp(1) * currentRotation, 0, paint);
-            endYDiff = AndroidUtilities.dp(5) * (1 - Math.abs(currentRotation)) - AndroidUtilities.dp(0.5f) * Math.abs(currentRotation);
-            endXDiff = AndroidUtilities.dp(9) - AndroidUtilities.dp(9) * Math.abs(currentRotation);
-            startYDiff = AndroidUtilities.dp(5) + AndroidUtilities.dp(3.0f) * Math.abs(currentRotation);
-            startXDiff = -AndroidUtilities.dp(9) + AndroidUtilities.dp(9) * Math.abs(currentRotation);
+            canvas.drawLine(-Space.dp(9) + Space.dp(1) * currentRotation, 0, Space.dp(9) - Space.dp(1) * currentRotation, 0, paint);
+            endYDiff = Space.dp(5) * (1 - Math.abs(currentRotation)) - Space.dp(0.5f) * Math.abs(currentRotation);
+            endXDiff = Space.dp(9) - Space.dp(9) * Math.abs(currentRotation);
+            startYDiff = Space.dp(5) + Space.dp(3.0f) * Math.abs(currentRotation);
+            startXDiff = -Space.dp(9) + Space.dp(9) * Math.abs(currentRotation);
         }
         canvas.drawLine(startXDiff, -startYDiff, endXDiff, -endYDiff, paint);
         canvas.drawLine(startXDiff, startYDiff, endXDiff, endYDiff, paint);
@@ -134,11 +135,11 @@ public class MenuDrawable extends Drawable {
 
     @Override
     public int getIntrinsicWidth() {
-        return AndroidUtilities.dp(24);
+        return Space.dp(24);
     }
 
     @Override
     public int getIntrinsicHeight() {
-        return AndroidUtilities.dp(24);
+        return Space.dp(24);
     }
 }

@@ -20,7 +20,7 @@ import com.same.lib.base.NotificationCenter;
 import com.same.lib.core.AlertDialog;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.lottie.RLottieImageView;
-import com.same.lib.span.ThemeName;
+import com.same.ui.theme.span.ThemeName;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeInfo;

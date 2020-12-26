@@ -10,8 +10,8 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
 import com.same.lib.drawable.ColorManager;
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.theme.KeyHub;
+import com.same.lib.util.Space;
 
 import androidx.annotation.Keep;
 
@@ -44,7 +44,7 @@ public class RadialProgressView extends View {
     public RadialProgressView(Context context) {
         super(context);
 
-        size = AndroidUtilities.dp(40);
+        size = Space.dp(40);
 
         progressColor = ColorManager.getColor(KeyHub.key_progressCircle);
         decelerateInterpolator = new DecelerateInterpolator();
@@ -52,7 +52,7 @@ public class RadialProgressView extends View {
         progressPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         progressPaint.setStyle(Paint.Style.STROKE);
         progressPaint.setStrokeCap(Paint.Cap.ROUND);
-        progressPaint.setStrokeWidth(AndroidUtilities.dp(3));
+        progressPaint.setStrokeWidth(Space.dp(3));
         progressPaint.setColor(progressColor);
     }
 
@@ -112,7 +112,7 @@ public class RadialProgressView extends View {
     }
 
     public void setStrokeWidth(float value) {
-        progressPaint.setStrokeWidth(AndroidUtilities.dp(value));
+        progressPaint.setStrokeWidth(Space.dp(value));
     }
 
     public void setProgressColor(int color) {

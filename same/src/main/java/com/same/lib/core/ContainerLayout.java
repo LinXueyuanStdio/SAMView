@@ -31,6 +31,8 @@ import android.widget.FrameLayout;
 
 import com.same.lib.R;
 import com.same.lib.anim.CubicBezierInterpolator;
+import com.same.lib.base.AndroidUtilities;
+import com.same.lib.base.SharedConfig;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.KeyHub;
@@ -38,8 +40,7 @@ import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeDescription;
 import com.same.lib.theme.ThemeInfo;
 import com.same.lib.theme.ThemeManager;
-import com.same.lib.base.AndroidUtilities;
-import com.same.lib.base.SharedConfig;
+import com.same.lib.util.Space;
 
 import java.util.ArrayList;
 
@@ -161,7 +162,7 @@ public class ContainerLayout extends FrameLayout {
 
             View rootView = getRootView();
             getWindowVisibleDisplayFrame(rect);
-            int usableViewHeight = rootView.getHeight() - (rect.top != 0 ? AndroidUtilities.statusBarHeight : 0) - AndroidUtilities.getViewInset(rootView);
+            int usableViewHeight = rootView.getHeight() - (rect.top != 0 ? Space.statusBarHeight : 0) - AndroidUtilities.getViewInset(rootView);
             isKeyboardVisible = usableViewHeight - (rect.bottom - rect.top) > 0;
             if (waitingForKeyboardCloseRunnable != null && !containerView.isKeyboardVisible && !containerViewBack.isKeyboardVisible) {
                 AndroidUtilities.cancelRunOnUIThread(waitingForKeyboardCloseRunnable);
@@ -392,9 +393,9 @@ public class ContainerLayout extends FrameLayout {
             if (view != null) {
                 previewBackgroundDrawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
                 previewBackgroundDrawable.draw(canvas);
-                int x = (getMeasuredWidth() - AndroidUtilities.dp(24)) / 2;
-                int y = (int) (view.getTop() + containerView.getTranslationY() - AndroidUtilities.dp(12 + (Build.VERSION.SDK_INT < 21 ? 20 : 0)));
-                Theme.moveUpDrawable.setBounds(x, y, x + AndroidUtilities.dp(24), y + AndroidUtilities.dp(24));
+                int x = (getMeasuredWidth() - Space.dp(24)) / 2;
+                int y = (int) (view.getTop() + containerView.getTranslationY() - Space.dp(12 + (Build.VERSION.SDK_INT < 21 ? 20 : 0)));
+                Theme.moveUpDrawable.setBounds(x, y, x + Space.dp(24), y + Space.dp(24));
                 Theme.moveUpDrawable.draw(canvas);
             }
         }
@@ -403,7 +404,7 @@ public class ContainerLayout extends FrameLayout {
 
         if (translationX != 0) {
             if (child == containerView) {
-                final float alpha = Math.max(0, Math.min((width - translationX) / (float) AndroidUtilities.dp(20), 1.0f));
+                final float alpha = Math.max(0, Math.min((width - translationX) / (float) Space.dp(20), 1.0f));
                 layerShadowDrawable.setBounds(translationX - layerShadowDrawable.getIntrinsicWidth(), child.getTop(), translationX, child.getBottom());
                 layerShadowDrawable.setAlpha((int) (0xff * alpha));
                 layerShadowDrawable.draw(canvas);
@@ -857,7 +858,7 @@ public class ContainerLayout extends FrameLayout {
                         containerView.invalidate();
                         invalidate();
                     } else {
-                        containerView.setTranslationX(AndroidUtilities.dp(48) * (1.0f - interpolated));
+                        containerView.setTranslationX(Space.dp(48) * (1.0f - interpolated));
                     }
                 } else {
                     containerViewBack.setAlpha(1.0f - interpolated);
@@ -869,7 +870,7 @@ public class ContainerLayout extends FrameLayout {
                         containerView.invalidate();
                         invalidate();
                     } else {
-                        containerViewBack.setTranslationX(AndroidUtilities.dp(48) * interpolated);
+                        containerViewBack.setTranslationX(Space.dp(48) * interpolated);
                     }
                 }
                 if (animationProgress < 1) {
@@ -986,9 +987,9 @@ public class ContainerLayout extends FrameLayout {
         layoutParams.width = LayoutHelper.MATCH_PARENT;
         layoutParams.height = LayoutHelper.MATCH_PARENT;
         if (preview) {
-            layoutParams.rightMargin = layoutParams.leftMargin = AndroidUtilities.dp(8);
-            layoutParams.topMargin = layoutParams.bottomMargin = AndroidUtilities.dp(46);
-            layoutParams.topMargin += AndroidUtilities.statusBarHeight;
+            layoutParams.rightMargin = layoutParams.leftMargin = Space.dp(8);
+            layoutParams.topMargin = layoutParams.bottomMargin = Space.dp(46);
+            layoutParams.topMargin += Space.statusBarHeight;
         } else {
             layoutParams.topMargin = layoutParams.bottomMargin = layoutParams.rightMargin = layoutParams.leftMargin = 0;
         }
@@ -1025,11 +1026,11 @@ public class ContainerLayout extends FrameLayout {
                     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
                     @Override
                     public void getOutline(View view, Outline outline) {
-                        outline.setRoundRect(0, AndroidUtilities.statusBarHeight, view.getMeasuredWidth(), view.getMeasuredHeight(), AndroidUtilities.dp(6));
+                        outline.setRoundRect(0, Space.statusBarHeight, view.getMeasuredWidth(), view.getMeasuredHeight(), Space.dp(6));
                     }
                 });
                 fragmentView.setClipToOutline(true);
-                fragmentView.setElevation(AndroidUtilities.dp(4));
+                fragmentView.setElevation(Space.dp(4));
             }
             if (previewBackgroundDrawable == null) {
                 previewBackgroundDrawable = new ColorDrawable(0x2e000000);
@@ -1239,7 +1240,7 @@ public class ContainerLayout extends FrameLayout {
         float nextTranslation = -dy;
         if (nextTranslation > 0) {
             nextTranslation = 0;
-        } else if (nextTranslation < -AndroidUtilities.dp(60)) {
+        } else if (nextTranslation < -Space.dp(60)) {
             previewOpenAnimationInProgress = true;
             inPreviewMode = false;
             nextTranslation = 0;
@@ -1536,10 +1537,10 @@ public class ContainerLayout extends FrameLayout {
     }
 
     public void removeFragmentFromStack(BasePage fragment) {
-        if (useAlphaAnimations && fragmentsStack.size() == 1 && AndroidUtilities.isTablet()) {
+        if (useAlphaAnimations && fragmentsStack.size() == 1 && Space.isTablet()) {
             closeLastFragment(true);
         } else {
-            if (delegate != null && fragmentsStack.size() == 1 && AndroidUtilities.isTablet()) {
+            if (delegate != null && fragmentsStack.size() == 1 && Space.isTablet()) {
                 delegate.needCloseLastFragment(this);
             }
             removeFragmentFromStackInternal(fragment);

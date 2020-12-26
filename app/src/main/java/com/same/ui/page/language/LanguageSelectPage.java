@@ -177,7 +177,7 @@ public class LanguageSelectPage extends BasePage {
             final MLang.LocaleInfo finalLocaleInfo = localeInfo;
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
             builder.setTitle(MyLang.getString("DeleteLocalizationTitle", R.string.DeleteLocalizationTitle));
-            builder.setMessage(MyLang.replaceTags(MyLang.formatString("DeleteLocalizationText", R.string.DeleteLocalizationText, localeInfo.name)));
+            builder.setMessage(MyLang.replaceTags(context, MyLang.formatString("DeleteLocalizationText", R.string.DeleteLocalizationText, localeInfo.name)));
             builder.setPositiveButton(MyLang.getString("Delete", R.string.Delete), (dialogInterface, i) -> {
                 if (MyLang.getInstance().deleteLanguage(getParentActivity(), finalLocaleInfo)) {
                     fillLanguages();

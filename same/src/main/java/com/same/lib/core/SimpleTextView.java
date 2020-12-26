@@ -19,8 +19,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.drawable.DrawableManager;
+import com.same.lib.util.Space;
 
 
 /**
@@ -40,7 +40,7 @@ public class SimpleTextView extends View implements Drawable.Callback {
     private Drawable leftDrawable;
     private Drawable rightDrawable;
     private float rightDrawableScale = 1.0f;
-    private int drawablePadding = AndroidUtilities.dp(4);
+    private int drawablePadding = Space.dp(4);
     private int leftDrawableTopPadding;
     private int rightDrawableTopPadding;
 
@@ -93,7 +93,7 @@ public class SimpleTextView extends View implements Drawable.Callback {
     }
 
     public void setTextSize(int size) {
-        int newSize = AndroidUtilities.dp(size);
+        int newSize = Space.dp(size);
         if (newSize == textPaint.getTextSize()) {
             return;
         }
@@ -110,12 +110,12 @@ public class SimpleTextView extends View implements Drawable.Callback {
         scrollNonFitText = value;
         if (scrollNonFitText) {
             fadePaint = new Paint();
-            LinearGradient gradient = new LinearGradient(0, 0, AndroidUtilities.dp(6), 0, new int[]{0xffffffff, 0}, new float[]{0f, 1f}, Shader.TileMode.CLAMP);
+            LinearGradient gradient = new LinearGradient(0, 0, Space.dp(6), 0, new int[]{0xffffffff, 0}, new float[]{0f, 1f}, Shader.TileMode.CLAMP);
             fadePaint.setShader(gradient);
             fadePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
 
             fadePaintBack = new Paint();
-            gradient = new LinearGradient(0, 0, AndroidUtilities.dp(6), 0, new int[]{0, 0xffffffff}, new float[]{0f, 1f}, Shader.TileMode.CLAMP);
+            gradient = new LinearGradient(0, 0, Space.dp(6), 0, new int[]{0, 0xffffffff}, new float[]{0f, 1f}, Shader.TileMode.CLAMP);
             fadePaintBack.setShader(gradient);
             fadePaintBack.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
         }
@@ -158,7 +158,7 @@ public class SimpleTextView extends View implements Drawable.Callback {
             } else if (layout.getLineLeft(0) == 0) {
                 offsetX = width - textWidth;
             } else {
-                offsetX = -AndroidUtilities.dp(8);
+                offsetX = -Space.dp(8);
             }
             offsetX += getPaddingLeft();
             textDoesNotFit = textWidth > width;
@@ -187,7 +187,7 @@ public class SimpleTextView extends View implements Drawable.Callback {
                     calcOffset(width);
                     return false;
                 }*/
-                layout = new StaticLayout(string, 0, string.length(), textPaint, scrollNonFitText ? AndroidUtilities.dp(2000) : width + AndroidUtilities.dp(8), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                layout = new StaticLayout(string, 0, string.length(), textPaint, scrollNonFitText ? Space.dp(2000) : width + Space.dp(8), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 calcOffset(width);
             } catch (Exception ignore) {
 
@@ -205,8 +205,8 @@ public class SimpleTextView extends View implements Drawable.Callback {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
-        if (lastWidth != AndroidUtilities.displaySize.x) {
-            lastWidth = AndroidUtilities.displaySize.x;
+        if (lastWidth != Space.displaySize.x) {
+            lastWidth = Space.displaySize.x;
             scrollingOffset = 0;
             currentScrollDelay = SCROLL_DELAY_MS;
         }
@@ -432,7 +432,7 @@ public class SimpleTextView extends View implements Drawable.Callback {
             rightDrawable.draw(canvas);
             totalWidth += drawablePadding + dw;
         }
-        int nextScrollX = totalWidth + AndroidUtilities.dp(DIST_BETWEEN_SCROLLING_TEXT);
+        int nextScrollX = totalWidth + Space.dp(DIST_BETWEEN_SCROLLING_TEXT);
 
         if (scrollingOffset != 0) {
             if (leftDrawable != null) {
@@ -473,18 +473,18 @@ public class SimpleTextView extends View implements Drawable.Callback {
                 canvas.restore();
             }
             if (fade) {
-                if (scrollingOffset < AndroidUtilities.dp(10)) {
-                    fadePaint.setAlpha((int) (255 * (scrollingOffset / AndroidUtilities.dp(10))));
-                } else if (scrollingOffset > totalWidth + AndroidUtilities.dp(DIST_BETWEEN_SCROLLING_TEXT) - AndroidUtilities.dp(10)) {
-                    float dist = scrollingOffset - (totalWidth + AndroidUtilities.dp(DIST_BETWEEN_SCROLLING_TEXT) - AndroidUtilities.dp(10));
-                    fadePaint.setAlpha((int) (255 * (1.0f - dist / AndroidUtilities.dp(10))));
+                if (scrollingOffset < Space.dp(10)) {
+                    fadePaint.setAlpha((int) (255 * (scrollingOffset / Space.dp(10))));
+                } else if (scrollingOffset > totalWidth + Space.dp(DIST_BETWEEN_SCROLLING_TEXT) - Space.dp(10)) {
+                    float dist = scrollingOffset - (totalWidth + Space.dp(DIST_BETWEEN_SCROLLING_TEXT) - Space.dp(10));
+                    fadePaint.setAlpha((int) (255 * (1.0f - dist / Space.dp(10))));
                 } else {
                     fadePaint.setAlpha(255);
                 }
-                canvas.drawRect(0, 0, AndroidUtilities.dp(6), getMeasuredHeight(), fadePaint);
+                canvas.drawRect(0, 0, Space.dp(6), getMeasuredHeight(), fadePaint);
                 canvas.save();
-                canvas.translate(getMeasuredWidth() - AndroidUtilities.dp(6), 0);
-                canvas.drawRect(0, 0, AndroidUtilities.dp(6), getMeasuredHeight(), fadePaintBack);
+                canvas.translate(getMeasuredWidth() - Space.dp(6), 0);
+                canvas.drawRect(0, 0, Space.dp(6), getMeasuredHeight(), fadePaintBack);
                 canvas.restore();
             }
             updateScrollAnimation();
@@ -506,17 +506,17 @@ public class SimpleTextView extends View implements Drawable.Callback {
         if (currentScrollDelay > 0) {
             currentScrollDelay -= dt;
         } else {
-            int totalDistance = totalWidth + AndroidUtilities.dp(DIST_BETWEEN_SCROLLING_TEXT);
+            int totalDistance = totalWidth + Space.dp(DIST_BETWEEN_SCROLLING_TEXT);
             float pixelsPerSecond;
-            if (scrollingOffset < AndroidUtilities.dp(SCROLL_SLOWDOWN_PX)) {
-                pixelsPerSecond = PIXELS_PER_SECOND_SLOW + (PIXELS_PER_SECOND - PIXELS_PER_SECOND_SLOW) * (scrollingOffset / AndroidUtilities.dp(SCROLL_SLOWDOWN_PX));
-            } else if (scrollingOffset >= totalDistance - AndroidUtilities.dp(SCROLL_SLOWDOWN_PX)) {
-                float dist = scrollingOffset - (totalDistance - AndroidUtilities.dp(SCROLL_SLOWDOWN_PX));
-                pixelsPerSecond = PIXELS_PER_SECOND - (PIXELS_PER_SECOND - PIXELS_PER_SECOND_SLOW) * (dist / AndroidUtilities.dp(SCROLL_SLOWDOWN_PX));
+            if (scrollingOffset < Space.dp(SCROLL_SLOWDOWN_PX)) {
+                pixelsPerSecond = PIXELS_PER_SECOND_SLOW + (PIXELS_PER_SECOND - PIXELS_PER_SECOND_SLOW) * (scrollingOffset / Space.dp(SCROLL_SLOWDOWN_PX));
+            } else if (scrollingOffset >= totalDistance - Space.dp(SCROLL_SLOWDOWN_PX)) {
+                float dist = scrollingOffset - (totalDistance - Space.dp(SCROLL_SLOWDOWN_PX));
+                pixelsPerSecond = PIXELS_PER_SECOND - (PIXELS_PER_SECOND - PIXELS_PER_SECOND_SLOW) * (dist / Space.dp(SCROLL_SLOWDOWN_PX));
             } else {
                 pixelsPerSecond = PIXELS_PER_SECOND;
             }
-            scrollingOffset += dt / 1000.0f * AndroidUtilities.dp(pixelsPerSecond);
+            scrollingOffset += dt / 1000.0f * Space.dp(pixelsPerSecond);
             lastUpdateTime = newUpdateTime;
             if (scrollingOffset > totalDistance) {
                 scrollingOffset = 0;

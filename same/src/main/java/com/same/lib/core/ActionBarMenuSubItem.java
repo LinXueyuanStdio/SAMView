@@ -11,12 +11,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.SharedConfig;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
+import com.same.lib.util.Space;
+import com.same.lib.util.Store;
 
 
 /**
@@ -40,12 +41,12 @@ public class ActionBarMenuSubItem extends FrameLayout {
         super(context);
 
         setBackground(DrawableManager.createSelectorDrawable(selectorColor, 2));
-        setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
+        setPadding(Space.dp(18), 0, Space.dp(18), 0);
 
         imageView = new ImageView(context);
         imageView.setScaleType(ImageView.ScaleType.CENTER);
         imageView.setColorFilter(new PorterDuffColorFilter(iconColor, PorterDuff.Mode.MULTIPLY));
-        addView(imageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 40, Gravity.CENTER_VERTICAL | (SharedConfig.isRTL ? Gravity.RIGHT : Gravity.LEFT)));
+        addView(imageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 40, Gravity.CENTER_VERTICAL | (Store.isRTL ? Gravity.RIGHT : Gravity.LEFT)));
 
         textView = new TextView(context);
         textView.setLines(1);
@@ -54,12 +55,12 @@ public class ActionBarMenuSubItem extends FrameLayout {
         textView.setEllipsize(TextUtils.TruncateAt.END);
         textView.setTextColor(textColor);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (SharedConfig.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL));
+        addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (Store.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL));
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48), View.MeasureSpec.EXACTLY));
+        super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(Space.dp(48), View.MeasureSpec.EXACTLY));
     }
 
     public void setTextAndIcon(CharSequence text, int icon) {
@@ -67,7 +68,7 @@ public class ActionBarMenuSubItem extends FrameLayout {
         if (icon != 0) {
             imageView.setImageResource(icon);
             imageView.setVisibility(VISIBLE);
-            textView.setPadding(SharedConfig.isRTL ? 0 : AndroidUtilities.dp(43), 0, SharedConfig.isRTL ? AndroidUtilities.dp(43) : 0, 0);
+            textView.setPadding(Store.isRTL ? 0 : Space.dp(43), 0, Store.isRTL ? Space.dp(43) : 0, 0);
         } else {
             imageView.setVisibility(INVISIBLE);
             textView.setPadding(0, 0, 0, 0);
