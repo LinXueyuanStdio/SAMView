@@ -487,7 +487,7 @@ public class ContainerLayout extends FrameLayout {
                     int dx = Math.max(0, (int) (ev.getX() - startedTrackingX));
                     int dy = Math.abs((int) ev.getY() - startedTrackingY);
                     velocityTracker.addMovement(ev);
-                    if (!inPreviewMode && maybeStartTracking && !startedTracking && dx >= AndroidUtilities.getPixelsInCM(0.4f, true) && Math.abs(dx) / 3 > dy) {
+                    if (!inPreviewMode && maybeStartTracking && !startedTracking && dx >= Space.getPixelsInCM(0.4f, true) && Math.abs(dx) / 3 > dy) {
                         BasePage currentFragment = fragmentsStack.get(fragmentsStack.size() - 1);
                         if (currentFragment.canBeginSlide()) {
                             prepareForMoving(ev);

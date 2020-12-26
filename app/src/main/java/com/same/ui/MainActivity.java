@@ -46,6 +46,7 @@ import com.same.lib.theme.ThemeInfo;
 import com.same.lib.theme.ThemeManager;
 import com.same.lib.theme.ThemeRes;
 import com.same.lib.theme.WallpaperManager;
+import com.same.lib.util.Space;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.main.MainPage;
 import com.same.ui.page.theme.ThemeEditorView;
@@ -207,14 +208,14 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
                     int height = MeasureSpec.getSize(heightMeasureSpec);
                     setMeasuredDimension(width, height);
 
-                    if (!AndroidUtilities.isInMultiwindow && (!AndroidUtilities.isSmallTablet() || getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
+                    if (!Space.isInMultiwindow && (!Space.isSmallTablet() || getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
                         tabletFullSize = false;
                         int leftWidth = width / 100 * 35;
-                        if (leftWidth < AndroidUtilities.dp(320)) {
-                            leftWidth = AndroidUtilities.dp(320);
+                        if (leftWidth < Space.dp(320)) {
+                            leftWidth = Space.dp(320);
                         }
                         actionBarLayout.measure(MeasureSpec.makeMeasureSpec(leftWidth, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
-                        shadowTabletSide.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
+                        shadowTabletSide.measure(MeasureSpec.makeMeasureSpec(Space.dp(1), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
                         rightActionBarLayout.measure(MeasureSpec.makeMeasureSpec(width - leftWidth, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
                     } else {
                         tabletFullSize = true;
@@ -222,7 +223,7 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
                     }
                     backgroundTablet.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
                     shadowTablet.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
-                    layersActionBarLayout.measure(MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(530), width), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(528), height), MeasureSpec.EXACTLY));
+                    layersActionBarLayout.measure(MeasureSpec.makeMeasureSpec(Math.min(Space.dp(530), width), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(528), height), MeasureSpec.EXACTLY));
 
                     inLayout = false;
                 }
@@ -232,10 +233,10 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
                     int width = r - l;
                     int height = b - t;
 
-                    if (!AndroidUtilities.isInMultiwindow && (!AndroidUtilities.isSmallTablet() || getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
+                    if (!Space.isInMultiwindow && (!Space.isSmallTablet() || getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
                         int leftWidth = width / 100 * 35;
-                        if (leftWidth < AndroidUtilities.dp(320)) {
-                            leftWidth = AndroidUtilities.dp(320);
+                        if (leftWidth < Space.dp(320)) {
+                            leftWidth = Space.dp(320);
                         }
                         shadowTabletSide.layout(leftWidth, 0, leftWidth + shadowTabletSide.getMeasuredWidth(), shadowTabletSide.getMeasuredHeight());
                         actionBarLayout.layout(0, 0, actionBarLayout.getMeasuredWidth(), actionBarLayout.getMeasuredHeight());

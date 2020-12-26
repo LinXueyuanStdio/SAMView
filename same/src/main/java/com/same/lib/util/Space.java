@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.util.DisplayMetrics;
+import android.view.View;
 import android.view.WindowManager;
 
 /**
@@ -53,6 +54,10 @@ public class Space {
         }
     }
 
+    public static float getPixelsInCM(float cm, boolean isX) {
+        return (cm / 2.54f) * (isX ? displayMetrics.xdpi : displayMetrics.ydpi);
+    }
+
     public static boolean isTablet() {
         if (isTablet == null) {
             isTablet = false;
@@ -75,6 +80,19 @@ public class Space {
         int bS = Color.blue(color1);
         int aS = Color.alpha(color1);
         return Color.argb((int) ((aS + (aF - aS) * offset) * alpha), (int) (rS + (rF - rS) * offset), (int) (gS + (gF - gS) * offset), (int) (bS + (bF - bS) * offset));
+    }
+
+    public static void setPadding(View view, float padding) {
+        final int px = padding != 0 ? dp(padding) : 0;
+        view.setPadding(px, px, px, px);
+    }
+
+    public static void setPadding(View view, float left, float top, float right, float bottom) {
+        view.setPadding(dp(left), dp(top), dp(right), dp(bottom));
+    }
+
+    public static void setPaddingRelative(View view, float start, float top, float end, float bottom) {
+        setPadding(view, Store.isRTL ? end : start, top, Store.isRTL ? start : end, bottom);
     }
 
     /**
