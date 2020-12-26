@@ -6,7 +6,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
-import com.same.lib.drawable.ColorManager;
+import com.same.lib.util.ColorManager;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

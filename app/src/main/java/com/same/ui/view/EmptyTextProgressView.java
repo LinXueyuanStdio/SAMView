@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.core.RadialProgressView;
-import com.same.lib.drawable.ColorManager;
+import com.same.lib.util.ColorManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.KeyHub;
 import com.same.ui.R;

@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityManager;
 
-import com.same.lib.drawable.ColorManager;
+import com.same.lib.util.ColorManager;
 import com.same.lib.util.KeyHub;
 
 import java.util.ArrayList;

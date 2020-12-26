@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
 import android.view.animation.DecelerateInterpolator;
 
+import com.same.lib.util.ColorManager;
 import com.same.lib.util.KeyHub;
 import com.same.lib.util.Space;
 

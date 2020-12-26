@@ -25,7 +25,6 @@ public class Keyboard {
         return false;
     }
 
-
     public static void hideKeyboard(View view) {
         if (view == null) {
             return;

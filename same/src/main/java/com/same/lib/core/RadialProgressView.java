@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
-import com.same.lib.drawable.ColorManager;
+import com.same.lib.util.ColorManager;
 import com.same.lib.util.KeyHub;
 import com.same.lib.util.Space;
 

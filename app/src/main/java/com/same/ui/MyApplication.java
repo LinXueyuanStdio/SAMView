@@ -10,6 +10,7 @@ import com.same.lib.base.AndroidUtilities;
 import com.same.lib.intro.IntroLoader;
 import com.same.lib.lottie.NativeLoader;
 import com.same.lib.theme.Theme;
+import com.same.lib.util.ColorManager;
 import com.same.lib.util.Space;
 import com.same.lib.util.UIThread;
 import com.same.ui.lang.MyLang;
@@ -33,6 +34,12 @@ public class MyApplication extends Application {
         ColorDelegateLoader.init();
         AndroidUtilities.init(this);
         UIThread.init(this);
+        ColorManager.install(new ColorManager.ColorEngine() {
+            @Override
+            public int getColor(String key) {
+                return Theme.getColor(key);
+            }
+        });
     }
 
     @Override

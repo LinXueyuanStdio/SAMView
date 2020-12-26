@@ -6,7 +6,7 @@ import android.os.Build;
 import android.view.View;
 
 import com.same.lib.anim.OriginInterpolator;
-import com.same.lib.drawable.ColorManager;
+import com.same.lib.util.ColorManager;
 import com.same.lib.util.KeyHub;
 import com.same.lib.util.Num;
 import com.same.lib.util.Space;

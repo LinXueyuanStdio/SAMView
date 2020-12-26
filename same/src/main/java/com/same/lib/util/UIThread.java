@@ -13,6 +13,7 @@ import android.os.Handler;
 public class UIThread {
     public static volatile Handler applicationHandler;
     private static volatile boolean applicationInited = false;
+
     public static void init(Context context) {
         if (applicationInited) {
             return;
@@ -20,6 +21,7 @@ public class UIThread {
         applicationInited = true;
         applicationHandler = new Handler(context.getMainLooper());
     }
+
     public static void runOnUIThread(Runnable runnable) {
         runOnUIThread(runnable, 0);
     }

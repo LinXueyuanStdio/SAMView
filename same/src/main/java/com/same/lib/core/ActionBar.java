@@ -23,7 +23,7 @@ import android.widget.ImageView;
 
 import com.same.lib.R;
 import com.same.lib.drawable.BackDrawable;
-import com.same.lib.drawable.ColorManager;
+import com.same.lib.util.ColorManager;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.drawable.MenuDrawable;
 import com.same.lib.font.FontManager;

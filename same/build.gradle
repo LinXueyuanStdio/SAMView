@@ -9,8 +9,6 @@ dependencies {
     api project(':MView:RadioButton')
     api project(':MView:MFont')
     api project(':MView:MAnim')
-//    api project(':MView:MTheme')
-//    api project(':MView:MLottie')
 }
 
 ext {

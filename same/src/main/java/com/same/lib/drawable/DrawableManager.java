@@ -25,6 +25,7 @@ import android.os.Build;
 import android.util.StateSet;
 
 import com.same.lib.R;
+import com.same.lib.util.ColorManager;
 import com.same.lib.util.KeyHub;
 import com.same.lib.util.Space;
 

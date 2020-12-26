@@ -38,7 +38,7 @@ import com.same.lib.anim.CubicBezierInterpolator;
 import com.same.lib.base.NotificationCenter;
 import com.same.lib.core.AnimationProperties;
 import com.same.lib.core.ThemeDescription;
-import com.same.lib.drawable.ColorManager;
+import com.same.lib.util.ColorManager;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.font.FontManager;
 import com.same.lib.helper.LayoutHelper;
