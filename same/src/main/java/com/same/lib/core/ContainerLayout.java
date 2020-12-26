@@ -31,7 +31,6 @@ import android.widget.FrameLayout;
 
 import com.same.lib.R;
 import com.same.lib.anim.CubicBezierInterpolator;
-import com.same.lib.base.SharedConfig;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.KeyHub;
@@ -41,6 +40,7 @@ import com.same.lib.theme.ThemeInfo;
 import com.same.lib.theme.ThemeManager;
 import com.same.lib.util.Keyboard;
 import com.same.lib.util.Space;
+import com.same.lib.util.Store;
 import com.same.lib.util.UIThread;
 
 import java.util.ArrayList;
@@ -967,7 +967,7 @@ public class ContainerLayout extends FrameLayout {
         if (parentActivity.getCurrentFocus() != null && fragment.hideKeyboardOnShow()) {
             Keyboard.hideKeyboard(parentActivity.getCurrentFocus());
         }
-        boolean needAnimation = preview || !forceWithoutAnimation && SharedConfig.view_animations;
+        boolean needAnimation = preview || !forceWithoutAnimation && Store.view_animations;
 
         final BasePage currentFragment = !fragmentsStack.isEmpty() ? fragmentsStack.get(fragmentsStack.size() - 1) : null;
 
@@ -1305,7 +1305,7 @@ public class ContainerLayout extends FrameLayout {
             Keyboard.hideKeyboard(parentActivity.getCurrentFocus());
         }
         setInnerTranslationX(0);
-        boolean needAnimation = inPreviewMode || transitionAnimationPreviewMode || animated && SharedConfig.view_animations;
+        boolean needAnimation = inPreviewMode || transitionAnimationPreviewMode || animated && Store.view_animations;
         final BasePage currentFragment = fragmentsStack.get(fragmentsStack.size() - 1);
         BasePage previousFragment = null;
         if (fragmentsStack.size() > 1) {

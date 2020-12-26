@@ -22,13 +22,13 @@ import android.widget.TextView;
 
 import com.same.lib.R;
 import com.same.lib.anim.Easings;
-import com.same.lib.base.SharedConfig;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.font.FontManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.util.Space;
+import com.same.lib.util.Store;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -215,7 +215,7 @@ public final class Bulletin {
     }
 
     private static boolean isTransitionsEnabled() {
-        return SharedConfig.view_animations;
+        return Store.view_animations;
     }
 
     //region Offset Providers

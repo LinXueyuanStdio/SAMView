@@ -25,9 +25,7 @@ import android.os.Build;
 import android.util.StateSet;
 
 import com.same.lib.R;
-import com.same.lib.base.SharedConfig;
 import com.same.lib.theme.KeyHub;
-import com.same.lib.theme.Theme;
 import com.same.lib.util.Space;
 
 import java.lang.reflect.Method;
@@ -107,7 +105,7 @@ public class DrawableManager {
                 canStartHolidayAnimation = false;
             }
             if (dialogs_holidayDrawable == null) {
-                if (monthOfYear == 11 && dayOfMonth >= (SharedConfig.DEBUG_PRIVATE_VERSION ? 29 : 31) && dayOfMonth <= 31 || monthOfYear == 0 && dayOfMonth == 1) {
+                if (monthOfYear == 11 && dayOfMonth >= 31 && dayOfMonth <= 31 || monthOfYear == 0 && dayOfMonth == 1) {
                     dialogs_holidayDrawable = context.getResources().getDrawable(R.drawable.newyear);
                     dialogs_holidayDrawableOffsetX = -Space.dp(3);
                     dialogs_holidayDrawableOffsetY = -Space.dp(1);
@@ -444,7 +442,7 @@ public class DrawableManager {
         if (key == null) {
             return;
         }
-        setDrawableColor(drawable, Theme.getColor(key));
+        setDrawableColor(drawable, ColorManager.getColor(key));
     }
 
     @TargetApi(21)

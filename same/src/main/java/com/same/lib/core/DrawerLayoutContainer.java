@@ -25,7 +25,6 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.same.lib.R;
-import com.same.lib.base.SharedConfig;
 import com.same.lib.util.Keyboard;
 import com.same.lib.util.Space;
 import com.same.lib.util.Store;
@@ -415,7 +414,7 @@ public class DrawerLayoutContainer extends FrameLayout {
 
             final FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) child.getLayoutParams();
 
-            if (SharedConfig.DEBUG_VERSION) {
+            if (Store.DEBUG_VERSION) {
                 if (drawerLayout != child) {
                     child.layout(lp.leftMargin, lp.topMargin + getPaddingTop(), lp.leftMargin + child.getMeasuredWidth(), lp.topMargin + child.getMeasuredHeight() + getPaddingTop());
                 } else {

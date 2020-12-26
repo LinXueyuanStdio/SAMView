@@ -1,4 +1,4 @@
-package com.same.lib.drawable;
+package com.same.ui.theme.drawable;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
