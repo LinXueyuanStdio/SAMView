@@ -1,4 +1,4 @@
-package com.same.lib.core;
+package com.same.lib.effect;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;

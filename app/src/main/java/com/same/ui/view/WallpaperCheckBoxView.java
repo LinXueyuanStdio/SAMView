@@ -15,7 +15,7 @@ import android.util.Property;
 import android.view.View;
 
 import com.same.lib.base.AndroidUtilities;
-import com.same.lib.core.AnimationProperties;
+import com.same.ui.theme.AnimationProperties;
 import com.same.lib.font.FontManager;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;

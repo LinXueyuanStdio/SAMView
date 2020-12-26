@@ -85,6 +85,7 @@ public class LanguageSelectPage extends BasePage {
 
         actionBar.setBackButtonImage(R.drawable.ic_baseline_arrow_back_ios_24);
         actionBar.setAllowOverlayTitle(true);
+        actionBar.setSupportsHolidayImage(true);
         actionBar.setTitle(MyLang.getString("Language", R.string.Language));
 
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {

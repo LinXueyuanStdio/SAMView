@@ -49,7 +49,7 @@ import android.widget.TextView;
 
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.core.ActionBar;
-import com.same.lib.core.AnimationProperties;
+import com.same.ui.theme.AnimationProperties;
 import com.same.lib.core.BasePage;
 import com.same.ui.theme.dialog.BottomSheet;
 import com.same.lib.core.ContainerLayout;

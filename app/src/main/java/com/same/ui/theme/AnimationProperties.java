@@ -1,4 +1,4 @@
-package com.same.lib.core;
+package com.same.ui.theme;
 
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;

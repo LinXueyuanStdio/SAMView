@@ -23,6 +23,8 @@ import android.widget.ImageView;
 
 import com.same.lib.R;
 import com.same.lib.drawable.BackDrawable;
+import com.same.lib.effect.FireworksEffect;
+import com.same.lib.effect.SnowflakesEffect;
 import com.same.lib.util.ColorManager;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.drawable.MenuDrawable;

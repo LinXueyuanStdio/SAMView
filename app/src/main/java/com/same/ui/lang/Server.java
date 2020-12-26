@@ -20,6 +20,7 @@ public class Server {
     public static ArrayList<LangPackString> englishStrings() {
         ArrayList<LangPackString> list = new ArrayList<>();
         list.add(new LangPackString("Theme", "Theme"));
+        list.add(new LangPackString("Language", "Language"));
         list.add(new LangPackString("LanguageName", "English"));
         list.add(new LangPackString("LanguageNameInEnglish", "English"));
         list.add(new LangPackString("local_string", "remote string in english"));
@@ -30,6 +31,7 @@ public class Server {
     public static ArrayList<LangPackString> chineseStrings() {
         ArrayList<LangPackString> list = new ArrayList<>();
         list.add(new LangPackString("Theme", "主题"));
+        list.add(new LangPackString("Language", "语言"));
         list.add(new LangPackString("LanguageName", "中文简体"));
         list.add(new LangPackString("LanguageNameInEnglish", "Chinese"));
         list.add(new LangPackString("local_string", "中文的云端字符串"));
@@ -40,6 +42,7 @@ public class Server {
     public static ArrayList<LangPackString> frenchStrings() {
         ArrayList<LangPackString> list = new ArrayList<>();
         list.add(new LangPackString("Theme", "主题"));
+        list.add(new LangPackString("Language", "语言"));
         list.add(new LangPackString("LanguageName", "法语"));
         list.add(new LangPackString("LanguageNameInEnglish", "French"));
         list.add(new LangPackString("local_string", "法语的云端字符串"));
@@ -50,8 +53,8 @@ public class Server {
     public static LangPackDifference englishPackDifference() {
         LangPackDifference difference = new LangPackDifference();
         difference.lang_code = "en";
-        difference.from_version = 0;
-        difference.version = 1;
+        difference.from_version = 1;
+        difference.version = 2;
         difference.strings = englishStrings();
         return difference;
     }
@@ -59,8 +62,8 @@ public class Server {
     public static LangPackDifference frenchPackDifference() {
         LangPackDifference difference = new LangPackDifference();
         difference.lang_code = "fr";
-        difference.from_version = 0;
-        difference.version = 1;
+        difference.from_version = 1;
+        difference.version = 2;
         difference.strings = frenchStrings();
         return difference;
     }
@@ -68,8 +71,8 @@ public class Server {
     public static LangPackDifference chinesePackDifference() {
         LangPackDifference difference = new LangPackDifference();
         difference.lang_code = "zh";
-        difference.from_version = 0;
-        difference.version = 1;
+        difference.from_version = 1;
+        difference.version = 2;
         difference.strings = chineseStrings();
         return difference;
     }
