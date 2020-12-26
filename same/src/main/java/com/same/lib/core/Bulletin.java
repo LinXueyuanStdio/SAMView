@@ -22,7 +22,6 @@ import android.widget.TextView;
 
 import com.same.lib.R;
 import com.same.lib.anim.Easings;
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.SharedConfig;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.drawable.DrawableManager;
@@ -154,6 +153,7 @@ public final class Bulletin {
                 @Override
                 public void onViewAttachedToWindow(View v) {
                 }
+
                 @Override
                 public void onViewDetachedFromWindow(View v) {
                     layout.removeOnAttachStateChangeListener(this);
@@ -323,6 +323,7 @@ public final class Bulletin {
                 callbacks.get(i).onExitTransitionStart(this);
             }
         }
+
         @CallSuper
         protected void onExitTransitionEnd() {
             for (int i = 0, size = callbacks.size(); i < size; i++) {
@@ -367,6 +368,7 @@ public final class Bulletin {
 
         public interface Transition {
             void animateEnter(@NonNull Layout layout, @Nullable Runnable startAction, @Nullable Runnable endAction, int bottomOffset);
+
             void animateExit(@NonNull Layout layout, @Nullable Runnable startAction, @Nullable Runnable endAction, int bottomOffset);
         }
 
@@ -384,6 +386,7 @@ public final class Bulletin {
                             startAction.run();
                         }
                     }
+
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         if (endAction != null) {
@@ -406,6 +409,7 @@ public final class Bulletin {
                             startAction.run();
                         }
                     }
+
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         if (endAction != null) {

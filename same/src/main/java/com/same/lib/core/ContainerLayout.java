@@ -31,7 +31,6 @@ import android.widget.FrameLayout;
 
 import com.same.lib.R;
 import com.same.lib.anim.CubicBezierInterpolator;
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.SharedConfig;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.helper.LayoutHelper;
@@ -42,6 +41,7 @@ import com.same.lib.theme.ThemeInfo;
 import com.same.lib.theme.ThemeManager;
 import com.same.lib.util.Keyboard;
 import com.same.lib.util.Space;
+import com.same.lib.util.UIThread;
 
 import java.util.ArrayList;
 
@@ -166,7 +166,7 @@ public class ContainerLayout extends FrameLayout {
             int usableViewHeight = rootView.getHeight() - (rect.top != 0 ? Space.statusBarHeight : 0) - Space.getViewInset(rootView);
             isKeyboardVisible = usableViewHeight - (rect.bottom - rect.top) > 0;
             if (waitingForKeyboardCloseRunnable != null && !containerView.isKeyboardVisible && !containerViewBack.isKeyboardVisible) {
-                AndroidUtilities.cancelRunOnUIThread(waitingForKeyboardCloseRunnable);
+                UIThread.cancelRunOnUIThread(waitingForKeyboardCloseRunnable);
                 waitingForKeyboardCloseRunnable.run();
                 waitingForKeyboardCloseRunnable = null;
             }
@@ -776,7 +776,7 @@ public class ContainerLayout extends FrameLayout {
         onCloseAnimationEnd();
         onOpenAnimationEnd();
         if (waitingForKeyboardCloseRunnable != null) {
-            AndroidUtilities.cancelRunOnUIThread(waitingForKeyboardCloseRunnable);
+            UIThread.cancelRunOnUIThread(waitingForKeyboardCloseRunnable);
             waitingForKeyboardCloseRunnable = null;
         }
         if (currentAnimation != null) {
@@ -786,7 +786,7 @@ public class ContainerLayout extends FrameLayout {
             currentAnimation = null;
         }
         if (animationRunnable != null) {
-            AndroidUtilities.cancelRunOnUIThread(animationRunnable);
+            UIThread.cancelRunOnUIThread(animationRunnable);
             animationRunnable = null;
         }
         setAlpha(1.0f);
@@ -812,7 +812,7 @@ public class ContainerLayout extends FrameLayout {
         if (delayedOpenAnimationRunnable == null) {
             return;
         }
-        AndroidUtilities.cancelRunOnUIThread(delayedOpenAnimationRunnable);
+        UIThread.cancelRunOnUIThread(delayedOpenAnimationRunnable);
         delayedOpenAnimationRunnable.run();
         delayedOpenAnimationRunnable = null;
     }
@@ -822,7 +822,7 @@ public class ContainerLayout extends FrameLayout {
             animationProgress = 0.0f;
             lastFrameTime = System.nanoTime() / 1000000;
         }
-        AndroidUtilities.runOnUIThread(animationRunnable = new Runnable() {
+        UIThread.runOnUIThread(animationRunnable = new Runnable() {
             @Override
             public void run() {
                 if (animationRunnable != this) {
@@ -1141,7 +1141,7 @@ public class ContainerLayout extends FrameLayout {
                                 startLayoutAnimation(true, true, preview);
                             }
                         };
-                        AndroidUtilities.runOnUIThread(waitingForKeyboardCloseRunnable, 200);
+                        UIThread.runOnUIThread(waitingForKeyboardCloseRunnable, 200);
                     } else if (fragment.needDelayOpenAnimation()) {
                         delayedOpenAnimationRunnable = new Runnable() {
                             @Override
@@ -1153,7 +1153,7 @@ public class ContainerLayout extends FrameLayout {
                                 startLayoutAnimation(true, true, preview);
                             }
                         };
-                        AndroidUtilities.runOnUIThread(delayedOpenAnimationRunnable, 200);
+                        UIThread.runOnUIThread(delayedOpenAnimationRunnable, 200);
                     } else {
                         startLayoutAnimation(true, true, preview);
                     }
@@ -1287,7 +1287,7 @@ public class ContainerLayout extends FrameLayout {
             return;
         }
         if (delayedOpenAnimationRunnable != null) {
-            AndroidUtilities.cancelRunOnUIThread(delayedOpenAnimationRunnable);
+            UIThread.cancelRunOnUIThread(delayedOpenAnimationRunnable);
             delayedOpenAnimationRunnable = null;
         }
         closeLastFragment(true);
@@ -1406,7 +1406,7 @@ public class ContainerLayout extends FrameLayout {
                                 startLayoutAnimation(false, true, false);
                             }
                         };
-                        AndroidUtilities.runOnUIThread(waitingForKeyboardCloseRunnable, 200);
+                        UIThread.runOnUIThread(waitingForKeyboardCloseRunnable, 200);
                     } else {
                         startLayoutAnimation(false, true, inPreviewMode || transitionAnimationPreviewMode);
                     }

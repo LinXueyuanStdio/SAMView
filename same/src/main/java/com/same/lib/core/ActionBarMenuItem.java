@@ -29,7 +29,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.same.lib.R;
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.drawable.CloseProgressDrawable2;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.drawable.DrawableManager;
@@ -39,6 +38,7 @@ import com.same.lib.theme.KeyHub;
 import com.same.lib.util.Keyboard;
 import com.same.lib.util.Space;
 import com.same.lib.util.Store;
+import com.same.lib.util.UIThread;
 import com.timecat.component.locale.MLang;
 
 /**
@@ -173,7 +173,7 @@ public class ActionBarMenuItem extends FrameLayout {
                     }
                     toggleSubMenu();
                 };
-                AndroidUtilities.runOnUIThread(showMenuRunnable, 200);
+                UIThread.runOnUIThread(showMenuRunnable, 200);
             }
         } else if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
             if (hasSubMenu() && (popupWindow == null || popupWindow != null && !popupWindow.isShowing())) {
@@ -460,7 +460,7 @@ public class ActionBarMenuItem extends FrameLayout {
             return;
         }
         if (showMenuRunnable != null) {
-            AndroidUtilities.cancelRunOnUIThread(showMenuRunnable);
+            UIThread.cancelRunOnUIThread(showMenuRunnable);
             showMenuRunnable = null;
         }
         if (popupWindow != null && popupWindow.isShowing()) {

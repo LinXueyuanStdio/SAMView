@@ -11,6 +11,7 @@ import com.same.lib.intro.IntroLoader;
 import com.same.lib.lottie.NativeLoader;
 import com.same.lib.theme.Theme;
 import com.same.lib.util.Space;
+import com.same.lib.util.UIThread;
 import com.same.ui.lang.MyLang;
 import com.same.ui.theme.delegate.ColorDelegateLoader;
 
@@ -31,6 +32,7 @@ public class MyApplication extends Application {
         MyLang.init(applicationContext);
         ColorDelegateLoader.init();
         AndroidUtilities.init(this);
+        UIThread.init(this);
     }
 
     @Override

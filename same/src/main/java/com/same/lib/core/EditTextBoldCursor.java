@@ -29,9 +29,9 @@ import android.widget.TextView;
 
 import com.same.lib.R;
 import com.same.lib.anim.CubicBezierInterpolator;
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.util.Space;
 import com.same.lib.util.Store;
+import com.same.lib.util.UIThread;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -64,7 +64,7 @@ public class EditTextBoldCursor extends EditText {
         public void run() {
             invalidate();
             if (attachedToWindow != null) {
-                AndroidUtilities.runOnUIThread(this, 500);
+                UIThread.runOnUIThread(this, 500);
             }
         }
     };
@@ -193,7 +193,7 @@ public class EditTextBoldCursor extends EditText {
             e.printStackTrace();
         }
         try {
-            gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[] {0xff54a1db, 0xff54a1db});
+            gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{0xff54a1db, 0xff54a1db});
             if (Build.VERSION.SDK_INT >= 29) {
                 setTextCursorDrawable(gradientDrawable);
             }
@@ -228,11 +228,15 @@ public class EditTextBoldCursor extends EditText {
                     editor = mEditor.get(this);
                 }
                 if (listenerFixer == null) {
-                    Method initDrawablesMethod = editorClass.getDeclaredMethod("getPositionListener");
-                    initDrawablesMethod.setAccessible(true);
-                    listenerFixer = (ViewTreeObserver.OnPreDrawListener) initDrawablesMethod.invoke(editor);
+                    if (editorClass != null) {
+                        Method initDrawablesMethod = editorClass.getDeclaredMethod("getPositionListener");
+                        initDrawablesMethod.setAccessible(true);
+                        listenerFixer = (ViewTreeObserver.OnPreDrawListener) initDrawablesMethod.invoke(editor);
+                    }
                 }
-                AndroidUtilities.runOnUIThread(listenerFixer::onPreDraw, 500);
+                if (listenerFixer != null) {
+                    UIThread.runOnUIThread(listenerFixer::onPreDraw, 500);
+                }
             } catch (Throwable ignore) {
 
             }
@@ -602,6 +606,7 @@ public class EditTextBoldCursor extends EditText {
     }
 
     private Rect mTempRect;
+
     private int clampHorizontalPosition(final Drawable drawable, float horizontal) {
         horizontal = Math.max(0.5f, horizontal - 0.5f);
         if (mTempRect == null) {
@@ -654,14 +659,14 @@ public class EditTextBoldCursor extends EditText {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         attachedToWindow = getRootView();
-        AndroidUtilities.runOnUIThread(invalidateRunnable);
+        UIThread.runOnUIThread(invalidateRunnable);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         attachedToWindow = null;
-        AndroidUtilities.cancelRunOnUIThread(invalidateRunnable);
+        UIThread.cancelRunOnUIThread(invalidateRunnable);
     }
 
     @Override

@@ -35,7 +35,6 @@ import android.widget.TextView;
 
 import com.same.lib.R;
 import com.same.lib.anim.CubicBezierInterpolator;
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.NotificationCenter;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.drawable.DrawableManager;
@@ -45,6 +44,7 @@ import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.ThemeDescription;
 import com.same.lib.util.Space;
 import com.same.lib.util.Store;
+import com.same.lib.util.UIThread;
 
 import java.util.ArrayList;
 
@@ -476,7 +476,7 @@ public class BottomSheet extends Dialog {
                 }
             }
             if (layoutCount == 0 && startAnimationRunnable != null) {
-                AndroidUtilities.cancelRunOnUIThread(startAnimationRunnable);
+                UIThread.cancelRunOnUIThread(startAnimationRunnable);
                 startAnimationRunnable.run();
                 startAnimationRunnable = null;
             }
@@ -546,7 +546,9 @@ public class BottomSheet extends Dialog {
 
     public interface BottomSheetDelegateInterface {
         void onOpenAnimationStart();
+
         void onOpenAnimationEnd();
+
         boolean canDismiss();
     }
 
@@ -843,7 +845,7 @@ public class BottomSheet extends Dialog {
         WindowManager.LayoutParams params = window.getAttributes();
         if (focusable) {
             params.softInputMode = (useSmoothKeyboard ? WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN : WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-            params.flags &=~ WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
+            params.flags &= ~WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
         } else {
             params.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING;
             params.flags |= WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
@@ -877,7 +879,7 @@ public class BottomSheet extends Dialog {
         if (Build.VERSION.SDK_INT >= 18) {
             layoutCount = 2;
             containerView.setTranslationY(containerView.getMeasuredHeight());
-            AndroidUtilities.runOnUIThread(startAnimationRunnable = new Runnable() {
+            UIThread.runOnUIThread(startAnimationRunnable = new Runnable() {
                 @Override
                 public void run() {
                     if (startAnimationRunnable != this || dismissed) {
@@ -1100,7 +1102,7 @@ public class BottomSheet extends Dialog {
                     if (onClickListener != null) {
                         onClickListener.onClick(BottomSheet.this, item);
                     }
-                    AndroidUtilities.runOnUIThread(() -> {
+                    UIThread.runOnUIThread(() -> {
                         try {
                             BottomSheet.super.dismiss();
                         } catch (Exception e) {
@@ -1154,7 +1156,7 @@ public class BottomSheet extends Dialog {
                     if (currentSheetAnimation != null && currentSheetAnimation.equals(animation)) {
                         currentSheetAnimation = null;
                         currentSheetAnimationType = 0;
-                        AndroidUtilities.runOnUIThread(() -> {
+                        UIThread.runOnUIThread(() -> {
                             try {
                                 dismissInternal();
                             } catch (Exception e) {

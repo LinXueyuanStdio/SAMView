@@ -15,7 +15,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Selection;
+import android.text.Spannable;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -42,6 +45,7 @@ import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.ThemeDescription;
 import com.same.lib.util.Space;
 import com.same.lib.util.Store;
+import com.same.lib.util.UIThread;
 import com.timecat.component.locale.MLang;
 
 import java.lang.reflect.Field;
@@ -321,7 +325,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     inLayout = false;
 
                     if (lastScreenWidth != Space.displaySize.x) {
-                        AndroidUtilities.runOnUIThread(() -> {
+                        UIThread.runOnUIThread(() -> {
                             lastScreenWidth = Space.displaySize.x;
                             final int calculatedWidth = Space.displaySize.x - Space.dp(56);
                             int maxWidth;
@@ -473,7 +477,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         messageTextView = new TextView(context);
         messageTextView.setTextColor(getThemeColor(KeyHub.key_dialogTextBlack));
         messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        messageTextView.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
+        messageTextView.setMovementMethod(new LinkMovementMethodMy());
         messageTextView.setLinkTextColor(getThemeColor(KeyHub.key_dialogTextLink));
         if (!messageTextViewClickable) {
             messageTextView.setClickable(false);
@@ -901,7 +905,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         } catch (Throwable ignore) {
 
         }
-        AndroidUtilities.cancelRunOnUIThread(showRunnable);
+        UIThread.cancelRunOnUIThread(showRunnable);
     }
 
     @Override
@@ -1042,8 +1046,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     }
 
     public void showDelayed(long delay) {
-        AndroidUtilities.cancelRunOnUIThread(showRunnable);
-        AndroidUtilities.runOnUIThread(showRunnable, delay);
+        UIThread.cancelRunOnUIThread(showRunnable);
+        UIThread.runOnUIThread(showRunnable, delay);
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
@@ -1069,6 +1073,22 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public static class LinkMovementMethodMy extends LinkMovementMethod {
+        @Override
+        public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
+            try {
+                boolean result = super.onTouchEvent(widget, buffer, event);
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    Selection.removeSelection(buffer);
+                }
+                return result;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return false;
         }
     }
 
