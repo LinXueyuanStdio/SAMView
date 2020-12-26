@@ -1,4 +1,4 @@
-package com.same.lib.core;
+package com.same.ui.theme.dialog;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -36,12 +36,13 @@ import android.widget.TextView;
 import com.same.lib.R;
 import com.same.lib.anim.CubicBezierInterpolator;
 import com.same.lib.base.NotificationCenter;
+import com.same.lib.core.AnimationProperties;
+import com.same.lib.core.ThemeDescription;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.font.FontManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.KeyHub;
-import com.same.lib.theme.ThemeDescription;
 import com.same.lib.util.Space;
 import com.same.lib.util.Store;
 import com.same.lib.util.UIThread;

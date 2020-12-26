@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.NotificationCenter;
-import com.same.lib.core.AlertDialog;
+import com.same.ui.theme.dialog.AlertDialog;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.lottie.RLottieImageView;
 import com.same.ui.theme.span.ThemeName;

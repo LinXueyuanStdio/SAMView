@@ -12,7 +12,7 @@ import com.same.lib.base.AndroidUtilities;
 import com.same.lib.core.ActionBar;
 import com.same.lib.core.ActionBarMenu;
 import com.same.lib.core.ActionBarMenuItem;
-import com.same.lib.core.AlertDialog;
+import com.same.ui.theme.dialog.AlertDialog;
 import com.same.lib.core.BasePage;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.helper.LayoutHelper;

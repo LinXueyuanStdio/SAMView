@@ -16,7 +16,6 @@ import android.view.accessibility.AccessibilityManager;
 
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.theme.KeyHub;
-import com.same.lib.theme.ThemeDescription;
 
 import java.util.ArrayList;
 
@@ -382,6 +381,10 @@ public class BasePage {
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         return new ArrayList<>();
+    }
+    //除了自己的 getThemeDescriptions()，还包括 visibleDialog 等内部等 getThemeDescriptions()
+    public ArrayList<ThemeDescription> getAllThemeDescriptions() {
+        return getThemeDescriptions();
     }
 
     public boolean extendActionMode(Menu menu) {

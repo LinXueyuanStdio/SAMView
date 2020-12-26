@@ -145,6 +145,10 @@ public class ThemeDescription {
         return false;
     }
 
+    void apply(Context context) {
+        setColor(context, ColorManager.getColor(getCurrentKey()), false, false);
+    }
+
     public void setColor(Context context, int color, boolean useDefault, boolean save) {
         if (save) {
             Theme.setColor(context, currentKey, color, useDefault);

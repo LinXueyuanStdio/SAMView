@@ -35,7 +35,6 @@ import com.same.lib.drawable.ColorManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
-import com.same.lib.theme.ThemeDescription;
 import com.same.lib.theme.ThemeInfo;
 import com.same.lib.theme.ThemeManager;
 import com.same.lib.util.Keyboard;
@@ -346,9 +345,6 @@ public class ContainerLayout extends FrameLayout {
             for (int a = 0, N = fragmentsStack.size(); a < N; a++) {
                 BasePage fragment = fragmentsStack.get(a);
                 fragment.onConfigurationChanged(newConfig);
-                if (fragment.visibleDialog instanceof BottomSheet) {
-                    ((BottomSheet) fragment.visibleDialog).onConfigurationChanged(newConfig);
-                }
             }
         }
     }
@@ -1609,7 +1605,7 @@ public class ContainerLayout extends FrameLayout {
                 int color = Color.argb(a, r, g, b);
                 ThemeDescription description = descriptions.get(i);
                 Theme.setAnimatedColor(description.getCurrentKey(), color);
-                description.setColor(getContext(), color, false, false);
+                description.applyColor(getContext(), color, false, false);
             }
         }
         for (int j = 0, N = themeAnimatorDelegate.size(); j < N; j++) {
@@ -1621,8 +1617,7 @@ public class ContainerLayout extends FrameLayout {
         if (presentingFragmentDescriptions != null) {
             for (int i = 0, N = presentingFragmentDescriptions.size(); i < N; i++) {
                 ThemeDescription description = presentingFragmentDescriptions.get(i);
-                String key = description.getCurrentKey();
-                description.setColor(getContext(), ColorManager.getColor(key), false, false);
+                description.apply(getContext());
             }
         }
     }
@@ -1685,15 +1680,7 @@ public class ContainerLayout extends FrameLayout {
             }
             if (fragment != null) {
                 startAnimation = true;
-                ArrayList<ThemeDescription> descriptions = fragment.getThemeDescriptions();
-                addStartDescriptions(descriptions);
-                if (fragment.visibleDialog instanceof BottomSheet) {
-                    BottomSheet sheet = (BottomSheet) fragment.visibleDialog;
-                    addStartDescriptions(sheet.getThemeDescriptions());
-                } else if (fragment.visibleDialog instanceof AlertDialog) {
-                    AlertDialog dialog = (AlertDialog) fragment.visibleDialog;
-                    addStartDescriptions(dialog.getThemeDescriptions());
-                }
+                addStartDescriptions(fragment.getAllThemeDescriptions());
                 if (i == 0) {
                     if (accentId != -1) {
                         theme.setCurrentAccentId(accentId);
@@ -1701,12 +1688,7 @@ public class ContainerLayout extends FrameLayout {
                     }
                     ThemeManager.applyTheme(getContext(), theme, nightTheme);
                 }
-                addEndDescriptions(descriptions);
-                if (fragment.visibleDialog instanceof BottomSheet) {
-                    addEndDescriptions(((BottomSheet) fragment.visibleDialog).getThemeDescriptions());
-                } else if (fragment.visibleDialog instanceof AlertDialog) {
-                    addEndDescriptions(((AlertDialog) fragment.visibleDialog).getThemeDescriptions());
-                }
+                addEndDescriptions(fragment.getAllThemeDescriptions());
             }
         }
         if (startAnimation) {

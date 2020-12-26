@@ -1,6 +1,7 @@
 package com.same.ui.page.base;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -10,10 +11,12 @@ import android.widget.ScrollView;
 
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.core.BasePage;
+import com.same.lib.core.ThemeDescription;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
-import com.same.lib.theme.ThemeDescription;
 import com.same.ui.R;
+import com.same.ui.theme.dialog.AlertDialog;
+import com.same.ui.theme.dialog.BottomSheet;
 
 import java.util.ArrayList;
 
@@ -61,6 +64,27 @@ public abstract class BaseActionBarPage extends BasePage {
         button.setText(text);
         button.setOnClickListener(clickListener);
         return button;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (visibleDialog instanceof BottomSheet) {
+            ((BottomSheet) visibleDialog).onConfigurationChanged(newConfig);
+        }
+    }
+
+    @Override
+    public ArrayList<ThemeDescription> getAllThemeDescriptions() {
+        ArrayList<ThemeDescription> descriptions = getThemeDescriptions();
+        if (visibleDialog instanceof BottomSheet) {
+            BottomSheet sheet = (BottomSheet) visibleDialog;
+            descriptions.addAll(sheet.getThemeDescriptions());
+        } else if (visibleDialog instanceof AlertDialog) {
+            AlertDialog dialog = (AlertDialog) visibleDialog;
+            descriptions.addAll(dialog.getThemeDescriptions());
+        }
+        return super.getAllThemeDescriptions();
     }
 
     @Override

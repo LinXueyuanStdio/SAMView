@@ -34,7 +34,7 @@ import com.same.lib.anim.Easings;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.NotificationCenter;
 import com.same.lib.base.SharedConfig;
-import com.same.lib.core.AlertDialog;
+import com.same.ui.theme.dialog.AlertDialog;
 import com.same.lib.core.BasePage;
 import com.same.lib.core.ContainerLayout;
 import com.same.lib.core.DrawerLayoutContainer;
