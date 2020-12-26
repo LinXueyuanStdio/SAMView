@@ -37,7 +37,6 @@ import com.same.lib.R;
 import com.same.lib.anim.CubicBezierInterpolator;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.NotificationCenter;
-import com.same.lib.base.SharedConfig;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.font.FontManager;
@@ -45,6 +44,7 @@ import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.ThemeDescription;
 import com.same.lib.util.Space;
+import com.same.lib.util.Store;
 
 import java.util.ArrayList;
 
@@ -235,7 +235,7 @@ public class BottomSheet extends Dialog {
 
         private void checkDismiss(float velX, float velY) {
             float translationY = containerView.getTranslationY();
-            boolean backAnimation = translationY < AndroidUtilities.getPixelsInCM(0.8f, false) && (velY < 3500 || Math.abs(velY) < Math.abs(velX)) || velY < 0 && Math.abs(velY) >= 3500;
+            boolean backAnimation = translationY < Space.getPixelsInCM(0.8f, false) && (velY < 3500 || Math.abs(velY) < Math.abs(velX)) || velY < 0 && Math.abs(velY) >= 3500;
             if (!backAnimation) {
                 boolean allowOld = allowCustomAnimation;
                 allowCustomAnimation = false;
@@ -245,7 +245,7 @@ public class BottomSheet extends Dialog {
             } else {
                 currentAnimation = new AnimatorSet();
                 currentAnimation.playTogether(ObjectAnimator.ofFloat(containerView, "translationY", 0));
-                currentAnimation.setDuration((int) (150 * (translationY / AndroidUtilities.getPixelsInCM(0.8f, false))));
+                currentAnimation.setDuration((int) (150 * (translationY / Space.getPixelsInCM(0.8f, false))));
                 currentAnimation.setInterpolator(CubicBezierInterpolator.EASE_OUT);
                 currentAnimation.addListener(new AnimatorListenerAdapter() {
                     @Override

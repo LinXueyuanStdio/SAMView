@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
 import android.view.animation.DecelerateInterpolator;
 
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 import com.same.lib.util.Space;
@@ -106,7 +105,7 @@ public class MenuDrawable extends Drawable {
         } else {
             canvas.rotate(currentRotation * (reverseAngle ? -225 : 135));
             int color2 = Theme.getColor(KeyHub.key_actionBarActionModeDefaultIcon);
-            paint.setColor(AndroidUtilities.getOffsetColor(color1, color2, currentRotation, 1.0f));
+            paint.setColor(Space.getOffsetColor(color1, color2, currentRotation, 1.0f));
             canvas.drawLine(-Space.dp(9) + Space.dp(1) * currentRotation, 0, Space.dp(9) - Space.dp(1) * currentRotation, 0, paint);
             endYDiff = Space.dp(5) * (1 - Math.abs(currentRotation)) - Space.dp(0.5f) * Math.abs(currentRotation);
             endXDiff = Space.dp(9) - Space.dp(9) * Math.abs(currentRotation);

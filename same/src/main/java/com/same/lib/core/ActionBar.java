@@ -22,7 +22,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.same.lib.R;
-import com.same.lib.base.SharedConfig;
 import com.same.lib.drawable.BackDrawable;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.drawable.DrawableManager;
@@ -31,6 +30,7 @@ import com.same.lib.font.FontManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.util.Space;
+import com.same.lib.util.Store;
 import com.timecat.component.locale.MLang;
 
 import java.util.ArrayList;

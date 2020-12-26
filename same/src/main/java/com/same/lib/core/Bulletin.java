@@ -585,7 +585,7 @@ public final class Bulletin {
             undoImageView.setImageResource(R.drawable.chats_undo);
             undoImageView.setColorFilter(new PorterDuffColorFilter(undoCancelColor, PorterDuff.Mode.MULTIPLY));
             undoImageView.setBackground(DrawableManager.createSelectorDrawable((undoCancelColor & 0x00ffffff) | 0x19000000));
-            AndroidUtilities.setPaddingRelative(undoImageView, 0, 12, 0, 12);
+            Space.setPaddingRelative(undoImageView, 0, 12, 0, 12);
             addView(undoImageView, LayoutHelper.createFrameRelatively(56, 48, Gravity.CENTER_VERTICAL));
         }
 

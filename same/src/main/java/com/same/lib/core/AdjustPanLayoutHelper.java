@@ -4,6 +4,7 @@ import android.os.Build;
 import android.view.View;
 
 import com.same.lib.base.AndroidUtilities;
+import com.same.lib.util.Space;
 import com.same.lib.util.Store;
 
 /**
@@ -48,7 +49,7 @@ public class AdjustPanLayoutHelper {
             if (loc[1] <= 0) {
                 loc[1] -= parentView.getTranslationY();
                 if (Build.VERSION.SDK_INT < 21) {
-                    loc[1] -= AndroidUtilities.statusBarHeight;
+                    loc[1] -= Space.statusBarHeight;
                 }
             } else {
                 loc[1] = 0;
