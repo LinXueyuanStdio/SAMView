@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.helper.LayoutHelper;
-import com.same.lib.theme.KeyHub;
+import com.same.lib.util.KeyHub;
 import com.same.lib.util.Space;
 import com.same.lib.util.Store;
 
@@ -34,7 +34,7 @@ public class ActionBarMenuSubItem extends FrameLayout {
 
     private int textColor = ColorManager.getColor(KeyHub.key_actionBarDefaultSubmenuItem);
     private int iconColor = ColorManager.getColor(KeyHub.key_actionBarDefaultSubmenuItemIcon);
-    private int selectorColor = ColorManager.getColor(KeyHub.key_dialogButtonSelector);
+    private int selectorColor = ColorManager.getColor(KeyHub.key_actionBarButtonSelector);
 
     public ActionBarMenuSubItem(Context context) {
         super(context);

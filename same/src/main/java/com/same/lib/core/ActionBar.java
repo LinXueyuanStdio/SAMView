@@ -28,7 +28,7 @@ import com.same.lib.drawable.DrawableManager;
 import com.same.lib.drawable.MenuDrawable;
 import com.same.lib.font.FontManager;
 import com.same.lib.helper.LayoutHelper;
-import com.same.lib.theme.KeyHub;
+import com.same.lib.util.KeyHub;
 import com.same.lib.util.Space;
 import com.same.lib.util.Store;
 import com.timecat.component.locale.MLang;

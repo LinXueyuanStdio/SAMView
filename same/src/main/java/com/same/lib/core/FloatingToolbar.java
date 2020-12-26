@@ -43,7 +43,7 @@ import com.same.lib.R;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.font.FontManager;
-import com.same.lib.theme.KeyHub;
+import com.same.lib.util.KeyHub;
 import com.same.lib.util.Space;
 import com.timecat.component.locale.MLang;
 

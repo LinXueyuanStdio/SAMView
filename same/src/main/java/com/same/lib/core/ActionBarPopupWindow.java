@@ -25,7 +25,7 @@ import android.widget.ScrollView;
 import com.same.lib.R;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.helper.LayoutHelper;
-import com.same.lib.theme.KeyHub;
+import com.same.lib.util.KeyHub;
 import com.same.lib.util.Space;
 
 import java.lang.reflect.Field;

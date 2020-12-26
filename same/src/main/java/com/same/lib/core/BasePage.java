@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityManager;
 
 import com.same.lib.drawable.ColorManager;
-import com.same.lib.theme.KeyHub;
+import com.same.lib.util.KeyHub;
 
 import java.util.ArrayList;
 
@@ -102,7 +102,7 @@ public class BasePage {
      * 绑定到容器
      * @param layout ContainerLayout
      */
-    protected void setParentLayout(ContainerLayout layout) {
+    public void setParentLayout(ContainerLayout layout) {
         if (parentLayout != layout) {
             parentLayout = layout;
             if (fragmentView != null) {
@@ -206,7 +206,7 @@ public class BasePage {
     /**
      * 给ContainerLayout用的，不要重写
      */
-    protected void clearViews() {
+    public void clearViews() {
         if (fragmentView != null) {
             ViewGroup parent = (ViewGroup) fragmentView.getParent();
             if (parent != null) {

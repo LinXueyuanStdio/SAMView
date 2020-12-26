@@ -6,6 +6,8 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
+import com.same.lib.drawable.ColorManager;
+
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
@@ -16,7 +18,7 @@ import java.util.HashMap;
  * @description 主题描述
  * @usage null
  */
-public class ThemeDescription {
+public class ThemeDescription implements com.same.lib.core.ThemeDescription {
 
     public static int FLAG_BACKGROUND = 0x00000001;
     public static int FLAG_LINKCOLOR = 0x00000002;
@@ -68,10 +70,10 @@ public class ThemeDescription {
 
     public HashMap<String, Field> cachedFields;
     public HashMap<String, Boolean> notFoundCachedFields;
-
-    public interface ThemeDescriptionDelegate {
-        void didSetColor();
-    }
+//
+//    public interface ThemeDescriptionDelegate {
+//        void didSetColor();
+//    }
 
     public ThemeDescription(View view, int flags, Class[] classes, Paint[] paint, Drawable[] drawables, ThemeDescriptionDelegate themeDescriptionDelegate, String key, Object unused) {
         currentKey = key;
@@ -145,8 +147,19 @@ public class ThemeDescription {
         return false;
     }
 
-    void apply(Context context) {
+    @Override
+    public void apply(Context context) {
         setColor(context, ColorManager.getColor(getCurrentKey()), false, false);
+    }
+
+    @Override
+    public void applyColor(Context context, int color, boolean useDefault, boolean save) {
+        setColor(context, color, useDefault, save);
+    }
+
+    @Override
+    public void applyColor(Context context, int color, boolean useDefault) {
+        setColor(context, color, useDefault);
     }
 
     public void setColor(Context context, int color, boolean useDefault, boolean save) {

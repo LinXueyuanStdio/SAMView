@@ -1,6 +1,8 @@
 package com.same.lib.drawable;
 
-import com.same.lib.theme.Theme;
+import android.graphics.Color;
+
+import java.util.Random;
 
 /**
  * @author 林学渊
@@ -10,7 +12,12 @@ import com.same.lib.theme.Theme;
  * @usage null
  */
 public class ColorManager {
-    public static int getColor(String key){
-        return Theme.getColor(key);
+    public static int getColor(String key) {
+        return randomColor();
+    }
+
+    private static int randomColor() {
+        int random = new Random().nextInt(360);
+        return Color.HSVToColor(new float[]{random, 0.5f, 0.9f});
     }
 }

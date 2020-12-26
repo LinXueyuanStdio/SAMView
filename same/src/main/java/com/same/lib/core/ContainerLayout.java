@@ -9,7 +9,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -33,10 +32,7 @@ import com.same.lib.R;
 import com.same.lib.anim.CubicBezierInterpolator;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.helper.LayoutHelper;
-import com.same.lib.theme.KeyHub;
-import com.same.lib.theme.Theme;
-import com.same.lib.theme.ThemeInfo;
-import com.same.lib.theme.ThemeManager;
+import com.same.lib.util.KeyHub;
 import com.same.lib.util.Keyboard;
 import com.same.lib.util.Space;
 import com.same.lib.util.Store;
@@ -44,7 +40,10 @@ import com.same.lib.util.UIThread;
 
 import java.util.ArrayList;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 
 /**
  * @author 林学渊
@@ -228,7 +227,7 @@ public class ContainerLayout extends FrameLayout {
     private Runnable waitingForKeyboardCloseRunnable;
     private Runnable delayedOpenAnimationRunnable;
 
-    private boolean inPreviewMode;
+    protected boolean inPreviewMode;
     private boolean previewOpenAnimationInProgress;
     private ColorDrawable previewBackgroundDrawable;
 
@@ -255,23 +254,17 @@ public class ContainerLayout extends FrameLayout {
     protected boolean animationInProgress;
     private VelocityTracker velocityTracker;
     private View layoutToIgnore;
-    private boolean beginTrackingSent;
-    private boolean transitionAnimationInProgress;
-    private boolean transitionAnimationPreviewMode;
-    private ArrayList<int[]> animateStartColors = new ArrayList<>();
-    private ArrayList<int[]> animateEndColors = new ArrayList<>();
-    private ArrayList<ArrayList<ThemeDescription>> themeAnimatorDescriptions = new ArrayList<>();
-    private ArrayList<ThemeDescription> presentingFragmentDescriptions;
-    private ArrayList<ThemeDescription.ThemeDescriptionDelegate> themeAnimatorDelegate = new ArrayList<>();
-    private AnimatorSet themeAnimatorSet;
-    private float themeAnimationValue;
-    private boolean animateThemeAfterAnimation;
-    private ThemeInfo animateSetThemeAfterAnimation;
-    private boolean animateSetThemeNightAfterAnimation;
-    private int animateSetThemeAccentIdAfterAnimation;
-    private boolean rebuildAfterAnimation;
-    private boolean rebuildLastAfterAnimation;
-    private boolean showLastAfterAnimation;
+    protected boolean beginTrackingSent;
+    protected boolean transitionAnimationInProgress;
+    protected boolean transitionAnimationPreviewMode;
+    protected ArrayList<int[]> animateStartColors = new ArrayList<>();
+    protected ArrayList<int[]> animateEndColors = new ArrayList<>();
+
+    public static Drawable moveUpDrawable;
+
+    protected boolean rebuildAfterAnimation;
+    protected boolean rebuildLastAfterAnimation;
+    protected boolean showLastAfterAnimation;
     private long transitionAnimationStartTime;
     private boolean inActionMode;
     private int startedTrackingPointerId;
@@ -298,13 +291,18 @@ public class ContainerLayout extends FrameLayout {
     public ArrayList<BasePage> fragmentsStack;
     //endregion
 
+    protected Drawable getDrawableById(@NonNull Context context, @DrawableRes int id) {
+        return ResourcesCompat.getDrawable(context.getResources(), id, context.getTheme());
+    }
+
     public ContainerLayout(Context context) {
         super(context);
         parentActivity = (Activity) context;
 
+        moveUpDrawable = getDrawableById(context, R.drawable.preview_open);
         if (layerShadowDrawable == null) {
-            layerShadowDrawable = getResources().getDrawable(R.drawable.layer_shadow);
-            headerShadowDrawable = getResources().getDrawable(R.drawable.header_shadow).mutate();
+            layerShadowDrawable = getDrawableById(context, R.drawable.layer_shadow);
+            headerShadowDrawable = getDrawableById(context, R.drawable.header_shadow).mutate();
             scrimPaint = new Paint();
         }
     }
@@ -392,8 +390,8 @@ public class ContainerLayout extends FrameLayout {
                 previewBackgroundDrawable.draw(canvas);
                 int x = (getMeasuredWidth() - Space.dp(24)) / 2;
                 int y = (int) (view.getTop() + containerView.getTranslationY() - Space.dp(12 + (Build.VERSION.SDK_INT < 21 ? 20 : 0)));
-                Theme.moveUpDrawable.setBounds(x, y, x + Space.dp(24), y + Space.dp(24));
-                Theme.moveUpDrawable.draw(canvas);
+                moveUpDrawable.setBounds(x, y, x + Space.dp(24), y + Space.dp(24));
+                moveUpDrawable.draw(canvas);
             }
         }
         final boolean result = super.drawChild(canvas, child, drawingTime);
@@ -457,9 +455,7 @@ public class ContainerLayout extends FrameLayout {
             fragmentView.setBackgroundColor(ColorManager.getColor(KeyHub.key_windowBackgroundWhite));
         }
         lastFragment.onResume();
-        if (themeAnimatorSet != null) {
-            presentingFragmentDescriptions = lastFragment.getThemeDescriptions();
-        }
+        loadDescFor(lastFragment);
     }
 
     public boolean onTouchEvent(MotionEvent ev) {
@@ -851,7 +847,7 @@ public class ContainerLayout extends FrameLayout {
                         containerView.setScaleX(0.9f + 0.1f * interpolated);
                         containerView.setScaleY(0.9f + 0.1f * interpolated);
                         previewBackgroundDrawable.setAlpha((int) (0x2e * interpolated));
-                        Theme.moveUpDrawable.setAlpha((int) (255 * interpolated));
+                        moveUpDrawable.setAlpha((int) (255 * interpolated));
                         containerView.invalidate();
                         invalidate();
                     } else {
@@ -863,7 +859,7 @@ public class ContainerLayout extends FrameLayout {
                         containerViewBack.setScaleX(0.9f + 0.1f * (1.0f - interpolated));
                         containerViewBack.setScaleY(0.9f + 0.1f * (1.0f - interpolated));
                         previewBackgroundDrawable.setAlpha((int) (0x2e * (1.0f - interpolated)));
-                        Theme.moveUpDrawable.setAlpha((int) (255 * (1.0f - interpolated)));
+                        moveUpDrawable.setAlpha((int) (255 * (1.0f - interpolated)));
                         containerView.invalidate();
                         invalidate();
                     } else {
@@ -881,14 +877,10 @@ public class ContainerLayout extends FrameLayout {
     //endregion
 
     //region Fragment控制
-    private void checkNeedRebuild() {
+    protected void checkNeedRebuild() {
         if (rebuildAfterAnimation) {
             rebuildAllFragmentViews(rebuildLastAfterAnimation, showLastAfterAnimation);
             rebuildAfterAnimation = false;
-        } else if (animateThemeAfterAnimation) {
-            animateThemedValues(animateSetThemeAfterAnimation, animateSetThemeAccentIdAfterAnimation, animateSetThemeNightAfterAnimation, false);
-            animateSetThemeAfterAnimation = null;
-            animateThemeAfterAnimation = false;
         }
     }
 
@@ -1033,7 +1025,7 @@ public class ContainerLayout extends FrameLayout {
                 previewBackgroundDrawable = new ColorDrawable(0x2e000000);
             }
             previewBackgroundDrawable.setAlpha(0);
-            Theme.moveUpDrawable.setAlpha(0);
+            moveUpDrawable.setAlpha(0);
         }
 
         bringContainerViewToFront();
@@ -1045,9 +1037,7 @@ public class ContainerLayout extends FrameLayout {
         }
 
         //动画
-        if (themeAnimatorSet != null) {
-            presentingFragmentDescriptions = fragment.getThemeDescriptions();
-        }
+        loadDescFor(fragment);
 
         if (needAnimation || preview) {
             if (useAlphaAnimations && fragmentsStack.size() == 1) {
@@ -1355,9 +1345,7 @@ public class ContainerLayout extends FrameLayout {
             previousFragment.onTransitionAnimationStart(true, true);
             currentFragment.onTransitionAnimationStart(false, true);
             previousFragment.onResume();
-            if (themeAnimatorSet != null) {
-                presentingFragmentDescriptions = previousFragment.getThemeDescriptions();
-            }
+            loadDescFor(previousFragment);
             currentActionBar = previousFragment.actionBar;
             if (!previousFragment.hasOwnBackground && fragmentView.getBackground() == null) {
                 fragmentView.setBackgroundColor(ColorManager.getColor(KeyHub.key_windowBackgroundWhite));
@@ -1578,170 +1566,7 @@ public class ContainerLayout extends FrameLayout {
     }
     //endregion
 
-    //region 主题控制
-    @Keep
-    public void setThemeAnimationValue(float value) {
-        themeAnimationValue = value;
-        for (int j = 0, N = themeAnimatorDescriptions.size(); j < N; j++) {
-            ArrayList<ThemeDescription> descriptions = themeAnimatorDescriptions.get(j);
-            int[] startColors = animateStartColors.get(j);
-            int[] endColors = animateEndColors.get(j);
-            int rE, gE, bE, aE, rS, gS, bS, aS, a, r, g, b;
-            for (int i = 0, N2 = descriptions.size(); i < N2; i++) {
-                rE = Color.red(endColors[i]);
-                gE = Color.green(endColors[i]);
-                bE = Color.blue(endColors[i]);
-                aE = Color.alpha(endColors[i]);
-
-                rS = Color.red(startColors[i]);
-                gS = Color.green(startColors[i]);
-                bS = Color.blue(startColors[i]);
-                aS = Color.alpha(startColors[i]);
-
-                a = Math.min(255, (int) (aS + (aE - aS) * value));
-                r = Math.min(255, (int) (rS + (rE - rS) * value));
-                g = Math.min(255, (int) (gS + (gE - gS) * value));
-                b = Math.min(255, (int) (bS + (bE - bS) * value));
-                int color = Color.argb(a, r, g, b);
-                ThemeDescription description = descriptions.get(i);
-                Theme.setAnimatedColor(description.getCurrentKey(), color);
-                description.applyColor(getContext(), color, false, false);
-            }
-        }
-        for (int j = 0, N = themeAnimatorDelegate.size(); j < N; j++) {
-            ThemeDescription.ThemeDescriptionDelegate delegate = themeAnimatorDelegate.get(j);
-            if (delegate != null) {
-                delegate.didSetColor();
-            }
-        }
-        if (presentingFragmentDescriptions != null) {
-            for (int i = 0, N = presentingFragmentDescriptions.size(); i < N; i++) {
-                ThemeDescription description = presentingFragmentDescriptions.get(i);
-                description.apply(getContext());
-            }
-        }
-    }
-
-    @Keep
-    public float getThemeAnimationValue() {
-        return themeAnimationValue;
-    }
-
-    private void addStartDescriptions(ArrayList<ThemeDescription> descriptions) {
-        if (descriptions == null) {
-            return;
-        }
-        themeAnimatorDescriptions.add(descriptions);
-        int[] startColors = new int[descriptions.size()];
-        animateStartColors.add(startColors);
-        for (int a = 0, N = descriptions.size(); a < N; a++) {
-            ThemeDescription description = descriptions.get(a);
-            startColors[a] = description.getSetColor();
-            ThemeDescription.ThemeDescriptionDelegate delegate = description.setDelegateDisabled();
-            if (delegate != null && !themeAnimatorDelegate.contains(delegate)) {
-                themeAnimatorDelegate.add(delegate);
-            }
-        }
-    }
-
-    private void addEndDescriptions(ArrayList<ThemeDescription> descriptions) {
-        if (descriptions == null) {
-            return;
-        }
-        int[] endColors = new int[descriptions.size()];
-        animateEndColors.add(endColors);
-        for (int a = 0, N = descriptions.size(); a < N; a++) {
-            endColors[a] = descriptions.get(a).getSetColor();
-        }
-    }
-
-    public void animateThemedValues(ThemeInfo theme, int accentId, boolean nightTheme, boolean instant) {
-        if (transitionAnimationInProgress || startedTracking) {
-            animateThemeAfterAnimation = true;
-            animateSetThemeAfterAnimation = theme;
-            animateSetThemeNightAfterAnimation = nightTheme;
-            animateSetThemeAccentIdAfterAnimation = accentId;
-            return;
-        }
-        if (themeAnimatorSet != null) {
-            themeAnimatorSet.cancel();
-            themeAnimatorSet = null;
-        }
-        boolean startAnimation = false;
-        for (int i = 0; i < 2; i++) {
-            BasePage fragment;
-            if (i == 0) {
-                fragment = getLastFragment();
-            } else {
-                if (!inPreviewMode && !transitionAnimationPreviewMode || fragmentsStack.size() <= 1) {
-                    continue;
-                }
-                fragment = fragmentsStack.get(fragmentsStack.size() - 2);
-            }
-            if (fragment != null) {
-                startAnimation = true;
-                addStartDescriptions(fragment.getAllThemeDescriptions());
-                if (i == 0) {
-                    if (accentId != -1) {
-                        theme.setCurrentAccentId(accentId);
-                        ThemeManager.saveThemeAccents(getContext(), theme, true, false, true);
-                    }
-                    ThemeManager.applyTheme(getContext(), theme, nightTheme);
-                }
-                addEndDescriptions(fragment.getAllThemeDescriptions());
-            }
-        }
-        if (startAnimation) {
-            int count = fragmentsStack.size() - (inPreviewMode || transitionAnimationPreviewMode ? 2 : 1);
-            for (int a = 0; a < count; a++) {
-                BasePage fragment = fragmentsStack.get(a);
-                fragment.clearViews();
-                fragment.setParentLayout(this);
-            }
-            if (instant) {
-                setThemeAnimationValue(1.0f);
-                themeAnimatorDescriptions.clear();
-                animateStartColors.clear();
-                animateEndColors.clear();
-                themeAnimatorDelegate.clear();
-                presentingFragmentDescriptions = null;
-                return;
-            }
-            Theme.setAnimatingColor(true);
-            themeAnimatorSet = new AnimatorSet();
-            themeAnimatorSet.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    if (animation.equals(themeAnimatorSet)) {
-                        themeAnimatorDescriptions.clear();
-                        animateStartColors.clear();
-                        animateEndColors.clear();
-                        themeAnimatorDelegate.clear();
-                        Theme.setAnimatingColor(false);
-                        presentingFragmentDescriptions = null;
-                        themeAnimatorSet = null;
-                    }
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-                    if (animation.equals(themeAnimatorSet)) {
-                        themeAnimatorDescriptions.clear();
-                        animateStartColors.clear();
-                        animateEndColors.clear();
-                        themeAnimatorDelegate.clear();
-                        Theme.setAnimatingColor(false);
-                        presentingFragmentDescriptions = null;
-                        themeAnimatorSet = null;
-                    }
-                }
-            });
-            themeAnimatorSet.playTogether(ObjectAnimator.ofFloat(this, "themeAnimationValue", 0.0f, 1.0f));
-            themeAnimatorSet.setDuration(200);
-            themeAnimatorSet.start();
-        }
-    }
-    //endregion
+    protected void loadDescFor(BasePage page) {}
 
     //region ActionMode控制
     public void onActionModeStarted(Object mode) {
