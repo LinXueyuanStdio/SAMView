@@ -32,7 +32,6 @@ import android.widget.TextView;
 
 import com.same.lib.R;
 import com.same.lib.base.AndroidUtilities;
-import com.same.lib.base.SharedConfig;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.font.FontManager;
@@ -1053,8 +1052,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
 
         private AlertDialog alertDialog;
 
-        protected Builder(AlertDialog alert){
-            alertDialog=alert;
+        protected Builder(AlertDialog alert) {
+            alertDialog = alert;
         }
 
         public Builder(Context context) {

@@ -5,9 +5,10 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.view.View;
 
-import com.same.lib.base.AndroidUtilities;
+import com.same.lib.anim.OriginInterpolator;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.theme.KeyHub;
+import com.same.lib.util.Num;
 import com.same.lib.util.Space;
 
 import java.util.ArrayList;
@@ -83,7 +84,7 @@ public class FireworksEffect {
                 count--;
                 continue;
             }
-            particle.alpha = 1.0f - AndroidUtilities.decelerateInterpolator.getInterpolation(particle.currentTime / particle.lifeTime);
+            particle.alpha = 1.0f - OriginInterpolator.decelerateInterpolator.getInterpolation(particle.currentTime / particle.lifeTime);
             particle.x += particle.vx * particle.velocity * dt / 500.0f;
             particle.y += particle.vy * particle.velocity * dt / 500.0f;
             particle.vy += dt / 100.0f;
@@ -102,13 +103,13 @@ public class FireworksEffect {
             particle.draw(canvas);
         }
 
-        if (AndroidUtilities.random.nextBoolean() && particles.size() + 8 < 150) {
+        if (Num.random.nextBoolean() && particles.size() + 8 < 150) {
             int statusBarHeight = (Build.VERSION.SDK_INT >= 21 ? Space.statusBarHeight : 0);
-            float cx = AndroidUtilities.random.nextFloat() * parent.getMeasuredWidth();
-            float cy = statusBarHeight + AndroidUtilities.random.nextFloat() * (parent.getMeasuredHeight() - Space.dp(20) - statusBarHeight);
+            float cx = Num.random.nextFloat() * parent.getMeasuredWidth();
+            float cy = statusBarHeight + Num.random.nextFloat() * (parent.getMeasuredHeight() - Space.dp(20) - statusBarHeight);
             int color;
 
-            switch (AndroidUtilities.random.nextInt(4)) {
+            switch (Num.random.nextInt(4)) {
                 case 0: {
                     color = 0xff342eda;
                     break;
@@ -132,7 +133,7 @@ public class FireworksEffect {
                 }
             }
             for (int a = 0; a < 8; a++) {
-                int angle = AndroidUtilities.random.nextInt(270) - 225;
+                int angle = Num.random.nextInt(270) - 225;
                 float vx = (float) Math.cos(Math.PI / 180.0 * angle);
                 float vy = (float) Math.sin(Math.PI / 180.0 * angle);
 
@@ -153,11 +154,11 @@ public class FireworksEffect {
                 newParticle.alpha = 1.0f;
                 newParticle.currentTime = 0;
 
-                newParticle.scale = Math.max(1.0f, AndroidUtilities.random.nextFloat() * 1.5f);
+                newParticle.scale = Math.max(1.0f, Num.random.nextFloat() * 1.5f);
                 newParticle.type = 0;//Utilities.random.nextInt(2);
 
-                newParticle.lifeTime = 1000 + AndroidUtilities.random.nextInt(1000);
-                newParticle.velocity = 20.0f + AndroidUtilities.random.nextFloat() * 4.0f;
+                newParticle.lifeTime = 1000 + Num.random.nextInt(1000);
+                newParticle.velocity = 20.0f + Num.random.nextFloat() * 4.0f;
                 particles.add(newParticle);
             }
         }

@@ -5,9 +5,10 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.view.View;
 
-import com.same.lib.base.AndroidUtilities;
+import com.same.lib.anim.OriginInterpolator;
 import com.same.lib.drawable.ColorManager;
 import com.same.lib.theme.KeyHub;
+import com.same.lib.util.Num;
 import com.same.lib.util.Space;
 
 import java.util.ArrayList;
@@ -133,9 +134,9 @@ public class SnowflakesEffect {
                 continue;
             }
             if (particle.currentTime < 200.0f) {
-                particle.alpha = AndroidUtilities.accelerateInterpolator.getInterpolation(particle.currentTime / 200.0f);
+                particle.alpha = OriginInterpolator.accelerateInterpolator.getInterpolation(particle.currentTime / 200.0f);
             } else {
-                particle.alpha = 1.0f - AndroidUtilities.decelerateInterpolator.getInterpolation((particle.currentTime - 200.0f) / (particle.lifeTime - 200.0f));
+                particle.alpha = 1.0f - OriginInterpolator.decelerateInterpolator.getInterpolation((particle.currentTime - 200.0f) / (particle.lifeTime - 200.0f));
             }
             particle.x += particle.vx * particle.velocity * dt / 500.0f;
             particle.y += particle.vy * particle.velocity * dt / 500.0f;
@@ -154,12 +155,12 @@ public class SnowflakesEffect {
             particle.draw(canvas);
         }
 
-        if (AndroidUtilities.random.nextFloat() > 0.7f && particles.size() < 100) {
+        if (Num.random.nextFloat() > 0.7f && particles.size() < 100) {
             int statusBarHeight = (Build.VERSION.SDK_INT >= 21 ? Space.statusBarHeight : 0);
-            float cx = AndroidUtilities.random.nextFloat() * parent.getMeasuredWidth();
-            float cy = statusBarHeight + AndroidUtilities.random.nextFloat() * (parent.getMeasuredHeight() - Space.dp(20) - statusBarHeight);
+            float cx = Num.random.nextFloat() * parent.getMeasuredWidth();
+            float cy = statusBarHeight + Num.random.nextFloat() * (parent.getMeasuredHeight() - Space.dp(20) - statusBarHeight);
 
-            int angle = AndroidUtilities.random.nextInt(40) - 20 + 90;
+            int angle = Num.random.nextInt(40) - 20 + 90;
             float vx = (float) Math.cos(Math.PI / 180.0 * angle);
             float vy = (float) Math.sin(Math.PI / 180.0 * angle);
 
@@ -179,11 +180,11 @@ public class SnowflakesEffect {
             newParticle.alpha = 0.0f;
             newParticle.currentTime = 0;
 
-            newParticle.scale = AndroidUtilities.random.nextFloat() * 1.2f;
-            newParticle.type = AndroidUtilities.random.nextInt(2);
+            newParticle.scale = Num.random.nextFloat() * 1.2f;
+            newParticle.type = Num.random.nextInt(2);
 
-            newParticle.lifeTime = 2000 + AndroidUtilities.random.nextInt(100);
-            newParticle.velocity = 20.0f + AndroidUtilities.random.nextFloat() * 4.0f;
+            newParticle.lifeTime = 2000 + Num.random.nextInt(100);
+            newParticle.velocity = 20.0f + Num.random.nextFloat() * 4.0f;
             particles.add(newParticle);
         }
 
