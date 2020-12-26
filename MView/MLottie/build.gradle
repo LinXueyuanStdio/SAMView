@@ -1,4 +1,4 @@
-apply from: "${project.rootDir}/gradle/library.gradle"
+apply from: "${project.rootDir}/gradle/library_header.gradle"
 
 android {
     compileSdkVersion 29
@@ -29,9 +29,4 @@ dependencies {
     api project(':MView:MBase')
 }
 
-ext {
-    DIST_PATH = "${project.rootDir}/dist"
-    PUBLISH_GROUP_ID = 'com.timecat.component'
-    PUBLISH_ARTIFACT_ID = 'MView-lottie'
-    PUBLISH_VERSION = "1.0.0"
-}
+apply from: "${project.rootDir}/gradle/library_tail.gradle"

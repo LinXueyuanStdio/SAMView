@@ -1,8 +1,15 @@
 buildscript {
+    def moduleConfigProps = new Properties()
+    File moduleConfig = rootProject.file("moduleConfig.properties")
+    if (moduleConfig.exists()) {
+        moduleConfigProps.load(new FileInputStream(moduleConfig))
+    }
+    def localMavenDir = file(moduleConfigProps.localMavenPath)
 
     repositories {
         google()
         jcenter()
+        maven { url "file://${localMavenDir.absolutePath}" }
         maven { url "https://plugins.gradle.org/m2/" }
         maven { url "https://github.com/LinXueyuanStdio/MLang/raw/main/dist/" }
     }
@@ -16,9 +23,17 @@ buildscript {
 }
 
 allprojects {
+    def moduleConfigProps = new Properties()
+    File moduleConfig = rootProject.file("moduleConfig.properties")
+    if (moduleConfig.exists()) {
+        moduleConfigProps.load(new FileInputStream(moduleConfig))
+    }
+    def localMavenDir = file(moduleConfigProps.localMavenPath)
+
     repositories {
         google()
         jcenter()
+        maven { url "file://${localMavenDir.absolutePath}" }
         maven { url "https://github.com/LinXueyuanStdio/MLang/raw/main/dist/" }
     }
 }

@@ -1,4 +1,4 @@
-apply from: "${project.rootDir}/gradle/library.gradle"
+apply from: "${project.rootDir}/gradle/library_header.gradle"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

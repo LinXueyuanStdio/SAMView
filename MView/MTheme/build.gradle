@@ -1,4 +1,4 @@
-apply from: "${project.rootDir}/gradle/library.gradle"
+apply from: "${project.rootDir}/gradle/library_header.gradle"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -9,9 +9,4 @@ dependencies {
 
 }
 
-ext {
-    DIST_PATH = "${project.rootDir}/dist"
-    PUBLISH_GROUP_ID = 'com.timecat.component'
-    PUBLISH_ARTIFACT_ID = 'MView-theme'
-    PUBLISH_VERSION = "1.0.0"
-}
+apply from: "${project.rootDir}/gradle/library_tail.gradle"
