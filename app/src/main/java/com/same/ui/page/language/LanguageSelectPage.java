@@ -28,6 +28,7 @@ import com.same.ui.theme.CommonTheme;
 import com.same.ui.theme.dialog.AlertDialog;
 import com.same.ui.view.EmptyTextProgressView;
 import com.same.ui.view.RecyclerListView;
+import com.timecat.component.locale.LocaleInfo;
 import com.timecat.component.locale.MLang;
 
 import java.util.ArrayList;
@@ -54,9 +55,9 @@ public class LanguageSelectPage extends BasePage {
     private boolean searching;
 
     private Timer searchTimer;
-    private ArrayList<MLang.LocaleInfo> searchResult;
-    private ArrayList<MLang.LocaleInfo> sortedLanguages;
-    private ArrayList<MLang.LocaleInfo> unofficialLanguages;
+    private ArrayList<LocaleInfo> searchResult;
+    private ArrayList<LocaleInfo> sortedLanguages;
+    private ArrayList<LocaleInfo> unofficialLanguages;
 
     @Override
     public boolean onFragmentCreate() {
@@ -154,7 +155,7 @@ public class LanguageSelectPage extends BasePage {
                 return;
             }
             LanguageCell cell = (LanguageCell) view;
-            MLang.LocaleInfo localeInfo = cell.getCurrentLocale();
+            LocaleInfo localeInfo = cell.getCurrentLocale();
             if (localeInfo != null) {
                 MyLang.getInstance().applyLanguage(getParentActivity(), localeInfo, true, false, false, true, new MLang.FinishLoadCallback() {
                     @Override
@@ -171,11 +172,11 @@ public class LanguageSelectPage extends BasePage {
                 return false;
             }
             LanguageCell cell = (LanguageCell) view;
-            MLang.LocaleInfo localeInfo = cell.getCurrentLocale();
+            LocaleInfo localeInfo = cell.getCurrentLocale();
             if (localeInfo == null || localeInfo.pathToFile == null || localeInfo.isRemote() && localeInfo.serverIndex != Integer.MAX_VALUE) {
                 return false;
             }
-            final MLang.LocaleInfo finalLocaleInfo = localeInfo;
+            final LocaleInfo finalLocaleInfo = localeInfo;
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
             builder.setTitle(MyLang.getString("DeleteLocalizationTitle", R.string.DeleteLocalizationTitle));
             builder.setMessage(MyLang.replaceTags(context, MyLang.formatString("DeleteLocalizationText", R.string.DeleteLocalizationText, localeInfo.name)));
@@ -216,8 +217,8 @@ public class LanguageSelectPage extends BasePage {
     }
 
     private void fillLanguages() {
-        final MLang.LocaleInfo currentLocale = MyLang.getInstance().getCurrentLocaleInfo();
-        Comparator<MLang.LocaleInfo> comparator = (o, o2) -> {
+        final LocaleInfo currentLocale = MyLang.getInstance().getCurrentLocaleInfo();
+        Comparator<LocaleInfo> comparator = (o, o2) -> {
             if (o == currentLocale) {
                 return -1;
             } else if (o2 == currentLocale) {
@@ -236,9 +237,9 @@ public class LanguageSelectPage extends BasePage {
         sortedLanguages = new ArrayList<>();
         unofficialLanguages = new ArrayList<>(MyLang.getInstance().unofficialLanguages);
 
-        ArrayList<MLang.LocaleInfo> arrayList = MyLang.getInstance().languages;
+        ArrayList<LocaleInfo> arrayList = MyLang.getInstance().languages;
         for (int a = 0, size = arrayList.size(); a < size; a++) {
-            MLang.LocaleInfo info = arrayList.get(a);
+            LocaleInfo info = arrayList.get(a);
             if (info.serverIndex != Integer.MAX_VALUE) {
                 sortedLanguages.add(info);
             } else {
@@ -293,17 +294,17 @@ public class LanguageSelectPage extends BasePage {
                 return;
             }
             long time = System.currentTimeMillis();
-            ArrayList<MLang.LocaleInfo> resultArray = new ArrayList<>();
+            ArrayList<LocaleInfo> resultArray = new ArrayList<>();
 
             for (int a = 0, N = unofficialLanguages.size(); a < N; a++) {
-                MLang.LocaleInfo c = unofficialLanguages.get(a);
+                LocaleInfo c = unofficialLanguages.get(a);
                 if (c.name.toLowerCase().startsWith(query) || c.nameEnglish.toLowerCase().startsWith(query)) {
                     resultArray.add(c);
                 }
             }
 
             for (int a = 0, N = sortedLanguages.size(); a < N; a++) {
-                MLang.LocaleInfo c = sortedLanguages.get(a);
+                LocaleInfo c = sortedLanguages.get(a);
                 if (c.name.toLowerCase().startsWith(query) || c.nameEnglish.toLowerCase().startsWith(query)) {
                     resultArray.add(c);
                 }
@@ -313,7 +314,7 @@ public class LanguageSelectPage extends BasePage {
         });
     }
 
-    private void updateSearchResults(final ArrayList<MLang.LocaleInfo> arrCounties) {
+    private void updateSearchResults(final ArrayList<LocaleInfo> arrCounties) {
         AndroidUtilities.runOnUIThread(() -> {
             searchResult = arrCounties;
             searchListViewAdapter.notifyDataSetChanged();
@@ -377,7 +378,7 @@ public class LanguageSelectPage extends BasePage {
             switch (holder.getItemViewType()) {
                 case 0: {
                     LanguageCell textSettingsCell = (LanguageCell) holder.itemView;
-                    MLang.LocaleInfo localeInfo;
+                    LocaleInfo localeInfo;
                     boolean last;
                     if (search) {
                         localeInfo = searchResult.get(position);

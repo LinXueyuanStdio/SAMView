@@ -17,6 +17,7 @@ import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 import com.same.ui.R;
 import com.same.ui.theme.CommonTheme;
+import com.timecat.component.locale.LocaleInfo;
 import com.timecat.component.locale.MLang;
 
 import static com.same.lib.base.SharedConfig.isRTL;
@@ -34,7 +35,7 @@ public class LanguageCell extends FrameLayout {
     private TextView textView2;
     private ImageView checkImage;
     private boolean needDivider;
-    private MLang.LocaleInfo currentLocale;
+    private LocaleInfo currentLocale;
     private boolean isDialog;
 
     public LanguageCell(Context context, boolean dialog) {
@@ -74,7 +75,7 @@ public class LanguageCell extends FrameLayout {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(isDialog ? 50 : 54) + (needDivider ? 1 : 0), MeasureSpec.EXACTLY));
     }
 
-    public void setLanguage(MLang.LocaleInfo language, String desc, boolean divider) {
+    public void setLanguage(LocaleInfo language, String desc, boolean divider) {
         textView.setText(desc != null ? desc : language.name);
         textView2.setText(language.nameEnglish);
         currentLocale = language;
@@ -89,7 +90,7 @@ public class LanguageCell extends FrameLayout {
         needDivider = false;
     }
 
-    public MLang.LocaleInfo getCurrentLocale() {
+    public LocaleInfo getCurrentLocale() {
         return currentLocale;
     }
 

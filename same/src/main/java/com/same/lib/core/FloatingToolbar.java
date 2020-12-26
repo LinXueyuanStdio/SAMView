@@ -40,12 +40,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.same.lib.R;
-import com.same.lib.util.ColorManager;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.font.FontManager;
+import com.same.lib.util.ColorManager;
 import com.same.lib.util.KeyHub;
+import com.same.lib.util.Lang;
 import com.same.lib.util.Space;
-import com.timecat.component.locale.MLang;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -652,7 +652,7 @@ public final class FloatingToolbar {
                 mOverflowPanel.setAlpha(1);
                 mOverflowPanel.setVisibility(View.VISIBLE);
                 mOverflowButton.setImageDrawable(mArrow);
-                mOverflowButton.setContentDescription(MLang.getString(mContext, "AccDescrMoreOptions", R.string.AccDescrMoreOptions));
+                mOverflowButton.setContentDescription(Lang.getString(mContext, "AccDescrMoreOptions", R.string.AccDescrMoreOptions));
 
                 if (isInRTLMode()) {
                     mContentContainer.setX(mMarginHorizontal);
@@ -684,7 +684,7 @@ public final class FloatingToolbar {
                 mOverflowPanel.setAlpha(0);
                 mOverflowPanel.setVisibility(View.INVISIBLE);
                 mOverflowButton.setImageDrawable(mOverflow);
-                mOverflowButton.setContentDescription(MLang.getString(mContext, "AccDescrMoreOptions", R.string.AccDescrMoreOptions));
+                mOverflowButton.setContentDescription(Lang.getString(mContext, "AccDescrMoreOptions", R.string.AccDescrMoreOptions));
                 if (hasOverflow()) {
                     if (isInRTLMode()) {
                         mContentContainer.setX(mMarginHorizontal);

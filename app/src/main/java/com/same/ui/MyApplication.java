@@ -11,6 +11,7 @@ import com.same.lib.intro.IntroLoader;
 import com.same.lib.lottie.NativeLoader;
 import com.same.lib.theme.Theme;
 import com.same.lib.util.ColorManager;
+import com.same.lib.util.Lang;
 import com.same.lib.util.Space;
 import com.same.lib.util.UIThread;
 import com.same.ui.lang.MyLang;
@@ -38,6 +39,12 @@ public class MyApplication extends Application {
             @Override
             public int getColor(String key) {
                 return Theme.getColor(key);
+            }
+        });
+        Lang.install(new Lang.ILang() {
+            @Override
+            public String getString(String key, int string) {
+                return MyLang.getString(key, string);
             }
         });
     }

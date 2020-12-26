@@ -6,7 +6,7 @@ import com.same.lib.R;
 import com.same.lib.theme.Skin;
 import com.same.lib.theme.ThemeInfo;
 import com.same.lib.theme.ThemeManager;
-import com.timecat.component.locale.MLang;
+import com.same.ui.lang.MyLang;
 
 /**
  * @author 林学渊
@@ -19,15 +19,15 @@ public class ThemeName {
     public static String getName(Context context, ThemeInfo themeInfo) {
         String name = themeInfo.name;
         if ("Blue".equals(name)) {
-            return MLang.getString(context, "ThemeClassic", R.string.ThemeClassic);
+            return MyLang.getString("ThemeClassic", R.string.ThemeClassic);
         } else if ("Dark Blue".equals(name)) {
-            return MLang.getString(context,"ThemeDark", R.string.ThemeDark);
+            return MyLang.getString("ThemeDark", R.string.ThemeDark);
         } else if ("Arctic Blue".equals(name)) {
-            return MLang.getString(context,"ThemeArcticBlue", R.string.ThemeArcticBlue);
+            return MyLang.getString("ThemeArcticBlue", R.string.ThemeArcticBlue);
         } else if ("Day".equals(name)) {
-            return MLang.getString(context,"ThemeDay", R.string.ThemeDay);
+            return MyLang.getString("ThemeDay", R.string.ThemeDay);
         } else if ("Night".equals(name)) {
-            return MLang.getString(context,"ThemeNight", R.string.ThemeNight);
+            return MyLang.getString("ThemeNight", R.string.ThemeNight);
         }
         Skin info = themeInfo.info;
         return info != null ? info.title : name;

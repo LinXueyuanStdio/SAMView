@@ -2,8 +2,10 @@ package com.same.ui.page.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.same.ui.R;
 import com.same.ui.intro.IntroActivity;
@@ -28,6 +30,21 @@ public class MainPage extends BaseActionBarPage {
 
     @Override
     protected void fillInContainerLayout(Context context, LinearLayout containerLayout) {
+        final TextView detail = new TextView(context);
+        detail.setPadding(20, 20, 20, 20);
+        detail.setTextSize(18);
+        detail.setGravity(Gravity.CENTER);
+        String detailText = "语言详情"
+                + "\n"
+                + "当前语言设置：" + MyLang.loadLanguageKeyInLocal()
+                + "\n"
+                + "当前语言的英语名：" + MyLang.getString("LanguageNameInEnglish", R.string.LanguageNameInEnglish)
+                + "\n\n本地缺失，云端存在的字符串：\n"
+                + MyLang.getString("remote_string_only", R.string.fallback_string)
+                + "\n\n本地云端都存在，云端将覆盖本地的字符串：\n"
+                + MyLang.getString("local_string", R.string.local_string);
+        detail.setText(detailText);
+        containerLayout.addView(detail);
         containerLayout.addView(createButton(context, "intro", new View.OnClickListener() {
             @Override
             public void onClick(View v) {

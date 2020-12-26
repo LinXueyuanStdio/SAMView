@@ -1,4 +1,7 @@
 <resources>
+    <string name="local_string">本地字符串</string>
+    <string name="fallback_string">本地不存在的字符串</string>
+
     <string name="app_name">SAMView</string>
     <string name="NoResult">NoResult</string>
     <string name="Search">Search</string>

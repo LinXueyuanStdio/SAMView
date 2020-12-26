@@ -23,17 +23,17 @@ import android.widget.ImageView;
 
 import com.same.lib.R;
 import com.same.lib.drawable.BackDrawable;
-import com.same.lib.effect.FireworksEffect;
-import com.same.lib.effect.SnowflakesEffect;
-import com.same.lib.util.ColorManager;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.drawable.MenuDrawable;
+import com.same.lib.effect.FireworksEffect;
+import com.same.lib.effect.SnowflakesEffect;
 import com.same.lib.font.FontManager;
 import com.same.lib.helper.LayoutHelper;
+import com.same.lib.util.ColorManager;
 import com.same.lib.util.KeyHub;
+import com.same.lib.util.Lang;
 import com.same.lib.util.Space;
 import com.same.lib.util.Store;
-import com.timecat.component.locale.MLang;
 
 import java.util.ArrayList;
 
@@ -134,7 +134,7 @@ public class ActionBar extends FrameLayout {
                 actionBarMenuOnItemClick.onItemClick(-1);
             }
         });
-        backButtonImageView.setContentDescription(MLang.getString(getContext(), "AccDescrGoBack", R.string.AccDescrGoBack));
+        backButtonImageView.setContentDescription(Lang.getString(getContext(), "AccDescrGoBack", R.string.AccDescrGoBack));
     }
 
     public void setBackButtonDrawable(Drawable drawable) {
@@ -876,7 +876,7 @@ public class ActionBar extends FrameLayout {
         if (!allowOverlayTitle || parentFragment.parentLayout == null) {
             return;
         }
-        CharSequence textToSet = title != null ? MLang.getString(getContext(), title, titleId) : lastTitle;
+        CharSequence textToSet = title != null ? Lang.getString(getContext(), title, titleId) : lastTitle;
         if (textToSet != null && titleTextView == null) {
             createTitleTextView();
         }

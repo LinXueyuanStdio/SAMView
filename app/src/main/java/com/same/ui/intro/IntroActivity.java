@@ -36,6 +36,7 @@ import com.same.lib.intro.Intro;
 import com.same.ui.MainActivity;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
+import com.timecat.component.locale.LocaleInfo;
 import com.timecat.component.locale.MLang;
 
 import javax.microedition.khronos.egl.EGL10;
@@ -87,7 +88,7 @@ public class IntroActivity extends Activity {
     private int startDragX;
     private boolean destroyed;
 
-    private MLang.LocaleInfo localeInfo;
+    private LocaleInfo localeInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -321,14 +322,14 @@ public class IntroActivity extends Activity {
     }
 
     private void checkContinueText() {
-        MLang.LocaleInfo englishInfo = null;
-        MLang.LocaleInfo systemInfo = null;
-        MLang.LocaleInfo currentLocaleInfo = MyLang.getInstance().getCurrentLocaleInfo();
+        LocaleInfo englishInfo = null;
+        LocaleInfo systemInfo = null;
+        LocaleInfo currentLocaleInfo = MyLang.getInstance().getCurrentLocaleInfo();
         final String systemLang = MyLang.loadLanguageKeyInLocal();
         String arg = systemLang.contains("-") ? systemLang.split("-")[0] : systemLang;
         String alias = MyLang.getLocaleAlias(arg);
         for (int a = 0; a < MyLang.getInstance().languages.size(); a++) {
-            MLang.LocaleInfo info = MyLang.getInstance().languages.get(a);
+            LocaleInfo info = MyLang.getInstance().languages.get(a);
             if (info.shortName.equals("en")) {
                 englishInfo = info;
             }

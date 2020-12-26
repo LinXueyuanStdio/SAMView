@@ -30,16 +30,16 @@ import android.widget.TextView;
 
 import com.same.lib.R;
 import com.same.lib.drawable.CloseProgressDrawable2;
-import com.same.lib.util.ColorManager;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.font.FontManager;
 import com.same.lib.helper.LayoutHelper;
+import com.same.lib.util.ColorManager;
 import com.same.lib.util.KeyHub;
 import com.same.lib.util.Keyboard;
+import com.same.lib.util.Lang;
 import com.same.lib.util.Space;
 import com.same.lib.util.Store;
 import com.same.lib.util.UIThread;
-import com.timecat.component.locale.MLang;
 
 /**
  * @author 林学渊
@@ -867,7 +867,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 searchField.requestFocus();
                 Keyboard.showKeyboard(searchField);
             });
-            clearButton.setContentDescription(MLang.getString(getContext(), "ClearButton", R.string.ClearButton));
+            clearButton.setContentDescription(Lang.getString(getContext(), "ClearButton", R.string.ClearButton));
             searchContainer.addView(clearButton, LayoutHelper.createFrame(48, LayoutHelper.MATCH_PARENT, Gravity.CENTER_VERTICAL | Gravity.RIGHT));
         }
         isSearchField = value;

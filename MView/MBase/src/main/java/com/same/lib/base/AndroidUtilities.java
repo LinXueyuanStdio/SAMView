@@ -22,9 +22,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EdgeEffect;
 import android.widget.ScrollView;
@@ -50,17 +47,12 @@ public class AndroidUtilities {
     public static boolean isScreenOn = false;
 
     public static int statusBarHeight = 0;
-    public static boolean firstConfigurationWas;
     public static float density = 1;
     public static Point displaySize = new Point();
     public static boolean incorrectDisplaySizeFix;
     public static DisplayMetrics displayMetrics = new DisplayMetrics();
     public static boolean usingHardwareInput;
     public static boolean isInMultiwindow;
-
-    public static DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
-    public static OvershootInterpolator overshootInterpolator = new OvershootInterpolator();
-    public static AccelerateInterpolator accelerateInterpolator = new AccelerateInterpolator();
 
     private static Boolean isTablet = null;
     public static float screenRefreshRate = 60;

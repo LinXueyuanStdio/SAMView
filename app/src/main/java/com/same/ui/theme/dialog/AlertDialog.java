@@ -37,17 +37,17 @@ import android.widget.TextView;
 import com.same.lib.R;
 import com.same.lib.core.LineProgressView;
 import com.same.lib.core.RadialProgressView;
-import com.same.lib.util.ColorManager;
+import com.same.lib.core.ThemeDescription;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.font.FontManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.lottie.RLottieImageView;
 import com.same.lib.theme.KeyHub;
-import com.same.lib.core.ThemeDescription;
+import com.same.lib.util.ColorManager;
 import com.same.lib.util.Space;
 import com.same.lib.util.Store;
 import com.same.lib.util.UIThread;
-import com.timecat.component.locale.MLang;
+import com.same.ui.lang.MyLang;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -801,10 +801,10 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             return;
         }
         Builder builder = new Builder(getContext());
-        builder.setTitle(MLang.getString(getContext(), "AppName", R.string.AppName));
-        builder.setMessage(MLang.getString(getContext(), "StopLoading", R.string.StopLoading));
-        builder.setPositiveButton(MLang.getString(getContext(), "WaitMore", R.string.WaitMore), null);
-        builder.setNegativeButton(MLang.getString(getContext(), "Stop", R.string.Stop), (dialogInterface, i) -> {
+        builder.setTitle(MyLang.getString("AppName", R.string.AppName));
+        builder.setMessage(MyLang.getString("StopLoading", R.string.StopLoading));
+        builder.setPositiveButton(MyLang.getString("WaitMore", R.string.WaitMore), null);
+        builder.setNegativeButton(MyLang.getString("Stop", R.string.Stop), (dialogInterface, i) -> {
             if (onCancelListener != null) {
                 onCancelListener.onCancel(AlertDialog.this);
             }

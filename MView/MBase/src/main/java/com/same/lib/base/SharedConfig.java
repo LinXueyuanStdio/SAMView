@@ -9,10 +9,7 @@ package com.same.lib.base;
  */
 public class SharedConfig {
     public static boolean smoothKeyboard = false;
-    public static boolean DEBUG_PRIVATE_VERSION = false;
-    public static boolean DEBUG_VERSION = false;
     public static boolean isRTL = false;
-    public static boolean view_animations = false;
     public static int fontSize = 16;
     public static int bubbleRadius = 4;
 
