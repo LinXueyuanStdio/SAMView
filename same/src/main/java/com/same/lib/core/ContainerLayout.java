@@ -162,7 +162,7 @@ public class ContainerLayout extends FrameLayout {
 
             View rootView = getRootView();
             getWindowVisibleDisplayFrame(rect);
-            int usableViewHeight = rootView.getHeight() - (rect.top != 0 ? Space.statusBarHeight : 0) - AndroidUtilities.getViewInset(rootView);
+            int usableViewHeight = rootView.getHeight() - (rect.top != 0 ? Space.statusBarHeight : 0) - Space.getViewInset(rootView);
             isKeyboardVisible = usableViewHeight - (rect.bottom - rect.top) > 0;
             if (waitingForKeyboardCloseRunnable != null && !containerView.isKeyboardVisible && !containerViewBack.isKeyboardVisible) {
                 AndroidUtilities.cancelRunOnUIThread(waitingForKeyboardCloseRunnable);

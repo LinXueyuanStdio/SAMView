@@ -344,7 +344,7 @@ public class BottomSheet extends Dialog {
             View rootView = getRootView();
             getWindowVisibleDisplayFrame(rect);
             if (rect.bottom != 0 && rect.top != 0) {
-                int usableViewHeight = rootView.getHeight() - (rect.top != 0 ? Space.statusBarHeight : 0) - AndroidUtilities.getViewInset(rootView);
+                int usableViewHeight = rootView.getHeight() - (rect.top != 0 ? Space.statusBarHeight : 0) - Space.getViewInset(rootView);
                 keyboardHeight = Math.max(0, usableViewHeight - (rect.bottom - rect.top));
                 if (keyboardHeight < Space.dp(20)) {
                     keyboardHeight = 0;

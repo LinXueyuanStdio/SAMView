@@ -4,9 +4,13 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.Rect;
+import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
+
+import java.lang.reflect.Field;
 
 /**
  * @author 林学渊
@@ -30,6 +34,7 @@ public class Space {
 
     private static Boolean isTablet = null;
 
+    //region space
     public static int dp(float value) {
         if (value == 0) {
             return 0;
@@ -43,6 +48,7 @@ public class Space {
         }
         return density * value;
     }
+    //endregion
 
     public static int getShadowHeight() {
         if (density >= 4.0f) {
@@ -58,6 +64,7 @@ public class Space {
         return (cm / 2.54f) * (isX ? displayMetrics.xdpi : displayMetrics.ydpi);
     }
 
+    //region tablet
     public static boolean isTablet() {
         if (isTablet == null) {
             isTablet = false;
@@ -69,6 +76,7 @@ public class Space {
         float minSide = Math.min(displaySize.x, displaySize.y) / density;
         return minSide <= 700;
     }
+    //endregion
 
     public static int getOffsetColor(int color1, int color2, float offset, float alpha) {
         int rF = Color.red(color2);
@@ -82,6 +90,7 @@ public class Space {
         return Color.argb((int) ((aS + (aF - aS) * offset) * alpha), (int) (rS + (rF - rS) * offset), (int) (gS + (gF - gS) * offset), (int) (bS + (bF - bS) * offset));
     }
 
+    //region padding
     public static void setPadding(View view, float padding) {
         final int px = padding != 0 ? dp(padding) : 0;
         view.setPadding(px, px, px, px);
@@ -94,6 +103,35 @@ public class Space {
     public static void setPaddingRelative(View view, float start, float top, float end, float bottom) {
         setPadding(view, Store.isRTL ? end : start, top, Store.isRTL ? start : end, bottom);
     }
+    //endregion
+
+    //region inset
+    private static Field mAttachInfoField;
+    private static Field mStableInsetsField;
+
+    public static int getViewInset(View view) {
+        if (view == null || Build.VERSION.SDK_INT < 21 || view.getHeight() == displaySize.y || view.getHeight() == displaySize.y - statusBarHeight) {
+            return 0;
+        }
+        try {
+            if (mAttachInfoField == null) {
+                mAttachInfoField = View.class.getDeclaredField("mAttachInfo");
+                mAttachInfoField.setAccessible(true);
+            }
+            Object mAttachInfo = mAttachInfoField.get(view);
+            if (mAttachInfo != null) {
+                if (mStableInsetsField == null) {
+                    mStableInsetsField = mAttachInfo.getClass().getDeclaredField("mStableInsets");
+                    mStableInsetsField.setAccessible(true);
+                }
+                Rect insets = (Rect) mStableInsetsField.get(mAttachInfo);
+                return insets.bottom;
+            }
+        } catch (Exception e) {
+        }
+        return 0;
+    }
+    //endregion
 
     /**
      * 适配机械键盘、屏幕密度、平板模式
