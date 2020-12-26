@@ -34,7 +34,6 @@ import com.same.lib.anim.Easings;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.NotificationCenter;
 import com.same.lib.base.SharedConfig;
-import com.same.ui.theme.dialog.AlertDialog;
 import com.same.lib.core.BasePage;
 import com.same.lib.core.ContainerLayout;
 import com.same.lib.core.DrawerLayoutContainer;
@@ -54,6 +53,8 @@ import com.same.ui.theme.ChatTheme;
 import com.same.ui.theme.CommonTheme;
 import com.same.ui.theme.DialogTheme;
 import com.same.ui.theme.ProfileTheme;
+import com.same.ui.theme.dialog.AlertDialog;
+import com.same.ui.theme.wrap.ThemeContainerLayout;
 
 import java.util.ArrayList;
 
@@ -61,15 +62,15 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
     /**
      * 主容器
      */
-    private ContainerLayout actionBarLayout;
+    private ThemeContainerLayout actionBarLayout;
     /**
      * 适配平板的容器
      */
-    private ContainerLayout layersActionBarLayout;
+    private ThemeContainerLayout layersActionBarLayout;
     /**
      * 适配平板的容器
      */
-    private ContainerLayout rightActionBarLayout;
+    private ThemeContainerLayout rightActionBarLayout;
     private FrameLayout shadowTablet;
     private FrameLayout shadowTabletSide;
     private View backgroundTablet;
@@ -110,6 +111,7 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
     protected void onCreate(Bundle savedInstanceState) {
         //region onCreate前
         AndroidUtilities.checkDisplaySize(this, getResources().getConfiguration());
+        Space.checkDisplaySize(this, getResources().getConfiguration());
         Theme.onConfigurationChanged(this, getResources().getConfiguration());
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setTheme(R.style.Theme_TMessages);
@@ -166,7 +168,7 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
             absTheme.createResources(this);
         }
 
-        actionBarLayout = new ContainerLayout(this) {
+        actionBarLayout = new ThemeContainerLayout(this) {
             @Override
             public void setThemeAnimationValue(float value) {
                 super.setThemeAnimationValue(value);
@@ -261,7 +263,7 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
 
             launchLayout.addView(actionBarLayout);
 
-            rightActionBarLayout = new ContainerLayout(this);
+            rightActionBarLayout = new ThemeContainerLayout(this);
             rightActionBarLayout.init(rightFragmentsStack);
             rightActionBarLayout.setDelegate(this);
             launchLayout.addView(rightActionBarLayout);
@@ -303,7 +305,7 @@ public class MainActivity extends Activity implements ContainerLayout.ActionBarL
 
             });
 
-            layersActionBarLayout = new ContainerLayout(this);
+            layersActionBarLayout = new ThemeContainerLayout(this);
             layersActionBarLayout.setRemoveActionBarExtraHeight(true);
             layersActionBarLayout.setBackgroundView(shadowTablet);
             layersActionBarLayout.setUseAlphaAnimations(true);

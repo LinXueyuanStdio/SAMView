@@ -42,4 +42,10 @@ public interface KeyHub {
     String key_undo_background = "undo_background";
     String key_undo_cancelColor = "undo_cancelColor";
     String key_undo_infoColor = "undo_infoColor";
+
+    String key_windowBackgroundWhiteBlackText = "windowBackgroundWhiteBlackText";
+    String key_dialogTextBlack = "dialogTextBlack";
+    String key_dialogBackground = "dialogBackground";
+    String key_progressCircle = "progressCircle";
+
 }

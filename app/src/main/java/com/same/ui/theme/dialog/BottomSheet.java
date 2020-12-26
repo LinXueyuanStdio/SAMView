@@ -254,10 +254,10 @@ public class BottomSheet extends Dialog {
                         if (currentAnimation != null && currentAnimation.equals(animation)) {
                             currentAnimation = null;
                         }
-                        NotificationCenter.post(NotificationCenter.startAllHeavyOperations);
+                        NotificationCenter.post(NotificationCenter.startAllHeavyOperations, 512);
                     }
                 });
-                NotificationCenter.post(NotificationCenter.stopAllHeavyOperations);
+                NotificationCenter.post(NotificationCenter.stopAllHeavyOperations, 512);
                 currentAnimation.start();
             }
         }
@@ -1010,7 +1010,7 @@ public class BottomSheet extends Dialog {
                             getWindow().setAttributes(params);
                         }
                     }
-                    NotificationCenter.post(NotificationCenter.startAllHeavyOperations);
+                    NotificationCenter.post(NotificationCenter.startAllHeavyOperations, 512);
                 }
 
                 @Override
@@ -1021,7 +1021,7 @@ public class BottomSheet extends Dialog {
                     }
                 }
             });
-            NotificationCenter.post(NotificationCenter.stopAllHeavyOperations);
+            NotificationCenter.post(NotificationCenter.stopAllHeavyOperations, 512);
             currentSheetAnimation.start();
         }
     }
@@ -1111,7 +1111,7 @@ public class BottomSheet extends Dialog {
                         }
                     });
                 }
-                NotificationCenter.post(NotificationCenter.startAllHeavyOperations);
+                NotificationCenter.post(NotificationCenter.startAllHeavyOperations, 512);
             }
 
             @Override
@@ -1122,7 +1122,7 @@ public class BottomSheet extends Dialog {
                 }
             }
         });
-        NotificationCenter.post(NotificationCenter.stopAllHeavyOperations);
+        NotificationCenter.post(NotificationCenter.stopAllHeavyOperations, 512);
         currentSheetAnimation.start();
     }
 
@@ -1165,7 +1165,7 @@ public class BottomSheet extends Dialog {
                             }
                         });
                     }
-                    NotificationCenter.post(NotificationCenter.startAllHeavyOperations);
+                    NotificationCenter.post(NotificationCenter.startAllHeavyOperations, 512);
                 }
 
                 @Override
@@ -1176,7 +1176,7 @@ public class BottomSheet extends Dialog {
                     }
                 }
             });
-            NotificationCenter.post(NotificationCenter.stopAllHeavyOperations);
+            NotificationCenter.post(NotificationCenter.stopAllHeavyOperations, 512);
             currentSheetAnimation.start();
         }
     }

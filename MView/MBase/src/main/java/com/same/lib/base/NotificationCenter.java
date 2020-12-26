@@ -112,7 +112,7 @@ public class NotificationCenter {
     public int setAnimationInProgress(int oldIndex, int[] allowedNotifications) {
         onAnimationFinish(oldIndex);
         if (animationInProgressCount == 0) {
-            NotificationCenter.getGlobalInstance().post(stopAllHeavyOperations, 512);
+            NotificationCenter.post(stopAllHeavyOperations, 512);
         }
 
         animationInProgressCount++;
@@ -141,7 +141,7 @@ public class NotificationCenter {
         if (notifications != null) {
             animationInProgressCount--;
             if (animationInProgressCount == 0) {
-                NotificationCenter.getGlobalInstance().post(startAllHeavyOperations, 512);
+                NotificationCenter.post(startAllHeavyOperations, 512);
                 if (!delayedPosts.isEmpty()) {
                     for (int a = 0; a < delayedPosts.size(); a++) {
                         DelayedPost delayedPost = delayedPosts.get(a);

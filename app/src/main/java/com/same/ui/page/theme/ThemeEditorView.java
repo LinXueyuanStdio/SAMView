@@ -406,7 +406,7 @@ public class ThemeEditorView {
                             }
                             setColor(currentColor);
                             for (int a = 0; a < currentThemeDesription.size(); a++) {
-                                currentThemeDesription.get(a).setColor(context, getColor(), false);
+                                currentThemeDesription.get(a).applyColor(context, getColor(), false);
                             }
 
                             ignoreTextChange = false;
@@ -589,7 +589,7 @@ public class ThemeEditorView {
                                         || key.equals(KeyHub.key_windowBackgroundGray)) {
                                     color = 0xff000000 | color;
                                 }
-                                currentThemeDesription.get(a).setColor(getContext(), color, false);
+                                currentThemeDesription.get(a).applyColor(getContext(), color, false);
                             }
                             int red = Color.red(color);
                             int green = Color.green(color);
@@ -1316,7 +1316,7 @@ public class ThemeEditorView {
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !itemsMap.containsKey(KeyHub.key_windowBackgroundGray)) {
                     final ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-                    arrayList.add(new ThemeDescription(null, 0, null, null, null, null, KeyHub.key_windowBackgroundGray));
+                    arrayList.add(new com.same.lib.theme.ThemeDescription(null, 0, null, null, null, null, KeyHub.key_windowBackgroundGray));
                     items.add(arrayList);
                 }
             }
