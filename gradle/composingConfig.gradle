@@ -2,7 +2,7 @@ ext {
     composing_dependencies = [
             MLang = [
                     // 是否本地依赖
-                    isLocal     : true,
+                    isLocal     : false,
                     // 项目的路径
                     projectPath : "../MLang",
                     // 项目名称
