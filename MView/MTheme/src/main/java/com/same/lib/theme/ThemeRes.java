@@ -1,6 +1,9 @@
 package com.same.lib.theme;
 
+import android.content.Context;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -15,5 +18,11 @@ public class ThemeRes {
 
     public static void install(AbsTheme absTheme) {
         themes.add(absTheme);
+    }
+    public static void installAndApply(Context context, AbsTheme... absThemes) {
+        themes.addAll(Arrays.asList(absThemes));
+        for (AbsTheme absTheme : themes) {
+            absTheme.createResources(context);
+        }
     }
 }

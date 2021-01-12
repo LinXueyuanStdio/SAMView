@@ -1,5 +1,6 @@
 package com.same.ui.page.language;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.View;
@@ -209,7 +210,9 @@ public class LanguageSelectPage extends BasePage {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                    AndroidUtilities.hideKeyboard(getParentActivity().getCurrentFocus());
+                    Activity activity = getParentActivity();
+                    if (activity == null) { return; }
+                    AndroidUtilities.hideKeyboard(activity.getCurrentFocus());
                 }
             }
         });

@@ -19,6 +19,8 @@ import com.same.lib.util.KeyHub;
 
 import java.util.ArrayList;
 
+import androidx.annotation.Nullable;
+
 /**
  * @author 林学渊
  * @email linxy59@mail2.sysu.edu.cn
@@ -72,8 +74,16 @@ public class BasePage {
 
     //region 工具方法，不要重写，只管调用
     //region getter
+    @Nullable
     public Activity getParentActivity() {
-        if (parentLayout != null) {
+        if (parentLayout != null && parentLayout.parentActivity instanceof Activity) {
+            return (Activity) parentLayout.parentActivity;
+        }
+        return null;
+    }
+    @Nullable
+    public Context getContext() {
+        if (parentLayout != null && parentLayout.parentActivity != null) {
             return parentLayout.parentActivity;
         }
         return null;
@@ -454,7 +464,9 @@ public class BasePage {
 
     protected void onBecomeFullyVisible() {
         //兼容辅助模式
-        AccessibilityManager mgr = (AccessibilityManager) getParentActivity().getSystemService(Context.ACCESSIBILITY_SERVICE);
+        Context context = getContext();
+        if (context == null) return;
+        AccessibilityManager mgr = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
         if (mgr.isEnabled()) {
             ActionBar actionBar = getActionBar();
             if (actionBar != null) {

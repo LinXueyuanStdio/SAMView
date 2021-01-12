@@ -15,17 +15,18 @@ android {
 
     buildTypes {
         debug {
-            debuggable true
-            jniDebuggable true
-            minifyEnabled true
-            multiDexEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-        release {
+            buildConfigField "boolean", "LOG_DEBUG", "true"
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro', file(rootProject.ext.android["globalProguardFilesPath"])
+        }
+
+        release {
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro', file(rootProject.ext.android["globalProguardFilesPath"])
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

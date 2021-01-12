@@ -46,7 +46,7 @@ public abstract class BaseActionBarPage extends BasePage {
         containerLayout.setOrientation(LinearLayout.VERTICAL);
         fillInContainerLayout(context, containerLayout);
 
-        ScrollView scrollView = new ScrollView(getParentActivity());
+        ScrollView scrollView = new ScrollView(context);
         scrollView.addView(containerLayout);
         frameLayout.addView(scrollView);
 
@@ -66,6 +66,14 @@ public abstract class BaseActionBarPage extends BasePage {
         button.setText(text);
         button.setOnClickListener(clickListener);
         return button;
+    }
+    protected Button createButton(Context context, String text, BasePage page) {
+        return createButton(context, text, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presentFragment(page);
+            }
+        });
     }
 
     @Override

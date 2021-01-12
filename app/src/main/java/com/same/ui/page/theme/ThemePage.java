@@ -17,10 +17,8 @@ import android.widget.TextView;
 
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.NotificationCenter;
-import com.same.ui.theme.dialog.AlertDialog;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.lottie.RLottieImageView;
-import com.same.ui.theme.span.ThemeName;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeInfo;
@@ -28,6 +26,8 @@ import com.same.lib.theme.ThemeManager;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.base.BaseActionBarPage;
+import com.same.ui.theme.dialog.AlertDialog;
+import com.same.ui.theme.span.ThemeName;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -56,19 +56,18 @@ public class ThemePage extends BaseActionBarPage {
         containerLayout.addView(createButton(context, "创建新主题", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getParentActivity() == null) {
-                    return;
-                }
-                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                Activity activity = getParentActivity();
+                if (activity == null)return;
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                 builder.setTitle(MyLang.getString("NewTheme", R.string.NewTheme));
                 builder.setMessage(MyLang.getString("CreateNewThemeAlert", R.string.CreateNewThemeAlert));
                 builder.setNegativeButton(MyLang.getString("Cancel", R.string.Cancel), null);
                 builder.setPositiveButton(MyLang.getString("CreateTheme", R.string.CreateTheme), (dialog, which) -> {
                     if (parentLayout != null) {
-                        ThemeInfo themeInfo = ThemeManager.createNewTheme(getParentActivity(), "新主题的名字");
-                        ThemeManager.applyTheme(getParentActivity(), themeInfo);
+                        ThemeInfo themeInfo = ThemeManager.createNewTheme(activity, "新主题的名字");
+                        ThemeManager.applyTheme(activity, themeInfo);
                         parentLayout.rebuildAllFragmentViews(true, true);
-                        new ThemeEditorView().show(getParentActivity(), themeInfo);
+                        new ThemeEditorView().show(activity, themeInfo);
                     }
                 });
                 showDialog(builder.create());
@@ -78,10 +77,9 @@ public class ThemePage extends BaseActionBarPage {
         containerLayout.addView(createButton(context, "重置主题", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getParentActivity() == null) {
-                    return;
-                }
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(getParentActivity());
+                Activity activity = getParentActivity();
+                if (activity == null) { return; }
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(activity);
                 builder1.setTitle(MyLang.getString("ThemeResetToDefaultsTitle", R.string.ThemeResetToDefaultsTitle));
                 builder1.setMessage(MyLang.getString("ThemeResetToDefaultsText", R.string.ThemeResetToDefaultsText));
                 builder1.setPositiveButton(MyLang.getString("Reset", R.string.Reset), (dialogInterface, i) -> {
@@ -89,7 +87,7 @@ public class ThemePage extends BaseActionBarPage {
                     ThemeInfo currentTheme = ThemeManager.getCurrentTheme();
                     if (themeInfo != currentTheme) {
                         themeInfo.setCurrentAccentId(Theme.DEFALT_THEME_ACCENT_ID);
-                        ThemeManager.saveThemeAccents(getParentActivity(), themeInfo, true, false, true);
+                        ThemeManager.saveThemeAccents(context, themeInfo, true, false, true);
                     } else if (themeInfo.currentAccentId != Theme.DEFALT_THEME_ACCENT_ID) {
                         NotificationCenter.post(NotificationCenter.needSetDayNightTheme, currentTheme);
                     }
@@ -120,19 +118,19 @@ public class ThemePage extends BaseActionBarPage {
                 shareTheme(context, themeInfo);
             }
         }));
-        currentTheme = createButton(context, ThemeName.getCurrentThemeName(getParentActivity()), new View.OnClickListener() {
+        currentTheme = createButton(context, ThemeName.getCurrentThemeName(context), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currentTheme.setText(ThemeName.getCurrentThemeName(getParentActivity()));
+                currentTheme.setText(ThemeName.getCurrentThemeName(context));
             }
         });
         containerLayout.addView(currentTheme);
 
         for (ThemeInfo themeInfo : Theme.themes) {
-            containerLayout.addView(createButton(context, ThemeName.getName(getParentActivity(), themeInfo), new View.OnClickListener() {
+            containerLayout.addView(createButton(context, ThemeName.getName(context, themeInfo), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ThemeManager.applyTheme(getParentActivity(), themeInfo);
+                    ThemeManager.applyTheme(context, themeInfo);
                     parentLayout.rebuildAllFragmentViews(true, true);
                 }
             }));
@@ -202,7 +200,7 @@ public class ThemePage extends BaseActionBarPage {
             intent.setType("text/xml");
             if (Build.VERSION.SDK_INT >= 24) {
                 try {
-                    intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(getParentActivity(), "com.same.ui.provider", finalFile));
+                    intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(context, "com.same.ui.provider", finalFile));
                     intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 } catch (Exception ignore) {
                     ignore.printStackTrace();

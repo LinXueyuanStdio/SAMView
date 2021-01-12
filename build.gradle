@@ -22,18 +22,25 @@ buildscript {
     }
 }
 
+def moduleConfigProps = new Properties()
+File moduleConfig = rootProject.file("moduleConfig.properties")
+if (moduleConfig.exists()) {
+    moduleConfigProps.load(new FileInputStream(moduleConfig))
+}
+def localMavenDir = file(moduleConfigProps.localMavenPath)
+def localGradleDir = file(moduleConfigProps.localGradlePath)
+
 allprojects {
-    def moduleConfigProps = new Properties()
-    File moduleConfig = rootProject.file("moduleConfig.properties")
-    if (moduleConfig.exists()) {
-        moduleConfigProps.load(new FileInputStream(moduleConfig))
-    }
-    def localMavenDir = file(moduleConfigProps.localMavenPath)
 
     repositories {
+        maven { url "file://${localMavenDir.absolutePath}" }
+
         google()
         jcenter()
-        maven { url "file://${localMavenDir.absolutePath}" }
+        maven { url "https://jitpack.io" }
+
+        maven { url "https://plugins.gradle.org/m2/" }
+
         maven { url "https://github.com/LinXueyuanStdio/MLang/raw/main/dist/" }
     }
 }
@@ -41,5 +48,5 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-apply from: "${project.rootDir}/gradle/publish_to_github_release.gradle"
-version = 2
+
+apply from: "${localGradleDir}/deps.gradle"

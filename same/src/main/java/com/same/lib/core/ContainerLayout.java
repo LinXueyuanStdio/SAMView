@@ -30,8 +30,8 @@ import android.widget.FrameLayout;
 
 import com.same.lib.R;
 import com.same.lib.anim.CubicBezierInterpolator;
-import com.same.lib.util.ColorManager;
 import com.same.lib.helper.LayoutHelper;
+import com.same.lib.util.ColorManager;
 import com.same.lib.util.KeyHub;
 import com.same.lib.util.Keyboard;
 import com.same.lib.util.Space;
@@ -283,7 +283,7 @@ public class ContainerLayout extends FrameLayout {
     private Runnable overlayAction;
 
     private ActionBarLayoutDelegate delegate;
-    protected Activity parentActivity;
+    protected Context parentActivity;
 
     /**
      * fragment 栈
@@ -297,7 +297,7 @@ public class ContainerLayout extends FrameLayout {
 
     public ContainerLayout(Context context) {
         super(context);
-        parentActivity = (Activity) context;
+        parentActivity = context;
 
         moveUpDrawable = getDrawableById(context, R.drawable.preview_open);
         if (layerShadowDrawable == null) {
@@ -489,8 +489,11 @@ public class ContainerLayout extends FrameLayout {
                         }
                     } else if (startedTracking) {
                         if (!beginTrackingSent) {
-                            if (parentActivity.getCurrentFocus() != null) {
-                                Keyboard.hideKeyboard(parentActivity.getCurrentFocus());
+                            if (parentActivity instanceof Activity) {
+                                View f = ((Activity) parentActivity).getCurrentFocus();
+                                if (f != null) {
+                                    Keyboard.hideKeyboard(f);
+                                }
                             }
                             BasePage currentFragment = fragmentsStack.get(fragmentsStack.size() - 1);
                             currentFragment.onBeginSlide();
@@ -634,7 +637,7 @@ public class ContainerLayout extends FrameLayout {
     }
 
     public void startActivityForResult(final Intent intent, final int requestCode) {
-        if (parentActivity == null) {
+        if (!(parentActivity instanceof Activity)) {
             return;
         }
         if (transitionAnimationInProgress) {
@@ -648,13 +651,9 @@ public class ContainerLayout extends FrameLayout {
                 onOpenAnimationEnd();
             }
             containerView.invalidate();
-            if (intent != null) {
-                parentActivity.startActivityForResult(intent, requestCode);
-            }
-        } else {
-            if (intent != null) {
-                parentActivity.startActivityForResult(intent, requestCode);
-            }
+        }
+        if (intent != null) {
+            ((Activity) parentActivity).startActivityForResult(intent, requestCode);
         }
     }
 
@@ -952,8 +951,11 @@ public class ContainerLayout extends FrameLayout {
             return false;
         }
         fragment.setInPreviewMode(preview);
-        if (parentActivity.getCurrentFocus() != null && fragment.hideKeyboardOnShow()) {
-            Keyboard.hideKeyboard(parentActivity.getCurrentFocus());
+        if (parentActivity instanceof Activity) {
+            View f = ((Activity) parentActivity).getCurrentFocus();
+            if (f != null && fragment.hideKeyboardOnShow()) {
+                Keyboard.hideKeyboard(f);
+            }
         }
         boolean needAnimation = preview || !forceWithoutAnimation && Store.view_animations;
 
@@ -1287,8 +1289,11 @@ public class ContainerLayout extends FrameLayout {
         if (delegate != null && !delegate.needCloseLastFragment(this) || checkTransitionAnimation() || fragmentsStack.isEmpty()) {
             return;
         }
-        if (parentActivity.getCurrentFocus() != null) {
-            Keyboard.hideKeyboard(parentActivity.getCurrentFocus());
+        if (parentActivity instanceof Activity) {
+            View f = ((Activity) parentActivity).getCurrentFocus();
+            if (f != null) {
+                Keyboard.hideKeyboard(f);
+            }
         }
         setInnerTranslationX(0);
         boolean needAnimation = inPreviewMode || transitionAnimationPreviewMode || animated && Store.view_animations;
