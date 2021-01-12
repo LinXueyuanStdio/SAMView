@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.same.ui.MainService;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.base.BaseActionBarPage;

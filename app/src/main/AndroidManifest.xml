@@ -68,7 +68,7 @@
                 android:resource="@xml/file_paths">
             </meta-data>
         </provider>
-        <service android:name=".MainService"
+        <service android:name=".page.service.MainService"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.CONFIGURATION_CHANGED" />

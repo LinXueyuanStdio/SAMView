@@ -1,4 +1,4 @@
-package com.same.ui;
+package com.same.ui.page.service;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -35,6 +35,7 @@ import com.same.lib.theme.ThemeManager;
 import com.same.lib.theme.ThemeRes;
 import com.same.lib.theme.WallpaperManager;
 import com.same.lib.util.Space;
+import com.same.ui.R;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.main.MainPage;
 import com.same.ui.page.theme.ThemeEditorView;
