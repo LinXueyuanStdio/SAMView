@@ -283,6 +283,7 @@ public class ContainerLayout extends FrameLayout {
     private Runnable overlayAction;
 
     private ActionBarLayoutDelegate delegate;
+    @NonNull
     protected Context parentActivity;
 
     /**
@@ -295,7 +296,7 @@ public class ContainerLayout extends FrameLayout {
         return ResourcesCompat.getDrawable(context.getResources(), id, context.getTheme());
     }
 
-    public ContainerLayout(Context context) {
+    public ContainerLayout(@NonNull Context context) {
         super(context);
         parentActivity = context;
 
@@ -416,6 +417,22 @@ public class ContainerLayout extends FrameLayout {
         return result;
     }
 
+    public boolean isActivityContext() {
+        return parentActivity instanceof Activity;
+    }
+
+    public void hideKeyboard() {
+        hideKeyboard(true);
+    }
+
+    public void hideKeyboard(boolean hideKeyboardOnShow) {
+        if (!isActivityContext()) { return; }
+        View f = ((Activity) parentActivity).getCurrentFocus();
+        if (f != null && hideKeyboardOnShow) {
+            Keyboard.hideKeyboard(f);
+        }
+    }
+
     private void prepareForMoving(MotionEvent ev) {
         maybeStartTracking = false;
         startedTracking = true;
@@ -489,12 +506,7 @@ public class ContainerLayout extends FrameLayout {
                         }
                     } else if (startedTracking) {
                         if (!beginTrackingSent) {
-                            if (parentActivity instanceof Activity) {
-                                View f = ((Activity) parentActivity).getCurrentFocus();
-                                if (f != null) {
-                                    Keyboard.hideKeyboard(f);
-                                }
-                            }
+                            hideKeyboard();
                             BasePage currentFragment = fragmentsStack.get(fragmentsStack.size() - 1);
                             currentFragment.onBeginSlide();
                             beginTrackingSent = true;
@@ -514,9 +526,7 @@ public class ContainerLayout extends FrameLayout {
                         if (velX >= 3500 && velX > Math.abs(velY) && currentFragment.canBeginSlide()) {
                             prepareForMoving(ev);
                             if (!beginTrackingSent) {
-                                if (((Activity) getContext()).getCurrentFocus() != null) {
-                                    Keyboard.hideKeyboard(((Activity) getContext()).getCurrentFocus());
-                                }
+                                hideKeyboard();
                                 beginTrackingSent = true;
                             }
                         }
@@ -637,7 +647,7 @@ public class ContainerLayout extends FrameLayout {
     }
 
     public void startActivityForResult(final Intent intent, final int requestCode) {
-        if (!(parentActivity instanceof Activity)) {
+        if (!isActivityContext()) {
             return;
         }
         if (transitionAnimationInProgress) {
@@ -951,12 +961,7 @@ public class ContainerLayout extends FrameLayout {
             return false;
         }
         fragment.setInPreviewMode(preview);
-        if (parentActivity instanceof Activity) {
-            View f = ((Activity) parentActivity).getCurrentFocus();
-            if (f != null && fragment.hideKeyboardOnShow()) {
-                Keyboard.hideKeyboard(f);
-            }
-        }
+        hideKeyboard(fragment.hideKeyboardOnShow());
         boolean needAnimation = preview || !forceWithoutAnimation && Store.view_animations;
 
         final BasePage currentFragment = !fragmentsStack.isEmpty() ? fragmentsStack.get(fragmentsStack.size() - 1) : null;
@@ -1289,12 +1294,7 @@ public class ContainerLayout extends FrameLayout {
         if (delegate != null && !delegate.needCloseLastFragment(this) || checkTransitionAnimation() || fragmentsStack.isEmpty()) {
             return;
         }
-        if (parentActivity instanceof Activity) {
-            View f = ((Activity) parentActivity).getCurrentFocus();
-            if (f != null) {
-                Keyboard.hideKeyboard(f);
-            }
-        }
+        hideKeyboard();
         setInnerTranslationX(0);
         boolean needAnimation = inPreviewMode || transitionAnimationPreviewMode || animated && Store.view_animations;
         final BasePage currentFragment = fragmentsStack.get(fragmentsStack.size() - 1);

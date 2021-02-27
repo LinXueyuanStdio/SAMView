@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -49,12 +48,10 @@ import android.widget.TextView;
 
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.core.ActionBar;
-import com.same.lib.theme.MyThemeDescription;
-import com.same.ui.theme.AnimationProperties;
 import com.same.lib.core.BasePage;
-import com.same.ui.theme.dialog.BottomSheet;
 import com.same.lib.core.ContainerLayout;
 import com.same.lib.core.EditTextBoldCursor;
+import com.same.lib.core.ThemeDescription;
 import com.same.lib.drawable.CloseProgressDrawable2;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.font.FontManager;
@@ -62,15 +59,16 @@ import com.same.lib.helper.LayoutHelper;
 import com.same.lib.listview.LinearLayoutManager;
 import com.same.lib.listview.RecyclerView;
 import com.same.lib.theme.KeyHub;
+import com.same.lib.theme.MyThemeDescription;
 import com.same.lib.theme.Theme;
-import com.same.lib.core.ThemeDescription;
 import com.same.lib.theme.ThemeInfo;
 import com.same.lib.theme.ThemeManager;
 import com.same.lib.theme.WallpaperManager;
-import com.same.ui.MainActivity;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.theme.cell.TextColorThemeCell;
+import com.same.ui.theme.AnimationProperties;
+import com.same.ui.theme.dialog.BottomSheet;
 import com.same.ui.view.DrawableBuilder;
 import com.same.ui.view.EmptyTextProgressView;
 import com.same.ui.view.RecyclerListView;
@@ -80,6 +78,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
 
 /**
  * @author 林学渊
@@ -90,8 +89,19 @@ import androidx.annotation.Keep;
  */
 public class ThemeEditorView {
 
+    public interface ThemeContainer {
+        void rebuildAllFragments(boolean last);
+
+        ContainerLayout getContainerLayout();
+
+        ContainerLayout getRightActionBarLayout();
+
+        ContainerLayout getLayersActionBarLayout();
+    }
+
     private FrameLayout windowView;
-    private Activity parentActivity;
+    private Context parentActivity;
+    private ThemeContainer callback;
 
     private boolean hidden;
 
@@ -112,6 +122,7 @@ public class ThemeEditorView {
 
     @SuppressLint("StaticFieldLeak")
     private static volatile ThemeEditorView Instance = null;
+
     public static ThemeEditorView getInstance() {
         return Instance;
     }
@@ -310,7 +321,7 @@ public class ThemeEditorView {
 
             private int colorWheelRadius;
 
-            private float[] colorHSV = new float[] { 0.0f, 0.0f, 1.0f };
+            private float[] colorHSV = new float[]{0.0f, 0.0f, 1.0f};
             private float alpha = 1.0f;
 
             private float[] hsvTemp = new float[3];
@@ -784,7 +795,7 @@ public class ThemeEditorView {
             containerView.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
             listView.setAdapter(listAdapter = new ListAdapter(context, items));
             searchAdapter = new SearchAdapter(context);
-//            listView.setGlowColor(0xfff5f6f7);
+            //            listView.setGlowColor(0xfff5f6f7);
             listView.setItemAnimator(null);
             listView.setLayoutAnimation(null);
             listView.setOnItemClickListener((view, position) -> {
@@ -1002,8 +1013,8 @@ public class ThemeEditorView {
                 });
                 animatorSet.start();
             } else {
-                if (parentActivity != null) {
-                    ((MainActivity) parentActivity).rebuildAllFragments(false);
+                if (callback != null) {
+                    callback.rebuildAllFragments(false);
                 }
                 ThemeManager.saveCurrentTheme(parentActivity, themeInfo, false, false, false);
                 if (listView.getAdapter() == listAdapter) {
@@ -1381,13 +1392,18 @@ public class ThemeEditorView {
         }
     }
 
-    public void show(Activity activity, final ThemeInfo theme) {
+    public void show(
+            @NonNull Context context,
+            @NonNull ThemeContainer callback,
+            final ThemeInfo theme
+    ) {
         if (Instance != null) {
             Instance.destroy();
         }
         hidden = false;
         themeInfo = theme;
-        windowView = new FrameLayout(activity) {
+        this.callback = callback;
+        windowView = new FrameLayout(context) {
 
             private float startX;
             private float startY;
@@ -1414,7 +1430,7 @@ public class ThemeEditorView {
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     if (!dragging) {
                         if (editorAlert == null) {
-                            MainActivity launchActivity = (MainActivity) parentActivity;
+                            ThemeContainer launchActivity = callback;
 
                             ContainerLayout actionBarLayout = null;
 
@@ -1452,7 +1468,7 @@ public class ThemeEditorView {
                                             editorAlert = null;
                                             show();
                                         });
-                                        editorAlert.show();
+                                        editorAlert.showInService();
                                         hide();
                                     }
                                 }
@@ -1498,7 +1514,7 @@ public class ThemeEditorView {
                 return true;
             }
         };
-        windowManager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
+        windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 
         preferences = AndroidUtilities.getThemeConfig();
 
@@ -1515,14 +1531,14 @@ public class ThemeEditorView {
             windowLayoutParams.y = getSideCoord(false, sidey, py, editorHeight);
             windowLayoutParams.format = PixelFormat.TRANSLUCENT;
             windowLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
-            windowLayoutParams.type = WindowManager.LayoutParams.LAST_APPLICATION_WINDOW;
+            windowLayoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
             windowLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
             windowManager.addView(windowView, windowLayoutParams);
         } catch (Exception e) {
             e.printStackTrace();
             return;
         }
-        wallpaperUpdater = new WallpaperUpdater(activity, new WallpaperUpdater.WallpaperUpdaterDelegate() {
+        wallpaperUpdater = new WallpaperUpdater(context, new WallpaperUpdater.WallpaperUpdaterDelegate() {
             @Override
             public void didSelectWallpaper(File file, Bitmap bitmap, boolean gallery) {
                 WallpaperManager.setThemeWallpaper(parentActivity, themeInfo, bitmap, file);
@@ -1541,7 +1557,7 @@ public class ThemeEditorView {
             }
         });
         Instance = this;
-        parentActivity = activity;
+        parentActivity = context;
         showWithAnimation();
     }
 

@@ -2,30 +2,20 @@ package com.same.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.view.ActionMode;
-import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -33,7 +23,6 @@ import android.widget.RelativeLayout;
 import com.same.lib.anim.Easings;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.NotificationCenter;
-import com.same.lib.base.SharedConfig;
 import com.same.lib.core.BasePage;
 import com.same.lib.core.ContainerLayout;
 import com.same.lib.core.DrawerLayoutContainer;
@@ -45,20 +34,27 @@ import com.same.lib.theme.ThemeManager;
 import com.same.lib.theme.ThemeRes;
 import com.same.lib.theme.WallpaperManager;
 import com.same.lib.util.Space;
-import com.same.ui.lang.MyLang;
 import com.same.ui.page.main.MainPage;
 import com.same.ui.page.theme.ThemeEditorView;
 import com.same.ui.theme.ChatTheme;
 import com.same.ui.theme.CommonTheme;
 import com.same.ui.theme.DialogTheme;
 import com.same.ui.theme.ProfileTheme;
-import com.same.ui.theme.dialog.AlertDialog;
 import com.same.ui.theme.wrap.ThemeContainerLayout;
 
 import java.util.ArrayList;
 
-public class MainActivity extends Activity
-        implements ContainerLayout.ActionBarLayoutDelegate, ThemeEditorView.ThemeContainer {
+import androidx.annotation.NonNull;
+
+/**
+ * @author 林学渊
+ * @email linxy59@mail2.sysu.edu.cn
+ * @date 2021/2/27
+ * @description null
+ * @usage null
+ */
+public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate, ThemeEditorView.ThemeContainer {
+
     /**
      * 主容器
      */
@@ -87,7 +83,7 @@ public class MainActivity extends Activity
         @Override
         public void didReceivedNotification(int id, int account, Object... args) {
             if (id == NotificationCenter.didSetNewTheme) {
-                didSetNewTheme((Boolean) args[0]);
+                //                didSetNewTheme((Boolean) args[0]);TODO
             } else if (id == NotificationCenter.needSetDayNightTheme) {
                 ThemeInfo theme = (ThemeInfo) args[0];
                 boolean nigthTheme = (boolean) args[1];
@@ -95,97 +91,89 @@ public class MainActivity extends Activity
                 int accentId = (int) args[3];
                 needSetDayNightTheme(theme, nigthTheme, pos, accentId);
             } else if (id == NotificationCenter.needCheckSystemBarColors) {
-                checkSystemBarColors();
+                //                checkSystemBarColors();
             } else if (id == NotificationCenter.didSetNewWallpaper) {
-//                if (sideMenu != null) {
-//                    View child = sideMenu.getChildAt(0);
-//                    if (child != null) {
-//                        child.invalidate();
-//                    }
-//                }
+                //                if (sideMenu != null) {
+                //                    View child = sideMenu.getChildAt(0);
+                //                    if (child != null) {
+                //                        child.invalidate();
+                //                    }
+                //                }
             }
         }
     };
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        //region onCreate前
-        AndroidUtilities.checkDisplaySize(this, getResources().getConfiguration());
-        Space.checkDisplaySize(this, getResources().getConfiguration());
-        Theme.onConfigurationChanged(this, getResources().getConfiguration());
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setTheme(R.style.Theme_TMessages);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            try {
-                setTaskDescription(new ActivityManager.TaskDescription(null, null, Theme.getColor(KeyHub.key_actionBarDefault) | 0xff000000));
-            } catch (Exception ignore) {
+    public interface ContextDelegate extends ThemeEditorView.ThemeContainer {
 
-            }
-            try {
-                getWindow().setNavigationBarColor(0xff000000);
-            } catch (Exception ignore) {
+        void setTheme(int theme_tMessages);
 
-            }
-        }
+        Configuration getConfiguration();
 
-        getWindow().setBackgroundDrawable(new ColorDrawable(0xffffffff) {
-            @Override
-            public void setBounds(int left, int top, int right, int bottom) {
-                bottom += AndroidUtilities.dp(500);
-                super.setBounds(left, top, right, bottom);
-            }
+        void stopSelf();
 
-            @Override
-            public void draw(Canvas canvas) {
-                if (SharedConfig.smoothKeyboard) {
-                    int color = getColor();
-                    int newColor = Theme.getColor(KeyHub.key_windowBackgroundWhite);
-                    if (color != newColor) {
-                        setColor(newColor);
-                    }
-                    super.draw(canvas);
-                }
-            }
-        });
+        Resources getResources();
+    }
 
-        //endregion
-        super.onCreate(savedInstanceState);
+    @NonNull
+    ContextDelegate delegate;
+    @NonNull
+    Context context;
+
+    public ContainerCreator(
+            @NonNull Context context,
+            @NonNull ContextDelegate delegate
+    ) {
+        this.context = context;
+        this.delegate = delegate;
+    }
+
+    public void onPreCreate() {
+        Configuration configuration = delegate.getConfiguration();
+        AndroidUtilities.checkDisplaySize(context, configuration);
+        Space.checkDisplaySize(context, configuration);
+        Theme.onConfigurationChanged(context, configuration);
+        delegate.setTheme(R.style.Theme_TMessages);
+    }
+
+    public void onCreateView(FrameLayout frameLayout) {
+
         if (Build.VERSION.SDK_INT >= 24) {
             //适配分屏
-            AndroidUtilities.isInMultiwindow = isInMultiWindowMode();
+            //            AndroidUtilities.isInMultiwindow = isInMultiWindowMode();TODO
         }
         //获取状态栏高度
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        int resourceId = delegate.getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
-            AndroidUtilities.statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+            AndroidUtilities.statusBarHeight = 0;//getResources().getDimensionPixelSize(resourceId);
+            Space.statusBarHeight = 0;
         }
 
-        ThemeRes.installAndApply(this, new CommonTheme(), new DialogTheme(), new ChatTheme(), new ProfileTheme());
+        ThemeRes.installAndApply(context, new CommonTheme(), new DialogTheme(), new ChatTheme(), new ProfileTheme());
 
-        actionBarLayout = new ThemeContainerLayout(this) {
+        actionBarLayout = new ThemeContainerLayout(context) {
             @Override
             public void setThemeAnimationValue(float value) {
                 super.setThemeAnimationValue(value);
                 drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(KeyHub.key_windowBackgroundWhite));
             }
         };
-        FrameLayout frameLayout = new FrameLayout(this);
-        setContentView(frameLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        //        FrameLayout frameLayout = new FrameLayout(this);TODO
+        //        setContentView(frameLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));TODO
         if (Build.VERSION.SDK_INT >= 21) {
-            themeSwitchImageView = new ImageView(this);
+            themeSwitchImageView = new ImageView(context);
             themeSwitchImageView.setVisibility(View.GONE);
             frameLayout.addView(themeSwitchImageView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         }
 
-        drawerLayoutContainer = new DrawerLayoutContainer(this);
+        drawerLayoutContainer = new DrawerLayoutContainer(context);
         drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(KeyHub.key_windowBackgroundWhite));
         frameLayout.addView(drawerLayoutContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
         if (AndroidUtilities.isTablet()) {
             //适配平板
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+            //            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);TODO
 
-            RelativeLayout launchLayout = new RelativeLayout(this) {
+            RelativeLayout launchLayout = new RelativeLayout(context) {
 
                 private boolean inLayout;
 
@@ -249,24 +237,24 @@ public class MainActivity extends Activity
             };
             drawerLayoutContainer.addView(launchLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-            backgroundTablet = new View(this);
-            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.catstile);
+            backgroundTablet = new View(context);
+            BitmapDrawable drawable = (BitmapDrawable) delegate.getResources().getDrawable(R.drawable.catstile);
             drawable.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
             backgroundTablet.setBackgroundDrawable(drawable);
             launchLayout.addView(backgroundTablet, LayoutHelper.createRelative(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
             launchLayout.addView(actionBarLayout);
 
-            rightActionBarLayout = new ThemeContainerLayout(this);
+            rightActionBarLayout = new ThemeContainerLayout(context);
             rightActionBarLayout.init(rightFragmentsStack);
             rightActionBarLayout.setDelegate(this);
             launchLayout.addView(rightActionBarLayout);
 
-            shadowTabletSide = new FrameLayout(this);
+            shadowTabletSide = new FrameLayout(context);
             shadowTabletSide.setBackgroundColor(0x40295274);
             launchLayout.addView(shadowTabletSide);
 
-            shadowTablet = new FrameLayout(this);
+            shadowTablet = new FrameLayout(context);
             shadowTablet.setVisibility(layerFragmentsStack.isEmpty() ? View.GONE : View.VISIBLE);
             shadowTablet.setBackgroundColor(0x7f000000);
             launchLayout.addView(shadowTablet);
@@ -299,7 +287,7 @@ public class MainActivity extends Activity
 
             });
 
-            layersActionBarLayout = new ThemeContainerLayout(this);
+            layersActionBarLayout = new ThemeContainerLayout(context);
             layersActionBarLayout.setRemoveActionBarExtraHeight(true);
             layersActionBarLayout.setBackgroundView(shadowTablet);
             layersActionBarLayout.setUseAlphaAnimations(true);
@@ -320,7 +308,7 @@ public class MainActivity extends Activity
         actionBarLayout.setDelegate(this);//代理，监听生命周期
 
         //应用的壁纸
-        WallpaperManager.loadWallpaper(this);
+        WallpaperManager.loadWallpaper(context);
 
         //注册通知中心，使用观察者模式处理应用内部的通知（消息）
         NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.didSetNewTheme);
@@ -333,59 +321,41 @@ public class MainActivity extends Activity
         actionBarLayout.presentFragment(page);
 
         checkLayout();
-        checkSystemBarColors();
+        //        checkSystemBarColors();TODO
 
         //适配各种国产 ROM
-        try {
-            String os1 = Build.DISPLAY;
-            String os2 = Build.USER;
-            if (os1 != null) {
-                os1 = os1.toLowerCase();
-            } else {
-                os1 = "";
-            }
-            if (os2 != null) {
-                os2 = os1.toLowerCase();
-            } else {
-                os2 = "";
-            }
-            if (os1.contains("flyme") || os2.contains("flyme")) {
-                AndroidUtilities.incorrectDisplaySizeFix = true;
-                final View view = getWindow().getDecorView().getRootView();
-                view.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener = () -> {
-                    int height = view.getMeasuredHeight();
-                    if (Build.VERSION.SDK_INT >= 21) {
-                        height -= AndroidUtilities.statusBarHeight;
-                    }
-                    if (height > AndroidUtilities.dp(100) && height < AndroidUtilities.displaySize.y && height + AndroidUtilities.dp(100) > AndroidUtilities.displaySize.y) {
-                        AndroidUtilities.displaySize.y = height;
-                    }
-                });
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        //        try {
+        //            String os1 = Build.DISPLAY;
+        //            String os2 = Build.USER;
+        //            if (os1 != null) {
+        //                os1 = os1.toLowerCase();
+        //            } else {
+        //                os1 = "";
+        //            }
+        //            if (os2 != null) {
+        //                os2 = os1.toLowerCase();
+        //            } else {
+        //                os2 = "";
+        //            }
+        //            if (os1.contains("flyme") || os2.contains("flyme")) {
+        //                AndroidUtilities.incorrectDisplaySizeFix = true;
+        //                final View view = getWindow().getDecorView().getRootView();
+        //                view.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener = () -> {
+        //                    int height = view.getMeasuredHeight();
+        //                    if (Build.VERSION.SDK_INT >= 21) {
+        //                        height -= AndroidUtilities.statusBarHeight;
+        //                    }
+        //                    if (height > AndroidUtilities.dp(100) && height < AndroidUtilities.displaySize.y && height + AndroidUtilities.dp(100) > AndroidUtilities.displaySize.y) {
+        //                        AndroidUtilities.displaySize.y = height;
+        //                    }
+        //                });
+        //            }
+        //        } catch (Exception e) {
+        //            e.printStackTrace();
+        //        }TODO
     }
 
-    private void checkSystemBarColors() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int color = Theme.getColor(KeyHub.key_actionBarDefault, null, true);
-            AndroidUtilities.setLightStatusBar(getWindow(), color == Color.WHITE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                final Window window = getWindow();
-                color = Theme.getColor(KeyHub.key_windowBackgroundGray, null, true);
-                if (window.getNavigationBarColor() != color) {
-                    window.setNavigationBarColor(color);
-                    final float brightness = AndroidUtilities.computePerceivedBrightness(color);
-                    AndroidUtilities.setLightNavigationBar(getWindow(), brightness >= 0.721f);
-                }
-            }
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
+    public void onPause() {
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, 4096);
         actionBarLayout.onPause();
         if (AndroidUtilities.isTablet()) {
@@ -394,98 +364,30 @@ public class MainActivity extends Activity
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    public void onResume() {
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 4096);
         actionBarLayout.onResume();
     }
 
-    @Override
-    protected void onDestroy() {
-        try {
-            if (onGlobalLayoutListener != null) {
-                final View view = getWindow().getDecorView().getRootView();
-                view.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    public void onDestroy() {
+//        try {
+//            if (onGlobalLayoutListener != null) {
+//                final View view = getWindow().getDecorView().getRootView();
+//                view.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         ThemeEditorView editorView = ThemeEditorView.getInstance();
-        if (editorView != null) {
-            editorView.onActivityResult(requestCode, resultCode, data);
-        }
-        if (actionBarLayout.fragmentsStack.size() != 0) {
-            BasePage fragment = actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1);
-            fragment.onActivityResultFragment(requestCode, resultCode, data);
-        }
-        if (AndroidUtilities.isTablet()) {
-            if (rightActionBarLayout.fragmentsStack.size() != 0) {
-                BasePage fragment = rightActionBarLayout.fragmentsStack.get(rightActionBarLayout.fragmentsStack.size() - 1);
-                fragment.onActivityResultFragment(requestCode, resultCode, data);
-            }
-            if (layersActionBarLayout.fragmentsStack.size() != 0) {
-                BasePage fragment = layersActionBarLayout.fragmentsStack.get(layersActionBarLayout.fragmentsStack.size() - 1);
-                fragment.onActivityResultFragment(requestCode, resultCode, data);
-            }
-        }
+        editorView.destroy();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (grantResults == null) {
-            grantResults = new int[0];
-        }
-        if (permissions == null) {
-            permissions = new String[0];
-        }
-
-        boolean granted = grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
-        if (actionBarLayout.fragmentsStack.size() != 0) {
-            BasePage fragment = actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1);
-            fragment.onRequestPermissionsResultFragment(requestCode, permissions, grantResults);
-        }
-        if (AndroidUtilities.isTablet()) {
-            if (rightActionBarLayout.fragmentsStack.size() != 0) {
-                BasePage fragment = rightActionBarLayout.fragmentsStack.get(rightActionBarLayout.fragmentsStack.size() - 1);
-                fragment.onRequestPermissionsResultFragment(requestCode, permissions, grantResults);
-            }
-            if (layersActionBarLayout.fragmentsStack.size() != 0) {
-                BasePage fragment = layersActionBarLayout.fragmentsStack.get(layersActionBarLayout.fragmentsStack.size() - 1);
-                fragment.onRequestPermissionsResultFragment(requestCode, permissions, grantResults);
-            }
-        }
+    public void onPreConfigurationChanged(Configuration newConfig) {
+        AndroidUtilities.checkDisplaySize(context, newConfig);
+        Theme.onConfigurationChanged(context, newConfig);
     }
 
-    private void showPermissionErrorAlert(String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(MyLang.getString("AppName", R.string.AppName));
-        builder.setMessage(message);
-        builder.setNegativeButton(MyLang.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialog, which) -> {
-            try {
-                Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                intent.setData(Uri.parse("package:" + MyLang.getContext().getPackageName()));
-                startActivity(intent);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        builder.setPositiveButton(MyLang.getString("OK", R.string.OK), null);
-        builder.show();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        AndroidUtilities.checkDisplaySize(this, newConfig);
-        Theme.onConfigurationChanged(this, newConfig);
-        super.onConfigurationChanged(newConfig);
+    public void onPostConfigurationChanged(Configuration newConfig) {
         checkLayout();
         actionBarLayout.onConfigurationChanged(newConfig);
         ThemeEditorView editorView = ThemeEditorView.getInstance();
@@ -493,14 +395,8 @@ public class MainActivity extends Activity
             editorView.onConfigurationChanged();
         }
         if (Theme.selectedAutoNightType == Theme.AUTO_NIGHT_TYPE_SYSTEM) {
-            ThemeManager.checkAutoNightThemeConditions(this);
+            ThemeManager.checkAutoNightThemeConditions(context);
         }
-    }
-
-    @Override
-    public void onMultiWindowModeChanged(boolean isInMultiWindowMode) {
-        AndroidUtilities.isInMultiwindow = isInMultiWindowMode;
-        checkLayout();
     }
 
     @Override
@@ -528,7 +424,7 @@ public class MainActivity extends Activity
             return;
         }
 
-        if (!AndroidUtilities.isInMultiwindow && (!AndroidUtilities.isSmallTablet() || getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
+        if (!AndroidUtilities.isInMultiwindow && (!AndroidUtilities.isSmallTablet() || delegate.getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
             tabletFullSize = false;
             if (actionBarLayout.fragmentsStack.size() >= 2) {
                 for (int a = 1; a < actionBarLayout.fragmentsStack.size(); a++) {
@@ -557,26 +453,6 @@ public class MainActivity extends Activity
             rightActionBarLayout.setVisibility(View.GONE);
             backgroundTablet.setVisibility(!actionBarLayout.fragmentsStack.isEmpty() ? View.GONE : View.VISIBLE);
         }
-    }
-
-    private void didSetNewTheme(Boolean nightTheme) {
-        if (!nightTheme) {
-            //            if (sideMenu != null) {
-            //                sideMenu.setBackgroundColor(Theme.getColor(KeyHub.key_chats_menuBackground));
-            //                sideMenu.setGlowColor(Theme.getColor(KeyHub.key_chats_menuBackground));
-            //                sideMenu.setListSelectorColor(Theme.getColor(KeyHub.key_listSelector));
-            //                sideMenu.getAdapter().notifyDataSetChanged();
-            //            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                try {
-                    setTaskDescription(new ActivityManager.TaskDescription(null, null, Theme.getColor(KeyHub.key_actionBarDefault) | 0xff000000));
-                } catch (Exception ignore) {
-
-                }
-            }
-        }
-        drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(KeyHub.key_windowBackgroundWhite));
-        checkSystemBarColors();
     }
 
     private void needSetDayNightTheme(ThemeInfo theme, boolean nigthTheme, int[] pos, int accentId) {
@@ -626,152 +502,8 @@ public class MainActivity extends Activity
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        try {
-            super.onSaveInstanceState(outState);
-            BasePage lastFragment = null;
-            if (AndroidUtilities.isTablet()) {
-                if (!layersActionBarLayout.fragmentsStack.isEmpty()) {
-                    lastFragment = layersActionBarLayout.fragmentsStack.get(layersActionBarLayout.fragmentsStack.size() - 1);
-                } else if (!rightActionBarLayout.fragmentsStack.isEmpty()) {
-                    lastFragment = rightActionBarLayout.fragmentsStack.get(rightActionBarLayout.fragmentsStack.size() - 1);
-                } else if (!actionBarLayout.fragmentsStack.isEmpty()) {
-                    lastFragment = actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1);
-                }
-            } else {
-                if (!actionBarLayout.fragmentsStack.isEmpty()) {
-                    lastFragment = actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1);
-                }
-            }
-
-            if (lastFragment != null) {
-                Bundle args = lastFragment.getArguments();
-                if (args != null) {
-                    outState.putBundle("args", args);
-                    outState.putString("fragment", "group");
-                }
-                lastFragment.saveSelfArgs(outState);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (AndroidUtilities.isTablet()) {
-            if (layersActionBarLayout.getVisibility() == View.VISIBLE) {
-                layersActionBarLayout.onBackPressed();
-            } else {
-                boolean cancel = false;
-                if (rightActionBarLayout.getVisibility() == View.VISIBLE && !rightActionBarLayout.fragmentsStack.isEmpty()) {
-                    BasePage lastFragment = rightActionBarLayout.fragmentsStack.get(rightActionBarLayout.fragmentsStack.size() - 1);
-                    cancel = !lastFragment.onBackPressed();
-                }
-                if (!cancel) {
-                    actionBarLayout.onBackPressed();
-                }
-            }
-        } else {
-            actionBarLayout.onBackPressed();
-        }
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        if (actionBarLayout != null) {
-            actionBarLayout.onLowMemory();
-            if (AndroidUtilities.isTablet()) {
-                rightActionBarLayout.onLowMemory();
-                layersActionBarLayout.onLowMemory();
-            }
-        }
-    }
-
-    @Override
-    public void onActionModeStarted(ActionMode mode) {
-        super.onActionModeStarted(mode);
-        visibleActionMode = mode;
-        try {
-            Menu menu = mode.getMenu();
-            if (menu != null) {
-                boolean extended = actionBarLayout.extendActionMode(menu);
-                if (!extended && AndroidUtilities.isTablet()) {
-                    extended = rightActionBarLayout.extendActionMode(menu);
-                    if (!extended) {
-                        layersActionBarLayout.extendActionMode(menu);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (Build.VERSION.SDK_INT >= 23 && mode.getType() == ActionMode.TYPE_FLOATING) {
-            return;
-        }
-        actionBarLayout.onActionModeStarted(mode);
-        if (AndroidUtilities.isTablet()) {
-            rightActionBarLayout.onActionModeStarted(mode);
-            layersActionBarLayout.onActionModeStarted(mode);
-        }
-    }
-
-    @Override
-    public void onActionModeFinished(ActionMode mode) {
-        super.onActionModeFinished(mode);
-        if (visibleActionMode == mode) {
-            visibleActionMode = null;
-        }
-        if (Build.VERSION.SDK_INT >= 23 && mode.getType() == ActionMode.TYPE_FLOATING) {
-            return;
-        }
-        actionBarLayout.onActionModeFinished(mode);
-        if (AndroidUtilities.isTablet()) {
-            rightActionBarLayout.onActionModeFinished(mode);
-            layersActionBarLayout.onActionModeFinished(mode);
-        }
-    }
-
-    @Override
     public boolean onPreIme() {
         return false;
-    }
-
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        int keyCode = event.getKeyCode();
-        if (!mainFragmentsStack.isEmpty() && event.getRepeatCount() == 0 && event.getAction() == KeyEvent.ACTION_DOWN && (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP || event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN)) {
-            BasePage fragment = mainFragmentsStack.get(mainFragmentsStack.size() - 1);
-            if (AndroidUtilities.isTablet() && !rightFragmentsStack.isEmpty()) {
-                fragment = rightFragmentsStack.get(rightFragmentsStack.size() - 1);
-            }
-        }
-        return super.dispatchKeyEvent(event);
-    }
-
-    @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_MENU) {
-            if (AndroidUtilities.isTablet()) {
-                if (layersActionBarLayout.getVisibility() == View.VISIBLE && !layersActionBarLayout.fragmentsStack.isEmpty()) {
-                    layersActionBarLayout.onKeyUp(keyCode, event);
-                } else if (rightActionBarLayout.getVisibility() == View.VISIBLE && !rightActionBarLayout.fragmentsStack.isEmpty()) {
-                    rightActionBarLayout.onKeyUp(keyCode, event);
-                } else {
-                    actionBarLayout.onKeyUp(keyCode, event);
-                }
-            } else {
-                if (actionBarLayout.fragmentsStack.size() == 1) {
-                    if (getCurrentFocus() != null) {
-                        AndroidUtilities.hideKeyboard(getCurrentFocus());
-                    }
-                } else {
-                    actionBarLayout.onKeyUp(keyCode, event);
-                }
-            }
-        }
-        return super.onKeyUp(keyCode, event);
     }
 
     @Override
@@ -821,7 +553,7 @@ public class MainActivity extends Activity
         if (AndroidUtilities.isTablet()) {
             if (layout == actionBarLayout && layout.fragmentsStack.size() <= 1) {
                 onFinish();
-                finish();
+                delegate.stopSelf();
                 return false;
             } else if (layout == rightActionBarLayout) {
                 if (!tabletFullSize) {
@@ -829,13 +561,13 @@ public class MainActivity extends Activity
                 }
             } else if (layout == layersActionBarLayout && actionBarLayout.fragmentsStack.isEmpty() && layersActionBarLayout.fragmentsStack.size() == 1) {
                 onFinish();
-                finish();
+                delegate.stopSelf();
                 return false;
             }
         } else {
             if (layout.fragmentsStack.size() <= 1) {
                 onFinish();
-                finish();
+                delegate.stopSelf();
                 return false;
             }
         }
@@ -847,7 +579,6 @@ public class MainActivity extends Activity
         NotificationCenter.getGlobalInstance().removeObserver(notificationCenterDelegate, NotificationCenter.didSetNewTheme);
         NotificationCenter.getGlobalInstance().removeObserver(notificationCenterDelegate, NotificationCenter.needSetDayNightTheme);
         NotificationCenter.getGlobalInstance().removeObserver(notificationCenterDelegate, NotificationCenter.needCheckSystemBarColors);
-
     }
 
     @Override

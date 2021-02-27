@@ -1,6 +1,6 @@
 package com.same.ui.page.theme;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 
@@ -14,7 +14,7 @@ import java.io.File;
  * @usage null
  */
 public class WallpaperUpdater {
-    public WallpaperUpdater(Activity activity, WallpaperUpdaterDelegate wallpaperUpdaterDelegate) {
+    public WallpaperUpdater(Context activity, WallpaperUpdaterDelegate wallpaperUpdaterDelegate) {
 
     }
 

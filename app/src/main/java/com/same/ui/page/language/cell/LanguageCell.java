@@ -18,7 +18,6 @@ import com.same.lib.theme.Theme;
 import com.same.ui.R;
 import com.same.ui.theme.CommonTheme;
 import com.timecat.component.locale.LocaleInfo;
-import com.timecat.component.locale.MLang;
 
 import static com.same.lib.base.SharedConfig.isRTL;
 
@@ -52,7 +51,7 @@ public class LanguageCell extends FrameLayout {
         textView.setSingleLine(true);
         textView.setEllipsize(TextUtils.TruncateAt.END);
         textView.setGravity((isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
-        addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (MLang.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, MLang.isRTL ? 23 + 48 : 23, (isDialog ? 4 : 7), MLang.isRTL ? 23 : 23 + 48, 0));
+        addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, isRTL ? 23 + 48 : 23, (isDialog ? 4 : 7), isRTL ? 23 : 23 + 48, 0));
 
         textView2 = new TextView(context);
         textView2.setTextColor(Theme.getColor(dialog ? KeyHub.key_dialogTextGray3 : KeyHub.key_windowBackgroundWhiteGrayText3));
@@ -62,12 +61,12 @@ public class LanguageCell extends FrameLayout {
         textView2.setSingleLine(true);
         textView2.setEllipsize(TextUtils.TruncateAt.END);
         textView2.setGravity((isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
-        addView(textView2, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (MLang.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, MLang.isRTL ? 23 + 48 : 23, (isDialog ? 25 : 29), MLang.isRTL ? 23 : 23 + 48, 0));
+        addView(textView2, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, isRTL ? 23 + 48 : 23, (isDialog ? 25 : 29), isRTL ? 23 : 23 + 48, 0));
 
         checkImage = new ImageView(context);
         checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(KeyHub.key_featuredStickers_addedIcon), PorterDuff.Mode.MULTIPLY));
         checkImage.setImageResource(R.mipmap.sticker_added);
-        addView(checkImage, LayoutHelper.createFrame(19, 14, (MLang.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, 23, 0, 23, 0));
+        addView(checkImage, LayoutHelper.createFrame(19, 14, (isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, 23, 0, 23, 0));
     }
 
     @Override
@@ -101,7 +100,7 @@ public class LanguageCell extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         if (needDivider) {
-            canvas.drawLine(MLang.isRTL ? 0 : AndroidUtilities.dp(20), getMeasuredHeight() - 1, getMeasuredWidth() - (MLang.isRTL ? AndroidUtilities.dp(20) : 0), getMeasuredHeight() - 1, CommonTheme.dividerPaint);
+            canvas.drawLine(isRTL ? 0 : AndroidUtilities.dp(20), getMeasuredHeight() - 1, getMeasuredWidth() - (isRTL ? AndroidUtilities.dp(20) : 0), getMeasuredHeight() - 1, CommonTheme.dividerPaint);
         }
     }
 }

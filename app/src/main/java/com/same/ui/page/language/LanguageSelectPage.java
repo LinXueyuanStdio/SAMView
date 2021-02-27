@@ -13,7 +13,6 @@ import com.same.lib.base.AndroidUtilities;
 import com.same.lib.core.ActionBar;
 import com.same.lib.core.ActionBarMenu;
 import com.same.lib.core.ActionBarMenuItem;
-import com.same.lib.core.BasePage;
 import com.same.lib.core.ThemeDescription;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.helper.LayoutHelper;
@@ -24,6 +23,7 @@ import com.same.lib.theme.MyThemeDescription;
 import com.same.lib.theme.Theme;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
+import com.same.ui.page.base.MyBasePage;
 import com.same.ui.page.language.cell.LanguageCell;
 import com.same.ui.page.language.cell.ShadowSectionCell;
 import com.same.ui.theme.CommonTheme;
@@ -46,7 +46,7 @@ import java.util.TimerTask;
  * @description null
  * @usage null
  */
-public class LanguageSelectPage extends BasePage {
+public class LanguageSelectPage extends MyBasePage {
 
     private ListAdapter listAdapter;
     private RecyclerListView listView;

@@ -7,9 +7,9 @@ buildscript {
     def localMavenDir = file(moduleConfigProps.localMavenPath)
 
     repositories {
+        maven { url "file://${localMavenDir.absolutePath}" }
         google()
         jcenter()
-        maven { url "file://${localMavenDir.absolutePath}" }
         maven { url "https://plugins.gradle.org/m2/" }
         maven { url "https://github.com/LinXueyuanStdio/MLang/raw/main/dist/" }
     }

@@ -51,11 +51,11 @@ public class TypefaceSpan extends MetricAffectingSpan {
     }
 
     public boolean isBold(Context context) {
-        return typeface == FontManager.getTypeface(context, "fonts/rmedium.ttf");
+        return typeface == FontManager.getMediumTypeface(context);
     }
 
     public boolean isItalic(Context context) {
-        return typeface == FontManager.getTypeface(context, "fonts/ritalic.ttf");
+        return typeface == FontManager.getItalicTypeface(context);
     }
 
     @Override

@@ -14,9 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityManager;
 
-import com.same.lib.util.ColorManager;
-import com.same.lib.util.KeyHub;
-
 import java.util.ArrayList;
 
 import androidx.annotation.Nullable;
@@ -81,6 +78,7 @@ public class BasePage {
         }
         return null;
     }
+
     @Nullable
     public Context getContext() {
         if (parentLayout != null && parentLayout.parentActivity != null) {
@@ -108,6 +106,7 @@ public class BasePage {
     //endregion
 
     //region setter
+
     /**
      * 绑定到容器
      * @param layout ContainerLayout
@@ -245,6 +244,7 @@ public class BasePage {
     //endregion
 
     //region 功能配置
+
     /**
      * 是否需要侧滑返回
      * @return true：将侧滑返回
@@ -289,11 +289,6 @@ public class BasePage {
      */
     protected ActionBar createActionBar(Context context) {
         ActionBar actionBar = new ActionBar(context);
-        actionBar.setBackgroundColor(ColorManager.getColor(KeyHub.key_actionBarDefault));
-        actionBar.setItemsBackgroundColor(ColorManager.getColor(KeyHub.key_actionBarDefaultSelector), false);
-        actionBar.setItemsBackgroundColor(ColorManager.getColor(KeyHub.key_actionBarActionModeDefaultSelector), true);
-        actionBar.setItemsColor(ColorManager.getColor(KeyHub.key_actionBarDefaultIcon), false);
-        actionBar.setItemsColor(ColorManager.getColor(KeyHub.key_actionBarActionModeDefaultIcon), true);
         if (inPreviewMode) {
             actionBar.setOccupyStatusBar(false);
         }
@@ -392,6 +387,7 @@ public class BasePage {
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         return new ArrayList<>();
     }
+
     //除了自己的 getThemeDescriptions()，还包括 visibleDialog 等内部等 getThemeDescriptions()
     public ArrayList<ThemeDescription> getAllThemeDescriptions() {
         return getThemeDescriptions();
@@ -465,7 +461,7 @@ public class BasePage {
     protected void onBecomeFullyVisible() {
         //兼容辅助模式
         Context context = getContext();
-        if (context == null) return;
+        if (context == null) { return; }
         AccessibilityManager mgr = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
         if (mgr.isEnabled()) {
             ActionBar actionBar = getActionBar();

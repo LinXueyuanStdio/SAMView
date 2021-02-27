@@ -56,8 +56,11 @@ public class ThemePage extends BaseActionBarPage {
         containerLayout.addView(createButton(context, "创建新主题", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Activity activity = getParentActivity();
-                if (activity == null)return;
+                Context activity = getContext();
+                ThemeEditorView.ThemeContainer container;
+                if (activity instanceof ThemeEditorView.ThemeContainer) {
+                    container = (ThemeEditorView.ThemeContainer) activity;
+                } else return;
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                 builder.setTitle(MyLang.getString("NewTheme", R.string.NewTheme));
                 builder.setMessage(MyLang.getString("CreateNewThemeAlert", R.string.CreateNewThemeAlert));
@@ -67,19 +70,21 @@ public class ThemePage extends BaseActionBarPage {
                         ThemeInfo themeInfo = ThemeManager.createNewTheme(activity, "新主题的名字");
                         ThemeManager.applyTheme(activity, themeInfo);
                         parentLayout.rebuildAllFragmentViews(true, true);
-                        new ThemeEditorView().show(activity, themeInfo);
+                        new ThemeEditorView().show(activity, container, themeInfo);
                     }
                 });
-                showDialog(builder.create());
+                AlertDialog dialog =  builder.create();
+                dialog.prepareShowInService();
+                showDialog(dialog);
             }
         }));
 
         containerLayout.addView(createButton(context, "重置主题", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Activity activity = getParentActivity();
-                if (activity == null) { return; }
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(activity);
+//                Activity activity = getParentActivity();
+//                if (activity == null) { return; }
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
                 builder1.setTitle(MyLang.getString("ThemeResetToDefaultsTitle", R.string.ThemeResetToDefaultsTitle));
                 builder1.setMessage(MyLang.getString("ThemeResetToDefaultsText", R.string.ThemeResetToDefaultsText));
                 builder1.setPositiveButton(MyLang.getString("Reset", R.string.Reset), (dialogInterface, i) -> {
@@ -94,6 +99,7 @@ public class ThemePage extends BaseActionBarPage {
                 });
                 builder1.setNegativeButton(MyLang.getString("Cancel", R.string.Cancel), null);
                 AlertDialog alertDialog = builder1.create();
+                alertDialog.prepareShowInService();
                 showDialog(alertDialog);
                 TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
                 if (button != null) {

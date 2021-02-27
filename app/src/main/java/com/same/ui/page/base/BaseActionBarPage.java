@@ -28,7 +28,7 @@ import java.util.ArrayList;
  * @description null
  * @usage null
  */
-public abstract class BaseActionBarPage extends BasePage {
+public abstract class BaseActionBarPage extends MyBasePage {
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_baseline_menu_24);

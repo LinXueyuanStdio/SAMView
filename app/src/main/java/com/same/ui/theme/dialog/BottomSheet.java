@@ -36,16 +36,16 @@ import android.widget.TextView;
 import com.same.lib.R;
 import com.same.lib.anim.CubicBezierInterpolator;
 import com.same.lib.base.NotificationCenter;
-import com.same.ui.theme.AnimationProperties;
 import com.same.lib.core.ThemeDescription;
-import com.same.lib.util.ColorManager;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.font.FontManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.KeyHub;
+import com.same.lib.util.ColorManager;
 import com.same.lib.util.Space;
 import com.same.lib.util.Store;
 import com.same.lib.util.UIThread;
+import com.same.ui.theme.AnimationProperties;
 
 import java.util.ArrayList;
 
@@ -61,7 +61,6 @@ import androidx.core.view.ViewCompat;
  * @description null
  * @usage null
  */
-
 public class BottomSheet extends Dialog {
 
     protected ViewGroup containerView;
@@ -1319,6 +1318,14 @@ public class BottomSheet extends Dialog {
 
     public void onContainerDraw(Canvas canvas) {
 
+    }
+
+    public void showInService() {
+        Window window = getWindow();
+        if (window != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            window.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+        }
+        show();
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {

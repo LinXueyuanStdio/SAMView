@@ -1055,6 +1055,13 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         return null;
     }
 
+    public void prepareShowInService() {
+        Window window = getWindow();
+        if (window != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            window.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+        }
+    }
+
     public static void setScrollViewEdgeEffectColor(ScrollView scrollView, int color) {
         if (Build.VERSION.SDK_INT >= 21) {
             try {

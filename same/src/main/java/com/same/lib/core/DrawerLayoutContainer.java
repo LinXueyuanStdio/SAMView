@@ -192,7 +192,7 @@ public class DrawerLayoutContainer extends FrameLayout {
         if (!allowOpenDrawer) {
             return;
         }
-        if (Space.isTablet() && parentActionBarLayout != null && parentActionBarLayout.parentActivity instanceof Activity) {
+        if (Space.isTablet() && parentActionBarLayout != null && parentActionBarLayout.isActivityContext()) {
             Keyboard.hideKeyboard(((Activity) parentActionBarLayout.parentActivity).getCurrentFocus());
         }
         cancelCurrentAnimation();
