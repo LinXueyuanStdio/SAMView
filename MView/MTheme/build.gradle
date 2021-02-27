@@ -6,7 +6,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     api project(':MView:MBase')
     api project(':same')
-
 }
 
 apply from: "${project.rootDir}/gradle/library_tail.gradle"

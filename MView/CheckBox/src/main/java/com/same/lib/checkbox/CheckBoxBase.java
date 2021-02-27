@@ -15,10 +15,6 @@ import android.graphics.RectF;
 import android.text.TextPaint;
 import android.view.View;
 
-import com.same.lib.anim.CubicBezierInterpolator;
-import com.same.lib.color.ColorUtil;
-import com.same.lib.font.FontManager;
-
 import java.util.Random;
 
 import androidx.annotation.Keep;
@@ -283,7 +279,7 @@ public class CheckBoxBase {
                     backgroundPaint.setColor(checkColor);
                 }
             } else {
-                backgroundPaint.setColor(ColorUtil.getOffsetColor(0x00ffffff, background2Color == 0 ? checkColor : background2Color, progress, backgroundAlpha));
+                backgroundPaint.setColor(getOffsetColor(0x00ffffff, background2Color == 0 ? checkColor : background2Color, progress, backgroundAlpha));
             }
         } else {
             if (drawUnchecked) {
@@ -291,10 +287,10 @@ public class CheckBoxBase {
                 if (drawBackgroundAsArc == 8) {
                     backgroundPaint.setColor(background2Color);
                 } else {
-                    backgroundPaint.setColor(ColorUtil.getOffsetColor(0xffffffff, checkColor, progress, backgroundAlpha));
+                    backgroundPaint.setColor(getOffsetColor(0xffffffff, checkColor, progress, backgroundAlpha));
                 }
             } else {
-                backgroundPaint.setColor(ColorUtil.getOffsetColor(0x00ffffff, background2Color == 0 ? checkColor : background2Color, progress, backgroundAlpha));
+                backgroundPaint.setColor(getOffsetColor(0x00ffffff, background2Color == 0 ? checkColor : background2Color, progress, backgroundAlpha));
             }
         }
 
@@ -365,7 +361,7 @@ public class CheckBoxBase {
                 if (checkedText != null) {
                     if (textPaint == null) {
                         textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-                        textPaint.setTypeface(FontManager.getMediumTypeface(parentView.getContext()));
+                        textPaint.setTypeface(Font.getMediumTypeface(parentView.getContext()));
                     }
                     final float textSize, y;
                     switch (checkedText.length()) {
@@ -416,8 +412,20 @@ public class CheckBoxBase {
         return randomColor();
     }
 
-    private int randomColor() {
+    public static int randomColor() {
         int random = new Random().nextInt(360);
         return Color.HSVToColor(new float[]{random, 0.5f, 0.9f});
+    }
+
+    public static int getOffsetColor(int color1, int color2, float offset, float alpha) {
+        int rF = Color.red(color2);
+        int gF = Color.green(color2);
+        int bF = Color.blue(color2);
+        int aF = Color.alpha(color2);
+        int rS = Color.red(color1);
+        int gS = Color.green(color1);
+        int bS = Color.blue(color1);
+        int aS = Color.alpha(color1);
+        return Color.argb((int) ((aS + (aF - aS) * offset) * alpha), (int) (rS + (rF - rS) * offset), (int) (gS + (gF - gS) * offset), (int) (bS + (bF - bS) * offset));
     }
 }

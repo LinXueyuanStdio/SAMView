@@ -4,13 +4,16 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.os.Handler;
 
 import com.same.lib.base.AndroidUtilities;
+import com.same.lib.font.FontManager;
 import com.same.lib.intro.IntroLoader;
 import com.same.lib.lottie.NativeLoader;
 import com.same.lib.theme.Theme;
 import com.same.lib.util.ColorManager;
+import com.same.lib.util.Font;
 import com.same.lib.util.Lang;
 import com.same.lib.util.Space;
 import com.same.lib.util.UIThread;
@@ -45,6 +48,12 @@ public class MyApplication extends Application {
             @Override
             public String getString(String key, int string) {
                 return MyLang.getString(key, string);
+            }
+        });
+        Font.install(new Font.IFont() {
+            @Override
+            public Typeface getTypeface(Context context, String assetPath) {
+                return FontManager.getMediumTypeface(context);
             }
         });
     }

@@ -22,10 +22,10 @@ import android.widget.TextView;
 
 import com.same.lib.R;
 import com.same.lib.anim.Easings;
-import com.same.lib.util.ColorManager;
 import com.same.lib.drawable.DrawableManager;
-import com.same.lib.font.FontManager;
 import com.same.lib.helper.LayoutHelper;
+import com.same.lib.util.ColorManager;
+import com.same.lib.util.Font;
 import com.same.lib.util.KeyHub;
 import com.same.lib.util.Space;
 import com.same.lib.util.Store;
@@ -517,7 +517,7 @@ public final class Bulletin {
             titleTextView.setSingleLine();
             titleTextView.setTextColor(undoInfoColor);
             titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-            titleTextView.setTypeface(FontManager.getMediumTypeface(context));
+            titleTextView.setTypeface(Font.getMediumTypeface(context));
             linearLayout.addView(titleTextView);
 
             subtitleTextView = new TextView(context);

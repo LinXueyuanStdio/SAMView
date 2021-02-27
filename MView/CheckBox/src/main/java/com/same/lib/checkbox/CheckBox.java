@@ -15,8 +15,6 @@ import android.text.TextPaint;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 
-import com.same.lib.font.FontManager;
-
 import androidx.annotation.Keep;
 
 /**
@@ -78,7 +76,7 @@ public class CheckBox extends View {
 
         textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setTextSize(dp(18));
-        textPaint.setTypeface(FontManager.getMediumTypeface(context));
+        textPaint.setTypeface(Font.getMediumTypeface(context));
 
         checkDrawable = context.getResources().getDrawable(resId).mutate();
     }

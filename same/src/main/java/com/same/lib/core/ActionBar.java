@@ -27,9 +27,9 @@ import com.same.lib.drawable.DrawableManager;
 import com.same.lib.drawable.MenuDrawable;
 import com.same.lib.effect.FireworksEffect;
 import com.same.lib.effect.SnowflakesEffect;
-import com.same.lib.font.FontManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.util.ColorManager;
+import com.same.lib.util.Font;
 import com.same.lib.util.KeyHub;
 import com.same.lib.util.Lang;
 import com.same.lib.util.Space;
@@ -288,7 +288,7 @@ public class ActionBar extends FrameLayout {
         titleTextView = new SimpleTextView(getContext());
         titleTextView.setGravity(Gravity.LEFT);
         titleTextView.setTextColor(ColorManager.getColor(KeyHub.key_actionBarDefaultTitle));
-        titleTextView.setTypeface(FontManager.getMediumTypeface(getContext()));
+        titleTextView.setTypeface(Font.getMediumTypeface(getContext()));
         addView(titleTextView, 0, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP));
     }
 
