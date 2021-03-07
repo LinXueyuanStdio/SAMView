@@ -14,9 +14,6 @@ import java.util.Locale;
 import static com.same.lib.theme.Theme.defaultColors;
 import static com.same.lib.theme.Theme.fallbackKeys;
 import static com.same.lib.theme.Theme.themeAccentExclusionKeys;
-import static com.same.lib.theme.ThemeManager.changeColorAccent;
-import static com.same.lib.theme.ThemeManager.getTempHsv;
-import static com.same.lib.theme.ThemeManager.getThemeFileValues;
 
 /**
  * @author 林学渊
@@ -33,8 +30,8 @@ public class ThemeAccent {
     public int account;
 
     public boolean fillAccentColors(HashMap<String, Integer> currentColorsNoAccent, HashMap<String, Integer> currentColors) {
-        float[] hsvTemp1 = getTempHsv(1);
-        float[] hsvTemp2 = getTempHsv(2);
+        float[] hsvTemp1 = ThemeManager.getTempHsv(1);
+        float[] hsvTemp2 = ThemeManager.getTempHsv(2);
 
         Color.colorToHSV(parentTheme.accentBaseColor, hsvTemp1);
         Color.colorToHSV(accentColor, hsvTemp2);
@@ -57,7 +54,7 @@ public class ThemeAccent {
                     color = defaultColors.get(key);
                 }
 
-                int newColor = changeColorAccent(hsvTemp1, hsvTemp2, color, isDarkTheme);
+                int newColor = ThemeManager.changeColorAccent(hsvTemp1, hsvTemp2, color, isDarkTheme);
                 if (newColor != color) {
                     currentColors.put(key, newColor);
                 }
@@ -72,7 +69,7 @@ public class ThemeAccent {
         dir.mkdirs();
         File path = new File(dir, String.format(Locale.US, "%s_%d.attheme", parentTheme.getKey(), id));
 
-        HashMap<String, Integer> currentColorsNoAccent = getThemeFileValues(context, null, parentTheme.assetName, null);
+        HashMap<String, Integer> currentColorsNoAccent = ThemeManager.getThemeFileValues(context, null, parentTheme.assetName, null);
         HashMap<String, Integer> currentColors = new HashMap<>(currentColorsNoAccent);
         fillAccentColors(currentColorsNoAccent, currentColors);
 

@@ -22,14 +22,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import static com.same.lib.theme.ThemeManager.applyDayNightThemeMaybe;
-import static com.same.lib.theme.ThemeManager.applyTheme;
-import static com.same.lib.theme.ThemeManager.changeColorAccent;
-import static com.same.lib.theme.ThemeManager.getTempHsv;
-import static com.same.lib.theme.ThemeManager.needSwitchToTheme;
-import static com.same.lib.theme.ThemeManager.saveOtherThemes;
-import static com.same.lib.theme.ThemeManager.sortThemes;
-
 /**
  * @author 林学渊
  * @email linxy59@mail2.sysu.edu.cn
@@ -74,14 +66,14 @@ public class Theme {
         @Override
         public void run() {
             switchDayRunnableScheduled = false;
-            applyDayNightThemeMaybe(false);
+            ThemeManager.applyDayNightThemeMaybe(false);
         }
     };
     static Runnable switchNightBrightnessRunnable = new Runnable() {
         @Override
         public void run() {
             switchNightRunnableScheduled = false;
-            applyDayNightThemeMaybe(true);
+            ThemeManager.applyDayNightThemeMaybe(true);
         }
     };
 
@@ -464,12 +456,12 @@ public class Theme {
                         themesDict.put(themeInfo.getKey(), themeInfo);
                     }
                 }
-                saveOtherThemes(AndroidUtilities.applicationContext, true, true);
+                ThemeManager.saveOtherThemes(AndroidUtilities.applicationContext, true, true);
                 themeConfig.edit().remove("themes").apply();
             }
         }
 
-        sortThemes();
+        ThemeManager.sortThemes();
 
         ThemeInfo applyingTheme = null;
         SharedPreferences preferences = AndroidUtilities.getGlobalMainSettings();
@@ -625,11 +617,11 @@ public class Theme {
             currentDayTheme = applyingTheme;
         }
 
-        int switchToTheme = needSwitchToTheme(AndroidUtilities.applicationContext);
+        int switchToTheme = ThemeManager.needSwitchToTheme(AndroidUtilities.applicationContext);
         if (switchToTheme == 2) {
             applyingTheme = currentNightTheme;
         }
-        applyTheme(AndroidUtilities.applicationContext, applyingTheme, false, switchToTheme == 2);
+        ThemeManager.applyTheme(AndroidUtilities.applicationContext, applyingTheme, false, switchToTheme == 2);
         AndroidUtilities.runOnUIThread(new Runnable() {
             @Override
             public void run() {
@@ -714,11 +706,11 @@ public class Theme {
             if (accent == null) {
                 return 0;
             }
-            float[] hsvTemp1 = getTempHsv(1);
-            float[] hsvTemp2 = getTempHsv(2);
+            float[] hsvTemp1 = ThemeManager.getTempHsv(1);
+            float[] hsvTemp2 = ThemeManager.getTempHsv(2);
             Color.colorToHSV(currentTheme.accentBaseColor, hsvTemp1);
             Color.colorToHSV(accent.accentColor, hsvTemp2);
-            return changeColorAccent(hsvTemp1, hsvTemp2, color, currentTheme.isDark());
+            return ThemeManager.changeColorAccent(hsvTemp1, hsvTemp2, color, currentTheme.isDark());
         }
         return 0;
     }

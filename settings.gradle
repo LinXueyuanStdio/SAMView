@@ -1,5 +1,7 @@
 include ':app'
 
+include ':middle:same'
+
 include ':component:Theme'
 include ':component:Lottie'
 

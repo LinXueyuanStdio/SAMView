@@ -16,7 +16,6 @@ import androidx.annotation.UiThread;
 import static com.same.lib.theme.Theme.DEFALT_THEME_ACCENT_ID;
 import static com.same.lib.theme.Theme.currentTheme;
 import static com.same.lib.theme.Theme.previousTheme;
-import static com.same.lib.theme.ThemeManager.saveOtherThemes;
 
 /**
  * @author 林学渊
@@ -234,7 +233,7 @@ public class ThemeInfo {
     void onFinishLoadingRemoteTheme(Context context) {
         loaded = true;
         previewParsed = false;
-        saveOtherThemes(context, true);
+        ThemeManager.saveOtherThemes(context, true);
         if (this == currentTheme && previousTheme == null) {
             NotificationCenter.post(NotificationCenter.needSetDayNightTheme, this);
         }

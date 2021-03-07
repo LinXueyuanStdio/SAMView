@@ -62,15 +62,17 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.timecat.component:MLang:2.0.2'
     implementation rootProject.ext.timecat["plugin-agreement-window"]
-//    implementation project(':MView:Core')
-//    implementation project(':MView:Font')
-//    implementation project(':MView:Intro')
-//
-//    implementation project(':MView:CheckBox')
-//    implementation project(':MView:RadioButton')
-//    implementation project(':MView:ListView')
-//
-//    implementation project(':component:Lottie')
-//    implementation project(':component:Theme')
+
+    implementation project(':component:Lottie')
+    implementation project(':component:Theme')
+    
+    implementation project(':MView:Core')
+    implementation project(':MView:Font')
+    implementation project(':MView:Intro')
+
+    implementation project(':MView:CheckBox')
+    implementation project(':MView:RadioButton')
+    implementation project(':MView:ListView')
+
 
 }
