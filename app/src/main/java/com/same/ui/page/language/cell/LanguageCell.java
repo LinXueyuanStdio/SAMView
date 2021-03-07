@@ -11,10 +11,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
+import com.same.lib.util.Space;
 import com.same.ui.R;
 import com.same.ui.theme.CommonTheme;
 import com.timecat.component.locale.LocaleInfo;
@@ -71,7 +71,7 @@ public class LanguageCell extends FrameLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(isDialog ? 50 : 54) + (needDivider ? 1 : 0), MeasureSpec.EXACTLY));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(Space.dp(isDialog ? 50 : 54) + (needDivider ? 1 : 0), MeasureSpec.EXACTLY));
     }
 
     public void setLanguage(LocaleInfo language, String desc, boolean divider) {
@@ -100,7 +100,7 @@ public class LanguageCell extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         if (needDivider) {
-            canvas.drawLine(isRTL ? 0 : AndroidUtilities.dp(20), getMeasuredHeight() - 1, getMeasuredWidth() - (isRTL ? AndroidUtilities.dp(20) : 0), getMeasuredHeight() - 1, CommonTheme.dividerPaint);
+            canvas.drawLine(isRTL ? 0 : Space.dp(20), getMeasuredHeight() - 1, getMeasuredWidth() - (isRTL ? Space.dp(20) : 0), getMeasuredHeight() - 1, CommonTheme.dividerPaint);
         }
     }
 }

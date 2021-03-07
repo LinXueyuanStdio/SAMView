@@ -26,6 +26,7 @@ import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeInfo;
 import com.same.lib.theme.ThemeManager;
+import com.same.lib.util.Space;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.base.BaseActionBarPage;
@@ -210,7 +211,7 @@ public class ThemePage extends BaseActionBarPage {
         };
         themesHorizontalListCell.setDrawDivider(false);
         themesHorizontalListCell.setFocusable(false);
-        themesHorizontalListCell.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, AndroidUtilities.dp(148)));
+        themesHorizontalListCell.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Space.dp(148)));
         containerLayout.addView(themesHorizontalListCell);
     }
 

@@ -5,10 +5,10 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.theme.AbsTheme;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
+import com.same.lib.util.Space;
 
 /**
  * @author 林学渊
@@ -39,7 +39,7 @@ public class CommonTheme extends AbsTheme {
             avatar_backgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             checkboxSquare_checkPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             checkboxSquare_checkPaint.setStyle(Paint.Style.STROKE);
-            checkboxSquare_checkPaint.setStrokeWidth(AndroidUtilities.dp(2));
+            checkboxSquare_checkPaint.setStrokeWidth(Space.dp(2));
             checkboxSquare_checkPaint.setStrokeCap(Paint.Cap.ROUND);
             checkboxSquare_eraserPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             checkboxSquare_eraserPaint.setColor(0);

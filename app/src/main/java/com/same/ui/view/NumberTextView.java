@@ -12,7 +12,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.view.View;
 
-import com.same.lib.base.AndroidUtilities;
+import com.same.lib.util.Space;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -96,7 +96,7 @@ public class NumberTextView extends View {
     }
 
     public void setTextSize(int size) {
-        textPaint.setTextSize(AndroidUtilities.dp(size));
+        textPaint.setTextSize(Space.dp(size));
         oldLetters.clear();
         letters.clear();
         setNumber(currentNumber, false);
@@ -164,7 +164,7 @@ public class NumberTextView extends View {
                 layout.draw(canvas);
             }
             canvas.restore();
-            canvas.translate(layout != null ? layout.getLineWidth(0) : old.getLineWidth(0) + AndroidUtilities.dp(1), 0);
+            canvas.translate(layout != null ? layout.getLineWidth(0) : old.getLineWidth(0) + Space.dp(1), 0);
         }
         canvas.restore();
     }

@@ -5,10 +5,10 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.drawable.CombinedDrawable;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.theme.KeyHub;
+import com.same.lib.util.Space;
 import com.same.ui.R;
 
 /**
@@ -44,6 +44,6 @@ public class ShadowSectionCell extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(size), MeasureSpec.EXACTLY));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(Space.dp(size), MeasureSpec.EXACTLY));
     }
 }

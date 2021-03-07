@@ -201,7 +201,7 @@
 //            SharedPreferences.Editor editor = preferences.edit();
 //            editor.putInt("fons_size", SharedConfig.fontSize);
 //            editor.commit();
-//            Theme.chat_msgTextPaint.setTextSize(AndroidUtilities.dp(SharedConfig.fontSize));
+//            Theme.chat_msgTextPaint.setTextSize(Space.dp(SharedConfig.fontSize));
 //
 //            RecyclerView.ViewHolder holder = listView.findViewHolderForAdapterPosition(textSizeRow);
 //            if (holder != null && holder.itemView instanceof TextSizeCell) {
@@ -622,7 +622,7 @@
 //        frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 //        listView.setOnItemClickListener((view, position, x, y) -> {
 //            if (position == nightThemeRow) {
-//                if (isRTL && x <= AndroidUtilities.dp(76) || !isRTL && x >= view.getMeasuredWidth() - AndroidUtilities.dp(76)) {
+//                if (isRTL && x <= Space.dp(76) || !isRTL && x >= view.getMeasuredWidth() - Space.dp(76)) {
 //                    NotificationsCheckCell checkCell = (NotificationsCheckCell) view;
 //                    if (Theme.selectedAutoNightType == Theme.AUTO_NIGHT_TYPE_NONE) {
 //                        Theme.selectedAutoNightType = Theme.AUTO_NIGHT_TYPE_AUTOMATIC;
@@ -902,37 +902,37 @@
 //
 //        @Override
 //        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-//            super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(62), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(62), MeasureSpec.EXACTLY));
+//            super.onMeasure(MeasureSpec.makeMeasureSpec(Space.dp(62), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(Space.dp(62), MeasureSpec.EXACTLY));
 //        }
 //
 //        @Override
 //        protected void onDraw(Canvas canvas) {
-//            float radius = AndroidUtilities.dp(20);
+//            float radius = Space.dp(20);
 //
 //            float cx = 0.5f * getMeasuredWidth();
 //            float cy = 0.5f * getMeasuredHeight();
 //
 //            paint.setColor(currentAccent.accentColor);
 //            paint.setStyle(Paint.Style.STROKE);
-//            paint.setStrokeWidth(AndroidUtilities.dp(3));
+//            paint.setStrokeWidth(Space.dp(3));
 //            paint.setAlpha(Math.round(255f * checkedState));
 //            canvas.drawCircle(cx, cy, radius - 0.5f * paint.getStrokeWidth(), paint);
 //
 //            paint.setAlpha(255);
 //            paint.setStyle(Paint.Style.FILL);
-//            canvas.drawCircle(cx, cy, radius - AndroidUtilities.dp(5) * checkedState, paint);
+//            canvas.drawCircle(cx, cy, radius - Space.dp(5) * checkedState, paint);
 //
 //            if (checkedState != 0) {
 //                paint.setColor(0xffffffff);
 //                paint.setAlpha(Math.round(255f * checkedState));
-//                canvas.drawCircle(cx, cy, AndroidUtilities.dp(2), paint);
-//                canvas.drawCircle(cx - AndroidUtilities.dp(7) * checkedState, cy, AndroidUtilities.dp(2), paint);
-//                canvas.drawCircle(cx + AndroidUtilities.dp(7) * checkedState, cy, AndroidUtilities.dp(2), paint);
+//                canvas.drawCircle(cx, cy, Space.dp(2), paint);
+//                canvas.drawCircle(cx - Space.dp(7) * checkedState, cy, Space.dp(2), paint);
+//                canvas.drawCircle(cx + Space.dp(7) * checkedState, cy, Space.dp(2), paint);
 //            }
 //
 //            if (currentAccent.myMessagesAccentColor != 0 && checkedState != 1) {
 //                paint.setColor(currentAccent.myMessagesAccentColor);
-//                canvas.drawCircle(cx, cy, AndroidUtilities.dp(8) * (1.0f - checkedState), paint);
+//                canvas.drawCircle(cx, cy, Space.dp(8) * (1.0f - checkedState), paint);
 //            }
 //        }
 //    }
@@ -957,8 +957,8 @@
 //        @Override
 //        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 //            super.onMeasure(
-//                    MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(62), MeasureSpec.EXACTLY),
-//                    MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(62), MeasureSpec.EXACTLY)
+//                    MeasureSpec.makeMeasureSpec(Space.dp(62), MeasureSpec.EXACTLY),
+//                    MeasureSpec.makeMeasureSpec(Space.dp(62), MeasureSpec.EXACTLY)
 //            );
 //        }
 //
@@ -967,8 +967,8 @@
 //            float centerX = 0.5f * getMeasuredWidth();
 //            float centerY = 0.5f * getMeasuredHeight();
 //
-//            float radSmall = AndroidUtilities.dp(5);
-//            float radRing = AndroidUtilities.dp(20) - radSmall;
+//            float radSmall = Space.dp(5);
+//            float radRing = Space.dp(20) - radSmall;
 //
 //            paint.setStyle(Paint.Style.FILL);
 //
@@ -1297,7 +1297,7 @@
 //                    themesHorizontalListCell.setDrawDivider(hasThemeAccents);
 //                    themesHorizontalListCell.setFocusable(false);
 //                    view = themesHorizontalListCell;
-//                    view.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, AndroidUtilities.dp(148)));
+//                    view.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Space.dp(148)));
 //                    break;
 //                case 12: {
 //                    RecyclerListView accentsListView = new TintRecyclerListView(mContext) {
@@ -1313,7 +1313,7 @@
 //                    accentsListView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
 //                    accentsListView.setItemAnimator(null);
 //                    accentsListView.setLayoutAnimation(null);
-//                    accentsListView.setPadding(AndroidUtilities.dp(11), 0, AndroidUtilities.dp(11), 0);
+//                    accentsListView.setPadding(Space.dp(11), 0, Space.dp(11), 0);
 //                    accentsListView.setClipToPadding(false);
 //                    LinearLayoutManager accentsLayoutManager = new LinearLayoutManager(mContext);
 //                    accentsLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -1340,7 +1340,7 @@
 //
 //                        int left = view1.getLeft();
 //                        int right = view1.getRight();
-//                        int extra = AndroidUtilities.dp(52);
+//                        int extra = Space.dp(52);
 //                        if (left - extra < 0) {
 //                            accentsListView.smoothScrollBy(left - extra, 0);
 //                        } else if (right + extra > accentsListView.getMeasuredWidth()) {
@@ -1421,7 +1421,7 @@
 //                    });
 //
 //                    view = accentsListView;
-//                    view.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, AndroidUtilities.dp(62)));
+//                    view.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Space.dp(62)));
 //                    break;
 //                }
 //                case 13:
@@ -1543,7 +1543,7 @@
 //                        pos = adapter.getItemCount() - 1;
 //                    }
 //                    if (pos != -1) {
-//                        ((LinearLayoutManager) accentsList.getLayoutManager()).scrollToPositionWithOffset(pos, listView.getMeasuredWidth() / 2 - AndroidUtilities.dp(42));
+//                        ((LinearLayoutManager) accentsList.getLayoutManager()).scrollToPositionWithOffset(pos, listView.getMeasuredWidth() / 2 - Space.dp(42));
 //                    }
 //                    break;
 //                }

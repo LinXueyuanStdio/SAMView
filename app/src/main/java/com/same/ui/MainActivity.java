@@ -123,7 +123,7 @@ public class MainActivity extends Activity
         getWindow().setBackgroundDrawable(new ColorDrawable(0xffffffff) {
             @Override
             public void setBounds(int left, int top, int right, int bottom) {
-                bottom += AndroidUtilities.dp(500);
+                bottom += Space.dp(500);
                 super.setBounds(left, top, right, bottom);
             }
 
@@ -211,7 +211,7 @@ public class MainActivity extends Activity
                     }
                     backgroundTablet.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
                     shadowTablet.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
-                    layersActionBarLayout.measure(MeasureSpec.makeMeasureSpec(Math.min(Space.dp(530), width), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(528), height), MeasureSpec.EXACTLY));
+                    layersActionBarLayout.measure(MeasureSpec.makeMeasureSpec(Math.min(Space.dp(530), width), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(Math.min(Space.dp(528), height), MeasureSpec.EXACTLY));
 
                     inLayout = false;
                 }
@@ -345,7 +345,7 @@ public class MainActivity extends Activity
                     if (Build.VERSION.SDK_INT >= 21) {
                         height -= AndroidUtilities.statusBarHeight;
                     }
-                    if (height > AndroidUtilities.dp(100) && height < AndroidUtilities.displaySize.y && height + AndroidUtilities.dp(100) > AndroidUtilities.displaySize.y) {
+                    if (height > Space.dp(100) && height < AndroidUtilities.displaySize.y && height + Space.dp(100) > AndroidUtilities.displaySize.y) {
                         AndroidUtilities.displaySize.y = height;
                     }
                 });

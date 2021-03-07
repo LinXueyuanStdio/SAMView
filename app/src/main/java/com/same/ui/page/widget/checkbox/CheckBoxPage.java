@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.checkbox.CheckBox;
 import com.same.lib.checkbox.CheckBox2;
 import com.same.lib.checkbox.CheckBoxSquare;
@@ -14,6 +13,7 @@ import com.same.lib.helper.LayoutHelper;
 import com.same.lib.radiobutton.RadioButton;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
+import com.same.lib.util.Space;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.base.BaseActionBarPage;
@@ -78,7 +78,7 @@ public class CheckBoxPage extends BaseActionBarPage {
         }));
 
         RadioButton button = new RadioButton(context);
-        button.setSize(AndroidUtilities.dp(20));
+        button.setSize(Space.dp(20));
         containerLayout.addView(button, LayoutHelper.createFrame(22, 22, Gravity.RIGHT | Gravity.TOP, 0, 2, 2, 0));
         containerLayout.addView(createButton(context, "check", new View.OnClickListener() {
             @Override

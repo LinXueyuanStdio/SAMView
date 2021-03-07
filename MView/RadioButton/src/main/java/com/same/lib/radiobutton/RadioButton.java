@@ -41,7 +41,8 @@ public class RadioButton extends View {
 
     public RadioButton(Context context) {
         super(context);
-        density = getResources().getDisplayMetrics().density;
+        density = context.getResources().getDisplayMetrics().density;
+        size = dp(16);
         if (paint == null) {
             paint = new Paint(Paint.ANTI_ALIAS_FLAG);
             paint.setStrokeWidth(dp(2));

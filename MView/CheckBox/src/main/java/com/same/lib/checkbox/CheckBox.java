@@ -76,7 +76,7 @@ public class CheckBox extends View {
 
         textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setTextSize(dp(18));
-        textPaint.setTypeface(Font.getMediumTypeface(context));
+        textPaint.setTypeface(CheckboxFont.getMediumTypeface(context));
 
         checkDrawable = context.getResources().getDrawable(resId).mutate();
     }

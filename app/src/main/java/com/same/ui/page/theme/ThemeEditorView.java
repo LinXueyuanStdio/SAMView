@@ -107,8 +107,8 @@ public class ThemeEditorView {
     private ArrayList<ThemeDescription> currentThemeDesription;
     private int currentThemeDesriptionPosition;
 
-    private final int editorWidth = AndroidUtilities.dp(54);
-    private final int editorHeight = AndroidUtilities.dp(54);
+    private final int editorWidth = Space.dp(54);
+    private final int editorHeight = Space.dp(54);
 
     private WindowManager.LayoutParams windowLayoutParams;
     private WindowManager windowManager;
@@ -185,7 +185,7 @@ public class ThemeEditorView {
                 super(context);
 
                 View searchBackground = new View(context);
-                searchBackground.setBackgroundDrawable(DrawableManager.createRoundRectDrawable(AndroidUtilities.dp(18), 0xfff2f4f5));
+                searchBackground.setBackgroundDrawable(DrawableManager.createRoundRectDrawable(Space.dp(18), 0xfff2f4f5));
                 addView(searchBackground, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 36, Gravity.LEFT | Gravity.TOP, 14, 11, 14, 0));
 
                 ImageView searchIconImageView = new ImageView(context);
@@ -198,7 +198,7 @@ public class ThemeEditorView {
                 clearSearchImageView.setScaleType(ImageView.ScaleType.CENTER);
                 CloseProgressDrawable2 progressDrawable;
                 clearSearchImageView.setImageDrawable(progressDrawable = new CloseProgressDrawable2());
-                progressDrawable.setSide(AndroidUtilities.dp(7));
+                progressDrawable.setSide(Space.dp(7));
                 clearSearchImageView.setScaleX(0.1f);
                 clearSearchImageView.setScaleY(0.1f);
                 clearSearchImageView.setAlpha(0.0f);
@@ -230,7 +230,7 @@ public class ThemeEditorView {
                 searchEditText.setImeOptions(EditorInfo.IME_ACTION_SEARCH | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
                 searchEditText.setHint(MyLang.getString("Search", R.string.Search));
                 searchEditText.setCursorColor(0xff50a8eb);
-                searchEditText.setCursorSize(AndroidUtilities.dp(20));
+                searchEditText.setCursorSize(Space.dp(20));
                 searchEditText.setCursorWidth(1.5f);
                 addView(searchEditText, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 40, Gravity.LEFT | Gravity.TOP, 16 + 38, 9, 16 + 30, 0));
                 searchEditText.addTextChangedListener(new TextWatcher() {
@@ -305,7 +305,7 @@ public class ThemeEditorView {
 
             private LinearLayout linearLayout;
 
-            private final int paramValueSliderWidth = AndroidUtilities.dp(20);
+            private final int paramValueSliderWidth = Space.dp(20);
 
             private Paint colorWheelPaint;
             private Paint valueSliderPaint;
@@ -354,7 +354,7 @@ public class ThemeEditorView {
                     colorEditText[a].setInputType(InputType.TYPE_CLASS_NUMBER);
                     colorEditText[a].setTextColor(0xff212121);
                     colorEditText[a].setCursorColor(0xff212121);
-                    colorEditText[a].setCursorSize(AndroidUtilities.dp(20));
+                    colorEditText[a].setCursorSize(Space.dp(20));
                     colorEditText[a].setCursorWidth(1.5f);
                     colorEditText[a].setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                     colorEditText[a].setBackgroundDrawable(DrawableBuilder.createEditTextDrawable(context, true));
@@ -443,7 +443,7 @@ public class ThemeEditorView {
             @Override
             protected void onDraw(Canvas canvas) {
                 int centerX = getWidth() / 2 - paramValueSliderWidth * 2;
-                int centerY = getHeight() / 2 - AndroidUtilities.dp(8);
+                int centerY = getHeight() / 2 - Space.dp(8);
 
                 canvas.drawBitmap(colorWheelBitmap, centerX - colorWheelRadius, centerY - colorWheelRadius, null);
 
@@ -461,7 +461,7 @@ public class ThemeEditorView {
 
                 int x = centerX + colorWheelRadius + paramValueSliderWidth;
                 int y = centerY - colorWheelRadius;
-                int width = AndroidUtilities.dp(9);
+                int width = Space.dp(9);
                 int height = colorWheelRadius * 2;
                 if (colorGradient == null) {
                     colorGradient = new LinearGradient(x, y, x + width, y + height, new int[]{Color.BLACK, Color.HSVToColor(hsvTemp)}, null, Shader.TileMode.CLAMP);
@@ -481,21 +481,21 @@ public class ThemeEditorView {
             }
 
             private void drawPointerArrow(Canvas canvas, int x, int y, int color) {
-                int side = AndroidUtilities.dp(13);
+                int side = Space.dp(13);
                 circleDrawable.setBounds(x - side, y - side, x + side, y + side);
                 circleDrawable.draw(canvas);
 
                 circlePaint.setColor(0xffffffff);
-                canvas.drawCircle(x, y, AndroidUtilities.dp(11), circlePaint);
+                canvas.drawCircle(x, y, Space.dp(11), circlePaint);
                 circlePaint.setColor(color);
-                canvas.drawCircle(x, y, AndroidUtilities.dp(9), circlePaint);
+                canvas.drawCircle(x, y, Space.dp(9), circlePaint);
             }
 
             @Override
             protected void onSizeChanged(int width, int height, int oldw, int oldh) {
-                colorWheelRadius = Math.max(1, width / 2 - paramValueSliderWidth * 2 - AndroidUtilities.dp(20));
+                colorWheelRadius = Math.max(1, width / 2 - paramValueSliderWidth * 2 - Space.dp(20));
                 colorWheelBitmap = createColorWheelBitmap(colorWheelRadius * 2, colorWheelRadius * 2);
-                //linearLayout.setTranslationY(colorWheelRadius * 2 + AndroidUtilities.dp(20));
+                //linearLayout.setTranslationY(colorWheelRadius * 2 + Space.dp(20));
                 colorGradient = null;
                 alphaGradient = null;
             }
@@ -552,7 +552,7 @@ public class ThemeEditorView {
                         int x = (int) event.getX();
                         int y = (int) event.getY();
                         int centerX = getWidth() / 2 - paramValueSliderWidth * 2;
-                        int centerY = getHeight() / 2 - AndroidUtilities.dp(8);
+                        int centerY = getHeight() / 2 - Space.dp(8);
                         int cx = x - centerX;
                         int cy = y - centerY;
                         double d = Math.sqrt(cx * cx + cy * cy);
@@ -691,11 +691,11 @@ public class ThemeEditorView {
 
                     int pickerSize = Math.min(width, height - (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0));
 
-                    int padding = height - (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + AndroidUtilities.dp(8) - pickerSize;
+                    int padding = height - (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + Space.dp(8) - pickerSize;
                     if (listView.getPaddingTop() != padding) {
                         ignoreLayout = true;
                         int previousPadding = listView.getPaddingTop();
-                        listView.setPadding(0, padding, 0, AndroidUtilities.dp(48));
+                        listView.setPadding(0, padding, 0, Space.dp(48));
                         if (colorPicker.getVisibility() == VISIBLE) {
                             //previousScrollPosition += previousPadding;
                             setScrollOffsetY(listView.getPaddingTop());
@@ -722,9 +722,9 @@ public class ThemeEditorView {
 
                 @Override
                 protected void onDraw(Canvas canvas) {
-                    int y = scrollOffsetY - backgroundPaddingTop + AndroidUtilities.dp(6);
-                    int top = scrollOffsetY - backgroundPaddingTop - AndroidUtilities.dp(13);
-                    int height = getMeasuredHeight() + AndroidUtilities.dp(30) + backgroundPaddingTop;
+                    int y = scrollOffsetY - backgroundPaddingTop + Space.dp(6);
+                    int top = scrollOffsetY - backgroundPaddingTop - Space.dp(13);
+                    int height = getMeasuredHeight() + Space.dp(30) + backgroundPaddingTop;
                     int statusBarHeight = 0;
                     float radProgress = 1.0f;
                     if (!isFullscreen && Build.VERSION.SDK_INT >= 21) {
@@ -748,15 +748,15 @@ public class ThemeEditorView {
 
                     if (radProgress != 1.0f) {
                         DialogTheme.dialogs_onlineCirclePaint.setColor(0xffffffff);
-                        rect1.set(backgroundPaddingLeft, backgroundPaddingTop + top, getMeasuredWidth() - backgroundPaddingLeft, backgroundPaddingTop + top + AndroidUtilities.dp(24));
-                        canvas.drawRoundRect(rect1, AndroidUtilities.dp(12) * radProgress, AndroidUtilities.dp(12) * radProgress, DialogTheme.dialogs_onlineCirclePaint);
+                        rect1.set(backgroundPaddingLeft, backgroundPaddingTop + top, getMeasuredWidth() - backgroundPaddingLeft, backgroundPaddingTop + top + Space.dp(24));
+                        canvas.drawRoundRect(rect1, Space.dp(12) * radProgress, Space.dp(12) * radProgress, DialogTheme.dialogs_onlineCirclePaint);
                     }
 
-                    int w = AndroidUtilities.dp(36);
-                    rect1.set((getMeasuredWidth() - w) / 2, y, (getMeasuredWidth() + w) / 2, y + AndroidUtilities.dp(4));
+                    int w = Space.dp(36);
+                    rect1.set((getMeasuredWidth() - w) / 2, y, (getMeasuredWidth() + w) / 2, y + Space.dp(4));
                     DialogTheme.dialogs_onlineCirclePaint.setColor(0xffe1e4e8);
                     DialogTheme.dialogs_onlineCirclePaint.setAlpha((int) (255 * listView.getAlpha()));
-                    canvas.drawRoundRect(rect1, AndroidUtilities.dp(2), AndroidUtilities.dp(2), DialogTheme.dialogs_onlineCirclePaint);
+                    canvas.drawRoundRect(rect1, Space.dp(2), Space.dp(2), DialogTheme.dialogs_onlineCirclePaint);
 
                     if (statusBarHeight > 0) {
                         int color1 = 0xffffffff;
@@ -778,11 +778,11 @@ public class ThemeEditorView {
             listView = new RecyclerListView(context) {
                 @Override
                 protected boolean allowSelectChildAtPosition(float x, float y) {
-                    return y >= scrollOffsetY + AndroidUtilities.dp(48) + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+                    return y >= scrollOffsetY + Space.dp(48) + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
                 }
             };
             listView.setSelectorDrawableColor(0x0f000000);
-            listView.setPadding(0, 0, 0, AndroidUtilities.dp(48));
+            listView.setPadding(0, 0, 0, Space.dp(48));
             listView.setClipToPadding(false);
             listView.setLayoutManager(layoutManager = new LinearLayoutManager(getContext()));
             listView.setHorizontalScrollBarEnabled(false);
@@ -827,7 +827,7 @@ public class ThemeEditorView {
             containerView.addView(searchEmptyView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT, 0, 52, 0, 0));
 
             FrameLayout.LayoutParams frameLayoutParams = new FrameLayout.LayoutParams(LayoutHelper.MATCH_PARENT, AndroidUtilities.getShadowHeight(), Gravity.TOP | Gravity.LEFT);
-            frameLayoutParams.topMargin = AndroidUtilities.dp(58);
+            frameLayoutParams.topMargin = Space.dp(58);
             shadow[0] = new View(context);
             shadow[0].setBackgroundColor(0x12000000);
             shadow[0].setAlpha(0.0f);
@@ -841,7 +841,7 @@ public class ThemeEditorView {
             containerView.addView(colorPicker, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.CENTER_HORIZONTAL));
 
             frameLayoutParams = new FrameLayout.LayoutParams(LayoutHelper.MATCH_PARENT, AndroidUtilities.getShadowHeight(), Gravity.BOTTOM | Gravity.LEFT);
-            frameLayoutParams.bottomMargin = AndroidUtilities.dp(48);
+            frameLayoutParams.bottomMargin = Space.dp(48);
             shadow[1] = new View(context);
             shadow[1].setBackgroundColor(0x12000000);
             containerView.addView(shadow[1], frameLayoutParams);
@@ -855,7 +855,7 @@ public class ThemeEditorView {
             closeButton.setTextColor(0xff19a7e8);
             closeButton.setGravity(Gravity.CENTER);
             closeButton.setBackgroundDrawable(DrawableManager.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
-            closeButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
+            closeButton.setPadding(Space.dp(18), 0, Space.dp(18), 0);
             closeButton.setText(MyLang.getString("CloseEditor", R.string.CloseEditor).toUpperCase());
             closeButton.setTypeface(Font.getMediumTypeface(context));
             bottomSaveLayout.addView(closeButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
@@ -866,7 +866,7 @@ public class ThemeEditorView {
             saveButton.setTextColor(0xff19a7e8);
             saveButton.setGravity(Gravity.CENTER);
             saveButton.setBackgroundDrawable(DrawableManager.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
-            saveButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
+            saveButton.setPadding(Space.dp(18), 0, Space.dp(18), 0);
             saveButton.setText(MyLang.getString("SaveTheme", R.string.SaveTheme).toUpperCase());
             saveButton.setTypeface(Font.getMediumTypeface(context));
             bottomSaveLayout.addView(saveButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.RIGHT));
@@ -887,7 +887,7 @@ public class ThemeEditorView {
             cancelButton.setTextColor(0xff19a7e8);
             cancelButton.setGravity(Gravity.CENTER);
             cancelButton.setBackgroundDrawable(DrawableManager.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
-            cancelButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
+            cancelButton.setPadding(Space.dp(18), 0, Space.dp(18), 0);
             cancelButton.setText(MyLang.getString("Cancel", R.string.Cancel).toUpperCase());
             cancelButton.setTypeface(Font.getMediumTypeface(context));
             bottomLayout.addView(cancelButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
@@ -907,7 +907,7 @@ public class ThemeEditorView {
             defaultButtom.setTextColor(0xff19a7e8);
             defaultButtom.setGravity(Gravity.CENTER);
             defaultButtom.setBackgroundDrawable(DrawableManager.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
-            defaultButtom.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
+            defaultButtom.setPadding(Space.dp(18), 0, Space.dp(18), 0);
             defaultButtom.setText(MyLang.getString("Default", R.string.Default).toUpperCase());
             defaultButtom.setTypeface(Font.getMediumTypeface(context));
             linearLayout.addView(defaultButtom, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
@@ -923,7 +923,7 @@ public class ThemeEditorView {
             saveButton.setTextColor(0xff19a7e8);
             saveButton.setGravity(Gravity.CENTER);
             saveButton.setBackgroundDrawable(DrawableManager.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
-            saveButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
+            saveButton.setPadding(Space.dp(18), 0, Space.dp(18), 0);
             saveButton.setText(MyLang.getString("Save", R.string.Save).toUpperCase());
             saveButton.setTypeface(Font.getMediumTypeface(context));
             linearLayout.addView(saveButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
@@ -1071,10 +1071,10 @@ public class ThemeEditorView {
             if (listView.getVisibility() != View.VISIBLE || animationInProgress) {
                 top = listView.getPaddingTop();
             } else {
-                top = child.getTop() - AndroidUtilities.dp(8);
+                top = child.getTop() - Space.dp(8);
             }
             int newOffset;
-            if (top > -AndroidUtilities.dp(1) && holder != null && holder.getAdapterPosition() == 0) {
+            if (top > -Space.dp(1) && holder != null && holder.getAdapterPosition() == 0) {
                 newOffset = top;
                 runShadowAnimation(0, false);
             } else {
@@ -1267,7 +1267,7 @@ public class ThemeEditorView {
                     case 1:
                     default:
                         view = new View(context);
-                        view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, AndroidUtilities.dp(56)));
+                        view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, Space.dp(56)));
                         break;
                 }
                 return new RecyclerListView.Holder(view);
@@ -1347,7 +1347,7 @@ public class ThemeEditorView {
                     case 1:
                     default:
                         view = new View(context);
-                        view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, AndroidUtilities.dp(56)));
+                        view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, Space.dp(56)));
                         break;
                 }
                 return new RecyclerListView.Holder(view);
@@ -1544,11 +1544,11 @@ public class ThemeEditorView {
         }
         int result;
         if (side == 0) {
-            result = AndroidUtilities.dp(10);
+            result = Space.dp(10);
         } else if (side == 1) {
-            result = total - AndroidUtilities.dp(10);
+            result = total - Space.dp(10);
         } else {
-            result = Math.round((total - AndroidUtilities.dp(20)) * p) + AndroidUtilities.dp(10);
+            result = Math.round((total - Space.dp(20)) * p) + Space.dp(10);
         }
         if (!isX) {
             result += ActionBar.getCurrentActionBarHeight();
@@ -1628,7 +1628,7 @@ public class ThemeEditorView {
         int endY = getSideCoord(false, 1, 0, editorHeight);
         ArrayList<Animator> animators = null;
         SharedPreferences.Editor editor = preferences.edit();
-        int maxDiff = AndroidUtilities.dp(20);
+        int maxDiff = Space.dp(20);
         boolean slideOut = false;
         if (Math.abs(startX - windowLayoutParams.x) <= maxDiff || windowLayoutParams.x < 0 && windowLayoutParams.x > -editorWidth / 4) {
             if (animators == null) {

@@ -125,9 +125,9 @@ public class IntroActivity extends Activity {
 
                 int oneFourth = (bottom - top) / 4;
 
-                int y = (oneFourth * 3 - AndroidUtilities.dp(275)) / 2;
+                int y = (oneFourth * 3 - Space.dp(275)) / 2;
                 frameLayout2.layout(0, y, frameLayout2.getMeasuredWidth(), y + frameLayout2.getMeasuredHeight());
-                y += AndroidUtilities.dp(272);
+                y += Space.dp(272);
                 int x = (getMeasuredWidth() - bottomPages.getMeasuredWidth()) / 2;
                 bottomPages.layout(x, y, x + bottomPages.getMeasuredWidth(), y + bottomPages.getMeasuredHeight());
                 viewPager.layout(0, 0, viewPager.getMeasuredWidth(), viewPager.getMeasuredHeight());
@@ -135,7 +135,7 @@ public class IntroActivity extends Activity {
                 y = oneFourth * 3 + (oneFourth - startMessagingButton.getMeasuredHeight()) / 2;
                 x = (getMeasuredWidth() - startMessagingButton.getMeasuredWidth()) / 2;
                 startMessagingButton.layout(x, y, x + startMessagingButton.getMeasuredWidth(), y + startMessagingButton.getMeasuredHeight());
-                y -= AndroidUtilities.dp(30);
+                y -= Space.dp(30);
                 x = (getMeasuredWidth() - textView.getMeasuredWidth()) / 2;
                 textView.layout(x, y - textView.getMeasuredHeight(), x + textView.getMeasuredWidth(), y);
             }
@@ -226,8 +226,8 @@ public class IntroActivity extends Activity {
         startMessagingButton.setTextColor(0xffffffff);
         startMessagingButton.setTypeface(Font.getMediumTypeface(this));
         startMessagingButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        startMessagingButton.setBackgroundDrawable(DrawableManager.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), 0xff50a8eb, 0xff439bde));
-        startMessagingButton.setPadding(AndroidUtilities.dp(34), 0, AndroidUtilities.dp(34), 0);
+        startMessagingButton.setBackgroundDrawable(DrawableManager.createSimpleSelectorRoundRectDrawable(Space.dp(4), 0xff50a8eb, 0xff439bde));
+        startMessagingButton.setPadding(Space.dp(34), 0, Space.dp(34), 0);
         frameLayout.addView(startMessagingButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 42, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 10, 0, 10, 76));
         startMessagingButton.setOnClickListener(view -> {
             if (startPressed) {
@@ -389,13 +389,13 @@ public class IntroActivity extends Activity {
                 @Override
                 protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
                     int oneFourth = (bottom - top) / 4;
-                    int y = (oneFourth * 3 - AndroidUtilities.dp(275)) / 2;
-                    y += AndroidUtilities.dp(166);
-                    int x = AndroidUtilities.dp(18);
+                    int y = (oneFourth * 3 - Space.dp(275)) / 2;
+                    y += Space.dp(166);
+                    int x = Space.dp(18);
                     headerTextView.layout(x, y, x + headerTextView.getMeasuredWidth(), y + headerTextView.getMeasuredHeight());
 
-                    y += AndroidUtilities.dp(42);
-                    x = AndroidUtilities.dp(16);
+                    y += Space.dp(42);
+                    x = Space.dp(16);
                     messageTextView.layout(x, y, x + messageTextView.getMeasuredWidth(), y + messageTextView.getMeasuredHeight());
                 }
             };

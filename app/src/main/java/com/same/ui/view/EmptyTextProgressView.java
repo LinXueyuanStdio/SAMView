@@ -12,9 +12,10 @@ import android.widget.TextView;
 
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.core.RadialProgressView;
-import com.same.lib.util.ColorManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.KeyHub;
+import com.same.lib.util.ColorManager;
+import com.same.lib.util.Space;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
 
@@ -44,7 +45,7 @@ public class EmptyTextProgressView extends FrameLayout {
         textView.setTextColor(ColorManager.getColor(KeyHub.key_emptyListPlaceholder));
         textView.setGravity(Gravity.CENTER);
         textView.setVisibility(INVISIBLE);
-        textView.setPadding(AndroidUtilities.dp(20), 0, AndroidUtilities.dp(20), 0);
+        textView.setPadding(Space.dp(20), 0, Space.dp(20), 0);
         textView.setText(MyLang.getString("NoResult", R.string.NoResult));
         addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
 
@@ -82,7 +83,7 @@ public class EmptyTextProgressView extends FrameLayout {
                 drawable.setColorFilter(new PorterDuffColorFilter(ColorManager.getColor(KeyHub.key_emptyListPlaceholder), PorterDuff.Mode.MULTIPLY));
             }
             textView.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
-            textView.setCompoundDrawablePadding(AndroidUtilities.dp(1));
+            textView.setCompoundDrawablePadding(Space.dp(1));
         }
     }
 
@@ -114,7 +115,7 @@ public class EmptyTextProgressView extends FrameLayout {
             int x = (width - child.getMeasuredWidth()) / 2;
             int y;
             if (showAtPos == 2) {
-                y = (AndroidUtilities.dp(100) - child.getMeasuredHeight()) / 2 + getPaddingTop();
+                y = (Space.dp(100) - child.getMeasuredHeight()) / 2 + getPaddingTop();
             } else if (showAtPos == 1) {
                 y = (height / 2 - child.getMeasuredHeight()) / 2 + getPaddingTop();
             } else {

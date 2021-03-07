@@ -9,7 +9,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.same.lib.helper.LayoutHelper;
-import com.same.lib.base.AndroidUtilities;
+import com.same.lib.util.Space;
 
 import static com.same.lib.base.SharedConfig.isRTL;
 
@@ -43,7 +43,7 @@ public class TextColorThemeCell extends FrameLayout {
         textView.setMaxLines(1);
         textView.setSingleLine(true);
         textView.setGravity((isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
-        textView.setPadding(0, 0, 0, AndroidUtilities.dp(3));
+        textView.setPadding(0, 0, 0, Space.dp(3));
         addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (isRTL ? 21 : 21 + 36), 0, (isRTL ? 21 + 36 : 21), 0));
     }
 
@@ -60,7 +60,7 @@ public class TextColorThemeCell extends FrameLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50) + (needDivider ? 1 : 0), MeasureSpec.EXACTLY));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(Space.dp(50) + (needDivider ? 1 : 0), MeasureSpec.EXACTLY));
     }
 
     public void setTextAndColor(CharSequence text, int color) {
@@ -75,7 +75,7 @@ public class TextColorThemeCell extends FrameLayout {
         if (currentColor != 0) {
             colorPaint.setColor(currentColor);
             colorPaint.setAlpha((int) (255 * alpha));
-            canvas.drawCircle(!isRTL ? AndroidUtilities.dp(28) : getMeasuredWidth() - AndroidUtilities.dp(28), getMeasuredHeight() / 2, AndroidUtilities.dp(10), colorPaint);
+            canvas.drawCircle(!isRTL ? Space.dp(28) : getMeasuredWidth() - Space.dp(28), getMeasuredHeight() / 2, Space.dp(10), colorPaint);
         }
     }
 }

@@ -10,7 +10,7 @@ import android.graphics.Typeface;
  * @description null
  * @usage null
  */
-public class Font {
+public class CheckboxFont {
     public interface IFont {
         Typeface getTypeface(Context context, String assetPath);
     }
@@ -18,7 +18,7 @@ public class Font {
     private static IFont font;
 
     public static void install(IFont font) {
-        Font.font = font;
+        CheckboxFont.font = font;
     }
 
     public static Typeface getMediumTypeface(Context context) {

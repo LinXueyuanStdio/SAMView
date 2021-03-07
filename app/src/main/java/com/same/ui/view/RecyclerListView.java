@@ -34,6 +34,7 @@ import com.same.lib.listview.LinearLayoutManager;
 import com.same.lib.listview.RecyclerView;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
+import com.same.lib.util.Space;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -319,12 +320,12 @@ public class RecyclerListView extends RecyclerView {
         public FastScroll(Context context) {
             super(context);
 
-            letterPaint.setTextSize(AndroidUtilities.dp(45));
+            letterPaint.setTextSize(Space.dp(45));
             for (int a = 0; a < 8; a++) {
-                radii[a] = AndroidUtilities.dp(44);
+                radii[a] = Space.dp(44);
             }
 
-            scrollX = isRTL ? AndroidUtilities.dp(10) : AndroidUtilities.dp(117);
+            scrollX = isRTL ? Space.dp(10) : Space.dp(117);
             updateColors();
         }
 
@@ -348,8 +349,8 @@ public class RecyclerListView extends RecyclerView {
                 case MotionEvent.ACTION_DOWN:
                     float x = event.getX();
                     lastY = event.getY();
-                    float currentY = (float) Math.ceil((getMeasuredHeight() - AndroidUtilities.dp(24 + 30)) * progress) + AndroidUtilities.dp(12);
-                    if (isRTL && x > AndroidUtilities.dp(25) || !isRTL && x < AndroidUtilities.dp(107) || lastY < currentY || lastY > currentY + AndroidUtilities.dp(30)) {
+                    float currentY = (float) Math.ceil((getMeasuredHeight() - Space.dp(24 + 30)) * progress) + Space.dp(12);
+                    if (isRTL && x > Space.dp(25) || !isRTL && x < Space.dp(107) || lastY < currentY || lastY > currentY + Space.dp(30)) {
                         return false;
                     }
                     startDy = lastY - currentY;
@@ -363,8 +364,8 @@ public class RecyclerListView extends RecyclerView {
                         return true;
                     }
                     float newY = event.getY();
-                    float minY = AndroidUtilities.dp(12) + startDy;
-                    float maxY = getMeasuredHeight() - AndroidUtilities.dp(12 + 30) + startDy;
+                    float minY = Space.dp(12) + startDy;
+                    float maxY = getMeasuredHeight() - Space.dp(12 + 30) + startDy;
                     if (newY < minY) {
                         newY = minY;
                     } else if (newY > maxY) {
@@ -372,7 +373,7 @@ public class RecyclerListView extends RecyclerView {
                     }
                     float dy = newY - lastY;
                     lastY = newY;
-                    progress += dy / (getMeasuredHeight() - AndroidUtilities.dp(24 + 30));
+                    progress += dy / (getMeasuredHeight() - Space.dp(24 + 30));
                     if (progress < 0) {
                         progress = 0;
                     } else if (progress > 1) {
@@ -414,11 +415,11 @@ public class RecyclerListView extends RecyclerView {
                                 float lWidth = letterLayout.getLineWidth(0);
                                 float lleft = letterLayout.getLineLeft(0);
                                 if (isRTL) {
-                                    textX = AndroidUtilities.dp(10) + (AndroidUtilities.dp(88) - letterLayout.getLineWidth(0)) / 2 - letterLayout.getLineLeft(0);
+                                    textX = Space.dp(10) + (Space.dp(88) - letterLayout.getLineWidth(0)) / 2 - letterLayout.getLineLeft(0);
                                 } else {
-                                    textX = (AndroidUtilities.dp(88) - letterLayout.getLineWidth(0)) / 2 - letterLayout.getLineLeft(0);
+                                    textX = (Space.dp(88) - letterLayout.getLineWidth(0)) / 2 - letterLayout.getLineLeft(0);
                                 }
-                                textY = (AndroidUtilities.dp(88) - letterLayout.getHeight()) / 2;
+                                textY = (Space.dp(88) - letterLayout.getHeight()) / 2;
                             }
                         }
                     }
@@ -428,34 +429,34 @@ public class RecyclerListView extends RecyclerView {
 
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            setMeasuredDimension(AndroidUtilities.dp(132), MeasureSpec.getSize(heightMeasureSpec));
+            setMeasuredDimension(Space.dp(132), MeasureSpec.getSize(heightMeasureSpec));
         }
 
         @Override
         protected void onDraw(Canvas canvas) {
             paint.setColor(Color.argb(255, colors[0] + (int) ((colors[1] - colors[0]) * bubbleProgress), colors[2] + (int) ((colors[3] - colors[2]) * bubbleProgress), colors[4] + (int) ((colors[5] - colors[4]) * bubbleProgress)));
-            int y = (int) Math.ceil((getMeasuredHeight() - AndroidUtilities.dp(24 + 30)) * progress);
-            rect.set(scrollX, AndroidUtilities.dp(12) + y, scrollX + AndroidUtilities.dp(5), AndroidUtilities.dp(12 + 30) + y);
-            canvas.drawRoundRect(rect, AndroidUtilities.dp(2), AndroidUtilities.dp(2), paint);
+            int y = (int) Math.ceil((getMeasuredHeight() - Space.dp(24 + 30)) * progress);
+            rect.set(scrollX, Space.dp(12) + y, scrollX + Space.dp(5), Space.dp(12 + 30) + y);
+            canvas.drawRoundRect(rect, Space.dp(2), Space.dp(2), paint);
             if ((pressed || bubbleProgress != 0)) {
                 paint.setAlpha((int) (255 * bubbleProgress));
-                int progressY = y + AndroidUtilities.dp(30);
-                y -= AndroidUtilities.dp(46);
+                int progressY = y + Space.dp(30);
+                y -= Space.dp(46);
                 float diff = 0;
-                if (y <= AndroidUtilities.dp(12)) {
-                    diff = AndroidUtilities.dp(12) - y;
-                    y = AndroidUtilities.dp(12);
+                if (y <= Space.dp(12)) {
+                    diff = Space.dp(12) - y;
+                    y = Space.dp(12);
                 }
                 float raduisTop;
                 float raduisBottom;
-                canvas.translate(AndroidUtilities.dp(10), y);
-                if (diff <= AndroidUtilities.dp(29)) {
-                    raduisTop = AndroidUtilities.dp(44);
-                    raduisBottom = AndroidUtilities.dp(4) + (diff / AndroidUtilities.dp(29)) * AndroidUtilities.dp(40);
+                canvas.translate(Space.dp(10), y);
+                if (diff <= Space.dp(29)) {
+                    raduisTop = Space.dp(44);
+                    raduisBottom = Space.dp(4) + (diff / Space.dp(29)) * Space.dp(40);
                 } else {
-                    diff -= AndroidUtilities.dp(29);
-                    raduisBottom = AndroidUtilities.dp(44);
-                    raduisTop = AndroidUtilities.dp(4) + (1.0f - diff / AndroidUtilities.dp(29)) * AndroidUtilities.dp(40);
+                    diff -= Space.dp(29);
+                    raduisBottom = Space.dp(44);
+                    raduisTop = Space.dp(4) + (1.0f - diff / Space.dp(29)) * Space.dp(40);
                 }
                 if (isRTL && (radii[0] != raduisTop || radii[6] != raduisBottom) || !isRTL && (radii[2] != raduisTop || radii[4] != raduisBottom)) {
                     if (isRTL) {
@@ -466,7 +467,7 @@ public class RecyclerListView extends RecyclerView {
                         radii[4] = radii[5] = raduisBottom;
                     }
                     path.reset();
-                    rect.set(isRTL ? AndroidUtilities.dp(10) : 0, 0, AndroidUtilities.dp(isRTL ? 98 : 88), AndroidUtilities.dp(88));
+                    rect.set(isRTL ? Space.dp(10) : 0, 0, Space.dp(isRTL ? 98 : 88), Space.dp(88));
                     path.addRoundRect(rect, radii, Path.Direction.CW);
                     path.close();
                 }
@@ -933,7 +934,7 @@ public class RecyclerListView extends RecyclerView {
         if (fastScroll != null) {
             int height = getMeasuredHeight() - getPaddingTop() - getPaddingBottom();
             fastScroll.getLayoutParams().height = height;
-            fastScroll.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(132), View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY));
+            fastScroll.measure(View.MeasureSpec.makeMeasureSpec(Space.dp(132), View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY));
         }
     }
 
@@ -1003,7 +1004,7 @@ public class RecyclerListView extends RecyclerView {
                                     minChild = child;
                                 }
                                 maxBottom = Math.max(maxBottom, bottom);
-                                if (bottom < sectionOffset + paddingTop + AndroidUtilities.dp(32)) {
+                                if (bottom < sectionOffset + paddingTop + Space.dp(32)) {
                                     continue;
                                 }
                                 if (bottom < minBottomSection) {
@@ -1067,7 +1068,7 @@ public class RecyclerListView extends RecyclerView {
                                         if (child != null) {
                                             headerTop = child.getTop() + paddingTop;
                                         } else {
-                                            headerTop = -AndroidUtilities.dp(100);
+                                            headerTop = -Space.dp(100);
                                         }
                                         header.setTag(Math.min(headerTop, 0));
                                     } else {
@@ -1079,7 +1080,7 @@ public class RecyclerListView extends RecyclerView {
                                     if (child != null) {
                                         header.setTag(child.getTop() + paddingTop);
                                     } else {
-                                        header.setTag(-AndroidUtilities.dp(100));
+                                        header.setTag(-Space.dp(100));
                                     }
                                     itemNum += count;
                                 }
@@ -1107,7 +1108,7 @@ public class RecyclerListView extends RecyclerView {
                                     minChild = child;
                                 }
                                 maxBottom = Math.max(maxBottom, bottom);
-                                if (bottom < sectionOffset + paddingTop + AndroidUtilities.dp(32)) {
+                                if (bottom < sectionOffset + paddingTop + Space.dp(32)) {
                                     continue;
                                 }
                                 if (bottom < minBottomSection) {
@@ -1150,7 +1151,7 @@ public class RecyclerListView extends RecyclerView {
                                         headerTop = available - headerHeight;
                                     }
                                 } else {
-                                    headerTop = -AndroidUtilities.dp(100);
+                                    headerTop = -Space.dp(100);
                                 }
                                 if (headerTop < 0) {
                                     pinnedHeader.setTag(paddingTop + sectionOffsetY + headerTop);

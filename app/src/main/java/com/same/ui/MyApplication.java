@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.os.Handler;
 
 import com.same.lib.base.AndroidUtilities;
+import com.same.lib.checkbox.CheckboxFont;
 import com.same.lib.font.FontManager;
 import com.same.lib.intro.IntroLoader;
 import com.same.lib.lottie.NativeLoader;
@@ -45,6 +46,7 @@ public class MyApplication extends Application {
         });
         Lang.install(MyLang::getString);
         Font.install((context, assetPath) -> FontManager.getMediumTypeface(context));
+        CheckboxFont.install((context, assetPath) -> FontManager.getMediumTypeface(context));
     }
 
     @Override

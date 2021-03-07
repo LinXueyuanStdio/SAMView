@@ -5,10 +5,10 @@ import android.content.res.Resources;
 import android.graphics.Paint;
 import android.text.TextPaint;
 
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.theme.AbsTheme;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
+import com.same.lib.util.Space;
 
 /**
  * @author 林学渊
@@ -32,7 +32,7 @@ public class ProfileTheme extends AbsTheme {
 
         Resources resources = context.getResources();
         applyProfileTheme();
-        profile_aboutTextPaint.setTextSize(AndroidUtilities.dp(16));
+        profile_aboutTextPaint.setTextSize(Space.dp(16));
     }
 
     public static void applyProfileTheme() {
