@@ -591,12 +591,7 @@ public class ThemeEditorView {
                             int color = getColor();
                             for (int a = 0; a < currentThemeDesription.size(); a++) {
                                 ThemeDescription description = currentThemeDesription.get(a);
-                                String key = description.getCurrentKey();
-                                if (a == 0 && key.equals(KeyHub.key_windowBackgroundWhite)
-                                        || key.equals(KeyHub.key_windowBackgroundGray)) {
-                                    color = 0xff000000 | color;
-                                }
-                                currentThemeDesription.get(a).applyColor(getContext(), color, false);
+                                description.applyColor(getContext(), color, false);
                             }
                             int red = Color.red(color);
                             int green = Color.green(color);
@@ -1442,9 +1437,6 @@ public class ThemeEditorView {
                                     ArrayList<ThemeDescription> items = fragment.getThemeDescriptions();
                                     if (items != null) {
                                         editorAlert = new EditorAlert(parentActivity, items);
-                                        editorAlert.setOnDismissListener(dialog -> {
-
-                                        });
                                         editorAlert.setOnDismissListener(dialog -> {
                                             editorAlert = null;
                                             show();
