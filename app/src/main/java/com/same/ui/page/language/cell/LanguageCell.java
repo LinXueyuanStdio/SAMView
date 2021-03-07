@@ -12,11 +12,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.same.lib.helper.LayoutHelper;
+import com.same.lib.same.theme.CommonTheme;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 import com.same.lib.util.Space;
 import com.same.ui.R;
-import com.same.ui.theme.CommonTheme;
 import com.timecat.component.locale.LocaleInfo;
 
 import static com.same.lib.base.SharedConfig.isRTL;
@@ -65,7 +65,7 @@ public class LanguageCell extends FrameLayout {
 
         checkImage = new ImageView(context);
         checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(KeyHub.key_actionBarDefaultIcon), PorterDuff.Mode.MULTIPLY));
-        checkImage.setImageResource(R.mipmap.sticker_added);
+        checkImage.setImageResource(R.drawable.ic_check);
         addView(checkImage, LayoutHelper.createFrame(19, 14, (isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, 23, 0, 23, 0));
     }
 

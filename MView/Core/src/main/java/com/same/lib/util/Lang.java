@@ -2,6 +2,7 @@ package com.same.lib.util;
 
 import android.content.Context;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
 /**
@@ -14,6 +15,7 @@ import androidx.annotation.StringRes;
 public class Lang {
     public interface ILang {
         String getString(String key, @StringRes int string);
+        String getTranslitString(String src);
     }
 
     private static ILang lang;
@@ -27,6 +29,14 @@ public class Lang {
             return lang.getString(key, string);
         } else {
             return context.getString(string);
+        }
+    }
+    @Nullable
+    public static String getTranslitString(Context context, String src) {
+        if (lang != null) {
+            return lang.getTranslitString(src);
+        } else {
+            return null;
         }
     }
 }

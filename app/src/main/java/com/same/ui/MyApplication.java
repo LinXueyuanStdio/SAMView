@@ -11,6 +11,7 @@ import com.same.lib.checkbox.CheckboxFont;
 import com.same.lib.font.FontManager;
 import com.same.lib.intro.IntroLoader;
 import com.same.lib.lottie.NativeLoader;
+import com.same.lib.same.theme.delegate.ColorDelegateLoader;
 import com.same.lib.theme.Theme;
 import com.same.lib.util.ColorManager;
 import com.same.lib.util.Font;
@@ -18,7 +19,6 @@ import com.same.lib.util.Lang;
 import com.same.lib.util.Space;
 import com.same.lib.util.UIThread;
 import com.same.ui.lang.MyLang;
-import com.same.ui.theme.delegate.ColorDelegateLoader;
 
 import androidx.annotation.NonNull;
 

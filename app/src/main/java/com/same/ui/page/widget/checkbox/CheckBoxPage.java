@@ -34,7 +34,7 @@ public class CheckBoxPage extends BaseActionBarPage {
     @Override
     protected void fillInContainerLayout(Context context, LinearLayout containerLayout) {
 
-        CheckBox checkBox = new CheckBox(context, R.drawable.ic_baseline_check_24);
+        CheckBox checkBox = new CheckBox(context, R.drawable.ic_check);
         checkBox.setColor(Theme.getColor(KeyHub.key_checkbox), Theme.getColor(KeyHub.key_checkboxCheck));
         containerLayout.addView(checkBox, LayoutHelper.createFrame(22, 22, Gravity.RIGHT | Gravity.TOP, 0, 2, 2, 0));
         checkBox.setChecked(true, true);
