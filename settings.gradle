@@ -1,10 +1,12 @@
-include ':app', ':same'
+include ':app'
 
-include ':MView:MFont'
-include ':MView:MLottie'
-include ':MView:MIntro'
-include ':MView:MTheme'
-include ':MView:MBase'
+include ':component:Theme'
+include ':component:Lottie'
+
+include ':MView:Base'
+include ':MView:Core'
+include ':MView:Font'
+include ':MView:Intro'
 
 include ':MView:CheckBox'
 include ':MView:ListView'
