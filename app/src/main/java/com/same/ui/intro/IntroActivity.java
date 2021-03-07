@@ -30,9 +30,10 @@ import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.DispatchQueue;
 import com.same.lib.base.SharedConfig;
 import com.same.lib.drawable.DrawableManager;
-import com.same.lib.font.FontManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.intro.Intro;
+import com.same.lib.util.Font;
+import com.same.lib.util.Space;
 import com.same.ui.MainActivity;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
@@ -223,7 +224,7 @@ public class IntroActivity extends Activity {
         startMessagingButton.setText(MyLang.getString("StartMessaging", R.string.StartMessaging));
         startMessagingButton.setGravity(Gravity.CENTER);
         startMessagingButton.setTextColor(0xffffffff);
-        startMessagingButton.setTypeface(FontManager.getMediumTypeface(this));
+        startMessagingButton.setTypeface(Font.getMediumTypeface(this));
         startMessagingButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         startMessagingButton.setBackgroundDrawable(DrawableManager.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), 0xff50a8eb, 0xff439bde));
         startMessagingButton.setPadding(AndroidUtilities.dp(34), 0, AndroidUtilities.dp(34), 0);
@@ -266,7 +267,7 @@ public class IntroActivity extends Activity {
             finish();
         });
 
-        if (AndroidUtilities.isTablet()) {
+        if (Space.isTablet()) {
             FrameLayout frameLayout3 = new FrameLayout(this);
             setContentView(frameLayout3);
 

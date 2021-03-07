@@ -125,7 +125,7 @@ public class IntroLoader {
 
             String folder;
             try {
-                String str = Build.CPU_ABI;
+                String[] str = Build.SUPPORTED_ABIS;
                 if (Build.CPU_ABI.equalsIgnoreCase("x86_64")) {
                     folder = "x86_64";
                 } else if (Build.CPU_ABI.equalsIgnoreCase("arm64-v8a")) {

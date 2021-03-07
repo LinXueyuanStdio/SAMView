@@ -49,7 +49,7 @@ public class ThemeTypeCell extends FrameLayout {
         addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, isRTL ? 23 + 48 : 21, 0, isRTL ? 21 : 23, 0));
 
         checkImage = new ImageView(context);
-        checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(KeyHub.key_featuredStickers_addedIcon), PorterDuff.Mode.MULTIPLY));
+        checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(KeyHub.key_actionBarDefaultIcon), PorterDuff.Mode.MULTIPLY));
         checkImage.setImageResource(R.mipmap.sticker_added);
         addView(checkImage, LayoutHelper.createFrame(19, 14, (isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, 23, 0, 23, 0));
     }

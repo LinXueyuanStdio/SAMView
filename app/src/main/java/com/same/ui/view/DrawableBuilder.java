@@ -17,6 +17,8 @@ import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 import com.same.ui.R;
 
+import androidx.core.content.res.ResourcesCompat;
+
 /**
  * @author 林学渊
  * @email linxy59@mail2.sysu.edu.cn
@@ -27,9 +29,9 @@ import com.same.ui.R;
 public class DrawableBuilder {
     public static Drawable createEditTextDrawable(Context context, boolean alert) {
         Resources resources = context.getResources();
-        Drawable defaultDrawable = resources.getDrawable(R.drawable.search_dark).mutate();
+        Drawable defaultDrawable = ResourcesCompat.getDrawable(resources, R.drawable.search_dark, null).mutate();
         defaultDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(alert ? KeyHub.key_dialogInputField : KeyHub.key_windowBackgroundWhiteInputField), PorterDuff.Mode.MULTIPLY));
-        Drawable pressedDrawable = resources.getDrawable(R.drawable.search_dark_activated).mutate();
+        Drawable pressedDrawable = ResourcesCompat.getDrawable(resources, R.drawable.search_dark_activated, null).mutate();
         pressedDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(alert ? KeyHub.key_dialogInputFieldActivated : KeyHub.key_windowBackgroundWhiteInputFieldActivated), PorterDuff.Mode.MULTIPLY));
         StateListDrawable stateListDrawable = new StateListDrawable() {
             @Override

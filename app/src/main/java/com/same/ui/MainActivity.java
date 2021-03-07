@@ -43,7 +43,6 @@ import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeInfo;
 import com.same.lib.theme.ThemeManager;
 import com.same.lib.theme.ThemeRes;
-import com.same.lib.theme.WallpaperManager;
 import com.same.lib.util.Space;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.main.MainPage;
@@ -53,7 +52,7 @@ import com.same.ui.theme.CommonTheme;
 import com.same.ui.theme.DialogTheme;
 import com.same.ui.theme.ProfileTheme;
 import com.same.ui.theme.dialog.AlertDialog;
-import com.same.ui.theme.wrap.ThemeContainerLayout;
+import com.same.lib.theme.wrap.ThemeContainerLayout;
 
 import java.util.ArrayList;
 
@@ -90,19 +89,12 @@ public class MainActivity extends Activity
                 didSetNewTheme((Boolean) args[0]);
             } else if (id == NotificationCenter.needSetDayNightTheme) {
                 ThemeInfo theme = (ThemeInfo) args[0];
-                boolean nigthTheme = (boolean) args[1];
-                int[] pos = (int[]) args[2];
-                int accentId = (int) args[3];
+                boolean nigthTheme = theme.isDark();
+                int[] pos = null;
+                int accentId = theme.currentAccentId;
                 needSetDayNightTheme(theme, nigthTheme, pos, accentId);
             } else if (id == NotificationCenter.needCheckSystemBarColors) {
                 checkSystemBarColors();
-            } else if (id == NotificationCenter.didSetNewWallpaper) {
-//                if (sideMenu != null) {
-//                    View child = sideMenu.getChildAt(0);
-//                    if (child != null) {
-//                        child.invalidate();
-//                    }
-//                }
             }
         }
     };
@@ -181,7 +173,7 @@ public class MainActivity extends Activity
         drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(KeyHub.key_windowBackgroundWhite));
         frameLayout.addView(drawerLayoutContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-        if (AndroidUtilities.isTablet()) {
+        if (Space.isTablet()) {
             //适配平板
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
@@ -319,14 +311,10 @@ public class MainActivity extends Activity
         actionBarLayout.init(mainFragmentsStack);//使用 main fragment 栈
         actionBarLayout.setDelegate(this);//代理，监听生命周期
 
-        //应用的壁纸
-        WallpaperManager.loadWallpaper(this);
-
         //注册通知中心，使用观察者模式处理应用内部的通知（消息）
         NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.didSetNewTheme);
         NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.needSetDayNightTheme);
         NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.needCheckSystemBarColors);
-        NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.didSetNewWallpaper);
 
         MainPage page = new MainPage();
         //        actionBarLayout.addFragmentToStack(page);
@@ -388,7 +376,7 @@ public class MainActivity extends Activity
         super.onPause();
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, 4096);
         actionBarLayout.onPause();
-        if (AndroidUtilities.isTablet()) {
+        if (Space.isTablet()) {
             rightActionBarLayout.onPause();
             layersActionBarLayout.onPause();
         }
@@ -417,15 +405,11 @@ public class MainActivity extends Activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        ThemeEditorView editorView = ThemeEditorView.getInstance();
-        if (editorView != null) {
-            editorView.onActivityResult(requestCode, resultCode, data);
-        }
         if (actionBarLayout.fragmentsStack.size() != 0) {
             BasePage fragment = actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1);
             fragment.onActivityResultFragment(requestCode, resultCode, data);
         }
-        if (AndroidUtilities.isTablet()) {
+        if (Space.isTablet()) {
             if (rightActionBarLayout.fragmentsStack.size() != 0) {
                 BasePage fragment = rightActionBarLayout.fragmentsStack.get(rightActionBarLayout.fragmentsStack.size() - 1);
                 fragment.onActivityResultFragment(requestCode, resultCode, data);
@@ -452,7 +436,7 @@ public class MainActivity extends Activity
             BasePage fragment = actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1);
             fragment.onRequestPermissionsResultFragment(requestCode, permissions, grantResults);
         }
-        if (AndroidUtilities.isTablet()) {
+        if (Space.isTablet()) {
             if (rightActionBarLayout.fragmentsStack.size() != 0) {
                 BasePage fragment = rightActionBarLayout.fragmentsStack.get(rightActionBarLayout.fragmentsStack.size() - 1);
                 fragment.onRequestPermissionsResultFragment(requestCode, permissions, grantResults);
@@ -524,7 +508,7 @@ public class MainActivity extends Activity
      * 只是为了适配平板布局
      */
     private void checkLayout() {
-        if (!AndroidUtilities.isTablet() || rightActionBarLayout == null) {
+        if (!Space.isTablet() || rightActionBarLayout == null) {
             return;
         }
 
@@ -611,7 +595,7 @@ public class MainActivity extends Activity
             }
         }
         actionBarLayout.animateThemedValues(theme, accentId, nigthTheme, instant);
-        if (AndroidUtilities.isTablet()) {
+        if (Space.isTablet()) {
             layersActionBarLayout.animateThemedValues(theme, accentId, nigthTheme, instant);
             rightActionBarLayout.animateThemedValues(theme, accentId, nigthTheme, instant);
         }
@@ -630,7 +614,7 @@ public class MainActivity extends Activity
         try {
             super.onSaveInstanceState(outState);
             BasePage lastFragment = null;
-            if (AndroidUtilities.isTablet()) {
+            if (Space.isTablet()) {
                 if (!layersActionBarLayout.fragmentsStack.isEmpty()) {
                     lastFragment = layersActionBarLayout.fragmentsStack.get(layersActionBarLayout.fragmentsStack.size() - 1);
                 } else if (!rightActionBarLayout.fragmentsStack.isEmpty()) {
@@ -659,7 +643,7 @@ public class MainActivity extends Activity
 
     @Override
     public void onBackPressed() {
-        if (AndroidUtilities.isTablet()) {
+        if (Space.isTablet()) {
             if (layersActionBarLayout.getVisibility() == View.VISIBLE) {
                 layersActionBarLayout.onBackPressed();
             } else {
@@ -682,7 +666,7 @@ public class MainActivity extends Activity
         super.onLowMemory();
         if (actionBarLayout != null) {
             actionBarLayout.onLowMemory();
-            if (AndroidUtilities.isTablet()) {
+            if (Space.isTablet()) {
                 rightActionBarLayout.onLowMemory();
                 layersActionBarLayout.onLowMemory();
             }
@@ -697,7 +681,7 @@ public class MainActivity extends Activity
             Menu menu = mode.getMenu();
             if (menu != null) {
                 boolean extended = actionBarLayout.extendActionMode(menu);
-                if (!extended && AndroidUtilities.isTablet()) {
+                if (!extended && Space.isTablet()) {
                     extended = rightActionBarLayout.extendActionMode(menu);
                     if (!extended) {
                         layersActionBarLayout.extendActionMode(menu);
@@ -711,7 +695,7 @@ public class MainActivity extends Activity
             return;
         }
         actionBarLayout.onActionModeStarted(mode);
-        if (AndroidUtilities.isTablet()) {
+        if (Space.isTablet()) {
             rightActionBarLayout.onActionModeStarted(mode);
             layersActionBarLayout.onActionModeStarted(mode);
         }
@@ -727,7 +711,7 @@ public class MainActivity extends Activity
             return;
         }
         actionBarLayout.onActionModeFinished(mode);
-        if (AndroidUtilities.isTablet()) {
+        if (Space.isTablet()) {
             rightActionBarLayout.onActionModeFinished(mode);
             layersActionBarLayout.onActionModeFinished(mode);
         }
@@ -743,7 +727,7 @@ public class MainActivity extends Activity
         int keyCode = event.getKeyCode();
         if (!mainFragmentsStack.isEmpty() && event.getRepeatCount() == 0 && event.getAction() == KeyEvent.ACTION_DOWN && (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP || event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN)) {
             BasePage fragment = mainFragmentsStack.get(mainFragmentsStack.size() - 1);
-            if (AndroidUtilities.isTablet() && !rightFragmentsStack.isEmpty()) {
+            if (Space.isTablet() && !rightFragmentsStack.isEmpty()) {
                 fragment = rightFragmentsStack.get(rightFragmentsStack.size() - 1);
             }
         }
@@ -753,7 +737,7 @@ public class MainActivity extends Activity
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_MENU) {
-            if (AndroidUtilities.isTablet()) {
+            if (Space.isTablet()) {
                 if (layersActionBarLayout.getVisibility() == View.VISIBLE && !layersActionBarLayout.fragmentsStack.isEmpty()) {
                     layersActionBarLayout.onKeyUp(keyCode, event);
                 } else if (rightActionBarLayout.getVisibility() == View.VISIBLE && !rightActionBarLayout.fragmentsStack.isEmpty()) {
@@ -776,7 +760,7 @@ public class MainActivity extends Activity
 
     @Override
     public boolean needPresentFragment(BasePage fragment, boolean removeLast, boolean forceWithoutAnimation, ContainerLayout layout) {
-        if (AndroidUtilities.isTablet()) {
+        if (Space.isTablet()) {
             if (layout != layersActionBarLayout) {
                 layersActionBarLayout.setVisibility(View.VISIBLE);
                 shadowTablet.setBackgroundColor(0x7f000000);
@@ -797,7 +781,7 @@ public class MainActivity extends Activity
 
     @Override
     public boolean needAddFragmentToStack(BasePage fragment, ContainerLayout layout) {
-        if (AndroidUtilities.isTablet()) {
+        if (Space.isTablet()) {
             if (layout != layersActionBarLayout) {
                 layersActionBarLayout.setVisibility(View.VISIBLE);
                 shadowTablet.setBackgroundColor(0x7f000000);
@@ -818,7 +802,7 @@ public class MainActivity extends Activity
 
     @Override
     public boolean needCloseLastFragment(ContainerLayout layout) {
-        if (AndroidUtilities.isTablet()) {
+        if (Space.isTablet()) {
             if (layout == actionBarLayout && layout.fragmentsStack.size() <= 1) {
                 onFinish();
                 finish();
@@ -843,7 +827,6 @@ public class MainActivity extends Activity
     }
 
     public void onFinish() {
-        NotificationCenter.getGlobalInstance().removeObserver(notificationCenterDelegate, NotificationCenter.didSetNewWallpaper);
         NotificationCenter.getGlobalInstance().removeObserver(notificationCenterDelegate, NotificationCenter.didSetNewTheme);
         NotificationCenter.getGlobalInstance().removeObserver(notificationCenterDelegate, NotificationCenter.needSetDayNightTheme);
         NotificationCenter.getGlobalInstance().removeObserver(notificationCenterDelegate, NotificationCenter.needCheckSystemBarColors);
@@ -861,7 +844,7 @@ public class MainActivity extends Activity
 
     @Override
     public void onRebuildAllFragments(ContainerLayout layout, boolean last) {
-        if (AndroidUtilities.isTablet()) {
+        if (Space.isTablet()) {
             if (layout == layersActionBarLayout) {
                 rightActionBarLayout.rebuildAllFragmentViews(last, last);
                 actionBarLayout.rebuildAllFragmentViews(last, last);

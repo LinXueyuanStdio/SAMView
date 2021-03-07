@@ -1,4 +1,4 @@
-package com.same.ui.page.base;
+package com.same.lib.theme.wrap;
 
 import android.content.Context;
 
@@ -14,7 +14,7 @@ import com.same.lib.util.KeyHub;
  * @description null
  * @usage null
  */
-public class MyBasePage extends BasePage {
+public class ThemeBasePage extends BasePage {
     @Override
     protected ActionBar createActionBar(Context context) {
         ActionBar actionBar = new ActionBar(context);

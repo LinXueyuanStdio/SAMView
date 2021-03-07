@@ -6,7 +6,7 @@ import android.content.res.Configuration;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 
-import com.same.lib.font.FontManager;
+import com.same.lib.util.Font;
 import com.same.ui.MyApplication;
 import com.same.ui.theme.span.TypefaceSpan;
 import com.timecat.component.locale.LangAction;
@@ -256,7 +256,7 @@ public class MyLang {
             }
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(stringBuilder);
             for (int a = 0; a < bolds.size() / 2; a++) {
-                spannableStringBuilder.setSpan(new TypefaceSpan(FontManager.getMediumTypeface(context)), bolds.get(a * 2), bolds.get(a * 2 + 1), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannableStringBuilder.setSpan(new TypefaceSpan(Font.getMediumTypeface(context)), bolds.get(a * 2), bolds.get(a * 2 + 1), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             return spannableStringBuilder;
         } catch (Exception e) {

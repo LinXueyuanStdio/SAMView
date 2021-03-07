@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,7 +18,9 @@ import android.widget.TextView;
 
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.NotificationCenter;
+import com.same.lib.core.BasePage;
 import com.same.lib.helper.LayoutHelper;
+import com.same.lib.listview.RecyclerView;
 import com.same.lib.lottie.RLottieImageView;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
@@ -26,11 +29,14 @@ import com.same.lib.theme.ThemeManager;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.base.BaseActionBarPage;
+import com.same.ui.page.theme.cell.ThemesHorizontalListCell;
 import com.same.ui.theme.dialog.AlertDialog;
 import com.same.ui.theme.span.ThemeName;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import androidx.core.content.FileProvider;
@@ -43,8 +49,14 @@ import androidx.core.content.FileProvider;
  * @usage null
  */
 public class ThemePage extends BaseActionBarPage {
-
+    public final static int THEME_TYPE_BASIC = 0;
+    public final static int THEME_TYPE_NIGHT = 1;
+    public final static int THEME_TYPE_OTHER = 2;
     Button currentTheme;
+
+    private ArrayList<ThemeInfo> darkThemes = new ArrayList<>();
+    private ArrayList<ThemeInfo> defaultThemes = new ArrayList<>();
+    private int currentType;
 
     @Override
     protected String title() {
@@ -60,7 +72,7 @@ public class ThemePage extends BaseActionBarPage {
                 ThemeEditorView.ThemeContainer container;
                 if (activity instanceof ThemeEditorView.ThemeContainer) {
                     container = (ThemeEditorView.ThemeContainer) activity;
-                } else return;
+                } else { return; }
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                 builder.setTitle(MyLang.getString("NewTheme", R.string.NewTheme));
                 builder.setMessage(MyLang.getString("CreateNewThemeAlert", R.string.CreateNewThemeAlert));
@@ -73,7 +85,7 @@ public class ThemePage extends BaseActionBarPage {
                         new ThemeEditorView().show(activity, container, themeInfo);
                     }
                 });
-                AlertDialog dialog =  builder.create();
+                AlertDialog dialog = builder.create();
                 dialog.prepareShowInService();
                 showDialog(dialog);
             }
@@ -82,8 +94,8 @@ public class ThemePage extends BaseActionBarPage {
         containerLayout.addView(createButton(context, "重置主题", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Activity activity = getParentActivity();
-//                if (activity == null) { return; }
+                //                Activity activity = getParentActivity();
+                //                if (activity == null) { return; }
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
                 builder1.setTitle(MyLang.getString("ThemeResetToDefaultsTitle", R.string.ThemeResetToDefaultsTitle));
                 builder1.setMessage(MyLang.getString("ThemeResetToDefaultsText", R.string.ThemeResetToDefaultsText));
@@ -163,6 +175,43 @@ public class ThemePage extends BaseActionBarPage {
             }
         }));
 
+        currentType = THEME_TYPE_BASIC;
+        defaultThemes.clear();
+        darkThemes.clear();
+
+        for (int a = 0, N = Theme.themes.size(); a < N; a++) {
+            ThemeInfo themeInfo = Theme.themes.get(a);
+            if (currentType != THEME_TYPE_BASIC) {
+                if (themeInfo.isLight() || themeInfo.info != null) {
+                    continue;
+                }
+            }
+            if (themeInfo.pathToFile != null) {
+                darkThemes.add(themeInfo);
+            } else {
+                defaultThemes.add(themeInfo);
+            }
+        }
+        Collections.sort(defaultThemes, (o1, o2) -> Integer.compare(o1.sortIndex, o2.sortIndex));
+
+        ThemesHorizontalListCell themesHorizontalListCell = new ThemesHorizontalListCell(context, currentType, defaultThemes, darkThemes) {
+            @Override
+            protected void showOptionsForTheme(ThemeInfo themeInfo) {
+            }
+
+            @Override
+            protected void presentFragment(BasePage fragment) {
+                ThemePage.this.presentFragment(fragment);
+            }
+
+            @Override
+            protected void updateRows() {
+            }
+        };
+        themesHorizontalListCell.setDrawDivider(false);
+        themesHorizontalListCell.setFocusable(false);
+        themesHorizontalListCell.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, AndroidUtilities.dp(148)));
+        containerLayout.addView(themesHorizontalListCell);
     }
 
     private void shareTheme(Context context, ThemeInfo themeInfo) {

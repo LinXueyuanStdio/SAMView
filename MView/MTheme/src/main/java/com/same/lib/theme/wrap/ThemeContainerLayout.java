@@ -1,4 +1,4 @@
-package com.same.ui.theme.wrap;
+package com.same.lib.theme.wrap;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

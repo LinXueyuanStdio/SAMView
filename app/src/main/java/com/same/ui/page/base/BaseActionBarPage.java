@@ -9,12 +9,13 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.core.BasePage;
 import com.same.lib.core.ThemeDescription;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.MyThemeDescription;
 import com.same.lib.theme.Theme;
+import com.same.lib.theme.wrap.ThemeBasePage;
+import com.same.lib.util.Space;
 import com.same.ui.R;
 import com.same.ui.theme.dialog.AlertDialog;
 import com.same.ui.theme.dialog.BottomSheet;
@@ -28,12 +29,12 @@ import java.util.ArrayList;
  * @description null
  * @usage null
  */
-public abstract class BaseActionBarPage extends MyBasePage {
+public abstract class BaseActionBarPage extends ThemeBasePage {
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_baseline_menu_24);
         actionBar.setAllowOverlayTitle(false);
-        if (AndroidUtilities.isTablet()) {
+        if (Space.isTablet()) {
             actionBar.setOccupyStatusBar(false);
         }
         actionBar.setTitle(title());

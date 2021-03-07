@@ -38,10 +38,10 @@ import com.same.lib.anim.CubicBezierInterpolator;
 import com.same.lib.base.NotificationCenter;
 import com.same.lib.core.ThemeDescription;
 import com.same.lib.drawable.DrawableManager;
-import com.same.lib.font.FontManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.util.ColorManager;
+import com.same.lib.util.Font;
 import com.same.lib.util.Space;
 import com.same.lib.util.Store;
 import com.same.lib.util.UIThread;
@@ -600,14 +600,14 @@ public class BottomSheet extends Dialog {
                 textView.setGravity(Gravity.CENTER);
                 textView.setTextColor(ColorManager.getColor(KeyHub.key_dialogTextBlack));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-                textView.setTypeface(FontManager.getMediumTypeface(context));
+                textView.setTypeface(Font.getMediumTypeface(context));
                 addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
             } else if (type == 2) {
                 textView.setGravity(Gravity.CENTER);
-                textView.setTextColor(ColorManager.getColor(KeyHub.key_featuredStickers_buttonText));
+                textView.setTextColor(ColorManager.getColor(KeyHub.key_dialogTextBlack));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-                textView.setTypeface(FontManager.getMediumTypeface(context));
-                textView.setBackground(DrawableManager.createSimpleSelectorRoundRectDrawable(Space.dp(4), ColorManager.getColor(KeyHub.key_featuredStickers_addButton), ColorManager.getColor(KeyHub.key_featuredStickers_addButtonPressed)));
+                textView.setTypeface(Font.getMediumTypeface(context));
+                textView.setBackground(DrawableManager.createSimpleSelectorRoundRectDrawable(Space.dp(4), ColorManager.getColor(KeyHub.key_dialogFloatingButton), ColorManager.getColor(KeyHub.key_dialogFloatingButtonPressed)));
                 addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, 0, 16, 16, 16, 16));
             }
         }
@@ -768,7 +768,7 @@ public class BottomSheet extends Dialog {
             if (bigTitle) {
                 titleView.setTextColor(ColorManager.getColor(KeyHub.key_dialogTextBlack));
                 titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-                titleView.setTypeface(FontManager.getMediumTypeface(context));
+                titleView.setTypeface(Font.getMediumTypeface(context));
                 titleView.setPadding(Space.dp(21), Space.dp(6), Space.dp(21), Space.dp(8));
             } else {
                 titleView.setTextColor(ColorManager.getColor(KeyHub.key_dialogTextGray2));

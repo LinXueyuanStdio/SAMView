@@ -32,7 +32,6 @@ import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeInfo;
 import com.same.lib.theme.ThemeManager;
 import com.same.lib.theme.ThemeRes;
-import com.same.lib.theme.WallpaperManager;
 import com.same.lib.util.Space;
 import com.same.ui.page.main.MainPage;
 import com.same.ui.page.theme.ThemeEditorView;
@@ -40,7 +39,7 @@ import com.same.ui.theme.ChatTheme;
 import com.same.ui.theme.CommonTheme;
 import com.same.ui.theme.DialogTheme;
 import com.same.ui.theme.ProfileTheme;
-import com.same.ui.theme.wrap.ThemeContainerLayout;
+import com.same.lib.theme.wrap.ThemeContainerLayout;
 
 import java.util.ArrayList;
 
@@ -86,19 +85,12 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
                 //                didSetNewTheme((Boolean) args[0]);TODO
             } else if (id == NotificationCenter.needSetDayNightTheme) {
                 ThemeInfo theme = (ThemeInfo) args[0];
-                boolean nigthTheme = (boolean) args[1];
-                int[] pos = (int[]) args[2];
-                int accentId = (int) args[3];
+                boolean nigthTheme = theme.isDark();
+                int[] pos = null;
+                int accentId = theme.currentAccentId;
                 needSetDayNightTheme(theme, nigthTheme, pos, accentId);
             } else if (id == NotificationCenter.needCheckSystemBarColors) {
                 //                checkSystemBarColors();
-            } else if (id == NotificationCenter.didSetNewWallpaper) {
-                //                if (sideMenu != null) {
-                //                    View child = sideMenu.getChildAt(0);
-                //                    if (child != null) {
-                //                        child.invalidate();
-                //                    }
-                //                }
             }
         }
     };
@@ -169,7 +161,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(KeyHub.key_windowBackgroundWhite));
         frameLayout.addView(drawerLayoutContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-        if (AndroidUtilities.isTablet()) {
+        if (Space.isTablet()) {
             //适配平板
             //            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);TODO
 
@@ -307,14 +299,10 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         actionBarLayout.init(mainFragmentsStack);//使用 main fragment 栈
         actionBarLayout.setDelegate(this);//代理，监听生命周期
 
-        //应用的壁纸
-        WallpaperManager.loadWallpaper(context);
-
         //注册通知中心，使用观察者模式处理应用内部的通知（消息）
         NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.didSetNewTheme);
         NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.needSetDayNightTheme);
         NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.needCheckSystemBarColors);
-        NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.didSetNewWallpaper);
 
         MainPage page = new MainPage();
         //        actionBarLayout.addFragmentToStack(page);
@@ -358,7 +346,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
     public void onPause() {
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, 4096);
         actionBarLayout.onPause();
-        if (AndroidUtilities.isTablet()) {
+        if (Space.isTablet()) {
             rightActionBarLayout.onPause();
             layersActionBarLayout.onPause();
         }
@@ -370,14 +358,14 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
     }
 
     public void onDestroy() {
-//        try {
-//            if (onGlobalLayoutListener != null) {
-//                final View view = getWindow().getDecorView().getRootView();
-//                view.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        //        try {
+        //            if (onGlobalLayoutListener != null) {
+        //                final View view = getWindow().getDecorView().getRootView();
+        //                view.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
+        //            }
+        //        } catch (Exception e) {
+        //            e.printStackTrace();
+        //        }
         ThemeEditorView editorView = ThemeEditorView.getInstance();
         editorView.destroy();
     }
@@ -420,7 +408,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
      * 只是为了适配平板布局
      */
     private void checkLayout() {
-        if (!AndroidUtilities.isTablet() || rightActionBarLayout == null) {
+        if (!Space.isTablet() || rightActionBarLayout == null) {
             return;
         }
 
@@ -487,7 +475,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
             }
         }
         actionBarLayout.animateThemedValues(theme, accentId, nigthTheme, instant);
-        if (AndroidUtilities.isTablet()) {
+        if (Space.isTablet()) {
             layersActionBarLayout.animateThemedValues(theme, accentId, nigthTheme, instant);
             rightActionBarLayout.animateThemedValues(theme, accentId, nigthTheme, instant);
         }
@@ -508,7 +496,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
 
     @Override
     public boolean needPresentFragment(BasePage fragment, boolean removeLast, boolean forceWithoutAnimation, ContainerLayout layout) {
-        if (AndroidUtilities.isTablet()) {
+        if (Space.isTablet()) {
             if (layout != layersActionBarLayout) {
                 layersActionBarLayout.setVisibility(View.VISIBLE);
                 shadowTablet.setBackgroundColor(0x7f000000);
@@ -529,7 +517,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
 
     @Override
     public boolean needAddFragmentToStack(BasePage fragment, ContainerLayout layout) {
-        if (AndroidUtilities.isTablet()) {
+        if (Space.isTablet()) {
             if (layout != layersActionBarLayout) {
                 layersActionBarLayout.setVisibility(View.VISIBLE);
                 shadowTablet.setBackgroundColor(0x7f000000);
@@ -550,7 +538,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
 
     @Override
     public boolean needCloseLastFragment(ContainerLayout layout) {
-        if (AndroidUtilities.isTablet()) {
+        if (Space.isTablet()) {
             if (layout == actionBarLayout && layout.fragmentsStack.size() <= 1) {
                 onFinish();
                 delegate.stopSelf();
@@ -575,7 +563,6 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
     }
 
     public void onFinish() {
-        NotificationCenter.getGlobalInstance().removeObserver(notificationCenterDelegate, NotificationCenter.didSetNewWallpaper);
         NotificationCenter.getGlobalInstance().removeObserver(notificationCenterDelegate, NotificationCenter.didSetNewTheme);
         NotificationCenter.getGlobalInstance().removeObserver(notificationCenterDelegate, NotificationCenter.needSetDayNightTheme);
         NotificationCenter.getGlobalInstance().removeObserver(notificationCenterDelegate, NotificationCenter.needCheckSystemBarColors);
@@ -592,7 +579,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
 
     @Override
     public void onRebuildAllFragments(ContainerLayout layout, boolean last) {
-        if (AndroidUtilities.isTablet()) {
+        if (Space.isTablet()) {
             if (layout == layersActionBarLayout) {
                 rightActionBarLayout.rebuildAllFragmentViews(last, last);
                 actionBarLayout.rebuildAllFragmentViews(last, last);

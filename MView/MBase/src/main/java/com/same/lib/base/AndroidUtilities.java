@@ -54,7 +54,6 @@ public class AndroidUtilities {
     public static boolean usingHardwareInput;
     public static boolean isInMultiwindow;
 
-    private static Boolean isTablet = null;
     public static float screenRefreshRate = 60;
 
     public static volatile Context applicationContext;
@@ -165,13 +164,6 @@ public class AndroidUtilities {
 
     public static void cancelRunOnUIThread(Runnable runnable) {
         applicationHandler.removeCallbacks(runnable);
-    }
-
-    public static boolean isTablet() {
-        if (isTablet == null) {
-            isTablet = false;
-        }
-        return isTablet;
     }
 
     public static boolean isSmallTablet() {

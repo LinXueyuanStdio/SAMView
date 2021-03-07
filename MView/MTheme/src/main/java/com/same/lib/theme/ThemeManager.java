@@ -3,17 +3,12 @@ package com.same.lib.theme;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.net.Uri;
 import android.os.SystemClock;
-import android.text.TextUtils;
 
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.NotificationCenter;
@@ -34,7 +29,6 @@ import static com.same.lib.theme.Theme.AUTO_NIGHT_TYPE_NONE;
 import static com.same.lib.theme.Theme.AUTO_NIGHT_TYPE_SCHEDULED;
 import static com.same.lib.theme.Theme.AUTO_NIGHT_TYPE_SYSTEM;
 import static com.same.lib.theme.Theme.DEFALT_THEME_ACCENT_ID;
-import static com.same.lib.theme.Theme.DEFAULT_BACKGROUND_SLUG;
 import static com.same.lib.theme.Theme.LIGHT_SENSOR_THEME_SWITCH_DELAY;
 import static com.same.lib.theme.Theme.LIGHT_SENSOR_THEME_SWITCH_NEAR_DELAY;
 import static com.same.lib.theme.Theme.LIGHT_SENSOR_THEME_SWITCH_NEAR_THRESHOLD;
@@ -48,7 +42,6 @@ import static com.same.lib.theme.Theme.autoNightLocationLongitude;
 import static com.same.lib.theme.Theme.autoNightScheduleByLocation;
 import static com.same.lib.theme.Theme.autoNightSunriseTime;
 import static com.same.lib.theme.Theme.autoNightSunsetTime;
-import static com.same.lib.theme.Theme.calcBackgroundColor;
 import static com.same.lib.theme.Theme.currentColors;
 import static com.same.lib.theme.Theme.currentColorsNoAccent;
 import static com.same.lib.theme.Theme.currentDayTheme;
@@ -66,16 +59,11 @@ import static com.same.lib.theme.Theme.isApplyingAccent;
 import static com.same.lib.theme.Theme.isInNigthMode;
 import static com.same.lib.theme.Theme.lastBrightnessValue;
 import static com.same.lib.theme.Theme.lastDelayUpdateTime;
-import static com.same.lib.theme.Theme.lastLoadingCurrentThemeTime;
-import static com.same.lib.theme.Theme.lastLoadingThemesTime;
 import static com.same.lib.theme.Theme.lastThemeSwitchTime;
 import static com.same.lib.theme.Theme.lightSensor;
 import static com.same.lib.theme.Theme.lightSensorRegistered;
-import static com.same.lib.theme.Theme.loadingCurrentTheme;
-import static com.same.lib.theme.Theme.loadingRemoteThemes;
 import static com.same.lib.theme.Theme.otherThemes;
 import static com.same.lib.theme.Theme.previousTheme;
-import static com.same.lib.theme.Theme.remoteThemesHash;
 import static com.same.lib.theme.Theme.selectedAutoNightType;
 import static com.same.lib.theme.Theme.sensorManager;
 import static com.same.lib.theme.Theme.shouldDrawGradientIcons;
@@ -148,63 +136,6 @@ public class ThemeManager {
 
             String[] wallpaperLink = new String[1];
             getThemeFileValues(context, new File(themeInfo.pathToFile), null, wallpaperLink);
-
-            if (!TextUtils.isEmpty(wallpaperLink[0])) {
-                String ling = wallpaperLink[0];
-                themeInfo.pathToWallpaper = new File(AndroidUtilities.getFilesDirFixed(), AndroidUtilities.MD5(ling) + ".wp").getAbsolutePath();
-                try {
-                    Uri data = Uri.parse(ling);
-                    themeInfo.slug = data.getQueryParameter("slug");
-                    String mode = data.getQueryParameter("mode");
-                    if (mode != null) {
-                        mode = mode.toLowerCase();
-                        String[] modes = mode.split(" ");
-                        if (modes != null && modes.length > 0) {
-                            for (int a = 0; a < modes.length; a++) {
-                                if ("blur".equals(modes[a])) {
-                                    themeInfo.isBlured = true;
-                                } else if ("motion".equals(modes[a])) {
-                                    themeInfo.isMotion = true;
-                                }
-                            }
-                        }
-                    }
-                    String intensity = data.getQueryParameter("intensity");
-                    if (!TextUtils.isEmpty(intensity)) {
-                        try {
-                            String bgColor = data.getQueryParameter("bg_color");
-                            if (!TextUtils.isEmpty(bgColor)) {
-                                themeInfo.patternBgColor = Integer.parseInt(bgColor, 16) | 0xff000000;
-                                if (bgColor.length() > 6) {
-                                    themeInfo.patternBgGradientColor = Integer.parseInt(bgColor.substring(7), 16) | 0xff000000;
-                                }
-                            }
-                        } catch (Exception ignore) {
-
-                        }
-                        try {
-                            String rotation = data.getQueryParameter("rotation");
-                            if (!TextUtils.isEmpty(rotation)) {
-                                themeInfo.patternBgGradientRotation = AndroidUtilities.parseInt(rotation);
-                            }
-                        } catch (Exception ignore) {
-
-                        }
-
-                        if (!TextUtils.isEmpty(intensity)) {
-                            themeInfo.patternIntensity = AndroidUtilities.parseInt(intensity);
-                        }
-                        if (themeInfo.patternIntensity == 0) {
-                            themeInfo.patternIntensity = 50;
-                        }
-                    }
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            } else {
-                WallpaperManager.themedWallpaperLink = null;
-            }
-
             return themeInfo;
         } catch (Exception e) {
             e.printStackTrace();
@@ -308,71 +239,6 @@ public class ThemeManager {
                 } else {
                     currentColorsNoAccent = getThemeFileValues(context, new File(themeInfo.pathToFile), null, wallpaperLink);
                 }
-                Integer offset = currentColorsNoAccent.get("wallpaperFileOffset");
-                WallpaperManager.themedWallpaperFileOffset = offset != null ? offset : -1;
-                if (!TextUtils.isEmpty(wallpaperLink[0])) {
-                    WallpaperManager.themedWallpaperLink = wallpaperLink[0];
-                    String newPathToFile = new File(AndroidUtilities.getFilesDirFixed(), AndroidUtilities.MD5(WallpaperManager.themedWallpaperLink) + ".wp").getAbsolutePath();
-                    try {
-                        if (themeInfo.pathToWallpaper != null && !themeInfo.pathToWallpaper.equals(newPathToFile)) {
-                            new File(themeInfo.pathToWallpaper).delete();
-                        }
-                    } catch (Exception ignore) {
-
-                    }
-                    themeInfo.pathToWallpaper = newPathToFile;
-                    try {
-                        Uri data = Uri.parse(WallpaperManager.themedWallpaperLink);
-                        themeInfo.slug = data.getQueryParameter("slug");
-
-                        String mode = data.getQueryParameter("mode");
-                        if (mode != null) {
-                            mode = mode.toLowerCase();
-                            String[] modes = mode.split(" ");
-                            if (modes != null && modes.length > 0) {
-                                for (int a = 0; a < modes.length; a++) {
-                                    if ("blur".equals(modes[a])) {
-                                        themeInfo.isBlured = true;
-                                    } else if ("motion".equals(modes[a])) {
-                                        themeInfo.isMotion = true;
-                                    }
-                                }
-                            }
-                        }
-                        themeInfo.patternBgGradientRotation = 45;
-                        try {
-                            String bgColor = data.getQueryParameter("bg_color");
-                            if (!TextUtils.isEmpty(bgColor)) {
-                                themeInfo.patternBgColor = Integer.parseInt(bgColor.substring(0, 6), 16) | 0xff000000;
-                                if (bgColor.length() > 6) {
-                                    themeInfo.patternBgGradientColor = Integer.parseInt(bgColor.substring(7), 16) | 0xff000000;
-                                }
-                            }
-                        } catch (Exception ignore) {
-
-                        }
-                        try {
-                            String rotation = data.getQueryParameter("rotation");
-                            if (!TextUtils.isEmpty(rotation)) {
-                                themeInfo.patternBgGradientRotation = AndroidUtilities.parseInt(rotation);
-                            }
-                        } catch (Exception ignore) {
-
-                        }
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        if (themeInfo.pathToWallpaper != null) {
-                            new File(themeInfo.pathToWallpaper).delete();
-                        }
-                    } catch (Exception ignore) {
-
-                    }
-                    themeInfo.pathToWallpaper = null;
-                    WallpaperManager.themedWallpaperLink = null;
-                }
             } else {
                 if (!nightTheme && save) {
                     SharedPreferences preferences = AndroidUtilities.getGlobalMainSettings();
@@ -381,10 +247,6 @@ public class ThemeManager {
                     editor.apply();
                 }
                 currentColorsNoAccent.clear();
-                WallpaperManager.themedWallpaperFileOffset = 0;
-                WallpaperManager.themedWallpaperLink = null;
-                WallpaperManager.wallpaper = null;
-                WallpaperManager.themedWallpaper = null;
             }
             if (!nightTheme && previousTheme == null) {
                 currentDayTheme = themeInfo;
@@ -399,7 +261,7 @@ public class ThemeManager {
             e.printStackTrace();
         }
         if (previousTheme == null && save && !switchingNightTheme) {
-            //            MessagesController.getInstance(themeInfo.account).saveTheme(themeInfo, themeInfo.getAccent(false), nightTheme, false);
+            ThemeStore.saveTheme(themeInfo, themeInfo.getAccent(false), nightTheme, false);
         }
     }
 
@@ -427,7 +289,6 @@ public class ThemeManager {
         if (accent != null) {
             shouldDrawGradientIcons = accent.fillAccentColors(currentColorsNoAccent, currentColors);
         }
-        WallpaperManager.reloadWallpaper(context);
         for (AbsTheme absTheme : ThemeRes.themes) {
             absTheme.applyResources(context);
         }
@@ -548,17 +409,10 @@ public class ThemeManager {
             return false;
         }
         boolean current = accent.id == theme.currentAccentId;
-        File wallpaperFile = accent.getPathToWallpaper();
-        if (wallpaperFile != null) {
-            wallpaperFile.delete();
-        }
         theme.themeAccentsMap.remove(accent.id);
         theme.themeAccents.remove(accent);
         if (accent.info != null) {
             theme.accentsByThemeId.remove(accent.info.id);
-        }
-        if (accent.overrideWallpaper != null) {
-            accent.overrideWallpaper.delete();
         }
         if (current) {
             ThemeAccent themeAccent = theme.themeAccents.get(0);
@@ -567,7 +421,7 @@ public class ThemeManager {
         if (save) {
             saveThemeAccents(context, theme, true, false, false);
             if (accent.info != null) {
-                //                MessagesController.getInstance(accent.account).saveTheme(theme, accent, current && theme == currentNightTheme, true);
+                ThemeStore.saveTheme(theme, accent, current && theme == currentNightTheme, true);
             }
         }
         return current;
@@ -605,12 +459,6 @@ public class ThemeManager {
                     }
                 }
                 theme.currentAccentId = theme.prevAccentId;
-                ThemeAccent accent = theme.getAccent(false);
-                if (accent != null) {
-                    theme.overrideWallpaper = accent.overrideWallpaper;
-                } else {
-                    theme.overrideWallpaper = null;
-                }
             }
             if (currentTheme == theme) {
                 refreshThemeColors(context);
@@ -636,12 +484,6 @@ public class ThemeManager {
             }
             editor.putString("themes2", array.toString());
         }
-        for (int a = 0; a < 1; a++) {
-            editor.putInt("remoteThemesHash" + (a != 0 ? a : ""), remoteThemesHash[a]);
-            editor.putInt("lastLoadingThemesTime" + (a != 0 ? a : ""), lastLoadingThemesTime[a]);
-        }
-
-        editor.putInt("lastLoadingCurrentThemeTime", lastLoadingCurrentThemeTime);
         editor.apply();
 
         if (full) {
@@ -946,9 +788,6 @@ public class ThemeManager {
         themeInfo.removeObservers();
         otherThemes.remove(themeInfo);
         themesDict.remove(themeInfo.name);
-        if (themeInfo.overrideWallpaper != null) {
-            themeInfo.overrideWallpaper.delete();
-        }
         themes.remove(themeInfo);
         File file = new File(themeInfo.pathToFile);
         file.delete();
@@ -960,122 +799,27 @@ public class ThemeManager {
         ThemeInfo newTheme = new ThemeInfo();
         newTheme.pathToFile = new File(AndroidUtilities.getFilesDirFixed(), "theme" + AndroidUtilities.random.nextLong() + ".attheme").getAbsolutePath();
         newTheme.name = name;
-        WallpaperManager.themedWallpaperLink = getWallpaperUrl(currentTheme.overrideWallpaper);
         newTheme.account = 0;
         saveCurrentTheme(context, newTheme, true, true, false);
         return newTheme;
     }
 
-    static String getWallpaperUrl(OverrideWallpaperInfo wallpaperInfo) {
-        if (wallpaperInfo == null || TextUtils.isEmpty(wallpaperInfo.slug) || wallpaperInfo.slug.equals(DEFAULT_BACKGROUND_SLUG)) {
-            return null;
-        }
-        StringBuilder modes = new StringBuilder();
-        if (wallpaperInfo.isBlurred) {
-            modes.append("blur");
-        }
-        if (wallpaperInfo.isMotion) {
-            if (modes.length() > 0) {
-                modes.append("+");
-            }
-            modes.append("motion");
-        }
-        String wallpaperLink;
-        if (wallpaperInfo.color == 0) {
-            wallpaperLink = "https://attheme.org?slug=" + wallpaperInfo.slug;
-        } else {
-            String color = String.format("%02x%02x%02x", (byte) (wallpaperInfo.color >> 16) & 0xff, (byte) (wallpaperInfo.color >> 8) & 0xff, (byte) (wallpaperInfo.color & 0xff)).toLowerCase();
-            String color2 = wallpaperInfo.gradientColor != 0 ? String.format("%02x%02x%02x", (byte) (wallpaperInfo.gradientColor >> 16) & 0xff, (byte) (wallpaperInfo.gradientColor >> 8) & 0xff, (byte) (wallpaperInfo.gradientColor & 0xff)).toLowerCase() : null;
-            if (color2 != null) {
-                color += "-" + color2;
-                color += "&rotation=" + wallpaperInfo.rotation;
-            }
-            wallpaperLink = "https://attheme.org?slug=" + wallpaperInfo.slug + "&intensity=" + (int) (wallpaperInfo.intensity * 100) + "&bg_color=" + color;
-        }
-        if (modes.length() > 0) {
-            wallpaperLink += "&mode=" + modes.toString();
-        }
-        return wallpaperLink;
-    }
-
-    public static boolean hasCustomWallpaper() {
-        return isApplyingAccent && currentTheme.overrideWallpaper != null;
-    }
-
-    public static void resetCustomWallpaper(Context context, boolean temporary) {
-        if (temporary) {
-            isApplyingAccent = false;
-            WallpaperManager.reloadWallpaper(context);
-        } else {
-            currentTheme.setOverrideWallpaper(null);
-        }
-    }
-
     public static void saveCurrentTheme(Context context, ThemeInfo themeInfo, boolean finalSave, boolean newTheme, boolean upload) {
-        String wallpaperLink;
-        OverrideWallpaperInfo wallpaperInfo = themeInfo.overrideWallpaper;
-        if (wallpaperInfo != null) {
-            wallpaperLink = getWallpaperUrl(wallpaperInfo);
-        } else {
-            wallpaperLink = WallpaperManager.themedWallpaperLink;
-        }
-
-        Drawable wallpaperToSave = newTheme ? WallpaperManager.wallpaper : WallpaperManager.themedWallpaper;
-        if (newTheme && wallpaperToSave != null) {
-            WallpaperManager.themedWallpaper = WallpaperManager.wallpaper;
-        }
         ThemeAccent accent = currentTheme.getAccent(false);
         HashMap<String, Integer> colorsMap = currentTheme.firstAccentIsDefault && accent.id == DEFALT_THEME_ACCENT_ID ? defaultColors : currentColors;
 
         StringBuilder result = new StringBuilder();
-        if (colorsMap != defaultColors) {
-            int outBubbleColor = accent != null ? accent.myMessagesAccentColor : 0;
-            int outBubbleGradient = accent != null ? accent.myMessagesGradientAccentColor : 0;
-            if (outBubbleColor != 0 && outBubbleGradient != 0) {
-                colorsMap.put(KeyHub.key_chat_outBubble, outBubbleColor);
-                colorsMap.put(KeyHub.key_chat_outBubbleGradient, outBubbleGradient);
-            }
-        }
         for (HashMap.Entry<String, Integer> entry : colorsMap.entrySet()) {
             String key = entry.getKey();
-            if (wallpaperToSave instanceof BitmapDrawable || wallpaperLink != null) {
-                if (KeyHub.key_chat_wallpaper.equals(key) || KeyHub.key_chat_wallpaper_gradient_to.equals(key)) {
-                    continue;
-                }
-            }
             result.append(key).append("=").append(entry.getValue()).append("\n");
         }
         FileOutputStream stream = null;
         try {
             stream = new FileOutputStream(themeInfo.pathToFile);
-            if (result.length() == 0 && !(wallpaperToSave instanceof BitmapDrawable) && TextUtils.isEmpty(wallpaperLink)) {
+            if (result.length() == 0) {
                 result.append(' ');
             }
             stream.write(AndroidUtilities.getStringBytes(result.toString()));
-            if (!TextUtils.isEmpty(wallpaperLink)) {
-                stream.write(AndroidUtilities.getStringBytes("WLS=" + wallpaperLink + "\n"));
-                if (newTheme) {
-                    try {
-                        Bitmap bitmap = ((BitmapDrawable) wallpaperToSave).getBitmap();
-                        FileOutputStream wallpaperStream = new FileOutputStream(new File(AndroidUtilities.getFilesDirFixed(), AndroidUtilities.MD5(wallpaperLink) + ".wp"));
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 87, wallpaperStream);
-                        wallpaperStream.close();
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                    }
-                }
-            } else if (wallpaperToSave instanceof BitmapDrawable) {
-                Bitmap bitmap = ((BitmapDrawable) wallpaperToSave).getBitmap();
-                if (bitmap != null) {
-                    stream.write(new byte[]{'W', 'P', 'S', '\n'});
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 87, stream);
-                    stream.write(new byte[]{'\n', 'W', 'P', 'E', '\n'});
-                }
-                if (finalSave && !upload) {
-                    WallpaperManager.wallpaper = wallpaperToSave;
-                    calcBackgroundColor(wallpaperToSave, 2);
-                }
-            }
             if (!upload) {
                 if (themesDict.get(themeInfo.getKey()) == null) {
                     themes.add(themeInfo);
@@ -1109,210 +853,8 @@ public class ThemeManager {
             }
         }
         if (finalSave) {
-            //            MessagesController.getInstance(themeInfo.account).saveThemeToServer(themeInfo, themeInfo.getAccent(false));
+            ThemeStore.saveThemeToServer(themeInfo, themeInfo.getAccent(false));
         }
-    }
-
-    public static void checkCurrentRemoteTheme(boolean force) {
-        if (loadingCurrentTheme != 0 || !force && Math.abs(System.currentTimeMillis() / 1000 - lastLoadingCurrentThemeTime) < 60 * 60) {
-            return;
-        }
-        for (int a = 0; a < 2; a++) {
-            ThemeInfo themeInfo = a == 0 ? currentDayTheme : currentNightTheme;
-            if (themeInfo == null || !AndroidUtilities.isClientActivated(themeInfo.account)) {
-                continue;
-            }
-            ThemeAccent accent = themeInfo.getAccent(false);
-            Skin info;
-            int account;
-            if (themeInfo.info != null) {
-                info = themeInfo.info;
-                account = themeInfo.account;
-            } else if (accent != null && accent.info != null) {
-                info = accent.info;
-                account = 0;
-            } else {
-                continue;
-            }
-            if (info == null || info.document == null) {
-                continue;
-            }
-
-            loadingCurrentTheme++;
-            //TODO 发起请求
-            //            TLRPC.TL_account_getTheme req = new TLRPC.TL_account_getTheme();
-            //            req.document_id = info.document.id;
-            //            req.format = "android";
-            //            TLRPC.TL_inputTheme inputTheme = new TLRPC.TL_inputTheme();
-            //            inputTheme.access_hash = info.access_hash;
-            //            inputTheme.id = info.id;
-            //            req.theme = inputTheme;
-            //            ConnectionsManager.getInstance(account).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
-            //                loadingCurrentTheme--;
-            //                boolean changed = false;
-            //                if (response instanceof Skin) {
-            //                    Skin theme = (Skin) response;
-            //                    if (accent != null && theme.settings != null) {
-            //                        if (!ThemeInfo.accentEquals(accent, theme.settings)) {
-            //                            File file = accent.getPathToWallpaper();
-            //                            if (file != null) {
-            //                                file.delete();
-            //                            }
-            //                            ThemeInfo.fillAccentValues(accent, theme.settings);
-            //                            if (currentTheme == themeInfo && currentTheme.currentAccentId == accent.id) {
-            //                                refreshThemeColors();
-            //                                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, currentTheme, currentNightTheme == currentTheme, null, -1);
-            //                            }
-            //                            PatternsLoader.createLoader(true);
-            //                            changed = true;
-            //                        }
-            //                        accent.patternMotion = theme.settings.wallpaper != null && theme.settings.wallpaper.settings != null && theme.settings.wallpaper.settings.motion;
-            //                    } else if (theme.document != null && theme.document.id != info.document.id) {
-            //                        if (accent != null) {
-            //                            accent.info = theme;
-            //                        } else {
-            //                            themeInfo.info = theme;
-            //                            themeInfo.loadThemeDocument();
-            //                        }
-            //                        changed = true;
-            //                    }
-            //                }
-            //                if (loadingCurrentTheme == 0) {
-            //                    lastLoadingCurrentThemeTime = (int) (System.currentTimeMillis() / 1000);
-            //                    saveOtherThemes(changed);
-            //                }
-            //            }));
-        }
-    }
-
-    public static void loadRemoteThemes(final int currentAccount, boolean force) {
-        if (loadingRemoteThemes[currentAccount] || !force && Math.abs(System.currentTimeMillis() / 1000 - lastLoadingThemesTime[currentAccount]) < 60 * 60 || !AndroidUtilities.isClientActivated(currentAccount)) {
-            return;
-        }
-        loadingRemoteThemes[currentAccount] = true;
-        //TODO 发起请求
-        //        TLRPC.TL_account_getThemes req = new TLRPC.TL_account_getThemes();
-        //        req.format = "android";
-        //        req.hash = remoteThemesHash[currentAccount];
-        //        ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
-        //            loadingRemoteThemes[currentAccount] = false;
-        //            if (response instanceof TLRPC.TL_account_themes) {
-        //                TLRPC.TL_account_themes res = (TLRPC.TL_account_themes) response;
-        //                remoteThemesHash[currentAccount] = res.hash;
-        //                lastLoadingThemesTime[currentAccount] = (int) (System.currentTimeMillis() / 1000);
-        //                ArrayList<Object> oldServerThemes = new ArrayList<>();
-        //                for (int a = 0, N = themes.size(); a < N; a++) {
-        //                    ThemeInfo info = themes.get(a);
-        //                    if (info.info != null && info.account == currentAccount) {
-        //                        oldServerThemes.add(info);
-        //                    } else if (info.themeAccents != null) {
-        //                        for (int b = 0; b < info.themeAccents.size(); b++) {
-        //                            ThemeAccent accent = info.themeAccents.get(b);
-        //                            if (accent.info != null && accent.account == currentAccount) {
-        //                                oldServerThemes.add(accent);
-        //                            }
-        //                        }
-        //                    }
-        //                }
-        //                boolean loadPatterns = false;
-        //                boolean added = false;
-        //                for (int a = 0, N = res.themes.size(); a < N; a++) {
-        //                    TLRPC.Theme t = res.themes.get(a);
-        //                    if (!(t instanceof Skin)) {
-        //                        continue;
-        //                    }
-        //                    Skin theme = (Skin) t;
-        //                    if (theme.settings != null) {
-        //                        String key = getBaseThemeKey(theme.settings);
-        //                        if (key == null) {
-        //                            continue;
-        //                        }
-        //                        ThemeInfo info = themesDict.get(key);
-        //                        if (info == null || info.themeAccents == null) {
-        //                            continue;
-        //                        }
-        //                        ThemeAccent accent = info.accentsByThemeId.get(theme.id);
-        //                        if (accent != null) {
-        //                            if (!ThemeInfo.accentEquals(accent, theme.settings)) {
-        //                                File file = accent.getPathToWallpaper();
-        //                                if (file != null) {
-        //                                    file.delete();
-        //                                }
-        //                                ThemeInfo.fillAccentValues(accent, theme.settings);
-        //                                loadPatterns = true;
-        //                                added = true;
-        //                                if (currentTheme == info && currentTheme.currentAccentId == accent.id) {
-        //                                    refreshThemeColors();
-        //                                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, currentTheme, currentNightTheme == currentTheme, null, -1);
-        //                                }
-        //                            }
-        //                            accent.patternMotion = theme.settings.wallpaper != null && theme.settings.wallpaper.settings != null && theme.settings.wallpaper.settings.motion;
-        //                            oldServerThemes.remove(accent);
-        //                        } else {
-        //                            accent = info.createNewAccent(theme, currentAccount);
-        //                            if (!TextUtils.isEmpty(accent.patternSlug)) {
-        //                                loadPatterns = true;
-        //                            }
-        //                        }
-        //                    } else {
-        //                        String key = "remote" + theme.id;
-        //                        ThemeInfo info = themesDict.get(key);
-        //                        if (info == null) {
-        //                            info = new ThemeInfo();
-        //                            info.account = currentAccount;
-        //                            info.pathToFile = new File(ApplicationLoader.getFilesDirFixed(), key + ".attheme").getAbsolutePath();
-        //                            themes.add(info);
-        //                            otherThemes.add(info);
-        //                            added = true;
-        //                        } else {
-        //                            oldServerThemes.remove(info);
-        //                        }
-        //                        info.name = theme.title;
-        //                        info.info = theme;
-        //                        themesDict.put(info.getKey(), info);
-        //                    }
-        //                }
-        //                for (int a = 0, N = oldServerThemes.size(); a < N; a++) {
-        //                    Object object = oldServerThemes.get(a);
-        //                    if (object instanceof ThemeInfo) {
-        //                        ThemeInfo info = (ThemeInfo) object;
-        //                        info.removeObservers();
-        //                        otherThemes.remove(info);
-        //                        themesDict.remove(info.name);
-        //                        if (info.overrideWallpaper != null) {
-        //                            info.overrideWallpaper.delete();
-        //                        }
-        //                        themes.remove(info);
-        //                        File file = new File(info.pathToFile);
-        //                        file.delete();
-        //                        boolean isNightTheme = false;
-        //                        if (currentDayTheme == info) {
-        //                            currentDayTheme = defaultTheme;
-        //                        } else if (currentNightTheme == info) {
-        //                            currentNightTheme = themesDict.get("Dark Blue");
-        //                            isNightTheme = true;
-        //                        }
-        //                        if (currentTheme == info) {
-        //                            applyTheme(isNightTheme ? currentNightTheme : currentDayTheme, true, false, isNightTheme);
-        //                        }
-        //                    } else if (object instanceof ThemeAccent) {
-        //                        ThemeAccent accent = (ThemeAccent) object;
-        //                        if (deleteThemeAccent(accent.parentTheme, accent, false) && currentTheme == accent.parentTheme) {
-        //                            Theme.refreshThemeColors();
-        //                            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, currentTheme, currentNightTheme == currentTheme, null, -1);
-        //                        }
-        //                    }
-        //                }
-        //                saveOtherThemes(true);
-        //                sortThemes();
-        //                if (added) {
-        //                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.themeListUpdated);
-        //                }
-        //                if (loadPatterns) {
-        //                    PatternsLoader.createLoader(true);
-        //                }
-        //            }
-        //        }));
     }
 
     public static String getBaseThemeKey(Skin.SkinSettings settings) {
@@ -1345,19 +887,6 @@ public class ThemeManager {
         return null;
     }
 
-    public static void setThemeFileReference(Context context, Skin info) {
-        for (int a = 0, N = themes.size(); a < N; a++) {
-            ThemeInfo themeInfo = themes.get(a);
-            if (themeInfo.info != null && themeInfo.info.id == info.id) {
-                if (themeInfo.info.document != null && info.document != null) {
-                    themeInfo.info.document.file_reference = info.document.file_reference;
-                    saveOtherThemes(context, true);
-                }
-                break;
-            }
-        }
-    }
-
     public static boolean isThemeInstalled(ThemeInfo themeInfo) {
         return themeInfo != null && themesDict.get(themeInfo.getKey()) != null;
     }
@@ -1388,17 +917,12 @@ public class ThemeManager {
             accent.account = account;
             theme.accentsByThemeId.put(info.id, accent);
             if (!ThemeInfo.accentEquals(accent, info.settings)) {
-                File file = accent.getPathToWallpaper();
-                if (file != null) {
-                    file.delete();
-                }
                 ThemeInfo.fillAccentValues(accent, info.settings);
                 if (currentTheme == theme && currentTheme.currentAccentId == accent.id) {
                     refreshThemeColors(context);
                     NotificationCenter.post(NotificationCenter.needSetDayNightTheme, currentTheme);
                 }
             }
-            accent.patternMotion = info.settings.wallpaper != null && info.settings.wallpaper.settings != null && info.settings.wallpaper.settings.motion;
             theme.previewParsed = false;
         } else {
             String key;

@@ -5,10 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Build;
@@ -21,7 +18,6 @@ import com.same.lib.base.NotificationCenter;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -102,14 +98,6 @@ public class Theme {
     public static double autoNightLocationLatitude = 10000;
     public static double autoNightLocationLongitude = 10000;
 
-    static Paint maskPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
-    static int loadingCurrentTheme;
-    static int lastLoadingCurrentThemeTime;
-    static boolean[] loadingRemoteThemes = new boolean[1];
-    static int[] lastLoadingThemesTime = new int[1];
-    static int[] remoteThemesHash = new int[1];
-
     public static ArrayList<ThemeInfo> themes;
     static ArrayList<ThemeInfo> otherThemes;
     static HashMap<String, ThemeInfo> themesDict;
@@ -127,30 +115,8 @@ public class Theme {
     static long lastDelayUpdateTime;
 
     public static PorterDuffColorFilter colorFilter;
-    public static PorterDuffColorFilter colorPressedFilter;
-    public static PorterDuffColorFilter colorFilter2;
-    public static PorterDuffColorFilter colorPressedFilter2;
     static boolean isCustomTheme;
-    static int serviceMessageColor;
-    static int serviceSelectedMessageColor;
-    public static int serviceMessageColorBackup;
-    public static int serviceSelectedMessageColorBackup;
-    static int serviceMessage2Color;
-    static int serviceSelectedMessage2Color;
-    public static int currentColor;
-    static int currentSelectedColor;
 
-    public static Drawable moveUpDrawable;
-
-    public static Paint dialogs_onlineCirclePaint;
-
-    public static Drawable dialogs_holidayDrawable;
-    static int dialogs_holidayDrawableOffsetX;
-    static int dialogs_holidayDrawableOffsetY;
-    static long lastHolidayCheckTime;
-    static boolean canStartHolidayAnimation;
-
-    static HashSet<String> myMessagesColorKeys = new HashSet<>();
     static HashMap<String, Integer> defaultColors = new HashMap<>();
     static HashMap<String, String> fallbackKeys = new HashMap<>();
     static HashSet<String> themeAccentExclusionKeys = new HashSet<>();
@@ -283,44 +249,9 @@ public class Theme {
         defaultColors.put(KeyHub.key_divider, 0xffd9d9d9);
         defaultColors.put(KeyHub.key_graySection, 0xfff5f5f5);
         defaultColors.put(KeyHub.key_graySectionText, 0xff82878A);
-        defaultColors.put(KeyHub.key_contextProgressInner1, 0xffbfdff6);
-        defaultColors.put(KeyHub.key_contextProgressOuter1, 0xff2b96e2);
-        defaultColors.put(KeyHub.key_contextProgressInner2, 0xffbfdff6);
-        defaultColors.put(KeyHub.key_contextProgressOuter2, 0xffffffff);
-        defaultColors.put(KeyHub.key_contextProgressInner3, 0xffb3b3b3);
-        defaultColors.put(KeyHub.key_contextProgressOuter3, 0xffffffff);
-        defaultColors.put(KeyHub.key_contextProgressInner4, 0xffcacdd0);
-        defaultColors.put(KeyHub.key_contextProgressOuter4, 0xff2f3438);
         defaultColors.put(KeyHub.key_fastScrollActive, 0xff52a3db);
         defaultColors.put(KeyHub.key_fastScrollInactive, 0xffc9cdd1);
         defaultColors.put(KeyHub.key_fastScrollText, 0xffffffff);
-
-        defaultColors.put(KeyHub.key_avatar_text, 0xffffffff);
-
-        defaultColors.put(KeyHub.key_avatar_backgroundSaved, 0xff66bffa);
-        defaultColors.put(KeyHub.key_avatar_backgroundArchived, 0xffa9b6c1);
-        defaultColors.put(KeyHub.key_avatar_backgroundArchivedHidden, 0xff66bffa);
-        defaultColors.put(KeyHub.key_avatar_backgroundRed, 0xffe56555);
-        defaultColors.put(KeyHub.key_avatar_backgroundOrange, 0xfff28c48);
-        defaultColors.put(KeyHub.key_avatar_backgroundViolet, 0xff8e85ee);
-        defaultColors.put(KeyHub.key_avatar_backgroundGreen, 0xff76c84d);
-        defaultColors.put(KeyHub.key_avatar_backgroundCyan, 0xff5fbed5);
-        defaultColors.put(KeyHub.key_avatar_backgroundBlue, 0xff549cdd);
-        defaultColors.put(KeyHub.key_avatar_backgroundPink, 0xfff2749a);
-
-        defaultColors.put(KeyHub.key_avatar_backgroundInProfileBlue, 0xff5085b1);
-        defaultColors.put(KeyHub.key_avatar_backgroundActionBarBlue, 0xff598fba);
-        defaultColors.put(KeyHub.key_avatar_subtitleInProfileBlue, 0xffd7eafa);
-        defaultColors.put(KeyHub.key_avatar_actionBarSelectorBlue, 0xff4981ad);
-        defaultColors.put(KeyHub.key_avatar_actionBarIconBlue, 0xffffffff);
-
-        defaultColors.put(KeyHub.key_avatar_nameInMessageRed, 0xffca5650);
-        defaultColors.put(KeyHub.key_avatar_nameInMessageOrange, 0xffd87b29);
-        defaultColors.put(KeyHub.key_avatar_nameInMessageViolet, 0xff4e92cc);
-        defaultColors.put(KeyHub.key_avatar_nameInMessageGreen, 0xff50b232);
-        defaultColors.put(KeyHub.key_avatar_nameInMessageCyan, 0xff379eb8);
-        defaultColors.put(KeyHub.key_avatar_nameInMessageBlue, 0xff4e92cc);
-        defaultColors.put(KeyHub.key_avatar_nameInMessagePink, 0xff4e92cc);
 
         defaultColors.put(KeyHub.key_actionBarDefault, 0xff527da3);
         defaultColors.put(KeyHub.key_actionBarDefaultIcon, 0xffffffff);
@@ -351,558 +282,17 @@ public class Theme {
         defaultColors.put(KeyHub.key_actionBarDefaultArchivedSearch, 0xffffffff);
         defaultColors.put(KeyHub.key_actionBarDefaultArchivedSearchPlaceholder, 0x88ffffff);
 
-        defaultColors.put(KeyHub.key_chats_onlineCircle, 0xff4bcb1c);
-        defaultColors.put(KeyHub.key_chats_unreadCounter, 0xff4ecc5e);
-        defaultColors.put(KeyHub.key_chats_unreadCounterMuted, 0xffc6c9cc);
-        defaultColors.put(KeyHub.key_chats_unreadCounterText, 0xffffffff);
-        defaultColors.put(KeyHub.key_chats_archiveBackground, 0xff66a9e0);
-        defaultColors.put(KeyHub.key_chats_archivePinBackground, 0xff9faab3);
-        defaultColors.put(KeyHub.key_chats_archiveIcon, 0xffffffff);
-        defaultColors.put(KeyHub.key_chats_archiveText, 0xffffffff);
-        defaultColors.put(KeyHub.key_chats_name, 0xff222222);
-        defaultColors.put(KeyHub.key_chats_nameArchived, 0xff525252);
-        defaultColors.put(KeyHub.key_chats_secretName, 0xff00a60e);
-        defaultColors.put(KeyHub.key_chats_secretIcon, 0xff19b126);
-        defaultColors.put(KeyHub.key_chats_nameIcon, 0xff242424);
-        defaultColors.put(KeyHub.key_chats_pinnedIcon, 0xffa8a8a8);
-        defaultColors.put(KeyHub.key_chats_message, 0xff8b8d8f);
-        defaultColors.put(KeyHub.key_chats_messageArchived, 0xff919191);
-        defaultColors.put(KeyHub.key_chats_message_threeLines, 0xff8e9091);
-        defaultColors.put(KeyHub.key_chats_draft, 0xffdd4b39);
-        defaultColors.put(KeyHub.key_chats_nameMessage, 0xff3c7eb0);
-        defaultColors.put(KeyHub.key_chats_nameMessageArchived, 0xff8b8d8f);
-        defaultColors.put(KeyHub.key_chats_nameMessage_threeLines, 0xff424449);
-        defaultColors.put(KeyHub.key_chats_nameMessageArchived_threeLines, 0xff5e5e5e);
-        defaultColors.put(KeyHub.key_chats_attachMessage, 0xff3c7eb0);
-        defaultColors.put(KeyHub.key_chats_actionMessage, 0xff3c7eb0);
-        defaultColors.put(KeyHub.key_chats_date, 0xff95999C);
-        defaultColors.put(KeyHub.key_chats_pinnedOverlay, 0x08000000);
-        defaultColors.put(KeyHub.key_chats_tabletSelectedOverlay, 0x0f000000);
-        defaultColors.put(KeyHub.key_chats_sentCheck, 0xff46aa36);
-        defaultColors.put(KeyHub.key_chats_sentReadCheck, 0xff46aa36);
-        defaultColors.put(KeyHub.key_chats_sentClock, 0xff75bd5e);
-        defaultColors.put(KeyHub.key_chats_sentError, 0xffd55252);
-        defaultColors.put(KeyHub.key_chats_sentErrorIcon, 0xffffffff);
-        defaultColors.put(KeyHub.key_chats_verifiedBackground, 0xff33a8e6);
-        defaultColors.put(KeyHub.key_chats_verifiedCheck, 0xffffffff);
-        defaultColors.put(KeyHub.key_chats_muteIcon, 0xffbdc1c4);
-        defaultColors.put(KeyHub.key_chats_mentionIcon, 0xffffffff);
-        defaultColors.put(KeyHub.key_chats_menuBackground, 0xffffffff);
-        defaultColors.put(KeyHub.key_chats_menuItemText, 0xff444444);
-        defaultColors.put(KeyHub.key_chats_menuItemCheck, 0xff598fba);
-        defaultColors.put(KeyHub.key_chats_menuItemIcon, 0xff889198);
-        defaultColors.put(KeyHub.key_chats_menuName, 0xffffffff);
-        defaultColors.put(KeyHub.key_chats_menuPhone, 0xffffffff);
-        defaultColors.put(KeyHub.key_chats_menuPhoneCats, 0xffc2e5ff);
-        defaultColors.put(KeyHub.key_chats_menuCloud, 0xffffffff);
-        defaultColors.put(KeyHub.key_chats_menuCloudBackgroundCats, 0xff427ba9);
-        defaultColors.put(KeyHub.key_chats_actionIcon, 0xffffffff);
-        defaultColors.put(KeyHub.key_chats_actionBackground, 0xff65a9e0);
-        defaultColors.put(KeyHub.key_chats_actionPressedBackground, 0xff569dd6);
-        defaultColors.put(KeyHub.key_chats_actionUnreadIcon, 0xff737373);
-        defaultColors.put(KeyHub.key_chats_actionUnreadBackground, 0xffffffff);
-        defaultColors.put(KeyHub.key_chats_actionUnreadPressedBackground, 0xfff2f2f2);
-        defaultColors.put(KeyHub.key_chats_menuTopBackgroundCats, 0xff598fba);
-        defaultColors.put(KeyHub.key_chats_archivePullDownBackground, 0xffc6c9cc);
-        defaultColors.put(KeyHub.key_chats_archivePullDownBackgroundActive, 0xff66a9e0);
-
-        defaultColors.put(KeyHub.key_chat_attachMediaBanBackground, 0xff464646);
-        defaultColors.put(KeyHub.key_chat_attachMediaBanText, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_attachCheckBoxCheck, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_attachCheckBoxBackground, 0xff39b2f7);
-        defaultColors.put(KeyHub.key_chat_attachPhotoBackground, 0x0c000000);
-        defaultColors.put(KeyHub.key_chat_attachActiveTab, 0xff33a7f5);
-        defaultColors.put(KeyHub.key_chat_attachUnactiveTab, 0xff92999e);
-        defaultColors.put(KeyHub.key_chat_attachPermissionImage, 0xff333333);
-        defaultColors.put(KeyHub.key_chat_attachPermissionMark, 0xffe25050);
-        defaultColors.put(KeyHub.key_chat_attachPermissionText, 0xff6f777a);
-        defaultColors.put(KeyHub.key_chat_attachEmptyImage, 0xffcccccc);
-
-        defaultColors.put(KeyHub.key_chat_attachGalleryBackground, 0xff459df5);
-        defaultColors.put(KeyHub.key_chat_attachGalleryText, 0xff2e8de9);
-        defaultColors.put(KeyHub.key_chat_attachGalleryIcon, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_attachAudioBackground, 0xffeb6060);
-        defaultColors.put(KeyHub.key_chat_attachAudioText, 0xffde4747);
-        defaultColors.put(KeyHub.key_chat_attachAudioIcon, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_attachFileBackground, 0xff34b9f1);
-        defaultColors.put(KeyHub.key_chat_attachFileText, 0xff14a8e4);
-        defaultColors.put(KeyHub.key_chat_attachFileIcon, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_attachContactBackground, 0xfff2c04b);
-        defaultColors.put(KeyHub.key_chat_attachContactText, 0xffdfa000);
-        defaultColors.put(KeyHub.key_chat_attachContactIcon, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_attachLocationBackground, 0xff60c255);
-        defaultColors.put(KeyHub.key_chat_attachLocationText, 0xff3cab2f);
-        defaultColors.put(KeyHub.key_chat_attachLocationIcon, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_attachPollBackground, 0xfff2c04b);
-        defaultColors.put(KeyHub.key_chat_attachPollText, 0xffdfa000);
-        defaultColors.put(KeyHub.key_chat_attachPollIcon, 0xffffffff);
-
-        defaultColors.put(KeyHub.key_chat_inPollCorrectAnswer, 0xff60c255);
-        defaultColors.put(KeyHub.key_chat_outPollCorrectAnswer, 0xff60c255);
-        defaultColors.put(KeyHub.key_chat_inPollWrongAnswer, 0xffeb6060);
-        defaultColors.put(KeyHub.key_chat_outPollWrongAnswer, 0xffeb6060);
-
-        defaultColors.put(KeyHub.key_chat_status, 0xffd5e8f7);
-        defaultColors.put(KeyHub.key_chat_inGreenCall, 0xff00c853);
-        defaultColors.put(KeyHub.key_chat_inRedCall, 0xffff4848);
-        defaultColors.put(KeyHub.key_chat_outGreenCall, 0xff00c853);
-        defaultColors.put(KeyHub.key_chat_shareBackground, 0x66728fa6);
-        defaultColors.put(KeyHub.key_chat_shareBackgroundSelected, 0x99728fa6);
-        defaultColors.put(KeyHub.key_chat_lockIcon, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_muteIcon, 0xffb1cce3);
-        defaultColors.put(KeyHub.key_chat_inBubble, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_inBubbleSelected, 0xffecf7fd);
-        defaultColors.put(KeyHub.key_chat_inBubbleShadow, 0xff1d3753);
-        defaultColors.put(KeyHub.key_chat_outBubble, 0xffefffde);
-        defaultColors.put(KeyHub.key_chat_outBubbleGradientSelectedOverlay, 0x14000000);
-        defaultColors.put(KeyHub.key_chat_outBubbleSelected, 0xffd9f7c5);
-        defaultColors.put(KeyHub.key_chat_outBubbleShadow, 0xff1e750c);
-        defaultColors.put(KeyHub.key_chat_inMediaIcon, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_inMediaIconSelected, 0xffeff8fe);
-        defaultColors.put(KeyHub.key_chat_outMediaIcon, 0xffefffde);
-        defaultColors.put(KeyHub.key_chat_outMediaIconSelected, 0xffe1f8cf);
-        defaultColors.put(KeyHub.key_chat_messageTextIn, 0xff000000);
-        defaultColors.put(KeyHub.key_chat_messageTextOut, 0xff000000);
-        defaultColors.put(KeyHub.key_chat_messageLinkIn, 0xff2678b6);
-        defaultColors.put(KeyHub.key_chat_messageLinkOut, 0xff2678b6);
-        defaultColors.put(KeyHub.key_chat_serviceText, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_serviceLink, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_serviceIcon, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_mediaTimeBackground, 0x66000000);
-        defaultColors.put(KeyHub.key_chat_outSentCheck, 0xff5db050);
-        defaultColors.put(KeyHub.key_chat_outSentCheckSelected, 0xff5db050);
-        defaultColors.put(KeyHub.key_chat_outSentCheckRead, 0xff5db050);
-        defaultColors.put(KeyHub.key_chat_outSentCheckReadSelected, 0xff5db050);
-        defaultColors.put(KeyHub.key_chat_outSentClock, 0xff75bd5e);
-        defaultColors.put(KeyHub.key_chat_outSentClockSelected, 0xff75bd5e);
-        defaultColors.put(KeyHub.key_chat_inSentClock, 0xffa1aab3);
-        defaultColors.put(KeyHub.key_chat_inSentClockSelected, 0xff93bdca);
-        defaultColors.put(KeyHub.key_chat_mediaSentCheck, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_mediaSentClock, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_inViews, 0xffa1aab3);
-        defaultColors.put(KeyHub.key_chat_inViewsSelected, 0xff93bdca);
-        defaultColors.put(KeyHub.key_chat_outViews, 0xff6eb257);
-        defaultColors.put(KeyHub.key_chat_outViewsSelected, 0xff6eb257);
-        defaultColors.put(KeyHub.key_chat_mediaViews, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_inMenu, 0xffb6bdc5);
-        defaultColors.put(KeyHub.key_chat_inMenuSelected, 0xff98c1ce);
-        defaultColors.put(KeyHub.key_chat_outMenu, 0xff91ce7e);
-        defaultColors.put(KeyHub.key_chat_outMenuSelected, 0xff91ce7e);
-        defaultColors.put(KeyHub.key_chat_mediaMenu, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_outInstant, 0xff55ab4f);
-        defaultColors.put(KeyHub.key_chat_outInstantSelected, 0xff489943);
-        defaultColors.put(KeyHub.key_chat_inInstant, 0xff3a8ccf);
-        defaultColors.put(KeyHub.key_chat_inInstantSelected, 0xff3079b5);
-        defaultColors.put(KeyHub.key_chat_sentError, 0xffdb3535);
-        defaultColors.put(KeyHub.key_chat_sentErrorIcon, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_selectedBackground, 0x280a90f0);
-        defaultColors.put(KeyHub.key_chat_previewDurationText, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_previewGameText, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_inPreviewInstantText, 0xff3a8ccf);
-        defaultColors.put(KeyHub.key_chat_outPreviewInstantText, 0xff55ab4f);
-        defaultColors.put(KeyHub.key_chat_inPreviewInstantSelectedText, 0xff3079b5);
-        defaultColors.put(KeyHub.key_chat_outPreviewInstantSelectedText, 0xff489943);
-        defaultColors.put(KeyHub.key_chat_secretTimeText, 0xffe4e2e0);
-        defaultColors.put(KeyHub.key_chat_stickerNameText, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_botButtonText, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_botProgress, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_inForwardedNameText, 0xff3886c7);
-        defaultColors.put(KeyHub.key_chat_outForwardedNameText, 0xff55ab4f);
-        defaultColors.put(KeyHub.key_chat_inPsaNameText, 0xff5a9c39);
-        defaultColors.put(KeyHub.key_chat_outPsaNameText, 0xff5a9c39);
-        defaultColors.put(KeyHub.key_chat_inViaBotNameText, 0xff3a8ccf);
-        defaultColors.put(KeyHub.key_chat_outViaBotNameText, 0xff55ab4f);
-        defaultColors.put(KeyHub.key_chat_stickerViaBotNameText, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_inReplyLine, 0xff599fd8);
-        defaultColors.put(KeyHub.key_chat_outReplyLine, 0xff6eb969);
-        defaultColors.put(KeyHub.key_chat_stickerReplyLine, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_inReplyNameText, 0xff3a8ccf);
-        defaultColors.put(KeyHub.key_chat_outReplyNameText, 0xff55ab4f);
-        defaultColors.put(KeyHub.key_chat_stickerReplyNameText, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_inReplyMessageText, 0xff000000);
-        defaultColors.put(KeyHub.key_chat_outReplyMessageText, 0xff000000);
-        defaultColors.put(KeyHub.key_chat_inReplyMediaMessageText, 0xffa1aab3);
-        defaultColors.put(KeyHub.key_chat_outReplyMediaMessageText, 0xff65b05b);
-        defaultColors.put(KeyHub.key_chat_inReplyMediaMessageSelectedText, 0xff89b4c1);
-        defaultColors.put(KeyHub.key_chat_outReplyMediaMessageSelectedText, 0xff65b05b);
-        defaultColors.put(KeyHub.key_chat_stickerReplyMessageText, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_inPreviewLine, 0xff70b4e8);
-        defaultColors.put(KeyHub.key_chat_outPreviewLine, 0xff88c97b);
-        defaultColors.put(KeyHub.key_chat_inSiteNameText, 0xff3a8ccf);
-        defaultColors.put(KeyHub.key_chat_outSiteNameText, 0xff55ab4f);
-        defaultColors.put(KeyHub.key_chat_inContactNameText, 0xff4e9ad4);
-        defaultColors.put(KeyHub.key_chat_outContactNameText, 0xff55ab4f);
-        defaultColors.put(KeyHub.key_chat_inContactPhoneText, 0xff2f3438);
-        defaultColors.put(KeyHub.key_chat_inContactPhoneSelectedText, 0xff2f3438);
-        defaultColors.put(KeyHub.key_chat_outContactPhoneText, 0xff354234);
-        defaultColors.put(KeyHub.key_chat_outContactPhoneSelectedText, 0xff354234);
-        defaultColors.put(KeyHub.key_chat_mediaProgress, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_inAudioProgress, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_outAudioProgress, 0xffefffde);
-        defaultColors.put(KeyHub.key_chat_inAudioSelectedProgress, 0xffeff8fe);
-        defaultColors.put(KeyHub.key_chat_outAudioSelectedProgress, 0xffe1f8cf);
-        defaultColors.put(KeyHub.key_chat_mediaTimeText, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_inTimeText, 0xffa1aab3);
-        defaultColors.put(KeyHub.key_chat_outTimeText, 0xff70b15c);
-        defaultColors.put(KeyHub.key_chat_adminText, 0xffc0c6cb);
-        defaultColors.put(KeyHub.key_chat_adminSelectedText, 0xff89b4c1);
-        defaultColors.put(KeyHub.key_chat_inTimeSelectedText, 0xff89b4c1);
-        defaultColors.put(KeyHub.key_chat_outTimeSelectedText, 0xff70b15c);
-        defaultColors.put(KeyHub.key_chat_inAudioPerformerText, 0xff2f3438);
-        defaultColors.put(KeyHub.key_chat_inAudioPerformerSelectedText, 0xff2f3438);
-        defaultColors.put(KeyHub.key_chat_outAudioPerformerText, 0xff354234);
-        defaultColors.put(KeyHub.key_chat_outAudioPerformerSelectedText, 0xff354234);
-        defaultColors.put(KeyHub.key_chat_inAudioTitleText, 0xff4e9ad4);
-        defaultColors.put(KeyHub.key_chat_outAudioTitleText, 0xff55ab4f);
-        defaultColors.put(KeyHub.key_chat_inAudioDurationText, 0xffa1aab3);
-        defaultColors.put(KeyHub.key_chat_outAudioDurationText, 0xff65b05b);
-        defaultColors.put(KeyHub.key_chat_inAudioDurationSelectedText, 0xff89b4c1);
-        defaultColors.put(KeyHub.key_chat_outAudioDurationSelectedText, 0xff65b05b);
-        defaultColors.put(KeyHub.key_chat_inAudioSeekbar, 0xffe4eaf0);
-        defaultColors.put(KeyHub.key_chat_inAudioCacheSeekbar, 0x3fe4eaf0);
-        defaultColors.put(KeyHub.key_chat_outAudioSeekbar, 0xffbbe3ac);
-        defaultColors.put(KeyHub.key_chat_outAudioCacheSeekbar, 0x3fbbe3ac);
-        defaultColors.put(KeyHub.key_chat_inAudioSeekbarSelected, 0xffbcdee8);
-        defaultColors.put(KeyHub.key_chat_outAudioSeekbarSelected, 0xffa9dd96);
-        defaultColors.put(KeyHub.key_chat_inAudioSeekbarFill, 0xff72b5e8);
-        defaultColors.put(KeyHub.key_chat_outAudioSeekbarFill, 0xff78c272);
-        defaultColors.put(KeyHub.key_chat_inVoiceSeekbar, 0xffdee5eb);
-        defaultColors.put(KeyHub.key_chat_outVoiceSeekbar, 0xffbbe3ac);
-        defaultColors.put(KeyHub.key_chat_inVoiceSeekbarSelected, 0xffbcdee8);
-        defaultColors.put(KeyHub.key_chat_outVoiceSeekbarSelected, 0xffa9dd96);
-        defaultColors.put(KeyHub.key_chat_inVoiceSeekbarFill, 0xff72b5e8);
-        defaultColors.put(KeyHub.key_chat_outVoiceSeekbarFill, 0xff78c272);
-        defaultColors.put(KeyHub.key_chat_inFileProgress, 0xffebf0f5);
-        defaultColors.put(KeyHub.key_chat_outFileProgress, 0xffdaf5c3);
-        defaultColors.put(KeyHub.key_chat_inFileProgressSelected, 0xffcbeaf6);
-        defaultColors.put(KeyHub.key_chat_outFileProgressSelected, 0xffc5eca7);
-        defaultColors.put(KeyHub.key_chat_inFileNameText, 0xff4e9ad4);
-        defaultColors.put(KeyHub.key_chat_outFileNameText, 0xff55ab4f);
-        defaultColors.put(KeyHub.key_chat_inFileInfoText, 0xffa1aab3);
-        defaultColors.put(KeyHub.key_chat_outFileInfoText, 0xff65b05b);
-        defaultColors.put(KeyHub.key_chat_inFileInfoSelectedText, 0xff89b4c1);
-        defaultColors.put(KeyHub.key_chat_outFileInfoSelectedText, 0xff65b05b);
-        defaultColors.put(KeyHub.key_chat_inFileBackground, 0xffebf0f5);
-        defaultColors.put(KeyHub.key_chat_outFileBackground, 0xffdaf5c3);
-        defaultColors.put(KeyHub.key_chat_inFileBackgroundSelected, 0xffcbeaf6);
-        defaultColors.put(KeyHub.key_chat_outFileBackgroundSelected, 0xffc5eca7);
-        defaultColors.put(KeyHub.key_chat_inVenueInfoText, 0xffa1aab3);
-        defaultColors.put(KeyHub.key_chat_outVenueInfoText, 0xff65b05b);
-        defaultColors.put(KeyHub.key_chat_inVenueInfoSelectedText, 0xff89b4c1);
-        defaultColors.put(KeyHub.key_chat_outVenueInfoSelectedText, 0xff65b05b);
-        defaultColors.put(KeyHub.key_chat_mediaInfoText, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_linkSelectBackground, 0x3362a9e3);
-        defaultColors.put(KeyHub.key_chat_textSelectBackground, 0x6662a9e3);
-        defaultColors.put(KeyHub.key_chat_emojiPanelBackground, 0xfff0f2f5);
-        defaultColors.put(KeyHub.key_chat_emojiPanelBadgeBackground, 0xff4da6ea);
-        defaultColors.put(KeyHub.key_chat_emojiPanelBadgeText, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_emojiSearchBackground, 0xffe5e9ee);
-        defaultColors.put(KeyHub.key_chat_emojiSearchIcon, 0xff94a1af);
-        defaultColors.put(KeyHub.key_chat_emojiPanelShadowLine, 0x12000000);
-        defaultColors.put(KeyHub.key_chat_emojiPanelEmptyText, 0xff949ba1);
-        defaultColors.put(KeyHub.key_chat_emojiPanelIcon, 0xff9da4ab);
-        defaultColors.put(KeyHub.key_chat_emojiBottomPanelIcon, 0xff8c9197);
-        defaultColors.put(KeyHub.key_chat_emojiPanelIconSelected, 0xff2b97e2);
-        defaultColors.put(KeyHub.key_chat_emojiPanelStickerPackSelector, 0xffe2e5e7);
-        defaultColors.put(KeyHub.key_chat_emojiPanelStickerPackSelectorLine, 0xff56abf0);
-        defaultColors.put(KeyHub.key_chat_emojiPanelBackspace, 0xff8c9197);
-        defaultColors.put(KeyHub.key_chat_emojiPanelMasksIcon, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_emojiPanelMasksIconSelected, 0xff62bfe8);
-        defaultColors.put(KeyHub.key_chat_emojiPanelTrendingTitle, 0xff222222);
-        defaultColors.put(KeyHub.key_chat_emojiPanelStickerSetName, 0xff828b94);
-        defaultColors.put(KeyHub.key_chat_emojiPanelStickerSetNameHighlight, 0xff278ddb);
-        defaultColors.put(KeyHub.key_chat_emojiPanelStickerSetNameIcon, 0xffb1b6bc);
-        defaultColors.put(KeyHub.key_chat_emojiPanelTrendingDescription, 0xff8a8a8a);
-        defaultColors.put(KeyHub.key_chat_botKeyboardButtonText, 0xff36474f);
-        defaultColors.put(KeyHub.key_chat_botKeyboardButtonBackground, 0xffe4e7e9);
-        defaultColors.put(KeyHub.key_chat_botKeyboardButtonBackgroundPressed, 0xffccd1d4);
-        defaultColors.put(KeyHub.key_chat_unreadMessagesStartArrowIcon, 0xffa2b5c7);
-        defaultColors.put(KeyHub.key_chat_unreadMessagesStartText, 0xff5695cc);
-        defaultColors.put(KeyHub.key_chat_unreadMessagesStartBackground, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_inFileIcon, 0xffa2b5c7);
-        defaultColors.put(KeyHub.key_chat_inFileSelectedIcon, 0xff87b6c5);
-        defaultColors.put(KeyHub.key_chat_outFileIcon, 0xff85bf78);
-        defaultColors.put(KeyHub.key_chat_outFileSelectedIcon, 0xff85bf78);
-        defaultColors.put(KeyHub.key_chat_inLocationBackground, 0xffebf0f5);
-        defaultColors.put(KeyHub.key_chat_inLocationIcon, 0xffa2b5c7);
-        defaultColors.put(KeyHub.key_chat_outLocationBackground, 0xffdaf5c3);
-        defaultColors.put(KeyHub.key_chat_outLocationIcon, 0xff87bf78);
-        defaultColors.put(KeyHub.key_chat_inContactBackground, 0xff72b5e8);
-        defaultColors.put(KeyHub.key_chat_inContactIcon, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_outContactBackground, 0xff78c272);
-        defaultColors.put(KeyHub.key_chat_outContactIcon, 0xffefffde);
-        defaultColors.put(KeyHub.key_chat_outBroadcast, 0xff46aa36);
-        defaultColors.put(KeyHub.key_chat_mediaBroadcast, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_searchPanelIcons, 0xff676a6f);
-        defaultColors.put(KeyHub.key_chat_searchPanelText, 0xff676a6f);
-        defaultColors.put(KeyHub.key_chat_secretChatStatusText, 0xff7f7f7f);
-        defaultColors.put(KeyHub.key_chat_fieldOverlayText, 0xff3a8ccf);
-        defaultColors.put(KeyHub.key_chat_stickersHintPanel, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_replyPanelIcons, 0xff57a8e6);
-        defaultColors.put(KeyHub.key_chat_replyPanelClose, 0xff8e959b);
-        defaultColors.put(KeyHub.key_chat_replyPanelName, 0xff3a8ccf);
-        defaultColors.put(KeyHub.key_chat_replyPanelMessage, 0xff222222);
-        defaultColors.put(KeyHub.key_chat_replyPanelLine, 0xffe8e8e8);
-        defaultColors.put(KeyHub.key_chat_messagePanelBackground, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_messagePanelText, 0xff000000);
-        defaultColors.put(KeyHub.key_chat_messagePanelHint, 0xffa4acb3);
-        defaultColors.put(KeyHub.key_chat_messagePanelCursor, 0xff54a1db);
-        defaultColors.put(KeyHub.key_chat_messagePanelShadow, 0xff000000);
-        defaultColors.put(KeyHub.key_chat_messagePanelIcons, 0xff8e959b);
-        defaultColors.put(KeyHub.key_chat_recordedVoicePlayPause, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_recordedVoiceDot, 0xffda564d);
-        defaultColors.put(KeyHub.key_chat_recordedVoiceBackground, 0xff5DADE8);
-        defaultColors.put(KeyHub.key_chat_recordedVoiceProgress, 0xffB1DEFF);
-        defaultColors.put(KeyHub.key_chat_recordedVoiceProgressInner, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_recordVoiceCancel, 0xff3A95D4);
-        defaultColors.put(KeyHub.key_chat_recordedVoiceHighlight, 0x64ffffff);
-        defaultColors.put(KeyHub.key_chat_messagePanelSend, 0xff62b0eb);
-        defaultColors.put(KeyHub.key_chat_messagePanelVoiceLock, 0xffa4a4a4);
-        defaultColors.put(KeyHub.key_chat_messagePanelVoiceLockBackground, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_messagePanelVoiceLockShadow, 0xff000000);
-        defaultColors.put(KeyHub.key_chat_recordTime, 0xff8e959b);
-        defaultColors.put(KeyHub.key_chat_emojiPanelNewTrending, 0xff4da6ea);
-        defaultColors.put(KeyHub.key_chat_gifSaveHintText, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_gifSaveHintBackground, 0xcc111111);
-        defaultColors.put(KeyHub.key_chat_goDownButton, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_goDownButtonShadow, 0xff000000);
-        defaultColors.put(KeyHub.key_chat_goDownButtonIcon, 0xff8e959b);
-        defaultColors.put(KeyHub.key_chat_goDownButtonCounter, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_goDownButtonCounterBackground, 0xff4da2e8);
-        defaultColors.put(KeyHub.key_chat_messagePanelCancelInlineBot, 0xffadadad);
-        defaultColors.put(KeyHub.key_chat_messagePanelVoicePressed, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_messagePanelVoiceBackground, 0xff5DA6DE);
-        defaultColors.put(KeyHub.key_chat_messagePanelVoiceDelete, 0xff737373);
-        defaultColors.put(KeyHub.key_chat_messagePanelVoiceDuration, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_inlineResultIcon, 0xff5795cc);
-        defaultColors.put(KeyHub.key_chat_topPanelBackground, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_topPanelClose, 0xff8c959a);
-        defaultColors.put(KeyHub.key_chat_topPanelLine, 0xff6c9fd2);
-        defaultColors.put(KeyHub.key_chat_topPanelTitle, 0xff3a8ccf);
-        defaultColors.put(KeyHub.key_chat_topPanelMessage, 0xff999999);
-        defaultColors.put(KeyHub.key_chat_reportSpam, 0xffcf5957);
-        defaultColors.put(KeyHub.key_chat_addContact, 0xff4a82b5);
-        defaultColors.put(KeyHub.key_chat_inLoader, 0xff72b5e8);
-        defaultColors.put(KeyHub.key_chat_inLoaderSelected, 0xff65abe0);
-        defaultColors.put(KeyHub.key_chat_outLoader, 0xff78c272);
-        defaultColors.put(KeyHub.key_chat_outLoaderSelected, 0xff6ab564);
-        defaultColors.put(KeyHub.key_chat_inLoaderPhoto, 0xffa2b8c8);
-        defaultColors.put(KeyHub.key_chat_inLoaderPhotoSelected, 0xffa2b5c7);
-        defaultColors.put(KeyHub.key_chat_inLoaderPhotoIcon, 0xfffcfcfc);
-        defaultColors.put(KeyHub.key_chat_inLoaderPhotoIconSelected, 0xffebf0f5);
-        defaultColors.put(KeyHub.key_chat_outLoaderPhoto, 0xff85bf78);
-        defaultColors.put(KeyHub.key_chat_outLoaderPhotoSelected, 0xff7db870);
-        defaultColors.put(KeyHub.key_chat_outLoaderPhotoIcon, 0xffdaf5c3);
-        defaultColors.put(KeyHub.key_chat_outLoaderPhotoIconSelected, 0xffc0e8a4);
-        defaultColors.put(KeyHub.key_chat_mediaLoaderPhoto, 0x66000000);
-        defaultColors.put(KeyHub.key_chat_mediaLoaderPhotoSelected, 0x7f000000);
-        defaultColors.put(KeyHub.key_chat_mediaLoaderPhotoIcon, 0xffffffff);
-        defaultColors.put(KeyHub.key_chat_mediaLoaderPhotoIconSelected, 0xffd9d9d9);
-        defaultColors.put(KeyHub.key_chat_secretTimerBackground, 0xcc3e648e);
-        defaultColors.put(KeyHub.key_chat_secretTimerText, 0xffffffff);
-
-        defaultColors.put(KeyHub.key_profile_creatorIcon, 0xff3a95d5);
-        defaultColors.put(KeyHub.key_profile_actionIcon, 0xff81868a);
-        defaultColors.put(KeyHub.key_profile_actionBackground, 0xffffffff);
-        defaultColors.put(KeyHub.key_profile_actionPressedBackground, 0xfff2f2f2);
-        defaultColors.put(KeyHub.key_profile_verifiedBackground, 0xffb2d6f8);
-        defaultColors.put(KeyHub.key_profile_verifiedCheck, 0xff4983b8);
-        defaultColors.put(KeyHub.key_profile_title, 0xffffffff);
-        defaultColors.put(KeyHub.key_profile_status, 0xffd7eafa);
-
-        defaultColors.put(KeyHub.key_profile_tabText, 0xff878c90);
-        defaultColors.put(KeyHub.key_profile_tabSelectedText, 0xff3a95d5);
-        defaultColors.put(KeyHub.key_profile_tabSelectedLine, 0xff4fa6e9);
-        defaultColors.put(KeyHub.key_profile_tabSelector, 0x0f000000);
-
-        defaultColors.put(KeyHub.key_player_actionBar, 0xffffffff);
-        defaultColors.put(KeyHub.key_player_actionBarSelector, 0x0f000000);
-        defaultColors.put(KeyHub.key_player_actionBarTitle, 0xff2f3438);
-        defaultColors.put(KeyHub.key_player_actionBarTop, 0x99000000);
-        defaultColors.put(KeyHub.key_player_actionBarSubtitle, 0xff8a8a8a);
-        defaultColors.put(KeyHub.key_player_actionBarItems, 0xff8a8a8a);
-        defaultColors.put(KeyHub.key_player_background, 0xffffffff);
-        defaultColors.put(KeyHub.key_player_time, 0xff8c9296);
-        defaultColors.put(KeyHub.key_player_progressBackground, 0xffe9eff5);
-        defaultColors.put(KeyHub.key_player_progressBackground2, 0xffCCD3DB);
-        defaultColors.put(KeyHub.key_player_progressCachedBackground, 0xffe9eff5);
-        defaultColors.put(KeyHub.key_player_progress, 0xff4b9fe3);
-        defaultColors.put(KeyHub.key_player_placeholder, 0xffa8a8a8);
-        defaultColors.put(KeyHub.key_player_placeholderBackground, 0xfff0f0f0);
-        defaultColors.put(KeyHub.key_player_button, 0xff333333);
-        defaultColors.put(KeyHub.key_player_buttonActive, 0xff4ca8ea);
-
-        defaultColors.put(KeyHub.key_sheet_scrollUp, 0xffe1e4e8);
-        defaultColors.put(KeyHub.key_sheet_other, 0xffc9cdd3);
-
-        defaultColors.put(KeyHub.key_files_folderIcon, 0xffffffff);
-        defaultColors.put(KeyHub.key_files_folderIconBackground, 0xff5dafeb);
-        defaultColors.put(KeyHub.key_files_iconText, 0xffffffff);
-
-        defaultColors.put(KeyHub.key_sessions_devicesImage, 0xff969696);
-
-        defaultColors.put(KeyHub.key_passport_authorizeBackground, 0xff45abef);
-        defaultColors.put(KeyHub.key_passport_authorizeBackgroundSelected, 0xff409ddb);
-        defaultColors.put(KeyHub.key_passport_authorizeText, 0xffffffff);
-
-        defaultColors.put(KeyHub.key_location_sendLocationBackground, 0xff469df6);
-        defaultColors.put(KeyHub.key_location_sendLocationIcon, 0xffffffff);
-        defaultColors.put(KeyHub.key_location_sendLocationText, 0xff1c8ad8);
-        defaultColors.put(KeyHub.key_location_sendLiveLocationBackground, 0xff4fc244);
-        defaultColors.put(KeyHub.key_location_sendLiveLocationIcon, 0xffffffff);
-        defaultColors.put(KeyHub.key_location_sendLiveLocationText, 0xff36ab24);
-        defaultColors.put(KeyHub.key_location_liveLocationProgress, 0xff359fe5);
-        defaultColors.put(KeyHub.key_location_placeLocationBackground, 0xff4ca8ea);
-        defaultColors.put(KeyHub.key_location_actionIcon, 0xff3a4045);
-        defaultColors.put(KeyHub.key_location_actionActiveIcon, 0xff4290e6);
-        defaultColors.put(KeyHub.key_location_actionBackground, 0xffffffff);
-        defaultColors.put(KeyHub.key_location_actionPressedBackground, 0xfff2f2f2);
-
-        defaultColors.put(KeyHub.key_dialog_liveLocationProgress, 0xff359fe5);
-
-        defaultColors.put(KeyHub.key_calls_callReceivedGreenIcon, 0xff00c853);
-        defaultColors.put(KeyHub.key_calls_callReceivedRedIcon, 0xffff4848);
-
-        defaultColors.put(KeyHub.key_featuredStickers_addedIcon, 0xff50a8eb);
-        defaultColors.put(KeyHub.key_featuredStickers_buttonProgress, 0xffffffff);
-        defaultColors.put(KeyHub.key_featuredStickers_addButton, 0xff50a8eb);
-        defaultColors.put(KeyHub.key_featuredStickers_addButtonPressed, 0xff439bde);
-        defaultColors.put(KeyHub.key_featuredStickers_removeButtonText, 0xff5093d3);
-        defaultColors.put(KeyHub.key_featuredStickers_buttonText, 0xffffffff);
-        defaultColors.put(KeyHub.key_featuredStickers_unread, 0xff4da6ea);
-
-        defaultColors.put(KeyHub.key_inappPlayerPerformer, 0xff2f3438);
-        defaultColors.put(KeyHub.key_inappPlayerTitle, 0xff2f3438);
-        defaultColors.put(KeyHub.key_inappPlayerBackground, 0xffffffff);
-        defaultColors.put(KeyHub.key_inappPlayerPlayPause, 0xff62b0eb);
-        defaultColors.put(KeyHub.key_inappPlayerClose, 0xffa8a8a8);
-
-        defaultColors.put(KeyHub.key_returnToCallBackground, 0xff44a1e3);
-        defaultColors.put(KeyHub.key_returnToCallText, 0xffffffff);
-
-        defaultColors.put(KeyHub.key_sharedMedia_startStopLoadIcon, 0xff36a2ee);
-        defaultColors.put(KeyHub.key_sharedMedia_linkPlaceholder, 0xfff0f3f5);
-        defaultColors.put(KeyHub.key_sharedMedia_linkPlaceholderText, 0xffb7bec3);
-        defaultColors.put(KeyHub.key_sharedMedia_photoPlaceholder, 0xffedf3f7);
-        defaultColors.put(KeyHub.key_sharedMedia_actionMode, 0xff4687b3);
-
         defaultColors.put(KeyHub.key_checkbox, 0xff5ec245);
         defaultColors.put(KeyHub.key_checkboxCheck, 0xffffffff);
         defaultColors.put(KeyHub.key_checkboxDisabled, 0xffb0b9c2);
 
-        defaultColors.put(KeyHub.key_stickers_menu, 0xffb6bdc5);
-        defaultColors.put(KeyHub.key_stickers_menuSelector, 0x0f000000);
-
-        defaultColors.put(KeyHub.key_changephoneinfo_image, 0xffb8bfc5);
-        defaultColors.put(KeyHub.key_changephoneinfo_image2, 0xff50a7ea);
-
-        defaultColors.put(KeyHub.key_groupcreate_hintText, 0xffa1aab3);
-        defaultColors.put(KeyHub.key_groupcreate_cursor, 0xff52a3db);
-        defaultColors.put(KeyHub.key_groupcreate_sectionShadow, 0xff000000);
-        defaultColors.put(KeyHub.key_groupcreate_sectionText, 0xff7c8288);
-        defaultColors.put(KeyHub.key_groupcreate_spanText, 0xff222222);
-        defaultColors.put(KeyHub.key_groupcreate_spanBackground, 0xfff2f2f2);
-        defaultColors.put(KeyHub.key_groupcreate_spanDelete, 0xffffffff);
-
-        defaultColors.put(KeyHub.key_contacts_inviteBackground, 0xff55be61);
-        defaultColors.put(KeyHub.key_contacts_inviteText, 0xffffffff);
-
-        defaultColors.put(KeyHub.key_login_progressInner, 0xffe1eaf2);
-        defaultColors.put(KeyHub.key_login_progressOuter, 0xff62a0d0);
-
-        defaultColors.put(KeyHub.key_musicPicker_checkbox, 0xff29b6f7);
-        defaultColors.put(KeyHub.key_musicPicker_checkboxCheck, 0xffffffff);
-        defaultColors.put(KeyHub.key_musicPicker_buttonBackground, 0xff5cafea);
-        defaultColors.put(KeyHub.key_musicPicker_buttonIcon, 0xffffffff);
-        defaultColors.put(KeyHub.key_picker_enabledButton, 0xff19a7e8);
-        defaultColors.put(KeyHub.key_picker_disabledButton, 0xff999999);
-        defaultColors.put(KeyHub.key_picker_badge, 0xff29b6f7);
-        defaultColors.put(KeyHub.key_picker_badgeText, 0xffffffff);
-
-        defaultColors.put(KeyHub.key_chat_botSwitchToInlineText, 0xff4391cc);
-
-        defaultColors.put(KeyHub.key_undo_background, 0xea272f38);
-        defaultColors.put(KeyHub.key_undo_cancelColor, 0xff85caff);
-        defaultColors.put(KeyHub.key_undo_infoColor, 0xffffffff);
-
-        defaultColors.put(KeyHub.key_wallet_blackBackground, 0xff000000);
-        defaultColors.put(KeyHub.key_wallet_graySettingsBackground, 0xfff0f0f0);
-        defaultColors.put(KeyHub.key_wallet_grayBackground, 0xff292929);
-        defaultColors.put(KeyHub.key_wallet_whiteBackground, 0xffffffff);
-        defaultColors.put(KeyHub.key_wallet_blackBackgroundSelector, 0x40ffffff);
-        defaultColors.put(KeyHub.key_wallet_whiteText, 0xffffffff);
-        defaultColors.put(KeyHub.key_wallet_blackText, 0xff222222);
-        defaultColors.put(KeyHub.key_wallet_statusText, 0xff808080);
-        defaultColors.put(KeyHub.key_wallet_grayText, 0xff777777);
-        defaultColors.put(KeyHub.key_wallet_grayText2, 0xff666666);
-        defaultColors.put(KeyHub.key_wallet_greenText, 0xff37a818);
-        defaultColors.put(KeyHub.key_wallet_redText, 0xffdb4040);
-        defaultColors.put(KeyHub.key_wallet_dateText, 0xff999999);
-        defaultColors.put(KeyHub.key_wallet_commentText, 0xff999999);
-        defaultColors.put(KeyHub.key_wallet_releaseBackground, 0xff307cbb);
-        defaultColors.put(KeyHub.key_wallet_pullBackground, 0xff212121);
-        defaultColors.put(KeyHub.key_wallet_buttonBackground, 0xff47a1e6);
-        defaultColors.put(KeyHub.key_wallet_buttonPressedBackground, 0xff2b8cd6);
-        defaultColors.put(KeyHub.key_wallet_buttonText, 0xffffffff);
-        defaultColors.put(KeyHub.key_wallet_addressConfirmBackground, 0x0d000000);
-        defaultColors.put(KeyHub.key_chat_outTextSelectionHighlight, 0x2E3F9923);
-        defaultColors.put(KeyHub.key_chat_inTextSelectionHighlight, 0x5062A9E3);
-        defaultColors.put(KeyHub.key_chat_TextSelectionCursor, 0xFF419FE8);
-
-        defaultColors.put(KeyHub.key_statisticChartSignature, 0x7f252529);
-        defaultColors.put(KeyHub.key_statisticChartSignatureAlpha, 0x7f252529);
-        defaultColors.put(KeyHub.key_statisticChartHintLine, 0x1a182D3B);
-        defaultColors.put(KeyHub.key_statisticChartActiveLine, 0x33000000);
-        defaultColors.put(KeyHub.key_statisticChartInactivePickerChart, 0x99e2eef9);
-        defaultColors.put(KeyHub.key_statisticChartActivePickerChart, 0xd8baccd9);
-
-        defaultColors.put(KeyHub.key_statisticChartRipple, 0x2c7e9db7);
-        defaultColors.put(KeyHub.key_statisticChartBackZoomColor, 0xff108BE3);
-        defaultColors.put(KeyHub.key_statisticChartCheckboxInactive, 0xffBDBDBD);
-        defaultColors.put(KeyHub.key_statisticChartNightIconColor, 0xff8E8E93);
-        defaultColors.put(KeyHub.key_statisticChartChevronColor, 0xffD2D5D7);
-        defaultColors.put(KeyHub.key_statisticChartHighlightColor, 0x20ececec);
-        defaultColors.put(KeyHub.key_statisticChartPopupBackground, 0xffffffff);
-
-        defaultColors.put(KeyHub.key_statisticChartLine_blue, 0xff327FE5);
-        defaultColors.put(KeyHub.key_statisticChartLine_green, 0xff61C752);
-        defaultColors.put(KeyHub.key_statisticChartLine_red, 0xffE05356);
-        defaultColors.put(KeyHub.key_statisticChartLine_golden, 0xffDEBA08);
-        defaultColors.put(KeyHub.key_statisticChartLine_lightblue, 0xff58A8ED);
-        defaultColors.put(KeyHub.key_statisticChartLine_lightgreen, 0xff8FCF39);
-        defaultColors.put(KeyHub.key_statisticChartLine_orange, 0xffE3B727);
-        defaultColors.put(KeyHub.key_statisticChartLine_indigo, 0xff7F79F3);
         //endregion
 
         //region fallbackKeys
-        fallbackKeys.put(KeyHub.key_chat_adminText, KeyHub.key_chat_inTimeText);
-        fallbackKeys.put(KeyHub.key_chat_adminSelectedText, KeyHub.key_chat_inTimeSelectedText);
-        fallbackKeys.put(KeyHub.key_player_progressCachedBackground, KeyHub.key_player_progressBackground);
-        fallbackKeys.put(KeyHub.key_chat_inAudioCacheSeekbar, KeyHub.key_chat_inAudioSeekbar);
-        fallbackKeys.put(KeyHub.key_chat_outAudioCacheSeekbar, KeyHub.key_chat_outAudioSeekbar);
-        fallbackKeys.put(KeyHub.key_chat_emojiSearchBackground, KeyHub.key_chat_emojiPanelStickerPackSelector);
-        fallbackKeys.put(KeyHub.key_location_sendLiveLocationIcon, KeyHub.key_location_sendLocationIcon);
-        fallbackKeys.put(KeyHub.key_changephoneinfo_image2, KeyHub.key_featuredStickers_addButton);
         fallbackKeys.put(KeyHub.key_graySectionText, KeyHub.key_windowBackgroundWhiteGrayText2);
-        fallbackKeys.put(KeyHub.key_chat_inMediaIcon, KeyHub.key_chat_inBubble);
-        fallbackKeys.put(KeyHub.key_chat_outMediaIcon, KeyHub.key_chat_outBubble);
-        fallbackKeys.put(KeyHub.key_chat_inMediaIconSelected, KeyHub.key_chat_inBubbleSelected);
-        fallbackKeys.put(KeyHub.key_chat_outMediaIconSelected, KeyHub.key_chat_outBubbleSelected);
-        fallbackKeys.put(KeyHub.key_chats_actionUnreadIcon, KeyHub.key_profile_actionIcon);
-        fallbackKeys.put(KeyHub.key_chats_actionUnreadBackground, KeyHub.key_profile_actionBackground);
-        fallbackKeys.put(KeyHub.key_chats_actionUnreadPressedBackground, KeyHub.key_profile_actionPressedBackground);
         fallbackKeys.put(KeyHub.key_dialog_inlineProgressBackground, KeyHub.key_windowBackgroundGray);
-        fallbackKeys.put(KeyHub.key_dialog_inlineProgress, KeyHub.key_chats_menuItemIcon);
-        fallbackKeys.put(KeyHub.key_groupcreate_spanDelete, KeyHub.key_chats_actionIcon);
-        fallbackKeys.put(KeyHub.key_sharedMedia_photoPlaceholder, KeyHub.key_windowBackgroundGray);
-        fallbackKeys.put(KeyHub.key_chat_attachPollBackground, KeyHub.key_chat_attachAudioBackground);
-        fallbackKeys.put(KeyHub.key_chat_attachPollIcon, KeyHub.key_chat_attachAudioIcon);
-        fallbackKeys.put(KeyHub.key_chats_onlineCircle, KeyHub.key_windowBackgroundWhiteBlueText);
         fallbackKeys.put(KeyHub.key_windowBackgroundWhiteBlueButton, KeyHub.key_windowBackgroundWhiteValueText);
         fallbackKeys.put(KeyHub.key_windowBackgroundWhiteBlueIcon, KeyHub.key_windowBackgroundWhiteValueText);
-        fallbackKeys.put(KeyHub.key_undo_background, KeyHub.key_chat_gifSaveHintBackground);
-        fallbackKeys.put(KeyHub.key_undo_cancelColor, KeyHub.key_chat_gifSaveHintText);
-        fallbackKeys.put(KeyHub.key_undo_infoColor, KeyHub.key_chat_gifSaveHintText);
         fallbackKeys.put(KeyHub.key_windowBackgroundUnchecked, KeyHub.key_windowBackgroundWhite);
         fallbackKeys.put(KeyHub.key_windowBackgroundChecked, KeyHub.key_windowBackgroundWhite);
         fallbackKeys.put(KeyHub.key_switchTrackBlue, KeyHub.key_switchTrack);
@@ -910,186 +300,24 @@ public class Theme {
         fallbackKeys.put(KeyHub.key_switchTrackBlueThumb, KeyHub.key_windowBackgroundWhite);
         fallbackKeys.put(KeyHub.key_switchTrackBlueThumbChecked, KeyHub.key_windowBackgroundWhite);
         fallbackKeys.put(KeyHub.key_windowBackgroundCheckText, KeyHub.key_windowBackgroundWhiteBlackText);
-        fallbackKeys.put(KeyHub.key_contextProgressInner4, KeyHub.key_contextProgressInner1);
-        fallbackKeys.put(KeyHub.key_contextProgressOuter4, KeyHub.key_contextProgressOuter1);
         fallbackKeys.put(KeyHub.key_switchTrackBlueSelector, KeyHub.key_listSelector);
         fallbackKeys.put(KeyHub.key_switchTrackBlueSelectorChecked, KeyHub.key_listSelector);
-        fallbackKeys.put(KeyHub.key_chat_emojiBottomPanelIcon, KeyHub.key_chat_emojiPanelIcon);
-        fallbackKeys.put(KeyHub.key_chat_emojiSearchIcon, KeyHub.key_chat_emojiPanelIcon);
-        fallbackKeys.put(KeyHub.key_chat_emojiPanelStickerSetNameHighlight, KeyHub.key_windowBackgroundWhiteBlueText4);
-        fallbackKeys.put(KeyHub.key_chat_emojiPanelStickerPackSelectorLine, KeyHub.key_chat_emojiPanelIconSelected);
-        fallbackKeys.put(KeyHub.key_sharedMedia_actionMode, KeyHub.key_actionBarDefault);
-        fallbackKeys.put(KeyHub.key_sheet_scrollUp, KeyHub.key_chat_emojiPanelStickerPackSelector);
-        fallbackKeys.put(KeyHub.key_sheet_other, KeyHub.key_player_actionBarItems);
-        fallbackKeys.put(KeyHub.key_dialogSearchBackground, KeyHub.key_chat_emojiPanelStickerPackSelector);
-        fallbackKeys.put(KeyHub.key_dialogSearchHint, KeyHub.key_chat_emojiPanelIcon);
-        fallbackKeys.put(KeyHub.key_dialogSearchIcon, KeyHub.key_chat_emojiPanelIcon);
         fallbackKeys.put(KeyHub.key_dialogSearchText, KeyHub.key_windowBackgroundWhiteBlackText);
         fallbackKeys.put(KeyHub.key_dialogFloatingButton, KeyHub.key_dialogRoundCheckBox);
         fallbackKeys.put(KeyHub.key_dialogFloatingButtonPressed, KeyHub.key_dialogRoundCheckBox);
         fallbackKeys.put(KeyHub.key_dialogFloatingIcon, KeyHub.key_dialogRoundCheckBoxCheck);
-        fallbackKeys.put(KeyHub.key_dialogShadowLine, KeyHub.key_chat_emojiPanelShadowLine);
         fallbackKeys.put(KeyHub.key_actionBarDefaultArchived, KeyHub.key_actionBarDefault);
         fallbackKeys.put(KeyHub.key_actionBarDefaultArchivedSelector, KeyHub.key_actionBarDefaultSelector);
         fallbackKeys.put(KeyHub.key_actionBarDefaultArchivedIcon, KeyHub.key_actionBarDefaultIcon);
         fallbackKeys.put(KeyHub.key_actionBarDefaultArchivedTitle, KeyHub.key_actionBarDefaultTitle);
         fallbackKeys.put(KeyHub.key_actionBarDefaultArchivedSearch, KeyHub.key_actionBarDefaultSearch);
         fallbackKeys.put(KeyHub.key_actionBarDefaultArchivedSearchPlaceholder, KeyHub.key_actionBarDefaultSearchPlaceholder);
-        fallbackKeys.put(KeyHub.key_chats_message_threeLines, KeyHub.key_chats_message);
-        fallbackKeys.put(KeyHub.key_chats_nameMessage_threeLines, KeyHub.key_chats_nameMessage);
-        fallbackKeys.put(KeyHub.key_chats_nameArchived, KeyHub.key_chats_name);
-        fallbackKeys.put(KeyHub.key_chats_nameMessageArchived, KeyHub.key_chats_nameMessage);
-        fallbackKeys.put(KeyHub.key_chats_nameMessageArchived_threeLines, KeyHub.key_chats_nameMessage);
-        fallbackKeys.put(KeyHub.key_chats_messageArchived, KeyHub.key_chats_message);
-        fallbackKeys.put(KeyHub.key_avatar_backgroundArchived, KeyHub.key_chats_unreadCounterMuted);
-        fallbackKeys.put(KeyHub.key_chats_archiveBackground, KeyHub.key_chats_actionBackground);
-        fallbackKeys.put(KeyHub.key_chats_archivePinBackground, KeyHub.key_chats_unreadCounterMuted);
-        fallbackKeys.put(KeyHub.key_chats_archiveIcon, KeyHub.key_chats_actionIcon);
-        fallbackKeys.put(KeyHub.key_chats_archiveText, KeyHub.key_chats_actionIcon);
         fallbackKeys.put(KeyHub.key_actionBarDefaultSubmenuItemIcon, KeyHub.key_dialogIcon);
-        fallbackKeys.put(KeyHub.key_checkboxDisabled, KeyHub.key_chats_unreadCounterMuted);
-        fallbackKeys.put(KeyHub.key_chat_status, KeyHub.key_actionBarDefaultSubtitle);
-        fallbackKeys.put(KeyHub.key_chat_inGreenCall, KeyHub.key_calls_callReceivedGreenIcon);
-        fallbackKeys.put(KeyHub.key_chat_inRedCall, KeyHub.key_calls_callReceivedRedIcon);
-        fallbackKeys.put(KeyHub.key_chat_outGreenCall, KeyHub.key_calls_callReceivedGreenIcon);
         fallbackKeys.put(KeyHub.key_actionBarTabActiveText, KeyHub.key_actionBarDefaultTitle);
         fallbackKeys.put(KeyHub.key_actionBarTabUnactiveText, KeyHub.key_actionBarDefaultSubtitle);
         fallbackKeys.put(KeyHub.key_actionBarTabLine, KeyHub.key_actionBarDefaultTitle);
         fallbackKeys.put(KeyHub.key_actionBarTabSelector, KeyHub.key_actionBarDefaultSelector);
-        fallbackKeys.put(KeyHub.key_profile_status, KeyHub.key_avatar_subtitleInProfileBlue);
-        fallbackKeys.put(KeyHub.key_chats_menuTopBackgroundCats, KeyHub.key_avatar_backgroundActionBarBlue);
-        //fallbackKeys.put(KeyHub.key_chat_attachActiveTab, 0xff33a7f5);
-        //fallbackKeys.put(KeyHub.key_chat_attachUnactiveTab, 0xff92999e);
-        fallbackKeys.put(KeyHub.key_chat_attachPermissionImage, KeyHub.key_dialogTextBlack);
-        fallbackKeys.put(KeyHub.key_chat_attachPermissionMark, KeyHub.key_chat_sentError);
-        fallbackKeys.put(KeyHub.key_chat_attachPermissionText, KeyHub.key_dialogTextBlack);
-        fallbackKeys.put(KeyHub.key_chat_attachEmptyImage, KeyHub.key_emptyListPlaceholder);
         fallbackKeys.put(KeyHub.key_actionBarBrowser, KeyHub.key_actionBarDefault);
-        fallbackKeys.put(KeyHub.key_chats_sentReadCheck, KeyHub.key_chats_sentCheck);
-        fallbackKeys.put(KeyHub.key_chat_outSentCheckRead, KeyHub.key_chat_outSentCheck);
-        fallbackKeys.put(KeyHub.key_chat_outSentCheckReadSelected, KeyHub.key_chat_outSentCheckSelected);
-        fallbackKeys.put(KeyHub.key_chats_archivePullDownBackground, KeyHub.key_chats_unreadCounterMuted);
-        fallbackKeys.put(KeyHub.key_chats_archivePullDownBackgroundActive, KeyHub.key_chats_actionBackground);
-        fallbackKeys.put(KeyHub.key_avatar_backgroundArchivedHidden, KeyHub.key_avatar_backgroundSaved);
-        fallbackKeys.put(KeyHub.key_featuredStickers_removeButtonText, KeyHub.key_featuredStickers_addButtonPressed);
-        fallbackKeys.put(KeyHub.key_dialogEmptyImage, KeyHub.key_player_time);
-        fallbackKeys.put(KeyHub.key_dialogEmptyText, KeyHub.key_player_time);
-        fallbackKeys.put(KeyHub.key_location_actionIcon, KeyHub.key_dialogTextBlack);
-        fallbackKeys.put(KeyHub.key_location_actionActiveIcon, KeyHub.key_windowBackgroundWhiteBlueText7);
-        fallbackKeys.put(KeyHub.key_location_actionBackground, KeyHub.key_dialogBackground);
-        fallbackKeys.put(KeyHub.key_location_actionPressedBackground, KeyHub.key_dialogBackgroundGray);
-        fallbackKeys.put(KeyHub.key_location_sendLocationText, KeyHub.key_windowBackgroundWhiteBlueText7);
-        fallbackKeys.put(KeyHub.key_location_sendLiveLocationText, KeyHub.key_windowBackgroundWhiteGreenText);
-        fallbackKeys.put(KeyHub.key_chat_outTextSelectionHighlight, KeyHub.key_chat_textSelectBackground);
-        fallbackKeys.put(KeyHub.key_chat_inTextSelectionHighlight, KeyHub.key_chat_textSelectBackground);
-        fallbackKeys.put(KeyHub.key_chat_TextSelectionCursor, KeyHub.key_chat_messagePanelCursor);
-        fallbackKeys.put(KeyHub.key_chat_inPollCorrectAnswer, KeyHub.key_chat_attachLocationBackground);
-        fallbackKeys.put(KeyHub.key_chat_outPollCorrectAnswer, KeyHub.key_chat_attachLocationBackground);
-        fallbackKeys.put(KeyHub.key_chat_inPollWrongAnswer, KeyHub.key_chat_attachAudioBackground);
-        fallbackKeys.put(KeyHub.key_chat_outPollWrongAnswer, KeyHub.key_chat_attachAudioBackground);
-
-        fallbackKeys.put(KeyHub.key_profile_tabText, KeyHub.key_windowBackgroundWhiteGrayText);
-        fallbackKeys.put(KeyHub.key_profile_tabSelectedText, KeyHub.key_windowBackgroundWhiteBlueHeader);
-        fallbackKeys.put(KeyHub.key_profile_tabSelectedLine, KeyHub.key_windowBackgroundWhiteBlueHeader);
-        fallbackKeys.put(KeyHub.key_profile_tabSelector, KeyHub.key_listSelector);
-        fallbackKeys.put(KeyHub.key_statisticChartPopupBackground, KeyHub.key_dialogBackground);
-
-        fallbackKeys.put(KeyHub.key_chat_attachGalleryText, KeyHub.key_chat_attachGalleryBackground);
-        fallbackKeys.put(KeyHub.key_chat_attachAudioText, KeyHub.key_chat_attachAudioBackground);
-        fallbackKeys.put(KeyHub.key_chat_attachFileText, KeyHub.key_chat_attachFileBackground);
-        fallbackKeys.put(KeyHub.key_chat_attachContactText, KeyHub.key_chat_attachContactBackground);
-        fallbackKeys.put(KeyHub.key_chat_attachLocationText, KeyHub.key_chat_attachLocationBackground);
-        fallbackKeys.put(KeyHub.key_chat_attachPollText, KeyHub.key_chat_attachPollBackground);
-
-        fallbackKeys.put(KeyHub.key_chat_inPsaNameText, KeyHub.key_avatar_nameInMessageGreen);
-        fallbackKeys.put(KeyHub.key_chat_outPsaNameText, KeyHub.key_avatar_nameInMessageGreen);
-        //endregion
-
-        //region themeAccentExclusionKeys
-        themeAccentExclusionKeys.addAll(Arrays.asList(KeyHub.keys_avatar_background));
-        themeAccentExclusionKeys.addAll(Arrays.asList(KeyHub.keys_avatar_nameInMessage));
-        themeAccentExclusionKeys.add(KeyHub.key_chat_attachFileBackground);
-        themeAccentExclusionKeys.add(KeyHub.key_chat_attachGalleryBackground);
-        themeAccentExclusionKeys.add(KeyHub.key_chat_attachFileText);
-        themeAccentExclusionKeys.add(KeyHub.key_chat_attachGalleryText);
-        themeAccentExclusionKeys.add(KeyHub.key_chat_shareBackground);
-        themeAccentExclusionKeys.add(KeyHub.key_chat_shareBackgroundSelected);
-        //endregion
-
-        //region myMessagesColorKeys
-        myMessagesColorKeys.add(KeyHub.key_chat_outGreenCall);
-        myMessagesColorKeys.add(KeyHub.key_chat_outBubble);
-        myMessagesColorKeys.add(KeyHub.key_chat_outBubbleSelected);
-        myMessagesColorKeys.add(KeyHub.key_chat_outBubbleShadow);
-        myMessagesColorKeys.add(KeyHub.key_chat_outBubbleGradient);
-        myMessagesColorKeys.add(KeyHub.key_chat_outSentCheck);
-        myMessagesColorKeys.add(KeyHub.key_chat_outSentCheckSelected);
-        myMessagesColorKeys.add(KeyHub.key_chat_outSentCheckRead);
-        myMessagesColorKeys.add(KeyHub.key_chat_outSentCheckReadSelected);
-        myMessagesColorKeys.add(KeyHub.key_chat_outSentClock);
-        myMessagesColorKeys.add(KeyHub.key_chat_outSentClockSelected);
-        myMessagesColorKeys.add(KeyHub.key_chat_outMediaIcon);
-        myMessagesColorKeys.add(KeyHub.key_chat_outMediaIconSelected);
-        myMessagesColorKeys.add(KeyHub.key_chat_outViews);
-        myMessagesColorKeys.add(KeyHub.key_chat_outViewsSelected);
-        myMessagesColorKeys.add(KeyHub.key_chat_outMenu);
-        myMessagesColorKeys.add(KeyHub.key_chat_outMenuSelected);
-        myMessagesColorKeys.add(KeyHub.key_chat_outInstant);
-        myMessagesColorKeys.add(KeyHub.key_chat_outInstantSelected);
-        myMessagesColorKeys.add(KeyHub.key_chat_outPreviewInstantText);
-        myMessagesColorKeys.add(KeyHub.key_chat_outPreviewInstantSelectedText);
-        myMessagesColorKeys.add(KeyHub.key_chat_outForwardedNameText);
-        myMessagesColorKeys.add(KeyHub.key_chat_outViaBotNameText);
-        myMessagesColorKeys.add(KeyHub.key_chat_outReplyLine);
-        myMessagesColorKeys.add(KeyHub.key_chat_outReplyNameText);
-        myMessagesColorKeys.add(KeyHub.key_chat_outReplyMessageText);
-        myMessagesColorKeys.add(KeyHub.key_chat_outReplyMediaMessageText);
-        myMessagesColorKeys.add(KeyHub.key_chat_outReplyMediaMessageSelectedText);
-        myMessagesColorKeys.add(KeyHub.key_chat_outPreviewLine);
-        myMessagesColorKeys.add(KeyHub.key_chat_outSiteNameText);
-        myMessagesColorKeys.add(KeyHub.key_chat_outContactNameText);
-        myMessagesColorKeys.add(KeyHub.key_chat_outContactPhoneText);
-        myMessagesColorKeys.add(KeyHub.key_chat_outContactPhoneSelectedText);
-        myMessagesColorKeys.add(KeyHub.key_chat_outAudioProgress);
-        myMessagesColorKeys.add(KeyHub.key_chat_outAudioSelectedProgress);
-        myMessagesColorKeys.add(KeyHub.key_chat_outTimeText);
-        myMessagesColorKeys.add(KeyHub.key_chat_outTimeSelectedText);
-        myMessagesColorKeys.add(KeyHub.key_chat_outAudioPerformerText);
-        myMessagesColorKeys.add(KeyHub.key_chat_outAudioPerformerSelectedText);
-        myMessagesColorKeys.add(KeyHub.key_chat_outAudioTitleText);
-        myMessagesColorKeys.add(KeyHub.key_chat_outAudioDurationText);
-        myMessagesColorKeys.add(KeyHub.key_chat_outAudioDurationSelectedText);
-        myMessagesColorKeys.add(KeyHub.key_chat_outAudioSeekbar);
-        myMessagesColorKeys.add(KeyHub.key_chat_outAudioCacheSeekbar);
-        myMessagesColorKeys.add(KeyHub.key_chat_outAudioSeekbarSelected);
-        myMessagesColorKeys.add(KeyHub.key_chat_outAudioSeekbarFill);
-        myMessagesColorKeys.add(KeyHub.key_chat_outVoiceSeekbar);
-        myMessagesColorKeys.add(KeyHub.key_chat_outVoiceSeekbarSelected);
-        myMessagesColorKeys.add(KeyHub.key_chat_outVoiceSeekbarFill);
-        myMessagesColorKeys.add(KeyHub.key_chat_outFileProgress);
-        myMessagesColorKeys.add(KeyHub.key_chat_outFileProgressSelected);
-        myMessagesColorKeys.add(KeyHub.key_chat_outFileNameText);
-        myMessagesColorKeys.add(KeyHub.key_chat_outFileInfoText);
-        myMessagesColorKeys.add(KeyHub.key_chat_outFileInfoSelectedText);
-        myMessagesColorKeys.add(KeyHub.key_chat_outFileBackground);
-        myMessagesColorKeys.add(KeyHub.key_chat_outFileBackgroundSelected);
-        myMessagesColorKeys.add(KeyHub.key_chat_outVenueInfoText);
-        myMessagesColorKeys.add(KeyHub.key_chat_outVenueInfoSelectedText);
-        myMessagesColorKeys.add(KeyHub.key_chat_outLoader);
-        myMessagesColorKeys.add(KeyHub.key_chat_outLoaderSelected);
-        myMessagesColorKeys.add(KeyHub.key_chat_outLoaderPhoto);
-        myMessagesColorKeys.add(KeyHub.key_chat_outLoaderPhotoSelected);
-        myMessagesColorKeys.add(KeyHub.key_chat_outLoaderPhotoIcon);
-        myMessagesColorKeys.add(KeyHub.key_chat_outLoaderPhotoIconSelected);
-        myMessagesColorKeys.add(KeyHub.key_chat_outLocationBackground);
-        myMessagesColorKeys.add(KeyHub.key_chat_outLocationIcon);
-        myMessagesColorKeys.add(KeyHub.key_chat_outContactBackground);
-        myMessagesColorKeys.add(KeyHub.key_chat_outContactIcon);
-        myMessagesColorKeys.add(KeyHub.key_chat_outFileIcon);
-        myMessagesColorKeys.add(KeyHub.key_chat_outFileSelectedIcon);
-        myMessagesColorKeys.add(KeyHub.key_chat_outBroadcast);
-        myMessagesColorKeys.add(KeyHub.key_chat_messageTextOut);
-        myMessagesColorKeys.add(KeyHub.key_chat_messageLinkOut);
         //endregion
 
         //region load theme from share preference
@@ -1209,11 +437,6 @@ public class Theme {
         themesDict.put("Night", themeInfo);
         //endregion
 
-        for (int a = 0; a < 1; a++) {
-            remoteThemesHash[a] = themeConfig.getInt("remoteThemesHash" + (a != 0 ? a : ""), 0);
-            lastLoadingThemesTime[a] = themeConfig.getInt("lastLoadingThemesTime" + (a != 0 ? a : ""), 0);
-        }
-
         String themesString = themeConfig.getString("themes2", null);
         if (!TextUtils.isEmpty(themesString)) {
             try {
@@ -1224,7 +447,6 @@ public class Theme {
                         otherThemes.add(themeInfo);
                         themes.add(themeInfo);
                         themesDict.put(themeInfo.getKey(), themeInfo);
-                        themeInfo.loadWallpapers(themeConfig);
                     }
                 }
             } catch (Exception e) {
@@ -1366,11 +588,6 @@ public class Theme {
                     if (info.themeAccentsMap != null && info.themeAccentsMap.get(info.currentAccentId) == null) {
                         info.currentAccentId = info.firstAccentIsDefault ? DEFALT_THEME_ACCENT_ID : 0;
                     }
-                    info.loadWallpapers(themeConfig);
-                    ThemeAccent accent = info.getAccent(false);
-                    if (accent != null) {
-                        info.overrideWallpaper = accent.overrideWallpaper;
-                    }
                 }
             }
             if (oldEditor != null) {
@@ -1408,34 +625,6 @@ public class Theme {
             currentDayTheme = applyingTheme;
         }
 
-        if (preferences.contains("overrideThemeWallpaper") || preferences.contains("selectedBackground2")) {
-            boolean override = preferences.getBoolean("overrideThemeWallpaper", false);
-            long id = preferences.getLong("selectedBackground2", 1000001);
-            if (id == -1 || override && id != -2 && id != 1000001) {
-                OverrideWallpaperInfo overrideWallpaper = new OverrideWallpaperInfo();
-                overrideWallpaper.color = preferences.getInt("selectedColor", 0);
-                overrideWallpaper.slug = preferences.getString("selectedBackgroundSlug", "");
-                if (id >= -100 && id <= -1 && overrideWallpaper.color != 0) {
-                    overrideWallpaper.slug = COLOR_BACKGROUND_SLUG;
-                    overrideWallpaper.fileName = "";
-                    overrideWallpaper.originalFileName = "";
-                } else {
-                    overrideWallpaper.fileName = "wallpaper.jpg";
-                    overrideWallpaper.originalFileName = "wallpaper_original.jpg";
-                }
-                overrideWallpaper.gradientColor = preferences.getInt("selectedGradientColor", 0);
-                overrideWallpaper.rotation = preferences.getInt("selectedGradientRotation", 45);
-                overrideWallpaper.isBlurred = preferences.getBoolean("selectedBackgroundBlurred", false);
-                overrideWallpaper.isMotion = preferences.getBoolean("selectedBackgroundMotion", false);
-                overrideWallpaper.intensity = preferences.getFloat("selectedIntensity", 0.5f);
-                currentDayTheme.setOverrideWallpaper(overrideWallpaper);
-                if (selectedAutoNightType != AUTO_NIGHT_TYPE_NONE) {
-                    currentNightTheme.setOverrideWallpaper(overrideWallpaper);
-                }
-            }
-            preferences.edit().remove("overrideThemeWallpaper").remove("selectedBackground2").apply();
-        }
-
         int switchToTheme = needSwitchToTheme(AndroidUtilities.applicationContext);
         if (switchToTheme == 2) {
             applyingTheme = currentNightTheme;
@@ -1470,44 +659,6 @@ public class Theme {
     }
 
     public static void applyChatServiceMessageColor() {
-        applyChatServiceMessageColor(null);
-    }
-
-    public static void applyChatServiceMessageColor(int[] custom) {
-        Integer serviceColor;
-        Integer servicePressedColor;
-        serviceMessageColor = serviceMessageColorBackup;
-        serviceSelectedMessageColor = serviceSelectedMessageColorBackup;
-        if (custom != null && custom.length >= 2) {
-            serviceColor = custom[0];
-            servicePressedColor = custom[1];
-            serviceMessageColor = custom[0];
-            serviceSelectedMessageColor = custom[1];
-        } else {
-            serviceColor = currentColors.get(KeyHub.key_chat_serviceBackground);
-            servicePressedColor = currentColors.get(KeyHub.key_chat_serviceBackgroundSelected);
-        }
-        Integer serviceColor2 = serviceColor;
-        Integer servicePressedColor2 = servicePressedColor;
-
-        if (serviceColor == null) {
-            serviceColor = serviceMessageColor;
-            serviceColor2 = serviceMessage2Color;
-        }
-        if (servicePressedColor == null) {
-            servicePressedColor = serviceSelectedMessageColor;
-            servicePressedColor2 = serviceSelectedMessage2Color;
-        }
-        if (currentColor != serviceColor) {
-            colorFilter = new PorterDuffColorFilter(serviceColor, PorterDuff.Mode.MULTIPLY);
-            colorFilter2 = new PorterDuffColorFilter(serviceColor2, PorterDuff.Mode.MULTIPLY);
-            currentColor = serviceColor;
-        }
-        if (currentSelectedColor != servicePressedColor) {
-            currentSelectedColor = servicePressedColor;
-            colorPressedFilter = new PorterDuffColorFilter(servicePressedColor, PorterDuff.Mode.MULTIPLY);
-            colorPressedFilter2 = new PorterDuffColorFilter(servicePressedColor2, PorterDuff.Mode.MULTIPLY);
-        }
     }
     //endregion
 
@@ -1515,9 +666,6 @@ public class Theme {
     public static int getDefaultColor(String key) {
         Integer value = defaultColors.get(key);
         if (value == null) {
-            if (key.equals(KeyHub.key_chats_menuTopShadow) || key.equals(KeyHub.key_chats_menuTopBackground) || key.equals(KeyHub.key_chats_menuTopShadowCats)) {
-                return 0;
-            }
             return 0xffff0000;
         }
         return value;
@@ -1595,20 +743,8 @@ public class Theme {
             }
         }
         if (currentTheme == defaultTheme) {
-            boolean useDefault;
-            if (myMessagesColorKeys.contains(key)) {
-                useDefault = currentTheme.isDefaultMyMessages();
-            } else if (KeyHub.key_chat_wallpaper.equals(key) || KeyHub.key_chat_wallpaper_gradient_to.equals(key)) {
-                useDefault = false;
-            } else {
-                useDefault = currentTheme.isDefaultMainAccent();
-            }
+            boolean useDefault = currentTheme.isDefaultMainAccent();
             if (useDefault) {
-                if (key.equals(KeyHub.key_chat_serviceBackground)) {
-                    return serviceMessageColor;
-                } else if (key.equals(KeyHub.key_chat_serviceBackgroundSelected)) {
-                    return serviceSelectedMessageColor;
-                }
                 return getDefaultColor(key);
             }
         }
@@ -1622,28 +758,13 @@ public class Theme {
                 if (isDefault != null) {
                     isDefault[0] = true;
                 }
-                if (key.equals(KeyHub.key_chat_serviceBackground)) {
-                    return serviceMessageColor;
-                } else if (key.equals(KeyHub.key_chat_serviceBackgroundSelected)) {
-                    return serviceSelectedMessageColor;
-                }
                 return getDefaultColor(key);
             }
-        }
-        if (KeyHub.key_windowBackgroundWhite.equals(key) || KeyHub.key_windowBackgroundGray.equals(key)) {
-            color |= 0xff000000;
         }
         return color;
     }
 
     public static void setColor(Context context, String key, int color, boolean useDefault) {
-        if (key.equals(KeyHub.key_chat_wallpaper)
-                || key.equals(KeyHub.key_chat_wallpaper_gradient_to)
-                || key.equals(KeyHub.key_windowBackgroundWhite)
-                || key.equals(KeyHub.key_windowBackgroundGray)) {
-            color = 0xff000000 | color;
-        }
-
         if (useDefault) {
             currentColors.remove(key);
         } else {
@@ -1651,15 +772,6 @@ public class Theme {
         }
 
         switch (key) {
-            case KeyHub.key_chat_serviceBackground:
-            case KeyHub.key_chat_serviceBackgroundSelected:
-                applyChatServiceMessageColor();
-                break;
-            case KeyHub.key_chat_wallpaper:
-            case KeyHub.key_chat_wallpaper_gradient_to:
-            case KeyHub.key_chat_wallpaper_gradient_rotation:
-                WallpaperManager.reloadWallpaper(context);
-                break;
             case KeyHub.key_actionBarDefault:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     NotificationCenter.post(NotificationCenter.needCheckSystemBarColors);
@@ -1695,21 +807,6 @@ public class Theme {
 
     public static boolean isCustomTheme() {
         return isCustomTheme;
-    }
-
-    static void calcBackgroundColor(Drawable drawable, int save) {
-        if (save != 2) {
-            int[] result = AndroidUtilities.calcDrawableColor(drawable);
-            serviceMessageColor = serviceMessageColorBackup = result[0];
-            serviceSelectedMessageColor = serviceSelectedMessageColorBackup = result[1];
-            serviceMessage2Color = result[2];
-            serviceSelectedMessage2Color = result[3];
-        }
-    }
-
-    public static int getServiceMessageColor() {
-        Integer serviceColor = currentColors.get(KeyHub.key_chat_serviceBackground);
-        return serviceColor == null ? serviceMessageColor : serviceColor;
     }
     //endregion
 }

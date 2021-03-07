@@ -6,7 +6,7 @@ import android.graphics.Typeface;
 import android.text.TextPaint;
 import android.text.style.MetricAffectingSpan;
 
-import com.same.lib.font.FontManager;
+import com.same.lib.util.Font;
 
 /**
  * @author 林学渊
@@ -51,11 +51,11 @@ public class TypefaceSpan extends MetricAffectingSpan {
     }
 
     public boolean isBold(Context context) {
-        return typeface == FontManager.getMediumTypeface(context);
+        return typeface == Font.getMediumTypeface(context);
     }
 
     public boolean isItalic(Context context) {
-        return typeface == FontManager.getItalicTypeface(context);
+        return typeface == Font.getItalicTypeface(context);
     }
 
     @Override

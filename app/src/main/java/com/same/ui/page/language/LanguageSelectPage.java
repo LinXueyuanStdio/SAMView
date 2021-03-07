@@ -23,7 +23,7 @@ import com.same.lib.theme.MyThemeDescription;
 import com.same.lib.theme.Theme;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
-import com.same.ui.page.base.MyBasePage;
+import com.same.lib.theme.wrap.ThemeBasePage;
 import com.same.ui.page.language.cell.LanguageCell;
 import com.same.ui.page.language.cell.ShadowSectionCell;
 import com.same.ui.theme.CommonTheme;
@@ -46,7 +46,7 @@ import java.util.TimerTask;
  * @description null
  * @usage null
  */
-public class LanguageSelectPage extends MyBasePage {
+public class LanguageSelectPage extends ThemeBasePage {
 
     private ListAdapter listAdapter;
     private RecyclerListView listView;
@@ -448,7 +448,6 @@ public class LanguageSelectPage extends MyBasePage {
         d.add(new MyThemeDescription(listView, MyThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, KeyHub.key_windowBackgroundGrayShadow));
         d.add(new MyThemeDescription(listView, 0, new Class[]{LanguageCell.class}, new String[]{"textView"}, null, null, null, KeyHub.key_windowBackgroundWhiteBlackText));
         d.add(new MyThemeDescription(listView, 0, new Class[]{LanguageCell.class}, new String[]{"textView2"}, null, null, null, KeyHub.key_windowBackgroundWhiteGrayText3));
-        d.add(new MyThemeDescription(listView, 0, new Class[]{LanguageCell.class}, new String[]{"checkImage"}, null, null, null, KeyHub.key_featuredStickers_addedIcon));
 
         return d;
     }

@@ -23,7 +23,6 @@ public class NotificationCenter {
     public static int didSetNewTheme = totalEvents++;
     public static int needCheckSystemBarColors = totalEvents++;
     public static int needSetDayNightTheme = totalEvents++;
-    public static int didSetNewWallpaper = totalEvents++;
 
     public static void post(int id) {
         getGlobalInstance().postNotificationName(id);

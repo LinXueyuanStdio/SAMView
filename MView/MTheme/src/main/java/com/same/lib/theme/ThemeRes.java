@@ -16,9 +16,6 @@ import java.util.List;
 public class ThemeRes {
     public static List<AbsTheme> themes = new ArrayList<>();
 
-    public static void install(AbsTheme absTheme) {
-        themes.add(absTheme);
-    }
     public static void installAndApply(Context context, AbsTheme... absThemes) {
         themes.addAll(Arrays.asList(absThemes));
         for (AbsTheme absTheme : themes) {

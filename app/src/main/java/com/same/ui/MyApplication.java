@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.Typeface;
 import android.os.Handler;
 
 import com.same.lib.base.AndroidUtilities;
@@ -44,18 +43,8 @@ public class MyApplication extends Application {
                 return Theme.getColor(key);
             }
         });
-        Lang.install(new Lang.ILang() {
-            @Override
-            public String getString(String key, int string) {
-                return MyLang.getString(key, string);
-            }
-        });
-        Font.install(new Font.IFont() {
-            @Override
-            public Typeface getTypeface(Context context, String assetPath) {
-                return FontManager.getMediumTypeface(context);
-            }
-        });
+        Lang.install(MyLang::getString);
+        Font.install((context, assetPath) -> FontManager.getMediumTypeface(context));
     }
 
     @Override

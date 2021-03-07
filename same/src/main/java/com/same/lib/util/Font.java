@@ -25,6 +25,10 @@ public class Font {
         return getTypeface(context, "fonts/rmedium.ttf");
     }
 
+    public static Typeface getItalicTypeface(Context context) {
+        return getTypeface(context, "fonts/ritalic.ttf");
+    }
+
     public static Typeface getTypeface(Context context, String assetPath) {
         return font.getTypeface(context, assetPath);
     }

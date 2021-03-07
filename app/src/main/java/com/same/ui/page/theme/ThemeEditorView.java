@@ -6,7 +6,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -54,7 +53,6 @@ import com.same.lib.core.EditTextBoldCursor;
 import com.same.lib.core.ThemeDescription;
 import com.same.lib.drawable.CloseProgressDrawable2;
 import com.same.lib.drawable.DrawableManager;
-import com.same.lib.font.FontManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.listview.LinearLayoutManager;
 import com.same.lib.listview.RecyclerView;
@@ -63,17 +61,18 @@ import com.same.lib.theme.MyThemeDescription;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeInfo;
 import com.same.lib.theme.ThemeManager;
-import com.same.lib.theme.WallpaperManager;
+import com.same.lib.util.Font;
+import com.same.lib.util.Space;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.theme.cell.TextColorThemeCell;
 import com.same.ui.theme.AnimationProperties;
+import com.same.ui.theme.DialogTheme;
 import com.same.ui.theme.dialog.BottomSheet;
 import com.same.ui.view.DrawableBuilder;
 import com.same.ui.view.EmptyTextProgressView;
 import com.same.ui.view.RecyclerListView;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -115,7 +114,6 @@ public class ThemeEditorView {
     private WindowManager windowManager;
     private DecelerateInterpolator decelerateInterpolator;
     private SharedPreferences preferences;
-    private WallpaperUpdater wallpaperUpdater;
     private EditorAlert editorAlert;
 
     private ThemeInfo themeInfo;
@@ -128,7 +126,6 @@ public class ThemeEditorView {
     }
 
     public void destroy() {
-        wallpaperUpdater.cleanup();
         if (parentActivity == null || windowView == null) {
             return;
         }
@@ -595,9 +592,7 @@ public class ThemeEditorView {
                             for (int a = 0; a < currentThemeDesription.size(); a++) {
                                 ThemeDescription description = currentThemeDesription.get(a);
                                 String key = description.getCurrentKey();
-                                if (a == 0 && key.equals(KeyHub.key_chat_wallpaper)
-                                        || key.equals(KeyHub.key_chat_wallpaper_gradient_to)
-                                        || key.equals(KeyHub.key_windowBackgroundWhite)
+                                if (a == 0 && key.equals(KeyHub.key_windowBackgroundWhite)
                                         || key.equals(KeyHub.key_windowBackgroundGray)) {
                                     color = 0xff000000 | color;
                                 }
@@ -752,22 +747,22 @@ public class ThemeEditorView {
                     shadowDrawable.draw(canvas);
 
                     if (radProgress != 1.0f) {
-                        Theme.dialogs_onlineCirclePaint.setColor(0xffffffff);
+                        DialogTheme.dialogs_onlineCirclePaint.setColor(0xffffffff);
                         rect1.set(backgroundPaddingLeft, backgroundPaddingTop + top, getMeasuredWidth() - backgroundPaddingLeft, backgroundPaddingTop + top + AndroidUtilities.dp(24));
-                        canvas.drawRoundRect(rect1, AndroidUtilities.dp(12) * radProgress, AndroidUtilities.dp(12) * radProgress, Theme.dialogs_onlineCirclePaint);
+                        canvas.drawRoundRect(rect1, AndroidUtilities.dp(12) * radProgress, AndroidUtilities.dp(12) * radProgress, DialogTheme.dialogs_onlineCirclePaint);
                     }
 
                     int w = AndroidUtilities.dp(36);
                     rect1.set((getMeasuredWidth() - w) / 2, y, (getMeasuredWidth() + w) / 2, y + AndroidUtilities.dp(4));
-                    Theme.dialogs_onlineCirclePaint.setColor(0xffe1e4e8);
-                    Theme.dialogs_onlineCirclePaint.setAlpha((int) (255 * listView.getAlpha()));
-                    canvas.drawRoundRect(rect1, AndroidUtilities.dp(2), AndroidUtilities.dp(2), Theme.dialogs_onlineCirclePaint);
+                    DialogTheme.dialogs_onlineCirclePaint.setColor(0xffe1e4e8);
+                    DialogTheme.dialogs_onlineCirclePaint.setAlpha((int) (255 * listView.getAlpha()));
+                    canvas.drawRoundRect(rect1, AndroidUtilities.dp(2), AndroidUtilities.dp(2), DialogTheme.dialogs_onlineCirclePaint);
 
                     if (statusBarHeight > 0) {
                         int color1 = 0xffffffff;
                         int finalColor = Color.argb(0xff, (int) (Color.red(color1) * 0.8f), (int) (Color.green(color1) * 0.8f), (int) (Color.blue(color1) * 0.8f));
-                        Theme.dialogs_onlineCirclePaint.setColor(finalColor);
-                        canvas.drawRect(backgroundPaddingLeft, AndroidUtilities.statusBarHeight - statusBarHeight, getMeasuredWidth() - backgroundPaddingLeft, AndroidUtilities.statusBarHeight, Theme.dialogs_onlineCirclePaint);
+                        DialogTheme.dialogs_onlineCirclePaint.setColor(finalColor);
+                        canvas.drawRect(backgroundPaddingLeft, AndroidUtilities.statusBarHeight - statusBarHeight, getMeasuredWidth() - backgroundPaddingLeft, AndroidUtilities.statusBarHeight, DialogTheme.dialogs_onlineCirclePaint);
                     }
                 }
             };
@@ -810,10 +805,6 @@ public class ThemeEditorView {
                 currentThemeDesriptionPosition = position;
                 for (int a = 0; a < currentThemeDesription.size(); a++) {
                     ThemeDescription description = currentThemeDesription.get(a);
-                    if (description.getCurrentKey().equals(KeyHub.key_chat_wallpaper)) {
-                        wallpaperUpdater.showAlert(true);
-                        return;
-                    }
                     description.startEditing();
                     if (a == 0) {
                         colorPicker.setColor(description.getCurrentColor());
@@ -866,7 +857,7 @@ public class ThemeEditorView {
             closeButton.setBackgroundDrawable(DrawableManager.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
             closeButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
             closeButton.setText(MyLang.getString("CloseEditor", R.string.CloseEditor).toUpperCase());
-            closeButton.setTypeface(FontManager.getMediumTypeface(context));
+            closeButton.setTypeface(Font.getMediumTypeface(context));
             bottomSaveLayout.addView(closeButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
             closeButton.setOnClickListener(v -> dismiss());
 
@@ -877,7 +868,7 @@ public class ThemeEditorView {
             saveButton.setBackgroundDrawable(DrawableManager.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
             saveButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
             saveButton.setText(MyLang.getString("SaveTheme", R.string.SaveTheme).toUpperCase());
-            saveButton.setTypeface(FontManager.getMediumTypeface(context));
+            saveButton.setTypeface(Font.getMediumTypeface(context));
             bottomSaveLayout.addView(saveButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.RIGHT));
             saveButton.setOnClickListener(v -> {
                 ThemeManager.saveCurrentTheme(parentActivity, themeInfo, true, false, false);
@@ -898,7 +889,7 @@ public class ThemeEditorView {
             cancelButton.setBackgroundDrawable(DrawableManager.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
             cancelButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
             cancelButton.setText(MyLang.getString("Cancel", R.string.Cancel).toUpperCase());
-            cancelButton.setTypeface(FontManager.getMediumTypeface(context));
+            cancelButton.setTypeface(Font.getMediumTypeface(context));
             bottomLayout.addView(cancelButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
             cancelButton.setOnClickListener(v -> {
                 for (int a = 0; a < currentThemeDesription.size(); a++) {
@@ -918,7 +909,7 @@ public class ThemeEditorView {
             defaultButtom.setBackgroundDrawable(DrawableManager.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
             defaultButtom.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
             defaultButtom.setText(MyLang.getString("Default", R.string.Default).toUpperCase());
-            defaultButtom.setTypeface(FontManager.getMediumTypeface(context));
+            defaultButtom.setTypeface(Font.getMediumTypeface(context));
             linearLayout.addView(defaultButtom, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
             defaultButtom.setOnClickListener(v -> {
                 for (int a = 0; a < currentThemeDesription.size(); a++) {
@@ -934,7 +925,7 @@ public class ThemeEditorView {
             saveButton.setBackgroundDrawable(DrawableManager.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
             saveButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
             saveButton.setText(MyLang.getString("Save", R.string.Save).toUpperCase());
-            saveButton.setTypeface(FontManager.getMediumTypeface(context));
+            saveButton.setTypeface(Font.getMediumTypeface(context));
             linearLayout.addView(saveButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
             saveButton.setOnClickListener(v -> setColorPickerVisible(false));
         }
@@ -1287,12 +1278,7 @@ public class ThemeEditorView {
                 if (holder.getItemViewType() == 0) {
                     ArrayList<ThemeDescription> arrayList = searchResult.get(position - 1);
                     ThemeDescription description = arrayList.get(0);
-                    int color;
-                    if (description.getCurrentKey().equals(KeyHub.key_chat_wallpaper)) {
-                        color = 0;
-                    } else {
-                        color = description.getSetColor();
-                    }
+                    int color = description.getSetColor();
                     ((TextColorThemeCell) holder.itemView).setTextAndColor(searchNames.get(position - 1), color);
                 }
             }
@@ -1372,12 +1358,7 @@ public class ThemeEditorView {
                 if (holder.getItemViewType() == 0) {
                     ArrayList<ThemeDescription> arrayList = items.get(position - 1);
                     ThemeDescription description = arrayList.get(0);
-                    int color;
-                    if (description.getCurrentKey().equals(KeyHub.key_chat_wallpaper)) {
-                        color = 0;
-                    } else {
-                        color = description.getSetColor();
-                    }
+                    int color = description.getSetColor();
                     ((TextColorThemeCell) holder.itemView).setTextAndColor(description.getTitle(), color);
                 }
             }
@@ -1434,7 +1415,7 @@ public class ThemeEditorView {
 
                             ContainerLayout actionBarLayout = null;
 
-                            if (AndroidUtilities.isTablet()) {
+                            if (Space.isTablet()) {
                                 actionBarLayout = launchActivity.getLayersActionBarLayout();
                                 if (actionBarLayout != null && actionBarLayout.fragmentsStack.isEmpty()) {
                                     actionBarLayout = null;
@@ -1538,24 +1519,6 @@ public class ThemeEditorView {
             e.printStackTrace();
             return;
         }
-        wallpaperUpdater = new WallpaperUpdater(context, new WallpaperUpdater.WallpaperUpdaterDelegate() {
-            @Override
-            public void didSelectWallpaper(File file, Bitmap bitmap, boolean gallery) {
-                WallpaperManager.setThemeWallpaper(parentActivity, themeInfo, bitmap, file);
-            }
-
-            @Override
-            public void needOpenColorPicker() {
-                for (int a = 0; a < currentThemeDesription.size(); a++) {
-                    ThemeDescription description = currentThemeDesription.get(a);
-                    description.startEditing();
-                    if (a == 0) {
-                        editorAlert.colorPicker.setColor(description.getCurrentColor());
-                    }
-                }
-                editorAlert.setColorPickerVisible(true);
-            }
-        });
         Instance = this;
         parentActivity = context;
         showWithAnimation();
@@ -1655,12 +1618,6 @@ public class ThemeEditorView {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (wallpaperUpdater != null) {
-            wallpaperUpdater.onActivityResult(requestCode, resultCode, data);
         }
     }
 

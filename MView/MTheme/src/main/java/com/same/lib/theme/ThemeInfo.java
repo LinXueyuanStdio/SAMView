@@ -1,12 +1,10 @@
 package com.same.lib.theme;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
 
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.NotificationCenter;
 
 import org.json.JSONObject;
@@ -16,7 +14,6 @@ import java.util.ArrayList;
 import androidx.annotation.UiThread;
 
 import static com.same.lib.theme.Theme.DEFALT_THEME_ACCENT_ID;
-import static com.same.lib.theme.Theme.DEFAULT_BACKGROUND_SLUG;
 import static com.same.lib.theme.Theme.currentTheme;
 import static com.same.lib.theme.Theme.previousTheme;
 import static com.same.lib.theme.ThemeManager.saveOtherThemes;
@@ -31,28 +28,14 @@ import static com.same.lib.theme.ThemeManager.saveOtherThemes;
 public class ThemeInfo {
     public String name;
     public String pathToFile;
-    public String pathToWallpaper;
     public String assetName;
-    public String slug;
-    public boolean badWallpaper;
-    public boolean isBlured;
-    public boolean isMotion;
-    public int patternBgColor;
-    public int patternBgGradientColor;
-    public int patternBgGradientRotation = 45;
-    public int patternIntensity;
 
     public int account;
 
     public Skin info;
     public boolean loaded = true;
 
-    public String uploadingThumb;
-    public String uploadingFile;
-
     int previewBackgroundColor;
-    public int previewBackgroundGradientColor;
-    public int previewWallpaperOffset;
     int previewInColor;
     int previewOutColor;
     public boolean firstAccentIsDefault;
@@ -75,8 +58,6 @@ public class ThemeInfo {
     String loadingThemeWallpaperName;
     String newPathToWallpaper;
 
-    public OverrideWallpaperInfo overrideWallpaper;
-
     ThemeInfo() {
 
     }
@@ -98,88 +79,8 @@ public class ThemeInfo {
         return null;
     }
 
-    void loadWallpapers(SharedPreferences sharedPreferences) {
-        if (themeAccents != null && !themeAccents.isEmpty()) {
-            for (int a = 0, N = themeAccents.size(); a < N; a++) {
-                ThemeAccent accent = themeAccents.get(a);
-                loadOverrideWallpaper(sharedPreferences, accent, name + "_" + accent.id + "_owp");
-            }
-        } else {
-            loadOverrideWallpaper(sharedPreferences, null, name + "_owp");
-        }
-    }
-
-    void loadOverrideWallpaper(SharedPreferences sharedPreferences, ThemeAccent accent, String key) {
-        try {
-            String json = sharedPreferences.getString(key, null);
-            if (TextUtils.isEmpty(json)) {
-                return;
-            }
-            JSONObject object = new JSONObject(json);
-            OverrideWallpaperInfo wallpaperInfo = new OverrideWallpaperInfo();
-            wallpaperInfo.fileName = object.getString("wall");
-            wallpaperInfo.originalFileName = object.getString("owall");
-            wallpaperInfo.color = object.getInt("pColor");
-            wallpaperInfo.gradientColor = object.getInt("pGrColor");
-            wallpaperInfo.rotation = object.getInt("pGrAngle");
-            wallpaperInfo.slug = object.getString("wallSlug");
-            wallpaperInfo.isBlurred = object.getBoolean("wBlur");
-            wallpaperInfo.isMotion = object.getBoolean("wMotion");
-            wallpaperInfo.intensity = (float) object.getDouble("pIntensity");
-            wallpaperInfo.parentTheme = this;
-            wallpaperInfo.parentAccent = accent;
-            if (accent != null) {
-                accent.overrideWallpaper = wallpaperInfo;
-            } else {
-                overrideWallpaper = wallpaperInfo;
-            }
-            if (object.has("wallId")) {
-                long id = object.getLong("wallId");
-                if (id == 1000001) {
-                    wallpaperInfo.slug = DEFAULT_BACKGROUND_SLUG;
-                }
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void setOverrideWallpaper(OverrideWallpaperInfo info) {
-        if (overrideWallpaper == info) {
-            return;
-        }
-        ThemeAccent accent = getAccent(false);
-        if (overrideWallpaper != null) {
-            overrideWallpaper.delete();
-        }
-        if (info != null) {
-            info.parentAccent = accent;
-            info.parentTheme = this;
-            info.save();
-        }
-        overrideWallpaper = info;
-        if (accent != null) {
-            accent.overrideWallpaper = info;
-        }
-    }
-
     public void setCurrentAccentId(int id) {
         currentAccentId = id;
-        ThemeAccent accent = getAccent(false);
-        if (accent != null) {
-            overrideWallpaper = accent.overrideWallpaper;
-        }
-    }
-
-    public String generateWallpaperName(ThemeAccent accent, boolean original) {
-        if (accent == null) {
-            accent = getAccent(false);
-        }
-        if (accent != null) {
-            return (original ? name + "_" + accent.id + "_wp_o" : name + "_" + accent.id + "_wp") + AndroidUtilities.random.nextInt() + ".jpg";
-        } else {
-            return (original ? name + "_wp_o" : name + "_wp") + AndroidUtilities.random.nextInt() + ".jpg";
-        }
     }
 
     public void setPreviewInColor(int color) {
@@ -213,21 +114,6 @@ public class ThemeInfo {
             return 0xffcfd9e3;
         }
         return previewBackgroundColor;
-    }
-
-    boolean isDefaultMyMessages() {
-        if (!firstAccentIsDefault) {
-            return false;
-        }
-        if (currentAccentId == DEFALT_THEME_ACCENT_ID) {
-            return true;
-        }
-        ThemeAccent defaultAccent = themeAccentsMap.get(DEFALT_THEME_ACCENT_ID);
-        ThemeAccent accent = themeAccentsMap.get(currentAccentId);
-        if (defaultAccent == null || accent == null) {
-            return false;
-        }
-        return defaultAccent.myMessagesAccentColor == accent.myMessagesAccentColor && defaultAccent.myMessagesGradientAccentColor == accent.myMessagesGradientAccentColor;
     }
 
     boolean isDefaultMainAccent() {
@@ -317,32 +203,6 @@ public class ThemeInfo {
             themeAccent.id = ids != null ? ids[a] : a;
             themeAccent.accentColor = accent[a];
             themeAccent.parentTheme = this;
-            if (myMessages != null) {
-                themeAccent.myMessagesAccentColor = myMessages[a];
-            }
-            if (myMessagesGradient != null) {
-                themeAccent.myMessagesGradientAccentColor = myMessagesGradient[a];
-            }
-            if (background != null) {
-                themeAccent.backgroundOverrideColor = background[a];
-                if (firstAccentIsDefault && themeAccent.id == DEFALT_THEME_ACCENT_ID) {
-                    themeAccent.backgroundOverrideColor = 0x100000000L;
-                } else {
-                    themeAccent.backgroundOverrideColor = background[a];
-                }
-            }
-            if (backgroundGradient != null) {
-                if (firstAccentIsDefault && themeAccent.id == DEFALT_THEME_ACCENT_ID) {
-                    themeAccent.backgroundGradientOverrideColor = 0x100000000L;
-                } else {
-                    themeAccent.backgroundGradientOverrideColor = backgroundGradient[a];
-                }
-            }
-            if (patternSlugs != null) {
-                themeAccent.patternIntensity = patternIntensities[a] / 100.0f;
-                themeAccent.backgroundRotation = patternRotations[a];
-                themeAccent.patternSlug = patternSlugs[a];
-            }
             themeAccentsMap.put(themeAccent.id, themeAccent);
             themeAccents.add(themeAccent);
         }
@@ -381,59 +241,11 @@ public class ThemeInfo {
     }
 
     public static boolean accentEquals(ThemeAccent accent, Skin.SkinSettings settings) {
-        int myMessagesGradientAccentColor = settings.message_top_color;
-        if (settings.message_bottom_color == myMessagesGradientAccentColor) {
-            myMessagesGradientAccentColor = 0;
-        }
-        int backgroundOverrideColor = 0;
-        long backgroundGradientOverrideColor = 0;
-        int backgroundRotation = 0;
-        String patternSlug = null;
-        float patternIntensity = 0;
-        if (settings.wallpaper != null && settings.wallpaper.settings != null) {
-            backgroundOverrideColor = settings.wallpaper.settings.background_color;
-            if (settings.wallpaper.settings.second_background_color == 0) {
-                backgroundGradientOverrideColor = 0x100000000L;
-            } else {
-                backgroundGradientOverrideColor = settings.wallpaper.settings.second_background_color;
-            }
-            backgroundRotation = AndroidUtilities.getWallpaperRotation(settings.wallpaper.settings.rotation, false);
-            if (settings.wallpaper.pattern) {
-                patternSlug = settings.wallpaper.slug;
-                patternIntensity = settings.wallpaper.settings.intensity / 100.0f;
-            }
-        }
-        return settings.accent_color == accent.accentColor &&
-                settings.message_bottom_color == accent.myMessagesAccentColor &&
-                myMessagesGradientAccentColor == accent.myMessagesGradientAccentColor &&
-                backgroundOverrideColor == accent.backgroundOverrideColor &&
-                backgroundGradientOverrideColor == accent.backgroundGradientOverrideColor &&
-                backgroundRotation == accent.backgroundRotation &&
-                TextUtils.equals(patternSlug, accent.patternSlug) &&
-                Math.abs(patternIntensity - accent.patternIntensity) < 0.001;
+        return settings.accent_color == accent.accentColor;
     }
 
     public static void fillAccentValues(ThemeAccent themeAccent, Skin.SkinSettings settings) {
         themeAccent.accentColor = settings.accent_color;
-        themeAccent.myMessagesAccentColor = settings.message_bottom_color;
-        themeAccent.myMessagesGradientAccentColor = settings.message_top_color;
-        if (themeAccent.myMessagesAccentColor == themeAccent.myMessagesGradientAccentColor) {
-            themeAccent.myMessagesGradientAccentColor = 0;
-        }
-        if (settings.wallpaper != null && settings.wallpaper.settings != null) {
-            themeAccent.backgroundOverrideColor = settings.wallpaper.settings.background_color;
-            if (settings.wallpaper.settings.second_background_color == 0) {
-                themeAccent.backgroundGradientOverrideColor = 0x100000000L;
-            } else {
-                themeAccent.backgroundGradientOverrideColor = settings.wallpaper.settings.second_background_color;
-            }
-            themeAccent.backgroundRotation = AndroidUtilities.getWallpaperRotation(settings.wallpaper.settings.rotation, false);
-            if (settings.wallpaper.pattern) {
-                themeAccent.patternSlug = settings.wallpaper.slug;
-                themeAccent.patternIntensity = settings.wallpaper.settings.intensity / 100.0f;
-                themeAccent.patternMotion = settings.wallpaper.settings.motion;
-            }
-        }
     }
 
     public ThemeAccent createNewAccent(Skin.SkinSettings settings) {
@@ -471,21 +283,9 @@ public class ThemeInfo {
             int id = ++lastAccentId;
             ThemeAccent themeAccent = new ThemeAccent();
             themeAccent.accentColor = accent.accentColor;
-            themeAccent.myMessagesAccentColor = accent.myMessagesAccentColor;
-            themeAccent.myMessagesGradientAccentColor = accent.myMessagesGradientAccentColor;
-            themeAccent.backgroundOverrideColor = accent.backgroundOverrideColor;
-            themeAccent.backgroundGradientOverrideColor = accent.backgroundGradientOverrideColor;
-            themeAccent.backgroundRotation = accent.backgroundRotation;
-            themeAccent.patternSlug = accent.patternSlug;
-            themeAccent.patternIntensity = accent.patternIntensity;
-            themeAccent.patternMotion = accent.patternMotion;
             themeAccent.parentTheme = this;
-            if (overrideWallpaper != null) {
-                themeAccent.overrideWallpaper = new OverrideWallpaperInfo(overrideWallpaper, this, themeAccent);
-            }
             prevAccentId = currentAccentId;
             currentAccentId = themeAccent.id = id;
-            overrideWallpaper = themeAccent.overrideWallpaper;
             themeAccentsMap.put(id, themeAccent);
             themeAccents.add(0, themeAccent);
             return themeAccent;
