@@ -28,13 +28,13 @@ import android.view.ViewParent;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.FrameLayout;
 
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.listview.LinearLayoutManager;
 import com.same.lib.listview.RecyclerView;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 import com.same.lib.util.Space;
+import com.same.lib.util.UIThread;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

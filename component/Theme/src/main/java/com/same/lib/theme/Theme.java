@@ -14,6 +14,7 @@ import android.view.Window;
 
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.NotificationCenter;
+import com.same.lib.util.UIThread;
 
 import org.json.JSONArray;
 

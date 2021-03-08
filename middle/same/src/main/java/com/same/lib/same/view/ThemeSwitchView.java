@@ -32,8 +32,12 @@ public class ThemeSwitchView {
 
     public static boolean switchingTheme;
     public static RLottieImageView darkThemeView;
+    public static RLottieDrawable sunDrawable;
     public static RLottieImageView switchThemeView(Context context) {
-        RLottieDrawable sunDrawable = new RLottieDrawable(context, R.raw.sun, "" + R.raw.sun, Space.dp(28), Space.dp(28), true, null);
+        if (darkThemeView != null) {
+            return darkThemeView;
+        }
+        sunDrawable = new RLottieDrawable(context, R.raw.sun, "" + R.raw.sun, Space.dp(28), Space.dp(28), true, null);
         if (isCurrentThemeDay(context)) {
             sunDrawable.setCustomEndFrame(36);
         } else {
@@ -93,12 +97,12 @@ public class ThemeSwitchView {
                 ThemeManager.saveAutoNightThemeConfig();
                 ThemeManager.cancelAutoNightThemeCallbacks();
             }
-            switchTheme(darkThemeView, themeInfo, toDark);
+            sendSwitchThemeEvent(darkThemeView, themeInfo, toDark);
         });
         return darkThemeView;
     }
 
-    private static void switchTheme(RLottieImageView darkThemeView, ThemeInfo themeInfo, boolean toDark) {
+    private static void sendSwitchThemeEvent(RLottieImageView darkThemeView, ThemeInfo themeInfo, boolean toDark) {
         int[] pos = new int[2];
         darkThemeView.getLocationInWindow(pos);
         pos[0] += darkThemeView.getMeasuredWidth() / 2;

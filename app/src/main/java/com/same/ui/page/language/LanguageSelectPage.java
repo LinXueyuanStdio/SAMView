@@ -26,6 +26,7 @@ import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.MyThemeDescription;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.wrap.ThemeBasePage;
+import com.same.lib.util.UIThread;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.language.cell.LanguageCell;
