@@ -33,6 +33,7 @@ public class ThemeSwitchView {
     public static boolean switchingTheme;
     public static RLottieImageView darkThemeView;
     public static RLottieDrawable sunDrawable;
+
     public static RLottieImageView switchThemeView(Context context) {
         if (darkThemeView != null) {
             return darkThemeView;
@@ -82,8 +83,8 @@ public class ThemeSwitchView {
                 }
             }
 
-            boolean toDark;
-            if (toDark = dayThemeName.equals(themeInfo.getKey())) {
+            boolean toDark = dayThemeName.equals(themeInfo.getKey());
+            if (toDark) {
                 themeInfo = ThemeManager.getTheme(nightThemeName);
                 sunDrawable.setCustomEndFrame(36);
             } else {
