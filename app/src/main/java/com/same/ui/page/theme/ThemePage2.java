@@ -804,7 +804,7 @@
 //                name = null;
 //            }
 //            final String nameFinal = name;
-//            AndroidUtilities.runOnUIThread(() -> {
+//            UIThread.runOnUIThread(() -> {
 //                Theme.autoNightCityName = nameFinal;
 //                if (Theme.autoNightCityName == null) {
 //                    Theme.autoNightCityName = String.format("(%.06f, %.06f)", Theme.autoNightLocationLatitude, Theme.autoNightLocationLongitude);

@@ -165,7 +165,7 @@ public class PasscodeView extends FrameLayout {
             }
 
             if (dotRunnable != null) {
-                AndroidUtilities.cancelRunOnUIThread(dotRunnable);
+                UIThread.cancelRunOnUIThread(dotRunnable);
             }
             dotRunnable = new Runnable() {
                 @Override
@@ -198,7 +198,7 @@ public class PasscodeView extends FrameLayout {
                     currentAnimation.start();
                 }
             };
-            AndroidUtilities.runOnUIThread(dotRunnable, 1500);
+            UIThread.runOnUIThread(dotRunnable, 1500);
 
             for (int a = 0; a < newPos; a++) {
                 textView = characterTextViews.get(a);
@@ -288,7 +288,7 @@ public class PasscodeView extends FrameLayout {
             }
 
             if (dotRunnable != null) {
-                AndroidUtilities.cancelRunOnUIThread(dotRunnable);
+                UIThread.cancelRunOnUIThread(dotRunnable);
                 dotRunnable = null;
             }
 
@@ -314,7 +314,7 @@ public class PasscodeView extends FrameLayout {
                 return;
             }
             if (dotRunnable != null) {
-                AndroidUtilities.cancelRunOnUIThread(dotRunnable);
+                UIThread.cancelRunOnUIThread(dotRunnable);
                 dotRunnable = null;
             }
             if (currentAnimation != null) {
@@ -364,7 +364,7 @@ public class PasscodeView extends FrameLayout {
         @Override
         protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
             if (dotRunnable != null) {
-                AndroidUtilities.cancelRunOnUIThread(dotRunnable);
+                UIThread.cancelRunOnUIThread(dotRunnable);
                 dotRunnable = null;
             }
             if (currentAnimation != null) {
@@ -833,7 +833,7 @@ public class PasscodeView extends FrameLayout {
         @Override
         public void run() {
             checkRetryTextView();
-            AndroidUtilities.runOnUIThread(checkRunnable, 100);
+            UIThread.runOnUIThread(checkRunnable, 100);
         }
     };
     private int lastValue;
@@ -861,11 +861,11 @@ public class PasscodeView extends FrameLayout {
                     numbersFrameLayout.setVisibility(INVISIBLE);
                 }
                 AndroidUtilities.hideKeyboard(passwordEditText);
-                AndroidUtilities.cancelRunOnUIThread(checkRunnable);
-                AndroidUtilities.runOnUIThread(checkRunnable, 100);
+                UIThread.cancelRunOnUIThread(checkRunnable);
+                UIThread.runOnUIThread(checkRunnable, 100);
             }
         } else {
-            AndroidUtilities.cancelRunOnUIThread(checkRunnable);
+            UIThread.cancelRunOnUIThread(checkRunnable);
             if (passwordFrameLayout.getVisibility() != VISIBLE) {
                 retryTextView.setVisibility(INVISIBLE);
                 passwordFrameLayout.setVisibility(VISIBLE);
@@ -894,7 +894,7 @@ public class PasscodeView extends FrameLayout {
                     passwordEditText.requestFocus();
                     AndroidUtilities.showKeyboard(passwordEditText);
                 }
-                AndroidUtilities.runOnUIThread(() -> {
+                UIThread.runOnUIThread(() -> {
                     if (retryTextView.getVisibility() != VISIBLE && passwordEditText != null) {
                         passwordEditText.requestFocus();
                         AndroidUtilities.showKeyboard(passwordEditText);
@@ -906,7 +906,7 @@ public class PasscodeView extends FrameLayout {
     }
 
     public void onPause() {
-        AndroidUtilities.cancelRunOnUIThread(checkRunnable);
+        UIThread.cancelRunOnUIThread(checkRunnable);
         if (fingerprintDialog != null) {
             try {
                 if (fingerprintDialog.isShowing()) {

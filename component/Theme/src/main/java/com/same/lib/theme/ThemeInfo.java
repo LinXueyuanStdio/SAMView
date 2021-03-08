@@ -308,7 +308,7 @@ public class ThemeInfo {
     //                    File file = (File) args[1];
     //                    AndroidUtilities.globalQueue.postRunnable(() -> {
     //                        createBackground(file, newPathToWallpaper);
-    //                        AndroidUtilities.runOnUIThread(this::onFinishLoadingRemoteTheme);
+    //                        UIThread.runOnUIThread(this::onFinishLoadingRemoteTheme);
     //                    });
     //                } else {
     //                    String name = AndroidUtilities.getAttachFileName(info.document);
@@ -332,7 +332,7 @@ public class ThemeInfo {
     //                                    //                                        TLRPC.TL_inputWallPaperSlug inputWallPaperSlug = new TLRPC.TL_inputWallPaperSlug();
     //                                    //                                        inputWallPaperSlug.slug = themeInfo.slug;
     //                                    //                                        req.wallpaper = inputWallPaperSlug;
-    //                                    //                                        ConnectionsManager.getInstance(themeInfo.account).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+    //                                    //                                        ConnectionsManager.getInstance(themeInfo.account).sendRequest(req, (response, error) -> UIThread.runOnUIThread(() -> {
     //                                    //                                            if (response instanceof WallPaper) {
     //                                    //                                                WallPaper wallPaper = (WallPaper) response;
     //                                    //                                                loadingThemeWallpaperName = FileLoader.getAttachFileName(wallPaper.document);

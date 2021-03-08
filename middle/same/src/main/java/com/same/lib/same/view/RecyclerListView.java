@@ -538,7 +538,7 @@ public class RecyclerListView extends RecyclerView {
                                 onItemClickListenerExtended.onItemClick(view, position, x - view.getX(), y - view.getY());
                             }
                         }
-                        AndroidUtilities.runOnUIThread(clickRunnable = new Runnable() {
+                        UIThread.runOnUIThread(clickRunnable = new Runnable() {
                             @Override
                             public void run() {
                                 if (this == clickRunnable) {
@@ -563,7 +563,7 @@ public class RecyclerListView extends RecyclerView {
 
                         if (selectChildRunnable != null) {
                             View pressedChild = currentChildView;
-                            AndroidUtilities.cancelRunOnUIThread(selectChildRunnable);
+                            UIThread.cancelRunOnUIThread(selectChildRunnable);
                             selectChildRunnable = null;
                             currentChildView = null;
                             interceptedByChild = false;
@@ -678,7 +678,7 @@ public class RecyclerListView extends RecyclerView {
                             selectChildRunnable = null;
                         }
                     };
-                    AndroidUtilities.runOnUIThread(selectChildRunnable, ViewConfiguration.getTapTimeout());
+                    UIThread.runOnUIThread(selectChildRunnable, ViewConfiguration.getTapTimeout());
                     if (currentChildView.isEnabled() && canHighlightChildAt(currentChildView, x - currentChildView.getX(), y - currentChildView.getY())) {
                         positionSelector(currentChildPosition, currentChildView);
                         if (selectorDrawable != null) {
@@ -704,7 +704,7 @@ public class RecyclerListView extends RecyclerView {
             } else if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_POINTER_UP || action == MotionEvent.ACTION_CANCEL || !isScrollIdle) {
                 if (currentChildView != null) {
                     if (selectChildRunnable != null) {
-                        AndroidUtilities.cancelRunOnUIThread(selectChildRunnable);
+                        UIThread.cancelRunOnUIThread(selectChildRunnable);
                         selectChildRunnable = null;
                     }
                     View pressedChild = currentChildView;
@@ -802,7 +802,7 @@ public class RecyclerListView extends RecyclerView {
 
     public void cancelClickRunnables(boolean uncheck) {
         if (selectChildRunnable != null) {
-            AndroidUtilities.cancelRunOnUIThread(selectChildRunnable);
+            UIThread.cancelRunOnUIThread(selectChildRunnable);
             selectChildRunnable = null;
         }
         if (currentChildView != null) {
@@ -814,7 +814,7 @@ public class RecyclerListView extends RecyclerView {
             removeSelection(child, null);
         }
         if (clickRunnable != null) {
-            AndroidUtilities.cancelRunOnUIThread(clickRunnable);
+            UIThread.cancelRunOnUIThread(clickRunnable);
             clickRunnable = null;
         }
         interceptedByChild = false;
@@ -880,7 +880,7 @@ public class RecyclerListView extends RecyclerView {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 if (newState != RecyclerView.SCROLL_STATE_IDLE && currentChildView != null) {
                     if (selectChildRunnable != null) {
-                        AndroidUtilities.cancelRunOnUIThread(selectChildRunnable);
+                        UIThread.cancelRunOnUIThread(selectChildRunnable);
                         selectChildRunnable = null;
                     }
                     MotionEvent event = MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0, 0, 0);
@@ -1259,7 +1259,7 @@ public class RecyclerListView extends RecyclerView {
 
     private void highlightRowInternal(RecyclerListView.IntReturnCallback callback, boolean canHighlightLater) {
         if (removeHighlighSelectionRunnable != null) {
-            AndroidUtilities.cancelRunOnUIThread(removeHighlighSelectionRunnable);
+            UIThread.cancelRunOnUIThread(removeHighlighSelectionRunnable);
             removeHighlighSelectionRunnable = null;
         }
         RecyclerView.ViewHolder holder = findViewHolderForAdapterPosition(callback.run());
@@ -1283,7 +1283,7 @@ public class RecyclerListView extends RecyclerView {
                     invalidateDrawable(selectorDrawable);
                 }
             }
-            AndroidUtilities.runOnUIThread(removeHighlighSelectionRunnable = () -> {
+            UIThread.runOnUIThread(removeHighlighSelectionRunnable = () -> {
                 removeHighlighSelectionRunnable = null;
                 pendingHighlightPosition = null;
                 if (selectorDrawable != null) {
@@ -1432,7 +1432,7 @@ public class RecyclerListView extends RecyclerView {
 
     private void positionSelector(int position, View sel, boolean manageHotspot, float x, float y) {
         if (removeHighlighSelectionRunnable != null) {
-            AndroidUtilities.cancelRunOnUIThread(removeHighlighSelectionRunnable);
+            UIThread.cancelRunOnUIThread(removeHighlighSelectionRunnable);
             removeHighlighSelectionRunnable = null;
             pendingHighlightPosition = null;
         }

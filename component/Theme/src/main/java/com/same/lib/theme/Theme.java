@@ -622,7 +622,7 @@ public class Theme {
             applyingTheme = currentNightTheme;
         }
         ThemeManager.applyTheme(AndroidUtilities.applicationContext, applyingTheme, false, switchToTheme == 2);
-        AndroidUtilities.runOnUIThread(new Runnable() {
+        UIThread.runOnUIThread(new Runnable() {
             @Override
             public void run() {
                 ThemeManager.checkAutoNightThemeConditions(AndroidUtilities.applicationContext);

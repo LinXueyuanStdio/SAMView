@@ -319,7 +319,7 @@ public class LanguageSelectPage extends ThemeBasePage {
     }
 
     private void updateSearchResults(final ArrayList<LocaleInfo> arrCounties) {
-        AndroidUtilities.runOnUIThread(() -> {
+        UIThread.runOnUIThread(() -> {
             searchResult = arrCounties;
             searchListViewAdapter.notifyDataSetChanged();
         });

@@ -1187,7 +1187,7 @@ public class ThemeEditorView {
             }
 
             private void updateSearchResults(final ArrayList<ArrayList<ThemeDescription>> result, ArrayList<CharSequence> names, final int searchId) {
-                AndroidUtilities.runOnUIThread(() -> {
+                UIThread.runOnUIThread(() -> {
                     if (searchId != lastSearchId) {
                         return;
                     }

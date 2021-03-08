@@ -12,6 +12,7 @@ import android.os.SystemClock;
 
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.NotificationCenter;
+import com.same.lib.util.UIThread;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -292,7 +293,7 @@ public class ThemeManager {
         for (AbsTheme absTheme : ThemeRes.themes) {
             absTheme.applyResources(context);
         }
-        AndroidUtilities.runOnUIThread(() -> NotificationCenter.post(NotificationCenter.didSetNewTheme, false));
+        UIThread.runOnUIThread(() -> NotificationCenter.post(NotificationCenter.didSetNewTheme, false));
     }
 
     public static int changeColorAccent(ThemeInfo themeInfo, int accent, int color) {
@@ -571,20 +572,20 @@ public class ThemeManager {
             if (lastBrightnessValue <= autoNightBrighnessThreshold) {
                 if (switchDayRunnableScheduled) {
                     switchDayRunnableScheduled = false;
-                    AndroidUtilities.cancelRunOnUIThread(switchDayBrightnessRunnable);
+                    UIThread.cancelRunOnUIThread(switchDayBrightnessRunnable);
                 }
                 if (!switchNightRunnableScheduled) {
                     switchNightRunnableScheduled = true;
-                    AndroidUtilities.runOnUIThread(switchNightBrightnessRunnable, getAutoNightSwitchThemeDelay());
+                    UIThread.runOnUIThread(switchNightBrightnessRunnable, getAutoNightSwitchThemeDelay());
                 }
             } else {
                 if (switchNightRunnableScheduled) {
                     switchNightRunnableScheduled = false;
-                    AndroidUtilities.cancelRunOnUIThread(switchNightBrightnessRunnable);
+                    UIThread.cancelRunOnUIThread(switchNightBrightnessRunnable);
                 }
                 if (!switchDayRunnableScheduled) {
                     switchDayRunnableScheduled = true;
-                    AndroidUtilities.runOnUIThread(switchDayBrightnessRunnable, getAutoNightSwitchThemeDelay());
+                    UIThread.runOnUIThread(switchDayBrightnessRunnable, getAutoNightSwitchThemeDelay());
                 }
             }
         }
@@ -611,11 +612,11 @@ public class ThemeManager {
         if (selectedAutoNightType != AUTO_NIGHT_TYPE_AUTOMATIC) {
             if (switchNightRunnableScheduled) {
                 switchNightRunnableScheduled = false;
-                AndroidUtilities.cancelRunOnUIThread(switchNightBrightnessRunnable);
+                UIThread.cancelRunOnUIThread(switchNightBrightnessRunnable);
             }
             if (switchDayRunnableScheduled) {
                 switchDayRunnableScheduled = false;
-                AndroidUtilities.cancelRunOnUIThread(switchDayBrightnessRunnable);
+                UIThread.cancelRunOnUIThread(switchDayBrightnessRunnable);
             }
             if (lightSensorRegistered) {
                 lastBrightnessValue = 1.0f;
@@ -643,7 +644,7 @@ public class ThemeManager {
         } else {
             editor.remove("nighttheme");
         }
-        editor.commit();
+        editor.apply();
     }
 
     static int needSwitchToTheme(Context context) {
@@ -731,11 +732,11 @@ public class ThemeManager {
         if (force) {
             if (switchNightRunnableScheduled) {
                 switchNightRunnableScheduled = false;
-                AndroidUtilities.cancelRunOnUIThread(switchNightBrightnessRunnable);
+                UIThread.cancelRunOnUIThread(switchNightBrightnessRunnable);
             }
             if (switchDayRunnableScheduled) {
                 switchDayRunnableScheduled = false;
-                AndroidUtilities.cancelRunOnUIThread(switchDayBrightnessRunnable);
+                UIThread.cancelRunOnUIThread(switchDayBrightnessRunnable);
             }
         }
         cancelAutoNightThemeCallbacks();

@@ -361,7 +361,7 @@ public class IntroActivity extends Activity {
 //                }
 //                final TLRPC.LangPackString string = (TLRPC.LangPackString) vector.objects.get(0);
 //                if (string instanceof TLRPC.TL_langPackString) {
-//                    AndroidUtilities.runOnUIThread(() -> {
+//                    UIThread.runOnUIThread(() -> {
 //                        if (!destroyed) {
 //                            textView.setText(string.value);
 //                            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
