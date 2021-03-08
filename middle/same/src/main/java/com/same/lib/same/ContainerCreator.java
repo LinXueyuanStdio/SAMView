@@ -231,7 +231,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
                     }
                     backgroundTablet.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
                     shadowTablet.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
-                    layersActionBarLayout.measure(MeasureSpec.makeMeasureSpec(Math.min(Space.dp(530), width), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(528), height), MeasureSpec.EXACTLY));
+                    layersActionBarLayout.measure(MeasureSpec.makeMeasureSpec(Math.min(Space.dp(530), width), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(Math.min(Space.dp(528), height), MeasureSpec.EXACTLY));
 
                     inLayout = false;
                 }
@@ -353,7 +353,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         drawerLayoutContainer.setDrawerLayout(sideMenu);
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) sideMenu.getLayoutParams();
         Point screenSize = getRealScreenSize(context);
-        layoutParams.width = Space.isTablet() ? Space.dp(320) : Math.min(Space.dp(320), Math.min(screenSize.x, screenSize.y) - AndroidUtilities.dp(56));
+        layoutParams.width = Space.isTablet() ? Space.dp(320) : Math.min(Space.dp(320), Math.min(screenSize.x, screenSize.y) - Space.dp(56));
         layoutParams.height = LayoutHelper.MATCH_PARENT;
         sideMenu.setLayoutParams(layoutParams);
 
@@ -461,7 +461,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
 
     private void onPasscodePause() {
         if (lockRunnable != null) {
-            AndroidUtilities.cancelRunOnUIThread(lockRunnable);
+            UIThread.cancelRunOnUIThread(lockRunnable);
             lockRunnable = null;
         }
         if (PassCode.passcodeHash.length() != 0) {
@@ -656,7 +656,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
             return;
         }
 
-        if (!AndroidUtilities.isInMultiwindow && (!AndroidUtilities.isSmallTablet() || delegate.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
+        if (!AndroidUtilities.isInMultiwindow && (!Space.isSmallTablet() || delegate.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
             tabletFullSize = false;
             if (actionBarLayout.fragmentsStack.size() >= 2) {
                 for (int a = 1; a < actionBarLayout.fragmentsStack.size(); a++) {
@@ -732,6 +732,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
             }
             try {
                 int[] pos = (int[]) args[2];
+                Log.e("pos ", Arrays.toString(pos) + "");
                 boolean toDark = (Boolean) args[4];
                 RLottieImageView darkThemeView = (RLottieImageView) args[5];
                 int w = drawerLayoutContainer.getMeasuredWidth();
@@ -748,8 +749,8 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
                     themeSwitchSunView.setVisibility(View.GONE);
                 } else {
                     frameLayout.addView(themeSwitchImageView, 1, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
-                    themeSwitchSunView.setTranslationX(pos[0] - AndroidUtilities.dp(14));
-                    themeSwitchSunView.setTranslationY(pos[1] - AndroidUtilities.dp(14));
+                    themeSwitchSunView.setTranslationX(pos[0] - Space.dp(14));
+                    themeSwitchSunView.setTranslationY(pos[1] - Space.dp(14));
                     themeSwitchSunView.setVisibility(View.VISIBLE);
                     themeSwitchSunView.invalidate();
                 }
