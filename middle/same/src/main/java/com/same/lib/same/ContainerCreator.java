@@ -16,6 +16,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -37,6 +38,8 @@ import com.same.lib.core.ContainerLayout;
 import com.same.lib.core.DrawerLayoutContainer;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.listview.LinearLayoutManager;
+import com.same.lib.lottie.RLottieDrawable;
+import com.same.lib.lottie.RLottieImageView;
 import com.same.lib.same.theme.ChatTheme;
 import com.same.lib.same.theme.CommonTheme;
 import com.same.lib.same.theme.DialogTheme;
@@ -46,6 +49,7 @@ import com.same.lib.same.view.PassCode;
 import com.same.lib.same.view.PasscodeView;
 import com.same.lib.same.view.RecyclerListView;
 import com.same.lib.same.view.SideMenultItemAnimator;
+import com.same.lib.same.view.ThemeSwitchView;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeInfo;
@@ -58,6 +62,7 @@ import com.same.lib.util.UIThread;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import androidx.annotation.NonNull;
 
@@ -96,17 +101,18 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
     private DrawerLayoutContainer drawerLayoutContainer;
     private PasscodeView passcodeView;
     private ImageView themeSwitchImageView;
+    private View themeSwitchSunView;
+    private RLottieDrawable themeSwitchSunDrawable;
+    private FrameLayout frameLayout;
+
     private NotificationCenter.NotificationCenterDelegate notificationCenterDelegate = new NotificationCenter.NotificationCenterDelegate() {
         @Override
         public void didReceivedNotification(int id, int account, Object... args) {
             if (id == NotificationCenter.didSetNewTheme) {
                 //                didSetNewTheme((Boolean) args[0]);TODO
             } else if (id == NotificationCenter.needSetDayNightTheme) {
-                ThemeInfo theme = (ThemeInfo) args[0];
-                boolean nigthTheme = theme.isDark();
-                int[] pos = null;
-                int accentId = theme.currentAccentId;
-                needSetDayNightTheme(theme, nigthTheme, pos, accentId);
+                Log.e("needSetDayNightTheme", Arrays.toString(args) + "");
+                needSetDayNightTheme(args);
             } else if (id == NotificationCenter.needCheckSystemBarColors) {
                 //                checkSystemBarColors();
             }
@@ -147,6 +153,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
     }
 
     public void onCreateView(@NonNull FrameLayout frameLayout, @NonNull BasePage homePage) {
+        this.frameLayout = frameLayout;
         //获取状态栏高度
         int resourceId = delegate.getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
@@ -175,6 +182,19 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(KeyHub.key_windowBackgroundWhite));
         frameLayout.addView(drawerLayoutContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
+        if (Build.VERSION.SDK_INT >= 21) {
+            themeSwitchSunView = new View(context) {
+                @Override
+                protected void onDraw(Canvas canvas) {
+                    if (themeSwitchSunDrawable != null) {
+                        themeSwitchSunDrawable.draw(canvas);
+                        invalidate();
+                    }
+                }
+            };
+            frameLayout.addView(themeSwitchSunView, LayoutHelper.createFrame(48, 48));
+            themeSwitchSunView.setVisibility(View.GONE);
+        }
         if (Space.isTablet()) {
             //适配平板
             RelativeLayout launchLayout = new RelativeLayout(context) {
@@ -329,7 +349,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         sideMenu.setBackgroundColor(Theme.getColor(KeyHub.key_actionBarActionModeDefaultIcon));
         sideMenu.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         sideMenu.setAllowItemsInteractionDuringAnimation(false);
-//        sideMenu.setAdapter(drawerLayoutAdapter = new DrawerLayoutAdapter(this, itemAnimator));
+        //        sideMenu.setAdapter(drawerLayoutAdapter = new DrawerLayoutAdapter(this, itemAnimator));
         drawerLayoutContainer.setDrawerLayout(sideMenu);
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) sideMenu.getLayoutParams();
         Point screenSize = getRealScreenSize(context);
@@ -673,21 +693,23 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
             backgroundTablet.setVisibility(!actionBarLayout.fragmentsStack.isEmpty() ? View.GONE : View.VISIBLE);
         }
     }
+
     public void didSetPasscode() {
-//        if (PassCode.passcodeHash.length() > 0 && !PassCode.allowScreenCapture) {
-//            try {
-//                getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        } else if (!AndroidUtilities.hasFlagSecureFragment()) {
-//            try {
-//                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
+        //        if (PassCode.passcodeHash.length() > 0 && !PassCode.allowScreenCapture) {
+        //            try {
+        //                getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        //            } catch (Exception e) {
+        //                e.printStackTrace();
+        //            }
+        //        } else if (!AndroidUtilities.hasFlagSecureFragment()) {
+        //            try {
+        //                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+        //            } catch (Exception e) {
+        //                e.printStackTrace();
+        //            }
+        //        }
     }
+
     public void didSetNewTheme(Boolean nightTheme) {
         if (!nightTheme) {
             if (sideMenu != null) {
@@ -702,22 +724,40 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(KeyHub.key_windowBackgroundWhite));
     }
 
-    public void needSetDayNightTheme(ThemeInfo theme, boolean nigthTheme, int[] pos, int accentId) {
+    public void needSetDayNightTheme(Object... args) {
         boolean instant = false;
-        if (Build.VERSION.SDK_INT >= 21 && pos != null) {
+        if (Build.VERSION.SDK_INT >= 21 && args[2] != null) {
             if (themeSwitchImageView.getVisibility() == View.VISIBLE) {
                 return;
             }
             try {
+                int[] pos = (int[]) args[2];
+                boolean toDark = (Boolean) args[4];
+                RLottieImageView darkThemeView = (RLottieImageView) args[5];
                 int w = drawerLayoutContainer.getMeasuredWidth();
                 int h = drawerLayoutContainer.getMeasuredHeight();
+                if (!toDark) {
+                    darkThemeView.setVisibility(View.INVISIBLE);
+                }
                 Bitmap bitmap = Bitmap.createBitmap(drawerLayoutContainer.getMeasuredWidth(), drawerLayoutContainer.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
                 Canvas canvas = new Canvas(bitmap);
                 drawerLayoutContainer.draw(canvas);
+                frameLayout.removeView(themeSwitchImageView);
+                if (toDark) {
+                    frameLayout.addView(themeSwitchImageView, 0, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+                    themeSwitchSunView.setVisibility(View.GONE);
+                } else {
+                    frameLayout.addView(themeSwitchImageView, 1, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+                    themeSwitchSunView.setTranslationX(pos[0] - AndroidUtilities.dp(14));
+                    themeSwitchSunView.setTranslationY(pos[1] - AndroidUtilities.dp(14));
+                    themeSwitchSunView.setVisibility(View.VISIBLE);
+                    themeSwitchSunView.invalidate();
+                }
                 themeSwitchImageView.setImageBitmap(bitmap);
                 themeSwitchImageView.setVisibility(View.VISIBLE);
+                themeSwitchSunDrawable = darkThemeView.getAnimatedDrawable();
                 float finalRadius = (float) Math.max(Math.sqrt((w - pos[0]) * (w - pos[0]) + (h - pos[1]) * (h - pos[1])), Math.sqrt(pos[0] * pos[0] + (h - pos[1]) * (h - pos[1])));
-                Animator anim = ViewAnimationUtils.createCircularReveal(drawerLayoutContainer, pos[0], pos[1], 0, finalRadius);
+                Animator anim = ViewAnimationUtils.createCircularReveal(toDark ? drawerLayoutContainer : themeSwitchImageView, pos[0], pos[1], toDark ? 0 : finalRadius, toDark ? finalRadius : 0);
                 anim.setDuration(400);
                 anim.setInterpolator(Easings.easeInOutQuad);
                 anim.addListener(new AnimatorListenerAdapter() {
@@ -725,14 +765,30 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
                     public void onAnimationEnd(Animator animation) {
                         themeSwitchImageView.setImageDrawable(null);
                         themeSwitchImageView.setVisibility(View.GONE);
+                        themeSwitchSunView.setVisibility(View.GONE);
+//                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.themeAccentListUpdated);
+                        if (!toDark) {
+                            darkThemeView.setVisibility(View.VISIBLE);
+                        }
+                        ThemeSwitchView.switchingTheme = false;
                     }
                 });
                 anim.start();
                 instant = true;
-            } catch (Throwable ignore) {
-
+            } catch (Throwable e) {
+                e.printStackTrace();
+                try {
+                    themeSwitchImageView.setImageDrawable(null);
+                    frameLayout.removeView(themeSwitchImageView);
+                    ThemeSwitchView.switchingTheme = false;
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                }
             }
         }
+        ThemeInfo theme = (ThemeInfo) args[0];
+        boolean nigthTheme = (Boolean) args[1];
+        int accentId = (Integer) args[3];
         actionBarLayout.animateThemedValues(theme, accentId, nigthTheme, instant);
         if (Space.isTablet()) {
             layersActionBarLayout.animateThemedValues(theme, accentId, nigthTheme, instant);

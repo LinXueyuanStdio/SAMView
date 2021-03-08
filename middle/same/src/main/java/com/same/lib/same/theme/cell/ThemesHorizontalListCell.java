@@ -565,7 +565,7 @@ public class ThemesHorizontalListCell extends RecyclerListView {
             if (themeInfo == ThemeManager.getCurrentTheme()) {
                 return;
             }
-            NotificationCenter.post(NotificationCenter.needSetDayNightTheme, themeInfo);
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, themeInfo, false, null, -1);
         }
         updateRows();
 

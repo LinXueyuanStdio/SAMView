@@ -27,7 +27,6 @@ import com.same.lib.same.ContainerCreator;
 import com.same.lib.same.theme.dialog.AlertDialog;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
-import com.same.lib.theme.ThemeInfo;
 import com.same.lib.util.Space;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.main.MainPage;
@@ -238,11 +237,6 @@ public class MainActivity extends Activity
         }
         checkSystemBarColors();
     }
-
-    private void needSetDayNightTheme(ThemeInfo theme, boolean nigthTheme, int[] pos, int accentId) {
-        creator.needSetDayNightTheme(theme, nigthTheme, pos, accentId);
-    }
-
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
