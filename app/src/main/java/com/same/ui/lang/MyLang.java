@@ -6,9 +6,9 @@ import android.content.res.Configuration;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 
+import com.same.lib.same.theme.span.TypefaceSpan;
 import com.same.lib.util.Font;
 import com.same.ui.MyApplication;
-import com.same.ui.theme.span.TypefaceSpan;
 import com.timecat.component.locale.LangAction;
 import com.timecat.component.locale.LocaleInfo;
 import com.timecat.component.locale.MLang;

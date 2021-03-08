@@ -11,14 +11,14 @@ import android.widget.ScrollView;
 
 import com.same.lib.core.BasePage;
 import com.same.lib.core.ThemeDescription;
+import com.same.lib.same.theme.dialog.AlertDialog;
+import com.same.lib.same.theme.dialog.BottomSheet;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.MyThemeDescription;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.wrap.ThemeBasePage;
 import com.same.lib.util.Space;
 import com.same.ui.R;
-import com.same.ui.theme.dialog.AlertDialog;
-import com.same.ui.theme.dialog.BottomSheet;
 
 import java.util.ArrayList;
 

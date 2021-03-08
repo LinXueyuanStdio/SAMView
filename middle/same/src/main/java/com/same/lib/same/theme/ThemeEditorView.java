@@ -1154,7 +1154,7 @@ public class ThemeEditorView {
                         updateSearchResults(new ArrayList<>(), new ArrayList<>(), lastSearchId);
                         return;
                     }
-                    String search2 = Lang.getTranslitString(search1);
+                    String search2 = Lang.getTranslitString(context, search1);
                     if (search1.equals(search2) || search2.length() == 0) {
                         search2 = null;
                     }

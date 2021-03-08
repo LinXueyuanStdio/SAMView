@@ -38,21 +38,21 @@ import com.same.lib.core.BasePage;
 import com.same.lib.core.ContainerLayout;
 import com.same.lib.core.DrawerLayoutContainer;
 import com.same.lib.helper.LayoutHelper;
+import com.same.lib.same.theme.ChatTheme;
+import com.same.lib.same.theme.CommonTheme;
+import com.same.lib.same.theme.DialogTheme;
+import com.same.lib.same.theme.ProfileTheme;
+import com.same.lib.same.theme.ThemeEditorView;
+import com.same.lib.same.theme.dialog.AlertDialog;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeInfo;
 import com.same.lib.theme.ThemeManager;
 import com.same.lib.theme.ThemeRes;
+import com.same.lib.theme.wrap.ThemeContainerLayout;
 import com.same.lib.util.Space;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.main.MainPage;
-import com.same.ui.page.theme.ThemeEditorView;
-import com.same.ui.theme.ChatTheme;
-import com.same.ui.theme.CommonTheme;
-import com.same.ui.theme.DialogTheme;
-import com.same.ui.theme.ProfileTheme;
-import com.same.ui.theme.dialog.AlertDialog;
-import com.same.lib.theme.wrap.ThemeContainerLayout;
 
 import java.util.ArrayList;
 

@@ -7,31 +7,9 @@
     <string name="Save">Save</string>
     <string name="Delete">Delete</string>
     <string name="NoChats">NoChats</string>
-    <string name="ChatSettings">Settings</string>
-    <string name="ShareFile">ShareFile</string>
-
-    <string name="LanguageCustom">LanguageCustom</string>
-    <string name="Language">Language</string>
-    <string name="DeleteLocalizationTitle">Delete language pack</string>
-    <string name="DeleteLocalizationText">Are you sure you want to delete **%1$s** language pack?</string>
 
     <!--theme view-->
     <string name="Theme">Theme</string>
-    <string name="AutoNightTheme">Auto-Night Mode</string>
-    <string name="AutoNightThemeOff">Off</string>
-    <string name="AutoNightDisabled">Disabled</string>
-    <string name="AutoNightScheduled">Scheduled</string>
-    <string name="AutoNightAdaptive">Adaptive</string>
-    <string name="AutoNightSchedule">Schedule</string>
-    <string name="AutoNightSystemDefault">System Default</string>
-    <string name="AutoNightLocation">Use Local Sunset &amp; Sunrise</string>
-    <string name="AutoNightUpdateLocation">Update Location</string>
-    <string name="AutoNightUpdateLocationInfo">Calculating sunset &amp; sunrise times requires a one-time check of your approximate location. Note that this location is only stored locally on your device.\n\nSunset: %1$s\nSunrise: %2$s</string>
-    <string name="AutoNightFrom">From</string>
-    <string name="AutoNightTo">To</string>
-    <string name="AutoNightPreferred">Preferred night theme</string>
-    <string name="AutoNightBrightness">Brightness threshold</string>
-    <string name="AutoNightBrightnessInfo">Switch to your preferred night theme when ambient lighting falls below %1$d%%.</string>
     <string name="ThemeDark">Dark</string>
     <string name="ThemeDarkBlue">Dark Blue</string>
     <string name="ThemeDay">Day</string>

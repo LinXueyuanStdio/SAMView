@@ -44,7 +44,17 @@ public class MyApplication extends Application {
                 return Theme.getColor(key);
             }
         });
-        Lang.install(MyLang::getString);
+        Lang.install(new Lang.ILang() {
+            @Override
+            public String getString(String key, int string) {
+                return MyLang.getString(key, string);
+            }
+
+            @Override
+            public String getTranslitString(String src) {
+                return MyLang.getInstance().getTranslitString(src);
+            }
+        });
         Font.install((context, assetPath) -> FontManager.getMediumTypeface(context));
         CheckboxFont.install((context, assetPath) -> FontManager.getMediumTypeface(context));
     }
