@@ -56,7 +56,7 @@ public class ThemePage extends BaseActionBarPage {
     public final static int THEME_TYPE_NIGHT = 1;
     public final static int THEME_TYPE_OTHER = 2;
     Button currentTheme;
-
+    ThemesHorizontalListCell themesHorizontalListCell;
     private ArrayList<ThemeInfo> darkThemes = new ArrayList<>();
     private ArrayList<ThemeInfo> defaultThemes = new ArrayList<>();
     private int currentType;
@@ -197,7 +197,7 @@ public class ThemePage extends BaseActionBarPage {
         }
         Collections.sort(defaultThemes, (o1, o2) -> Integer.compare(o1.sortIndex, o2.sortIndex));
 
-        ThemesHorizontalListCell themesHorizontalListCell = new ThemesHorizontalListCell(context, currentType, defaultThemes, darkThemes) {
+        themesHorizontalListCell = new ThemesHorizontalListCell(context, currentType, defaultThemes, darkThemes) {
             @Override
             protected void showOptionsForTheme(ThemeInfo themeInfo) {
             }
@@ -209,6 +209,7 @@ public class ThemePage extends BaseActionBarPage {
 
             @Override
             protected void updateRows() {
+                themesHorizontalListCell.notifyDataSetChanged(fragmentView.getWidth());
             }
         };
         themesHorizontalListCell.setDrawDivider(false);
