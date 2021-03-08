@@ -15,7 +15,12 @@ import androidx.annotation.StringRes;
 public class Lang {
     public interface ILang {
         String getString(String key, @StringRes int string);
+
         String getTranslitString(String src);
+
+        String formatPluralString(String key, int plural);
+
+        String formatString(String key, int res, Object... args);
     }
 
     private static ILang lang;
@@ -31,10 +36,29 @@ public class Lang {
             return context.getString(string);
         }
     }
+
     @Nullable
     public static String getTranslitString(Context context, String src) {
         if (lang != null) {
             return lang.getTranslitString(src);
+        } else {
+            return null;
+        }
+    }
+
+    @Nullable
+    public static String formatString(String key, int res, Object... args) {
+        if (lang != null) {
+            return lang.formatString(key, res, args);
+        } else {
+            return null;
+        }
+    }
+
+    @Nullable
+    public static String formatPluralString(String key, int plural) {
+        if (lang != null) {
+            return lang.formatPluralString(key, plural);
         } else {
             return null;
         }

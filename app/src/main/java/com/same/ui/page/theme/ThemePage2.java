@@ -761,7 +761,7 @@
 //                    return;
 //                }
 //            } catch (Exception e) {
-//                FileLog.e(e);
+//                e.printStackTrace();
 //            }
 //        }
 //        try {
@@ -773,7 +773,7 @@
 //                lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
 //            }
 //        } catch (Exception e) {
-//            FileLog.e(e);
+//            e.printStackTrace();
 //        }
 //        if (lastKnownLocation == null || forceUpdate) {
 //            startLocationUpdate();
@@ -833,12 +833,12 @@
 //        try {
 //            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 0, gpsLocationListener);
 //        } catch (Exception e) {
-//            FileLog.e(e);
+//            e.printStackTrace();
 //        }
 //        try {
 //            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1, 0, networkLocationListener);
 //        } catch (Exception e) {
-//            FileLog.e(e);
+//            e.printStackTrace();
 //        }
 //    }
 //
@@ -1135,14 +1135,14 @@
 //                            stream = new FileOutputStream(currentFile);
 //                            stream.write(AndroidUtilities.getStringBytes(result.toString()));
 //                        } catch (Exception e) {
-//                            FileLog.e(e);
+//                            e.printStackTrace();
 //                        } finally {
 //                            try {
 //                                if (stream != null) {
 //                                    stream.close();
 //                                }
 //                            } catch (Exception e) {
-//                                FileLog.e(e);
+//                                e.printStackTrace();
 //                            }
 //                        }
 //                    } else if (themeInfo.assetName != null) {
@@ -1173,7 +1173,7 @@
 //                        }
 //                        startActivityForResult(Intent.createChooser(intent, MyLang.getString("ShareFile", R.string.ShareFile)), 500);
 //                    } catch (Exception e) {
-//                        FileLog.e(e);
+//                        e.printStackTrace();
 //                    }
 //                } else if (which == 2) {
 //                    if (parentLayout != null) {

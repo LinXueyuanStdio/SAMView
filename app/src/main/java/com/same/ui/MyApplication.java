@@ -54,6 +54,16 @@ public class MyApplication extends Application {
             public String getTranslitString(String src) {
                 return MyLang.getInstance().getTranslitString(src);
             }
+
+            @Override
+            public String formatPluralString(String key, int plural) {
+                return MyLang.formatPluralString(key, plural);
+            }
+
+            @Override
+            public String formatString(String key, int res, Object... args) {
+                return MyLang.formatString(key, res, args);
+            }
         });
         Font.install((context, assetPath) -> FontManager.getMediumTypeface(context));
         CheckboxFont.install((context, assetPath) -> FontManager.getMediumTypeface(context));

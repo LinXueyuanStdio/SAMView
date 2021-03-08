@@ -1,8 +1,11 @@
-package com.same.ui;
+package com.same.lib.same;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -12,13 +15,15 @@ import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.ActionMode;
 import android.view.Display;
+import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -45,7 +50,11 @@ import com.same.lib.theme.ThemeInfo;
 import com.same.lib.theme.ThemeManager;
 import com.same.lib.theme.ThemeRes;
 import com.same.lib.theme.wrap.ThemeContainerLayout;
+import com.same.lib.util.Keyboard;
 import com.same.lib.util.Space;
+import com.same.lib.util.UIThread;
+import com.same.lib.same.view.PassCode;
+import com.same.lib.same.view.PasscodeView;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -85,8 +94,8 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
     private static ArrayList<BasePage> rightFragmentsStack = new ArrayList<>();
     private ActionMode visibleActionMode;
     private DrawerLayoutContainer drawerLayoutContainer;
+    private PasscodeView passcodeView;
     private ImageView themeSwitchImageView;
-    private ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener;
     private NotificationCenter.NotificationCenterDelegate notificationCenterDelegate = new NotificationCenter.NotificationCenterDelegate() {
         @Override
         public void didReceivedNotification(int id, int account, Object... args) {
@@ -103,6 +112,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
             }
         }
     };
+    private Runnable lockRunnable;
 
     public interface ContextDelegate extends ThemeEditorView.ThemeContainer {
         Configuration getConfiguration();
@@ -143,7 +153,9 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
             AndroidUtilities.statusBarHeight = delegate.getResources().getDimensionPixelSize(resourceId);
             Space.statusBarHeight = AndroidUtilities.statusBarHeight;
         }
-
+        if (PassCode.passcodeHash.length() != 0 && PassCode.appLocked) {
+            PassCode.lastPauseTime = (int) (SystemClock.elapsedRealtime() / 1000);
+        }
         ThemeRes.installAndApply(context, new CommonTheme(), new DialogTheme(), new ChatTheme(), new ProfileTheme());
 
         actionBarLayout = new ThemeContainerLayout(context) {
@@ -330,6 +342,10 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         actionBarLayout.init(mainFragmentsStack);//使用 main fragment 栈
         actionBarLayout.setDelegate(this);//代理，监听生命周期
 
+        //指纹和密码解锁
+        passcodeView = new PasscodeView(context);
+        drawerLayoutContainer.addView(passcodeView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+
         //注册通知中心，使用观察者模式处理应用内部的通知（消息）
         NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.didSetNewTheme);
         NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.needSetDayNightTheme);
@@ -354,6 +370,80 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
             drawerLayoutContainer.setAllowOpenDrawer(allowOpen, false);
         }
         checkLayout();
+    }
+
+    private void showPasscodeActivity() {
+        if (passcodeView == null) {
+            return;
+        }
+        PassCode.appLocked = true;
+        passcodeView.onShow();
+        PassCode.isWaitingForPasscodeEnter = true;
+        drawerLayoutContainer.setAllowOpenDrawer(false, false);
+        passcodeView.setDelegate(() -> {
+            PassCode.isWaitingForPasscodeEnter = false;
+            drawerLayoutContainer.setAllowOpenDrawer(true, false);
+            actionBarLayout.setVisibility(View.VISIBLE);
+            actionBarLayout.showLastFragment();
+            if (Space.isTablet()) {
+                layersActionBarLayout.showLastFragment();
+                rightActionBarLayout.showLastFragment();
+                if (layersActionBarLayout.getVisibility() == View.INVISIBLE) {
+                    layersActionBarLayout.setVisibility(View.VISIBLE);
+                }
+                rightActionBarLayout.setVisibility(View.VISIBLE);
+            }
+        });
+        actionBarLayout.setVisibility(View.INVISIBLE);
+        if (Space.isTablet()) {
+            if (layersActionBarLayout.getVisibility() == View.VISIBLE) {
+                layersActionBarLayout.setVisibility(View.INVISIBLE);
+            }
+            rightActionBarLayout.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void onPasscodePause() {
+        if (lockRunnable != null) {
+            AndroidUtilities.cancelRunOnUIThread(lockRunnable);
+            lockRunnable = null;
+        }
+        if (PassCode.passcodeHash.length() != 0) {
+            PassCode.lastPauseTime = (int) (SystemClock.elapsedRealtime() / 1000);
+            lockRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    if (lockRunnable == this) {
+                        if (PassCode.needShowPasscode(true)) {
+                            showPasscodeActivity();
+                        }
+                        lockRunnable = null;
+                    }
+                }
+            };
+            if (PassCode.appLocked) {
+                UIThread.runOnUIThread(lockRunnable, 1000);
+            } else if (PassCode.autoLockIn != 0) {
+                UIThread.runOnUIThread(lockRunnable, ((long) PassCode.autoLockIn) * 1000 + 1000);
+            }
+        } else {
+            PassCode.lastPauseTime = 0;
+        }
+        PassCode.saveConfig();
+    }
+
+    private void onPasscodeResume() {
+        if (lockRunnable != null) {
+            UIThread.cancelRunOnUIThread(lockRunnable);
+            lockRunnable = null;
+        }
+        if (PassCode.needShowPasscode(true)) {
+            showPasscodeActivity();
+        }
+        if (PassCode.lastPauseTime != 0) {
+            PassCode.lastPauseTime = 0;
+            PassCode.saveConfig();
+        }
     }
 
     public static Point getRealScreenSize(Context context) {
@@ -381,29 +471,91 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
 
     public void onPause() {
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, 4096);
+        onPasscodePause();
         actionBarLayout.onPause();
         if (Space.isTablet()) {
             rightActionBarLayout.onPause();
             layersActionBarLayout.onPause();
         }
+        if (passcodeView != null) {
+            passcodeView.onPause();
+        }
     }
 
     public void onResume() {
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 4096);
-        actionBarLayout.onResume();
+
+        onPasscodeResume();
+        if (passcodeView.getVisibility() != View.VISIBLE) {
+            actionBarLayout.onResume();
+            if (Space.isTablet()) {
+                rightActionBarLayout.onResume();
+                layersActionBarLayout.onResume();
+            }
+        } else {
+            actionBarLayout.dismissDialogs();
+            if (Space.isTablet()) {
+                rightActionBarLayout.dismissDialogs();
+                layersActionBarLayout.dismissDialogs();
+            }
+            passcodeView.onResume();
+        }
     }
 
     public void onDestroy() {
-        //        try {
-        //            if (onGlobalLayoutListener != null) {
-        //                final View view = getWindow().getDecorView().getRootView();
-        //                view.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
-        //            }
-        //        } catch (Exception e) {
-        //            e.printStackTrace();
-        //        }
         ThemeEditorView editorView = ThemeEditorView.getInstance();
         editorView.destroy();
+    }
+
+    public void onPreActivityResult() {
+        if (PassCode.passcodeHash.length() != 0 && PassCode.lastPauseTime != 0) {
+            PassCode.lastPauseTime = 0;
+        }
+    }
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        ThemeEditorView editorView = ThemeEditorView.getInstance();
+        if (editorView != null) {
+            editorView.onActivityResult(requestCode, resultCode, data);
+        }
+        if (actionBarLayout.fragmentsStack.size() != 0) {
+            BasePage fragment = actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1);
+            fragment.onActivityResultFragment(requestCode, resultCode, data);
+        }
+        if (Space.isTablet()) {
+            if (rightActionBarLayout.fragmentsStack.size() != 0) {
+                BasePage fragment = rightActionBarLayout.fragmentsStack.get(rightActionBarLayout.fragmentsStack.size() - 1);
+                fragment.onActivityResultFragment(requestCode, resultCode, data);
+            }
+            if (layersActionBarLayout.fragmentsStack.size() != 0) {
+                BasePage fragment = layersActionBarLayout.fragmentsStack.get(layersActionBarLayout.fragmentsStack.size() - 1);
+                fragment.onActivityResultFragment(requestCode, resultCode, data);
+            }
+        }
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (grantResults == null) {
+            grantResults = new int[0];
+        }
+        if (permissions == null) {
+            permissions = new String[0];
+        }
+
+        boolean granted = grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+        if (actionBarLayout.fragmentsStack.size() != 0) {
+            BasePage fragment = actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1);
+            fragment.onRequestPermissionsResultFragment(requestCode, permissions, grantResults);
+        }
+        if (Space.isTablet()) {
+            if (rightActionBarLayout.fragmentsStack.size() != 0) {
+                BasePage fragment = rightActionBarLayout.fragmentsStack.get(rightActionBarLayout.fragmentsStack.size() - 1);
+                fragment.onRequestPermissionsResultFragment(requestCode, permissions, grantResults);
+            }
+            if (layersActionBarLayout.fragmentsStack.size() != 0) {
+                BasePage fragment = layersActionBarLayout.fragmentsStack.get(layersActionBarLayout.fragmentsStack.size() - 1);
+                fragment.onRequestPermissionsResultFragment(requestCode, permissions, grantResults);
+            }
+        }
     }
 
     public void onPreConfigurationChanged(Configuration newConfig) {
@@ -443,7 +595,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
      *
      * 只是为了适配平板布局
      */
-    private void checkLayout() {
+    public void checkLayout() {
         if (!Space.isTablet() || rightActionBarLayout == null) {
             return;
         }
@@ -486,7 +638,21 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         }
     }
 
-    private void needSetDayNightTheme(ThemeInfo theme, boolean nigthTheme, int[] pos, int accentId) {
+    public void didSetNewTheme(Boolean nightTheme) {
+        if (!nightTheme) {
+            if (sideMenu != null) {
+                sideMenu.setBackgroundColor(Theme.getColor(KeyHub.key_windowBackgroundGray));
+                sideMenu.setGlowColor(Theme.getColor(KeyHub.key_windowBackgroundGray));
+                sideMenu.setListSelectorColor(Theme.getColor(KeyHub.key_listSelector));
+                if (sideMenu.getAdapter() != null) {
+                    sideMenu.getAdapter().notifyDataSetChanged();
+                }
+            }
+        }
+        drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(KeyHub.key_windowBackgroundWhite));
+    }
+
+    public void needSetDayNightTheme(ThemeInfo theme, boolean nigthTheme, int[] pos, int accentId) {
         boolean instant = false;
         if (Build.VERSION.SDK_INT >= 21 && pos != null) {
             if (themeSwitchImageView.getVisibility() == View.VISIBLE) {
@@ -530,6 +696,133 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
 
     public boolean presentFragment(final BasePage fragment, final boolean removeLast, boolean forceWithoutAnimation) {
         return actionBarLayout.presentFragment(fragment, removeLast, forceWithoutAnimation, true, false);
+    }
+
+    public void onSaveInstanceState(Bundle outState) {
+        BasePage lastFragment = null;
+        if (Space.isTablet()) {
+            if (!layersActionBarLayout.fragmentsStack.isEmpty()) {
+                lastFragment = layersActionBarLayout.fragmentsStack.get(layersActionBarLayout.fragmentsStack.size() - 1);
+            } else if (!rightActionBarLayout.fragmentsStack.isEmpty()) {
+                lastFragment = rightActionBarLayout.fragmentsStack.get(rightActionBarLayout.fragmentsStack.size() - 1);
+            } else if (!actionBarLayout.fragmentsStack.isEmpty()) {
+                lastFragment = actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1);
+            }
+        } else {
+            if (!actionBarLayout.fragmentsStack.isEmpty()) {
+                lastFragment = actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1);
+            }
+        }
+
+        if (lastFragment != null) {
+            Bundle args = lastFragment.getArguments();
+            if (args != null) {
+                outState.putBundle("args", args);
+                outState.putString("fragment", "group");
+            }
+            lastFragment.saveSelfArgs(outState);
+        }
+    }
+
+
+    public void onBackPressed() {
+        if (passcodeView.getVisibility() == View.VISIBLE) {
+            delegate.stopSelf();
+            return;
+        }
+        if (drawerLayoutContainer.isDrawerOpened()) {
+            drawerLayoutContainer.closeDrawer(false);
+        } else if (Space.isTablet()) {
+            if (layersActionBarLayout.getVisibility() == View.VISIBLE) {
+                layersActionBarLayout.onBackPressed();
+            } else {
+                boolean cancel = false;
+                if (rightActionBarLayout.getVisibility() == View.VISIBLE && !rightActionBarLayout.fragmentsStack.isEmpty()) {
+                    BasePage lastFragment = rightActionBarLayout.fragmentsStack.get(rightActionBarLayout.fragmentsStack.size() - 1);
+                    cancel = !lastFragment.onBackPressed();
+                }
+                if (!cancel) {
+                    actionBarLayout.onBackPressed();
+                }
+            }
+        } else {
+            actionBarLayout.onBackPressed();
+        }
+    }
+
+    public void onLowMemory() {
+        if (actionBarLayout != null) {
+            actionBarLayout.onLowMemory();
+            if (Space.isTablet()) {
+                rightActionBarLayout.onLowMemory();
+                layersActionBarLayout.onLowMemory();
+            }
+        }
+    }
+
+    public void onActionModeStarted(ActionMode mode) {
+        visibleActionMode = mode;
+        try {
+            Menu menu = mode.getMenu();
+            if (menu != null) {
+                boolean extended = actionBarLayout.extendActionMode(menu);
+                if (!extended && Space.isTablet()) {
+                    extended = rightActionBarLayout.extendActionMode(menu);
+                    if (!extended) {
+                        layersActionBarLayout.extendActionMode(menu);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (Build.VERSION.SDK_INT >= 23 && mode.getType() == ActionMode.TYPE_FLOATING) {
+            return;
+        }
+        actionBarLayout.onActionModeStarted(mode);
+        if (Space.isTablet()) {
+            rightActionBarLayout.onActionModeStarted(mode);
+            layersActionBarLayout.onActionModeStarted(mode);
+        }
+    }
+
+    public void onActionModeFinished(ActionMode mode) {
+        if (visibleActionMode == mode) {
+            visibleActionMode = null;
+        }
+        if (Build.VERSION.SDK_INT >= 23 && mode.getType() == ActionMode.TYPE_FLOATING) {
+            return;
+        }
+        actionBarLayout.onActionModeFinished(mode);
+        if (Space.isTablet()) {
+            rightActionBarLayout.onActionModeFinished(mode);
+            layersActionBarLayout.onActionModeFinished(mode);
+        }
+    }
+
+    public void onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            if (Space.isTablet()) {
+                if (layersActionBarLayout.getVisibility() == View.VISIBLE && !layersActionBarLayout.fragmentsStack.isEmpty()) {
+                    layersActionBarLayout.onKeyUp(keyCode, event);
+                } else if (rightActionBarLayout.getVisibility() == View.VISIBLE && !rightActionBarLayout.fragmentsStack.isEmpty()) {
+                    rightActionBarLayout.onKeyUp(keyCode, event);
+                } else {
+                    actionBarLayout.onKeyUp(keyCode, event);
+                }
+            } else {
+                if (actionBarLayout.fragmentsStack.size() == 1) {
+                    if (context instanceof Activity) {
+                        View focus = ((Activity) context).getCurrentFocus();
+                        if (focus != null) {
+                            Keyboard.hideKeyboard(focus);
+                        }
+                    }
+                } else {
+                    actionBarLayout.onKeyUp(keyCode, event);
+                }
+            }
+        }
     }
 
     @Override

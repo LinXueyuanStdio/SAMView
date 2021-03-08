@@ -2,14 +2,16 @@ package com.same.ui.page.service;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.view.KeyEvent;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 
 import com.same.lib.core.ContainerLayout;
-import com.same.ui.ContainerCreator;
+import com.same.lib.same.ContainerCreator;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
+import com.same.ui.page.main.MainPage;
 import com.timecat.show.window.StandOutFlags;
 import com.timecat.show.window.StandOutWindow;
 import com.timecat.show.window.Window;
@@ -98,7 +100,7 @@ public class MainService extends StandOutWindow implements ContainerCreator.Cont
 
     @Override
     public void createAndAttachView(int i, FrameLayout frameLayout) {
-        creator.onCreateView(frameLayout);
+        creator.onCreateView(frameLayout, new MainPage());
     }
 
     @Override
@@ -130,6 +132,18 @@ public class MainService extends StandOutWindow implements ContainerCreator.Cont
         creator.onPreConfigurationChanged(newConfig);
         super.onConfigurationChanged(newConfig);
         creator.onPostConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        creator.onLowMemory();
+    }
+
+    @Override
+    public boolean onKeyEvent(int id, Window window, KeyEvent event) {
+        creator.onKeyUp(event.getKeyCode(), event);
+        return super.onKeyEvent(id, window, event);
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -1611,6 +1612,8 @@ public class ThemeEditorView {
         }
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    }
     private void animateToBoundsMaybe() {
         int startX = getSideCoord(true, 0, 0, editorWidth);
         int endX = getSideCoord(true, 1, 0, editorWidth);
