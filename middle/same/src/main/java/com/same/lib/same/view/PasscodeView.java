@@ -776,8 +776,8 @@ public class PasscodeView extends FrameLayout {
                 onPasscodeError();
                 return;
             }
-            if (!PassCode.checkPasscode(password)) {
-                PassCode.increaseBadPasscodeTries();
+            if (!PassCode.checkPasscode(getContext(), password)) {
+                PassCode.increaseBadPasscodeTries(getContext());
                 if (PassCode.passcodeRetryInMs > 0) {
                     checkRetryTextView();
                 }
@@ -805,7 +805,7 @@ public class PasscodeView extends FrameLayout {
         AnimatorSet.start();
 
         PassCode.appLocked = false;
-        PassCode.saveConfig();
+        PassCode.saveConfig(getContext());
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetPasscode);
         setOnTouchListener(null);
         if (delegate != null) {
@@ -847,7 +847,7 @@ public class PasscodeView extends FrameLayout {
             }
         }
         PassCode.lastUptimeMillis = currentTime;
-        PassCode.saveConfig();
+        PassCode.saveConfig(getContext());
         if (PassCode.passcodeRetryInMs > 0) {
             int value = Math.max(1, (int) Math.ceil(PassCode.passcodeRetryInMs / 1000.0));
             if (value != lastValue) {

@@ -12,6 +12,7 @@ import com.same.lib.font.FontManager;
 import com.same.lib.intro.IntroLoader;
 import com.same.lib.lottie.NativeLoader;
 import com.same.lib.same.theme.delegate.ColorDelegateLoader;
+import com.same.lib.same.view.PassCode;
 import com.same.lib.theme.Theme;
 import com.same.lib.util.ColorManager;
 import com.same.lib.util.Font;
@@ -67,6 +68,7 @@ public class MyApplication extends Application {
         });
         Font.install((context, assetPath) -> FontManager.getMediumTypeface(context));
         CheckboxFont.install((context, assetPath) -> FontManager.getMediumTypeface(context));
+        PassCode.loadConfig(this);
     }
 
     @Override

@@ -42,6 +42,8 @@ import com.same.lib.same.theme.CommonTheme;
 import com.same.lib.same.theme.DialogTheme;
 import com.same.lib.same.theme.ProfileTheme;
 import com.same.lib.same.theme.ThemeEditorView;
+import com.same.lib.same.view.PassCode;
+import com.same.lib.same.view.PasscodeView;
 import com.same.lib.same.view.RecyclerListView;
 import com.same.lib.same.view.SideMenultItemAnimator;
 import com.same.lib.theme.KeyHub;
@@ -53,8 +55,6 @@ import com.same.lib.theme.wrap.ThemeContainerLayout;
 import com.same.lib.util.Keyboard;
 import com.same.lib.util.Space;
 import com.same.lib.util.UIThread;
-import com.same.lib.same.view.PassCode;
-import com.same.lib.same.view.PasscodeView;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -346,6 +346,8 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         passcodeView = new PasscodeView(context);
         drawerLayoutContainer.addView(passcodeView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
+        switchToHomePage(homePage, true);
+
         //注册通知中心，使用观察者模式处理应用内部的通知（消息）
         NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.didSetNewTheme);
         NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.needSetDayNightTheme);
@@ -370,6 +372,39 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
             drawerLayoutContainer.setAllowOpenDrawer(allowOpen, false);
         }
         checkLayout();
+        if (PassCode.needShowPasscode(true, true) || PassCode.isWaitingForPasscodeEnter) {
+            showPasscodeActivity();
+        }
+    }
+
+    public void switchToHomePage(@NonNull BasePage homePage, boolean removeAll) {
+        if (Space.isTablet()) {
+            layersActionBarLayout.removeAllFragments();
+            rightActionBarLayout.removeAllFragments();
+            if (!tabletFullSize) {
+                shadowTabletSide.setVisibility(View.VISIBLE);
+                if (rightActionBarLayout.fragmentsStack.isEmpty()) {
+                    backgroundTablet.setVisibility(View.VISIBLE);
+                }
+                rightActionBarLayout.setVisibility(View.GONE);
+            }
+            layersActionBarLayout.setVisibility(View.GONE);
+        }
+        if (removeAll) {
+            actionBarLayout.removeAllFragments();
+        } else {
+            actionBarLayout.removeFragmentFromStack(0);
+        }
+        if (homePage instanceof SideMenuPage) {
+            ((SideMenuPage) homePage).setSideMenu(sideMenu);
+        }
+        actionBarLayout.addFragmentToStack(homePage, 0);
+        drawerLayoutContainer.setAllowOpenDrawer(true, false);
+        actionBarLayout.showLastFragment();
+        if (Space.isTablet()) {
+            layersActionBarLayout.showLastFragment();
+            rightActionBarLayout.showLastFragment();
+        }
     }
 
     private void showPasscodeActivity() {
@@ -414,7 +449,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
                 @Override
                 public void run() {
                     if (lockRunnable == this) {
-                        if (PassCode.needShowPasscode(true)) {
+                        if (PassCode.needShowPasscode(true, true)) {
                             showPasscodeActivity();
                         }
                         lockRunnable = null;
@@ -429,7 +464,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         } else {
             PassCode.lastPauseTime = 0;
         }
-        PassCode.saveConfig();
+        PassCode.saveConfig(context);
     }
 
     private void onPasscodeResume() {
@@ -437,12 +472,12 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
             UIThread.cancelRunOnUIThread(lockRunnable);
             lockRunnable = null;
         }
-        if (PassCode.needShowPasscode(true)) {
+        if (PassCode.needShowPasscode(true, true)) {
             showPasscodeActivity();
         }
         if (PassCode.lastPauseTime != 0) {
             PassCode.lastPauseTime = 0;
-            PassCode.saveConfig();
+            PassCode.saveConfig(context);
         }
     }
 
@@ -467,7 +502,6 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         }
         return size;
     }
-
 
     public void onPause() {
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, 4096);
@@ -512,6 +546,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
             PassCode.lastPauseTime = 0;
         }
     }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         ThemeEditorView editorView = ThemeEditorView.getInstance();
         if (editorView != null) {

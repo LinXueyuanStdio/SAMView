@@ -42,7 +42,7 @@ public class PassCode {
     public static boolean isWaitingForPasscodeEnter;
     public static boolean useFingerprint = true;
 
-    public static boolean checkPasscode(String passcode) {
+    public static boolean checkPasscode(Context context, String passcode) {
         if (passcodeSalt.length == 0) {
             boolean result = AndroidUtilities.MD5(passcode).equals(passcodeHash);
             if (result) {
@@ -55,7 +55,7 @@ public class PassCode {
                     System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
                     System.arraycopy(passcodeSalt, 0, bytes, passcodeBytes.length + 16, 16);
                     passcodeHash = bytesToHex(computeSHA256(bytes, 0, bytes.length));
-                    saveConfig();
+                    saveConfig(context);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -168,7 +168,7 @@ public class PassCode {
         animatorSet.start();
     }
 
-    public static void increaseBadPasscodeTries() {
+    public static void increaseBadPasscodeTries(Context context) {
         badPasscodeTries++;
         if (badPasscodeTries >= 3) {
             switch (badPasscodeTries) {
@@ -193,7 +193,7 @@ public class PassCode {
             }
             lastUptimeMillis = SystemClock.elapsedRealtime();
         }
-        saveConfig();
+        saveConfig(context);
     }
 
     public static void loadConfig(Context context) {
@@ -212,7 +212,7 @@ public class PassCode {
             badPasscodeTries = preferences.getInt("badPasscodeTries", 0);
             autoLockIn = preferences.getInt("autoLockIn", 60 * 60);
             lastPauseTime = preferences.getInt("lastPauseTime", 0);
-//            useFingerprint = preferences.getBoolean("useFingerprint", true);
+            useFingerprint = preferences.getBoolean("useFingerprint", true);
 //            lastUpdateVersion = preferences.getString("lastUpdateVersion2", "3.5");
 //            allowScreenCapture = preferences.getBoolean("allowScreenCapture", false);
 //            lastLocalId = preferences.getInt("lastLocalId", -210000);
@@ -237,7 +237,39 @@ public class PassCode {
             configLoaded = true;
         }
     }
-    public static void saveConfig() {
+    public static void saveConfig(Context context) {
+        synchronized (sync) {
+            try {
+                SharedPreferences preferences = context.getSharedPreferences("userconfing", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+//                editor.putBoolean("saveIncomingPhotos", saveIncomingPhotos);
+                editor.putString("passcodeHash1", passcodeHash);
+                editor.putString("passcodeSalt", passcodeSalt.length > 0 ? Base64.encodeToString(passcodeSalt, Base64.DEFAULT) : "");
+                editor.putBoolean("appLocked", appLocked);
+                editor.putInt("passcodeType", passcodeType);
+                editor.putLong("passcodeRetryInMs", passcodeRetryInMs);
+                editor.putLong("lastUptimeMillis", lastUptimeMillis);
+                editor.putInt("badPasscodeTries", badPasscodeTries);
+                editor.putInt("autoLockIn", autoLockIn);
+                editor.putInt("lastPauseTime", lastPauseTime);
+//                editor.putString("lastUpdateVersion2", lastUpdateVersion);
+                editor.putBoolean("useFingerprint", useFingerprint);
+//                editor.putBoolean("allowScreenCapture", allowScreenCapture);
+//                editor.putString("pushString2", pushString);
+//                editor.putString("pushAuthKey", pushAuthKey != null ? Base64.encodeToString(pushAuthKey, Base64.DEFAULT) : "");
+//                editor.putInt("lastLocalId", lastLocalId);
+//                editor.putString("passportConfigJson", passportConfigJson);
+//                editor.putInt("passportConfigHash", passportConfigHash);
+//                editor.putBoolean("sortContactsByName", sortContactsByName);
+//                editor.putBoolean("sortFilesByName", sortFilesByName);
+//                editor.putInt("textSelectionHintShows", textSelectionHintShows);
+//                editor.putInt("scheduledOrNoSoundHintShows", scheduledOrNoSoundHintShows);
+//                editor.putInt("lockRecordAudioVideoHint", lockRecordAudioVideoHint);
+                editor.apply();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 }
