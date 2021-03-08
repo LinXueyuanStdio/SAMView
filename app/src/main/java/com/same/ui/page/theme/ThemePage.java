@@ -5,7 +5,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.RippleDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.view.Gravity;
@@ -15,10 +19,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.NotificationCenter;
 import com.same.lib.core.BasePage;
+import com.same.lib.drawable.DrawableManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.listview.RecyclerView;
 import com.same.lib.lottie.RLottieImageView;
@@ -30,6 +36,7 @@ import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeInfo;
 import com.same.lib.theme.ThemeManager;
+import com.same.lib.util.Lang;
 import com.same.lib.util.Space;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
@@ -214,6 +221,56 @@ public class ThemePage extends BaseActionBarPage {
         themesHorizontalListCell.setFocusable(false);
         themesHorizontalListCell.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Space.dp(148)));
         containerLayout.addView(themesHorizontalListCell);
+
+        switchTheme(context, containerLayout);
+    }
+
+    private void switchTheme(Context context, ViewGroup containerLayout) {
+        ImageView  darkThemeView = new ImageView(context);
+        darkThemeView.setScaleType(ImageView.ScaleType.CENTER);
+        darkThemeView.setImageResource(R.drawable.ic_check);
+        darkThemeView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(KeyHub.key_actionBarDefaultIcon), PorterDuff.Mode.MULTIPLY));
+        if (Build.VERSION.SDK_INT >= 21) {
+            darkThemeView.setBackground(DrawableManager.createSelectorDrawable(Theme.getColor(KeyHub.key_listSelector), 1, AndroidUtilities.dp(17)));
+            DrawableManager.setRippleDrawableForceSoftware((RippleDrawable) darkThemeView.getBackground());
+        }
+        darkThemeView.setOnClickListener(v -> {
+            SharedPreferences preferences = context.getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
+            String dayThemeName = preferences.getString("lastDayTheme", "Blue");
+            if (ThemeManager.getTheme(dayThemeName) == null) {
+                dayThemeName = "Blue";
+            }
+            String nightThemeName = preferences.getString("lastDarkTheme", "Dark Blue");
+            if (ThemeManager.getTheme(nightThemeName) == null) {
+                nightThemeName = "Dark Blue";
+            }
+            ThemeInfo themeInfo = ThemeManager.getActiveTheme();
+            if (dayThemeName.equals(nightThemeName)) {
+                if (themeInfo.isDark()) {
+                    dayThemeName = "Blue";
+                } else {
+                    nightThemeName = "Dark Blue";
+                }
+            }
+
+            if (dayThemeName.equals(themeInfo.getKey())) {
+                themeInfo = ThemeManager.getTheme(nightThemeName);
+            } else {
+                themeInfo = ThemeManager.getTheme(dayThemeName);
+            }
+            if (Theme.selectedAutoNightType != Theme.AUTO_NIGHT_TYPE_NONE) {
+                Toast.makeText(getContext(), Lang.getString(context, "AutoNightModeOff", R.string.AutoNightModeOff), Toast.LENGTH_SHORT).show();
+                Theme.selectedAutoNightType = Theme.AUTO_NIGHT_TYPE_NONE;
+                ThemeManager.saveAutoNightThemeConfig();
+                ThemeManager.cancelAutoNightThemeCallbacks();
+            }
+            int[] pos = new int[2];
+            darkThemeView.getLocationInWindow(pos);
+            pos[0] += darkThemeView.getMeasuredWidth() / 2;
+            pos[1] += darkThemeView.getMeasuredHeight() / 2;
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, themeInfo, false, pos, -1);
+        });
+        containerLayout.addView(darkThemeView, LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, 6, 90));
     }
 
     private void shareTheme(Context context, ThemeInfo themeInfo) {

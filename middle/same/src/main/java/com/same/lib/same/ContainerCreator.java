@@ -329,6 +329,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         sideMenu.setBackgroundColor(Theme.getColor(KeyHub.key_actionBarActionModeDefaultIcon));
         sideMenu.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         sideMenu.setAllowItemsInteractionDuringAnimation(false);
+//        sideMenu.setAdapter(drawerLayoutAdapter = new DrawerLayoutAdapter(this, itemAnimator));
         drawerLayoutContainer.setDrawerLayout(sideMenu);
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) sideMenu.getLayoutParams();
         Point screenSize = getRealScreenSize(context);
@@ -672,7 +673,21 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
             backgroundTablet.setVisibility(!actionBarLayout.fragmentsStack.isEmpty() ? View.GONE : View.VISIBLE);
         }
     }
-
+    public void didSetPasscode() {
+//        if (PassCode.passcodeHash.length() > 0 && !PassCode.allowScreenCapture) {
+//            try {
+//                getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        } else if (!AndroidUtilities.hasFlagSecureFragment()) {
+//            try {
+//                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+    }
     public void didSetNewTheme(Boolean nightTheme) {
         if (!nightTheme) {
             if (sideMenu != null) {
