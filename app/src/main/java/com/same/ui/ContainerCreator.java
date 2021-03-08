@@ -7,15 +7,19 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
+import android.os.Bundle;
 import android.view.ActionMode;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -27,11 +31,14 @@ import com.same.lib.core.BasePage;
 import com.same.lib.core.ContainerLayout;
 import com.same.lib.core.DrawerLayoutContainer;
 import com.same.lib.helper.LayoutHelper;
+import com.same.lib.listview.LinearLayoutManager;
 import com.same.lib.same.theme.ChatTheme;
 import com.same.lib.same.theme.CommonTheme;
 import com.same.lib.same.theme.DialogTheme;
 import com.same.lib.same.theme.ProfileTheme;
 import com.same.lib.same.theme.ThemeEditorView;
+import com.same.lib.same.view.RecyclerListView;
+import com.same.lib.same.view.SideMenultItemAnimator;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeInfo;
@@ -39,8 +46,8 @@ import com.same.lib.theme.ThemeManager;
 import com.same.lib.theme.ThemeRes;
 import com.same.lib.theme.wrap.ThemeContainerLayout;
 import com.same.lib.util.Space;
-import com.same.ui.page.main.MainPage;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
@@ -70,6 +77,8 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
     private FrameLayout shadowTabletSide;
     private View backgroundTablet;
     private boolean tabletFullSize;
+    public RecyclerListView sideMenu;
+    public SideMenultItemAnimator itemAnimator;
 
     private static ArrayList<BasePage> mainFragmentsStack = new ArrayList<>();
     private static ArrayList<BasePage> layerFragmentsStack = new ArrayList<>();
@@ -96,14 +105,15 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
     };
 
     public interface ContextDelegate extends ThemeEditorView.ThemeContainer {
-
-        void setTheme(int theme_tMessages);
-
         Configuration getConfiguration();
 
         void stopSelf();
 
         Resources getResources();
+    }
+
+    public interface SideMenuPage {
+        void setSideMenu(RecyclerListView sideMenu);
     }
 
     @NonNull
@@ -124,20 +134,14 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         AndroidUtilities.checkDisplaySize(context, configuration);
         Space.checkDisplaySize(context, configuration);
         Theme.onConfigurationChanged(context, configuration);
-        delegate.setTheme(R.style.Theme_TMessages);
     }
 
-    public void onCreateView(FrameLayout frameLayout) {
-
-        if (Build.VERSION.SDK_INT >= 24) {
-            //适配分屏
-            //            AndroidUtilities.isInMultiwindow = isInMultiWindowMode();TODO
-        }
+    public void onCreateView(@NonNull FrameLayout frameLayout, @NonNull BasePage homePage) {
         //获取状态栏高度
         int resourceId = delegate.getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
-            AndroidUtilities.statusBarHeight = 0;//getResources().getDimensionPixelSize(resourceId);
-            Space.statusBarHeight = 0;
+            AndroidUtilities.statusBarHeight = delegate.getResources().getDimensionPixelSize(resourceId);
+            Space.statusBarHeight = AndroidUtilities.statusBarHeight;
         }
 
         ThemeRes.installAndApply(context, new CommonTheme(), new DialogTheme(), new ChatTheme(), new ProfileTheme());
@@ -149,8 +153,6 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
                 drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(KeyHub.key_windowBackgroundWhite));
             }
         };
-        //        FrameLayout frameLayout = new FrameLayout(this);TODO
-        //        setContentView(frameLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));TODO
         if (Build.VERSION.SDK_INT >= 21) {
             themeSwitchImageView = new ImageView(context);
             themeSwitchImageView.setVisibility(View.GONE);
@@ -163,8 +165,6 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
 
         if (Space.isTablet()) {
             //适配平板
-            //            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);TODO
-
             RelativeLayout launchLayout = new RelativeLayout(context) {
 
                 private boolean inLayout;
@@ -232,7 +232,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
             backgroundTablet = new View(context);
             BitmapDrawable drawable = (BitmapDrawable) delegate.getResources().getDrawable(R.drawable.catstile);
             drawable.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-            backgroundTablet.setBackgroundDrawable(drawable);
+            backgroundTablet.setBackground(drawable);
             launchLayout.addView(backgroundTablet, LayoutHelper.createRelative(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
             launchLayout.addView(actionBarLayout);
@@ -293,6 +293,37 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
             //手机
             drawerLayoutContainer.addView(actionBarLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         }
+
+        //侧滑栏
+        sideMenu = new RecyclerListView(context) {
+            @Override
+            public boolean drawChild(Canvas canvas, View child, long drawingTime) {
+                int restore = -1;
+                if (itemAnimator != null && itemAnimator.isRunning() && itemAnimator.isAnimatingChild(child)) {
+                    restore = canvas.save();
+                    canvas.clipRect(0, itemAnimator.getAnimationClipTop(), getMeasuredWidth(), getMeasuredHeight());
+                }
+                boolean result = super.drawChild(canvas, child, drawingTime);
+                if (restore >= 0) {
+                    canvas.restoreToCount(restore);
+                    invalidate();
+                    invalidateViews();
+                }
+                return result;
+            }
+        };
+        itemAnimator = new SideMenultItemAnimator(sideMenu);
+        sideMenu.setItemAnimator(itemAnimator);
+        sideMenu.setBackgroundColor(Theme.getColor(KeyHub.key_actionBarActionModeDefaultIcon));
+        sideMenu.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        sideMenu.setAllowItemsInteractionDuringAnimation(false);
+        drawerLayoutContainer.setDrawerLayout(sideMenu);
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) sideMenu.getLayoutParams();
+        Point screenSize = getRealScreenSize(context);
+        layoutParams.width = Space.isTablet() ? Space.dp(320) : Math.min(Space.dp(320), Math.min(screenSize.x, screenSize.y) - AndroidUtilities.dp(56));
+        layoutParams.height = LayoutHelper.MATCH_PARENT;
+        sideMenu.setLayoutParams(layoutParams);
+
         //双向绑定
         drawerLayoutContainer.setParentActionBarLayout(actionBarLayout);
         actionBarLayout.setDrawerLayoutContainer(drawerLayoutContainer);
@@ -304,44 +335,49 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.needSetDayNightTheme);
         NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.needCheckSystemBarColors);
 
-        MainPage page = new MainPage();
-        //        actionBarLayout.addFragmentToStack(page);
-        actionBarLayout.presentFragment(page);
-
+        if (actionBarLayout.fragmentsStack.isEmpty()) {
+            if (homePage instanceof SideMenuPage) {
+                ((SideMenuPage) homePage).setSideMenu(sideMenu);
+            }
+            actionBarLayout.addFragmentToStack(homePage);
+            drawerLayoutContainer.setAllowOpenDrawer(true, false);
+        } else {
+            //任务栈非空，直接从栈中恢复第一个fragment，清空其他fragment
+            BasePage fragment = actionBarLayout.fragmentsStack.get(0);
+            if (fragment instanceof SideMenuPage) {
+                ((SideMenuPage) fragment).setSideMenu(sideMenu);
+            }
+            boolean allowOpen = true;
+            if (Space.isTablet()) {
+                allowOpen = actionBarLayout.fragmentsStack.size() <= 1 && layersActionBarLayout.fragmentsStack.isEmpty();
+            }
+            drawerLayoutContainer.setAllowOpenDrawer(allowOpen, false);
+        }
         checkLayout();
-        //        checkSystemBarColors();TODO
-
-        //适配各种国产 ROM
-        //        try {
-        //            String os1 = Build.DISPLAY;
-        //            String os2 = Build.USER;
-        //            if (os1 != null) {
-        //                os1 = os1.toLowerCase();
-        //            } else {
-        //                os1 = "";
-        //            }
-        //            if (os2 != null) {
-        //                os2 = os1.toLowerCase();
-        //            } else {
-        //                os2 = "";
-        //            }
-        //            if (os1.contains("flyme") || os2.contains("flyme")) {
-        //                AndroidUtilities.incorrectDisplaySizeFix = true;
-        //                final View view = getWindow().getDecorView().getRootView();
-        //                view.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener = () -> {
-        //                    int height = view.getMeasuredHeight();
-        //                    if (Build.VERSION.SDK_INT >= 21) {
-        //                        height -= AndroidUtilities.statusBarHeight;
-        //                    }
-        //                    if (height > AndroidUtilities.dp(100) && height < AndroidUtilities.displaySize.y && height + AndroidUtilities.dp(100) > AndroidUtilities.displaySize.y) {
-        //                        AndroidUtilities.displaySize.y = height;
-        //                    }
-        //                });
-        //            }
-        //        } catch (Exception e) {
-        //            e.printStackTrace();
-        //        }TODO
     }
+
+    public static Point getRealScreenSize(Context context) {
+        Point size = new Point();
+        try {
+            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                windowManager.getDefaultDisplay().getRealSize(size);
+            } else {
+                try {
+                    Method mGetRawW = Display.class.getMethod("getRawWidth");
+                    Method mGetRawH = Display.class.getMethod("getRawHeight");
+                    size.set((Integer) mGetRawW.invoke(windowManager.getDefaultDisplay()), (Integer) mGetRawH.invoke(windowManager.getDefaultDisplay()));
+                } catch (Exception e) {
+                    size.set(windowManager.getDefaultDisplay().getWidth(), windowManager.getDefaultDisplay().getHeight());
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return size;
+    }
+
 
     public void onPause() {
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, 4096);
@@ -412,7 +448,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
             return;
         }
 
-        if (!AndroidUtilities.isInMultiwindow && (!AndroidUtilities.isSmallTablet() || delegate.getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
+        if (!AndroidUtilities.isInMultiwindow && (!AndroidUtilities.isSmallTablet() || delegate.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
             tabletFullSize = false;
             if (actionBarLayout.fragmentsStack.size() >= 2) {
                 for (int a = 1; a < actionBarLayout.fragmentsStack.size(); a++) {
@@ -421,6 +457,10 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
                     actionBarLayout.fragmentsStack.remove(a);
                     rightActionBarLayout.fragmentsStack.add(chatFragment);
                     a--;
+                }
+                if (passcodeView.getVisibility() != View.VISIBLE) {
+                    actionBarLayout.showLastFragment();
+                    rightActionBarLayout.showLastFragment();
                 }
             }
             rightActionBarLayout.setVisibility(rightActionBarLayout.fragmentsStack.isEmpty() ? View.GONE : View.VISIBLE);
@@ -435,6 +475,9 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
                     rightActionBarLayout.fragmentsStack.remove(a);
                     actionBarLayout.fragmentsStack.add(chatFragment);
                     a--;
+                }
+                if (passcodeView.getVisibility() != View.VISIBLE) {
+                    actionBarLayout.showLastFragment();
                 }
             }
             shadowTabletSide.setVisibility(View.GONE);

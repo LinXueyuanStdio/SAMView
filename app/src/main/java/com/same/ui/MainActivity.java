@@ -57,55 +57,13 @@ import com.same.ui.page.main.MainPage;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity
-        implements ContainerLayout.ActionBarLayoutDelegate, ThemeEditorView.ThemeContainer {
-    /**
-     * 主容器
-     */
-    private ThemeContainerLayout actionBarLayout;
-    /**
-     * 适配平板的容器
-     */
-    private ThemeContainerLayout layersActionBarLayout;
-    /**
-     * 适配平板的容器
-     */
-    private ThemeContainerLayout rightActionBarLayout;
-    private FrameLayout shadowTablet;
-    private FrameLayout shadowTabletSide;
-    private View backgroundTablet;
-    private boolean tabletFullSize;
-
-    private static ArrayList<BasePage> mainFragmentsStack = new ArrayList<>();
-    private static ArrayList<BasePage> layerFragmentsStack = new ArrayList<>();
-    private static ArrayList<BasePage> rightFragmentsStack = new ArrayList<>();
-    private ActionMode visibleActionMode;
-    private DrawerLayoutContainer drawerLayoutContainer;
-    private ImageView themeSwitchImageView;
-    private ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener;
-    private NotificationCenter.NotificationCenterDelegate notificationCenterDelegate = new NotificationCenter.NotificationCenterDelegate() {
-        @Override
-        public void didReceivedNotification(int id, int account, Object... args) {
-            if (id == NotificationCenter.didSetNewTheme) {
-                didSetNewTheme((Boolean) args[0]);
-            } else if (id == NotificationCenter.needSetDayNightTheme) {
-                ThemeInfo theme = (ThemeInfo) args[0];
-                boolean nigthTheme = theme.isDark();
-                int[] pos = null;
-                int accentId = theme.currentAccentId;
-                needSetDayNightTheme(theme, nigthTheme, pos, accentId);
-            } else if (id == NotificationCenter.needCheckSystemBarColors) {
-                checkSystemBarColors();
-            }
-        }
-    };
-
+        implements ContainerLayout.ActionBarLayoutDelegate, ContainerCreator.ContextDelegate {
+    ContainerCreator creator;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //region onCreate前
-        AndroidUtilities.checkDisplaySize(this, getResources().getConfiguration());
-        Space.checkDisplaySize(this, getResources().getConfiguration());
-        Theme.onConfigurationChanged(this, getResources().getConfiguration());
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        creator = new ContainerCreator(this, this);
+        creator.onPreCreate();
         setTheme(R.style.Theme_TMessages);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             try {
@@ -146,181 +104,15 @@ public class MainActivity extends Activity
             //适配分屏
             AndroidUtilities.isInMultiwindow = isInMultiWindowMode();
         }
-        //获取状态栏高度
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            AndroidUtilities.statusBarHeight = getResources().getDimensionPixelSize(resourceId);
-        }
-
-        ThemeRes.installAndApply(this, new CommonTheme(), new DialogTheme(), new ChatTheme(), new ProfileTheme());
-
-        actionBarLayout = new ThemeContainerLayout(this) {
-            @Override
-            public void setThemeAnimationValue(float value) {
-                super.setThemeAnimationValue(value);
-                drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(KeyHub.key_windowBackgroundWhite));
-            }
-        };
         FrameLayout frameLayout = new FrameLayout(this);
         setContentView(frameLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        if (Build.VERSION.SDK_INT >= 21) {
-            themeSwitchImageView = new ImageView(this);
-            themeSwitchImageView.setVisibility(View.GONE);
-            frameLayout.addView(themeSwitchImageView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
-        }
-
-        drawerLayoutContainer = new DrawerLayoutContainer(this);
-        drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(KeyHub.key_windowBackgroundWhite));
-        frameLayout.addView(drawerLayoutContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+        creator.onCreateView(frameLayout);
+        MainPage page = new MainPage();
 
         if (Space.isTablet()) {
             //适配平板
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
-            RelativeLayout launchLayout = new RelativeLayout(this) {
-
-                private boolean inLayout;
-
-                @Override
-                public void requestLayout() {
-                    if (inLayout) {
-                        return;
-                    }
-                    super.requestLayout();
-                }
-
-                @Override
-                protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                    inLayout = true;
-                    int width = MeasureSpec.getSize(widthMeasureSpec);
-                    int height = MeasureSpec.getSize(heightMeasureSpec);
-                    setMeasuredDimension(width, height);
-
-                    if (!Space.isInMultiwindow && (!Space.isSmallTablet() || getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
-                        tabletFullSize = false;
-                        int leftWidth = width / 100 * 35;
-                        if (leftWidth < Space.dp(320)) {
-                            leftWidth = Space.dp(320);
-                        }
-                        actionBarLayout.measure(MeasureSpec.makeMeasureSpec(leftWidth, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
-                        shadowTabletSide.measure(MeasureSpec.makeMeasureSpec(Space.dp(1), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
-                        rightActionBarLayout.measure(MeasureSpec.makeMeasureSpec(width - leftWidth, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
-                    } else {
-                        tabletFullSize = true;
-                        actionBarLayout.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
-                    }
-                    backgroundTablet.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
-                    shadowTablet.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
-                    layersActionBarLayout.measure(MeasureSpec.makeMeasureSpec(Math.min(Space.dp(530), width), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(Math.min(Space.dp(528), height), MeasureSpec.EXACTLY));
-
-                    inLayout = false;
-                }
-
-                @Override
-                protected void onLayout(boolean changed, int l, int t, int r, int b) {
-                    int width = r - l;
-                    int height = b - t;
-
-                    if (!Space.isInMultiwindow && (!Space.isSmallTablet() || getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
-                        int leftWidth = width / 100 * 35;
-                        if (leftWidth < Space.dp(320)) {
-                            leftWidth = Space.dp(320);
-                        }
-                        shadowTabletSide.layout(leftWidth, 0, leftWidth + shadowTabletSide.getMeasuredWidth(), shadowTabletSide.getMeasuredHeight());
-                        actionBarLayout.layout(0, 0, actionBarLayout.getMeasuredWidth(), actionBarLayout.getMeasuredHeight());
-                        rightActionBarLayout.layout(leftWidth, 0, leftWidth + rightActionBarLayout.getMeasuredWidth(), rightActionBarLayout.getMeasuredHeight());
-                    } else {
-                        actionBarLayout.layout(0, 0, actionBarLayout.getMeasuredWidth(), actionBarLayout.getMeasuredHeight());
-                    }
-                    int x = (width - layersActionBarLayout.getMeasuredWidth()) / 2;
-                    int y = (height - layersActionBarLayout.getMeasuredHeight()) / 2;
-                    layersActionBarLayout.layout(x, y, x + layersActionBarLayout.getMeasuredWidth(), y + layersActionBarLayout.getMeasuredHeight());
-                    backgroundTablet.layout(0, 0, backgroundTablet.getMeasuredWidth(), backgroundTablet.getMeasuredHeight());
-                    shadowTablet.layout(0, 0, shadowTablet.getMeasuredWidth(), shadowTablet.getMeasuredHeight());
-                }
-            };
-            drawerLayoutContainer.addView(launchLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
-
-            backgroundTablet = new View(this);
-            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.catstile);
-            drawable.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-            backgroundTablet.setBackgroundDrawable(drawable);
-            launchLayout.addView(backgroundTablet, LayoutHelper.createRelative(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
-
-            launchLayout.addView(actionBarLayout);
-
-            rightActionBarLayout = new ThemeContainerLayout(this);
-            rightActionBarLayout.init(rightFragmentsStack);
-            rightActionBarLayout.setDelegate(this);
-            launchLayout.addView(rightActionBarLayout);
-
-            shadowTabletSide = new FrameLayout(this);
-            shadowTabletSide.setBackgroundColor(0x40295274);
-            launchLayout.addView(shadowTabletSide);
-
-            shadowTablet = new FrameLayout(this);
-            shadowTablet.setVisibility(layerFragmentsStack.isEmpty() ? View.GONE : View.VISIBLE);
-            shadowTablet.setBackgroundColor(0x7f000000);
-            launchLayout.addView(shadowTablet);
-            shadowTablet.setOnTouchListener((v, event) -> {
-                if (!actionBarLayout.fragmentsStack.isEmpty() && event.getAction() == MotionEvent.ACTION_UP) {
-                    float x = event.getX();
-                    float y = event.getY();
-                    int[] location = new int[2];
-                    layersActionBarLayout.getLocationOnScreen(location);
-                    int viewX = location[0];
-                    int viewY = location[1];
-
-                    if (layersActionBarLayout.checkTransitionAnimation() || x > viewX && x < viewX + layersActionBarLayout.getWidth() && y > viewY && y < viewY + layersActionBarLayout.getHeight()) {
-                        return false;
-                    } else {
-                        if (!layersActionBarLayout.fragmentsStack.isEmpty()) {
-                            for (int a = 0; a < layersActionBarLayout.fragmentsStack.size() - 1; a++) {
-                                layersActionBarLayout.removeFragmentFromStack(layersActionBarLayout.fragmentsStack.get(0));
-                                a--;
-                            }
-                            layersActionBarLayout.closeLastFragment(true);
-                        }
-                        return true;
-                    }
-                }
-                return false;
-            });
-
-            shadowTablet.setOnClickListener(v -> {
-
-            });
-
-            layersActionBarLayout = new ThemeContainerLayout(this);
-            layersActionBarLayout.setRemoveActionBarExtraHeight(true);
-            layersActionBarLayout.setBackgroundView(shadowTablet);
-            layersActionBarLayout.setUseAlphaAnimations(true);
-            layersActionBarLayout.setBackgroundResource(R.drawable.boxshadow);
-            layersActionBarLayout.init(layerFragmentsStack);
-            layersActionBarLayout.setDelegate(this);
-            layersActionBarLayout.setDrawerLayoutContainer(drawerLayoutContainer);
-            layersActionBarLayout.setVisibility(layerFragmentsStack.isEmpty() ? View.GONE : View.VISIBLE);
-            launchLayout.addView(layersActionBarLayout);
-        } else {
-            //手机
-            drawerLayoutContainer.addView(actionBarLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         }
-        //双向绑定
-        drawerLayoutContainer.setParentActionBarLayout(actionBarLayout);
-        actionBarLayout.setDrawerLayoutContainer(drawerLayoutContainer);
-        actionBarLayout.init(mainFragmentsStack);//使用 main fragment 栈
-        actionBarLayout.setDelegate(this);//代理，监听生命周期
-
-        //注册通知中心，使用观察者模式处理应用内部的通知（消息）
-        NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.didSetNewTheme);
-        NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.needSetDayNightTheme);
-        NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.needCheckSystemBarColors);
-
-        MainPage page = new MainPage();
-        //        actionBarLayout.addFragmentToStack(page);
-        actionBarLayout.presentFragment(page);
-
-        checkLayout();
         checkSystemBarColors();
 
         //适配各种国产 ROM
