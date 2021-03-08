@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.NotificationCenter;
 import com.same.lib.core.BasePage;
+import com.same.lib.core.ThemeDescription;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.listview.RecyclerView;
 import com.same.lib.lottie.RLottieImageView;
@@ -28,6 +29,7 @@ import com.same.lib.same.theme.dialog.AlertDialog;
 import com.same.lib.same.theme.span.ThemeName;
 import com.same.lib.same.view.ThemeSwitchView;
 import com.same.lib.theme.KeyHub;
+import com.same.lib.theme.MyThemeDescription;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.ThemeInfo;
 import com.same.lib.theme.ThemeManager;
@@ -147,16 +149,6 @@ public class ThemePage extends BaseActionBarPage {
         });
         containerLayout.addView(currentTheme);
 
-        for (ThemeInfo themeInfo : Theme.themes) {
-            containerLayout.addView(createButton(context, ThemeName.getName(context, themeInfo), new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ThemeManager.applyTheme(context, themeInfo);
-                    parentLayout.rebuildAllFragmentViews(true, true);
-                }
-            }));
-        }
-
         RLottieImageView imageView = new RLottieImageView(context);
         imageView.setAnimation(R.raw.filters, 90, 90);
         imageView.setScaleType(ImageView.ScaleType.CENTER);
@@ -179,6 +171,33 @@ public class ThemePage extends BaseActionBarPage {
         }));
 
         currentType = THEME_TYPE_BASIC;
+        reloadTheme();
+        themesHorizontalListCell = new ThemesHorizontalListCell(context, currentType, defaultThemes, darkThemes) {
+            @Override
+            protected void showOptionsForTheme(ThemeInfo themeInfo) {
+            }
+
+            @Override
+            protected void presentFragment(BasePage fragment) {
+                ThemePage.this.presentFragment(fragment);
+            }
+
+            @Override
+            protected void updateRows() {
+                reloadTheme();
+                themesHorizontalListCell.notifyDataSetChanged(fragmentView.getWidth());
+            }
+        };
+        themesHorizontalListCell.setDrawDivider(false);
+        themesHorizontalListCell.setFocusable(false);
+        themesHorizontalListCell.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Space.dp(148)));
+        containerLayout.addView(themesHorizontalListCell);
+
+        switchTheme(context, containerLayout);
+    }
+
+    private void reloadTheme() {
+
         defaultThemes.clear();
         darkThemes.clear();
 
@@ -197,27 +216,6 @@ public class ThemePage extends BaseActionBarPage {
         }
         Collections.sort(defaultThemes, (o1, o2) -> Integer.compare(o1.sortIndex, o2.sortIndex));
 
-        themesHorizontalListCell = new ThemesHorizontalListCell(context, currentType, defaultThemes, darkThemes) {
-            @Override
-            protected void showOptionsForTheme(ThemeInfo themeInfo) {
-            }
-
-            @Override
-            protected void presentFragment(BasePage fragment) {
-                ThemePage.this.presentFragment(fragment);
-            }
-
-            @Override
-            protected void updateRows() {
-                themesHorizontalListCell.notifyDataSetChanged(fragmentView.getWidth());
-            }
-        };
-        themesHorizontalListCell.setDrawDivider(false);
-        themesHorizontalListCell.setFocusable(false);
-        themesHorizontalListCell.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Space.dp(148)));
-        containerLayout.addView(themesHorizontalListCell);
-
-        switchTheme(context, containerLayout);
     }
 
     private void switchTheme(Context context, ViewGroup containerLayout) {
@@ -279,5 +277,12 @@ public class ThemePage extends BaseActionBarPage {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public ArrayList<ThemeDescription> getThemeDescriptions() {
+        ArrayList<ThemeDescription> parent = super.getThemeDescriptions();
+        parent.add(new MyThemeDescription(themesHorizontalListCell, MyThemeDescription.FLAG_CELLBACKGROUNDCOLOR, null, null, null, null, KeyHub.key_windowBackgroundWhite));
+        return parent;
     }
 }
