@@ -1,6 +1,7 @@
 package com.same.ui.page.theme;
 
 import android.Manifest;
+import android.animation.Animator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -154,10 +156,20 @@ public class ThemePage extends BaseActionBarPage {
         imageView.setScaleType(ImageView.ScaleType.CENTER);
         imageView.playAnimation();
         containerLayout.addView(imageView, LayoutHelper.createFrame(90, 90, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 14, 0, 0));
+        ImageView i = new ImageView(context);
+        i.setImageResource(R.drawable.ic_baseline_fingerprint_24);
+        containerLayout.addView(i, LayoutHelper.createFrame(90, 90, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 14, 0, 0));
         imageView.setOnClickListener(v -> {
             if (!imageView.isPlaying()) {
                 imageView.setProgress(0.0f);
                 imageView.playAnimation();
+                int[] pos = new int[2];
+                imageView.getLocationInWindow(pos);
+                pos[0] += imageView.getMeasuredWidth() / 2;
+                pos[1] += imageView.getMeasuredHeight() / 2;
+                Animator a = ViewAnimationUtils.createCircularReveal(i, pos[0], pos[1], 0, 1000);
+//                a.setDuration(4000);
+                a.start();
             }
         });
         containerLayout.addView(createButton(context, "check", new View.OnClickListener() {
@@ -219,7 +231,7 @@ public class ThemePage extends BaseActionBarPage {
     }
 
     private void switchTheme(Context context, ViewGroup containerLayout) {
-        RLottieImageView darkThemeView = ThemeSwitchView.switchThemeView(context);
+        ThemeSwitchView darkThemeView = new ThemeSwitchView(context);
         containerLayout.addView(darkThemeView, LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, 6, 90));
     }
 

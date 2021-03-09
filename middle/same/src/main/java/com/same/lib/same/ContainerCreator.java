@@ -2,6 +2,7 @@ package com.same.lib.same;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -30,7 +31,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.same.lib.anim.Easings;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.NotificationCenter;
 import com.same.lib.core.BasePage;
@@ -39,7 +39,6 @@ import com.same.lib.core.DrawerLayoutContainer;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.listview.LinearLayoutManager;
 import com.same.lib.lottie.RLottieDrawable;
-import com.same.lib.lottie.RLottieImageView;
 import com.same.lib.same.theme.ChatTheme;
 import com.same.lib.same.theme.CommonTheme;
 import com.same.lib.same.theme.DialogTheme;
@@ -175,7 +174,6 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         if (Build.VERSION.SDK_INT >= 21) {
             themeSwitchImageView = new ImageView(context);
             themeSwitchImageView.setVisibility(View.GONE);
-            frameLayout.addView(themeSwitchImageView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         }
 
         drawerLayoutContainer = new DrawerLayoutContainer(context);
@@ -559,7 +557,9 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
 
     public void onDestroy() {
         ThemeEditorView editorView = ThemeEditorView.getInstance();
-        editorView.destroy();
+        if (editorView != null) {
+            editorView.destroy();
+        }
     }
 
     public void onPreActivityResult() {
@@ -723,23 +723,31 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         }
         drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(KeyHub.key_windowBackgroundWhite));
     }
-
+    public static Animator createRevealWithDelay(View view, int centerX, int centerY, float startRadius, float endRadius, long delayTimeMS) {
+        Animator delayAnimator = ViewAnimationUtils.createCircularReveal(view, centerX, centerY, startRadius, startRadius);
+        delayAnimator.setDuration(delayTimeMS);
+        Animator revealAnimator = ViewAnimationUtils.createCircularReveal(view, centerX, centerY, startRadius, endRadius);
+        AnimatorSet set = new AnimatorSet();
+        set.playSequentially(delayAnimator, revealAnimator);
+        return set;
+    }
     public void needSetDayNightTheme(Object... args) {
         boolean instant = false;
         if (Build.VERSION.SDK_INT >= 21 && args[2] != null) {
             if (themeSwitchImageView.getVisibility() == View.VISIBLE) {
                 return;
             }
+            int[] pos = (int[]) args[2];
+            boolean toDark = (Boolean) args[4];
+            ThemeSwitchView darkThemeView = (ThemeSwitchView) args[5];
+            Log.e("switchingTheme", "circle switchingTheme = " + darkThemeView.isSwitchingTheme());
+
+            int w = drawerLayoutContainer.getMeasuredWidth();
+            int h = drawerLayoutContainer.getMeasuredHeight();
+            if (!toDark) {
+                darkThemeView.setVisibility(View.INVISIBLE);
+            }
             try {
-                int[] pos = (int[]) args[2];
-                Log.e("pos ", Arrays.toString(pos) + "");
-                boolean toDark = (Boolean) args[4];
-                RLottieImageView darkThemeView = (RLottieImageView) args[5];
-                int w = drawerLayoutContainer.getMeasuredWidth();
-                int h = drawerLayoutContainer.getMeasuredHeight();
-                if (!toDark) {
-                    darkThemeView.setVisibility(View.INVISIBLE);
-                }
                 Bitmap bitmap = Bitmap.createBitmap(drawerLayoutContainer.getMeasuredWidth(), drawerLayoutContainer.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
                 Canvas canvas = new Canvas(bitmap);
                 drawerLayoutContainer.draw(canvas);
@@ -754,24 +762,42 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
                     themeSwitchSunView.setVisibility(View.VISIBLE);
                     themeSwitchSunView.invalidate();
                 }
-                themeSwitchImageView.setImageBitmap(bitmap);
+                themeSwitchImageView.setImageResource(R.drawable.ic_baseline_fingerprint_24);
+                //                themeSwitchImageView.setImageBitmap(bitmap);
                 themeSwitchImageView.setVisibility(View.VISIBLE);
                 themeSwitchSunDrawable = darkThemeView.getAnimatedDrawable();
                 float finalRadius = (float) Math.max(Math.sqrt((w - pos[0]) * (w - pos[0]) + (h - pos[1]) * (h - pos[1])), Math.sqrt(pos[0] * pos[0] + (h - pos[1]) * (h - pos[1])));
-                Animator anim = ViewAnimationUtils.createCircularReveal(toDark ? drawerLayoutContainer : themeSwitchImageView, pos[0], pos[1], toDark ? 0 : finalRadius, toDark ? finalRadius : 0);
-                anim.setDuration(400);
-                anim.setInterpolator(Easings.easeInOutQuad);
+//                Animator anim = toDark
+//                                ? ViewAnimationUtils.createCircularReveal(drawerLayoutContainer, pos[0], pos[1], 0, finalRadius)
+//                                : ViewAnimationUtils.createCircularReveal(themeSwitchImageView, pos[0], pos[1], finalRadius, 0);
+                Animator anim = toDark
+                                ? createRevealWithDelay(drawerLayoutContainer, pos[0], pos[1], 0, finalRadius, 4000)
+                                : createRevealWithDelay(themeSwitchImageView, pos[0], pos[1], finalRadius, 0, 4000);
+                Log.e("switchingTheme", "setDuration = " + anim.getDuration());
+                Log.e("switchingTheme", "finalRadius = " + finalRadius);
+                //                anim.setInterpolator(Easings.easeInOutQuad);
+//                anim.setDuration(400000);
+                final long[] startTime = {0};
                 anim.addListener(new AnimatorListenerAdapter() {
                     @Override
+                    public void onAnimationStart(Animator animation) {
+                        Log.e("switchingTheme", "start");
+                        startTime[0] = System.currentTimeMillis();
+                    }
+
+                    @Override
                     public void onAnimationEnd(Animator animation) {
+                        long endTime = System.currentTimeMillis();
+                        Log.e("switchingTheme", "end, duration=" + (endTime - startTime[0]));
+
                         themeSwitchImageView.setImageDrawable(null);
                         themeSwitchImageView.setVisibility(View.GONE);
                         themeSwitchSunView.setVisibility(View.GONE);
-//                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.themeAccentListUpdated);
+                        //                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.themeAccentListUpdated);
                         if (!toDark) {
                             darkThemeView.setVisibility(View.VISIBLE);
                         }
-                        ThemeSwitchView.switchingTheme = false;
+                        darkThemeView.setSwitchingTheme(false);
                     }
                 });
                 anim.start();
@@ -781,7 +807,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
                 try {
                     themeSwitchImageView.setImageDrawable(null);
                     frameLayout.removeView(themeSwitchImageView);
-                    ThemeSwitchView.switchingTheme = false;
+                    darkThemeView.setSwitchingTheme(false);
                 } catch (Exception e2) {
                     e2.printStackTrace();
                 }

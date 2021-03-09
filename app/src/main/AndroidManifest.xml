@@ -54,6 +54,7 @@
             android:name="com.same.ui.intro.IntroActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
             android:launchMode="singleTask" />
+        <activity android:name=".page.theme.TestActivity" />
 
         <meta-data
             android:name="android.max_aspect"

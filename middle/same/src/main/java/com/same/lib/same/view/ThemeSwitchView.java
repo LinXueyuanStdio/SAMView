@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -28,17 +29,21 @@ import com.same.lib.util.Space;
  * @description null
  * @usage null
  */
-public class ThemeSwitchView {
+public class ThemeSwitchView extends RLottieImageView {
 
-    public static boolean switchingTheme;
-    public static RLottieImageView darkThemeView;
-    public static RLottieDrawable sunDrawable;
+    private volatile boolean switchingTheme;
 
-    public static RLottieImageView switchThemeView(Context context) {
-        if (darkThemeView != null) {
-            return darkThemeView;
-        }
-        sunDrawable = new RLottieDrawable(context, R.raw.sun, "" + R.raw.sun, Space.dp(28), Space.dp(28), true, null);
+    public boolean isSwitchingTheme() {
+        return switchingTheme;
+    }
+
+    public void setSwitchingTheme(boolean switchingTheme) {
+        this.switchingTheme = switchingTheme;
+    }
+
+    public ThemeSwitchView(Context context) {
+        super(context);
+        RLottieDrawable sunDrawable = new RLottieDrawable(context, R.raw.sun, "" + R.raw.sun, Space.dp(28), Space.dp(28), true, null);
         if (isCurrentThemeDay(context)) {
             sunDrawable.setCustomEndFrame(36);
         } else {
@@ -46,7 +51,6 @@ public class ThemeSwitchView {
             sunDrawable.setCurrentFrame(36);
         }
         sunDrawable.setPlayInDirectionOfCustomEndFrame(true);
-        darkThemeView = new RLottieImageView(context);
         sunDrawable.beginApplyLayerColors();
         int color = Theme.getColor(KeyHub.key_actionBarDefaultIcon);
         sunDrawable.setLayerColor("Sunny.**", color);
@@ -54,17 +58,19 @@ public class ThemeSwitchView {
         sunDrawable.setLayerColor("Path.**", color);
         sunDrawable.setLayerColor("Path 5.**", color);
         sunDrawable.commitApplyLayerColors();
-        darkThemeView.setScaleType(ImageView.ScaleType.CENTER);
-        darkThemeView.setAnimation(sunDrawable);
+        setScaleType(ImageView.ScaleType.CENTER);
+        setAnimation(sunDrawable);
         if (Build.VERSION.SDK_INT >= 21) {
-            darkThemeView.setBackground(DrawableManager.createSelectorDrawable(Theme.getColor(KeyHub.key_listSelector), 1, AndroidUtilities.dp(17)));
-            DrawableManager.setRippleDrawableForceSoftware((RippleDrawable) darkThemeView.getBackground());
+            setBackground(DrawableManager.createSelectorDrawable(Theme.getColor(KeyHub.key_listSelector), 1, AndroidUtilities.dp(17)));
+            DrawableManager.setRippleDrawableForceSoftware((RippleDrawable) getBackground());
         }
-        darkThemeView.setOnClickListener(v -> {
+        setOnClickListener(v -> {
+            Log.e("switchingTheme", "switchingTheme = " + switchingTheme);
             if (switchingTheme) {
                 return;
             }
             switchingTheme = true;
+            Log.e("switchingTheme", "click switchingTheme = " + switchingTheme);
             SharedPreferences preferences = context.getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
             String dayThemeName = preferences.getString("lastDayTheme", "Blue");
             if (ThemeManager.getTheme(dayThemeName) == null) {
@@ -91,16 +97,15 @@ public class ThemeSwitchView {
                 themeInfo = ThemeManager.getTheme(dayThemeName);
                 sunDrawable.setCustomEndFrame(0);
             }
-            darkThemeView.playAnimation();
+            playAnimation();
             if (Theme.selectedAutoNightType != Theme.AUTO_NIGHT_TYPE_NONE) {
                 Toast.makeText(context, Lang.getString(context, "AutoNightModeOff", R.string.AutoNightModeOff), Toast.LENGTH_SHORT).show();
                 Theme.selectedAutoNightType = Theme.AUTO_NIGHT_TYPE_NONE;
                 ThemeManager.saveAutoNightThemeConfig();
                 ThemeManager.cancelAutoNightThemeCallbacks();
             }
-            sendSwitchThemeEvent(darkThemeView, themeInfo, toDark);
+            sendSwitchThemeEvent(this, themeInfo, toDark);
         });
-        return darkThemeView;
     }
 
     private static void sendSwitchThemeEvent(RLottieImageView darkThemeView, ThemeInfo themeInfo, boolean toDark) {

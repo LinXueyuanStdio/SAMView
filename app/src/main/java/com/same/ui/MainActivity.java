@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,7 +18,6 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.same.lib.base.AndroidUtilities;
-import com.same.lib.base.SharedConfig;
 import com.same.lib.core.BasePage;
 import com.same.lib.core.ContainerLayout;
 import com.same.lib.same.ContainerCreator;
@@ -41,6 +38,7 @@ public class MainActivity extends Activity
         //region onCreate前
         creator = new ContainerCreator(this, this);
         creator.onPreCreate();
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setTheme(R.style.Theme_TMessages);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             try {
@@ -54,26 +52,7 @@ public class MainActivity extends Activity
 
             }
         }
-
-        getWindow().setBackgroundDrawable(new ColorDrawable(0xffffffff) {
-            @Override
-            public void setBounds(int left, int top, int right, int bottom) {
-                bottom += Space.dp(500);
-                super.setBounds(left, top, right, bottom);
-            }
-
-            @Override
-            public void draw(Canvas canvas) {
-                if (SharedConfig.smoothKeyboard) {
-                    int color = getColor();
-                    int newColor = Theme.getColor(KeyHub.key_windowBackgroundWhite);
-                    if (color != newColor) {
-                        setColor(newColor);
-                    }
-                    super.draw(canvas);
-                }
-            }
-        });
+        getWindow().setBackgroundDrawableResource(R.drawable.transparent);
 
         //endregion
         super.onCreate(savedInstanceState);

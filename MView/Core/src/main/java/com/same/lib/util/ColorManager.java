@@ -34,7 +34,7 @@ public class ColorManager {
         }
     }
 
-    private static int randomColor() {
+    public static int randomColor() {
         int random = new Random().nextInt(360);
         return Color.HSVToColor(new float[]{random, 0.5f, 0.9f});
     }
