@@ -4,13 +4,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
-
-    api rootProject.ext.timecat["MView-CheckBox"]
-    api rootProject.ext.timecat["MView-RadioButton"]
-    api rootProject.ext.timecat["MView-ListView"]
-
-    api rootProject.ext.timecat["MView-theme"]
-    api rootProject.ext.timecat["MView-lottie"]
-
+    implementation 'com.timecat.component:MLang:2.0.2'
 }
+
 apply from: "${project.rootDir}/gradle/library_tail.gradle"

@@ -64,6 +64,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 
 /**
  * @author 林学渊
@@ -119,7 +120,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
     };
     private Runnable lockRunnable;
 
-    public interface ContextDelegate extends ThemeEditorView.ThemeContainer {
+    public interface ContextDelegate extends ThemeEditorView.ThemeContainer, LifecycleOwner {
         Configuration getConfiguration();
 
         void stopSelf();
@@ -723,6 +724,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         }
         drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(KeyHub.key_windowBackgroundWhite));
     }
+
     public static Animator createRevealWithDelay(View view, int centerX, int centerY, float startRadius, float endRadius, long delayTimeMS) {
         Animator delayAnimator = ViewAnimationUtils.createCircularReveal(view, centerX, centerY, startRadius, startRadius);
         delayAnimator.setDuration(delayTimeMS);
@@ -731,6 +733,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         set.playSequentially(delayAnimator, revealAnimator);
         return set;
     }
+
     public void needSetDayNightTheme(Object... args) {
         boolean instant = false;
         if (Build.VERSION.SDK_INT >= 21 && args[2] != null) {
