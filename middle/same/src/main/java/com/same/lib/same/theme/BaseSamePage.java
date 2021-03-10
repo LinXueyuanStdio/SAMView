@@ -1,81 +1,24 @@
-package com.same.ui.page.base;
+package com.same.lib.same.theme;
 
-import android.content.Context;
 import android.content.res.Configuration;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
-import com.same.lib.core.BasePage;
 import com.same.lib.core.ThemeDescription;
 import com.same.lib.same.theme.dialog.AlertDialog;
 import com.same.lib.same.theme.dialog.BottomSheet;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.MyThemeDescription;
-import com.same.lib.theme.Theme;
 import com.same.lib.theme.wrap.BaseThemePage;
-import com.same.lib.util.Space;
-import com.same.ui.R;
 
 import java.util.ArrayList;
 
 /**
  * @author 林学渊
  * @email linxy59@mail2.sysu.edu.cn
- * @date 2020/11/18
+ * @date 2021/3/10
  * @description null
  * @usage null
  */
-public abstract class BaseActionBarPage extends BaseThemePage {
-    @Override
-    public View createView(Context context) {
-        actionBar.setBackButtonImage(R.drawable.ic_baseline_menu_24);
-        actionBar.setAllowOverlayTitle(false);
-        if (Space.isTablet()) {
-            actionBar.setOccupyStatusBar(false);
-        }
-        actionBar.setTitle(title());
-
-        FrameLayout frameLayout = new FrameLayout(context);
-        frameLayout.setBackgroundColor(Theme.getColor(KeyHub.key_windowBackgroundGray));
-        fragmentView = frameLayout;
-
-        LinearLayout containerLayout = new LinearLayout(context);
-        containerLayout.setOrientation(LinearLayout.VERTICAL);
-        fillInContainerLayout(context, containerLayout);
-
-        ScrollView scrollView = new ScrollView(context);
-        scrollView.addView(containerLayout);
-        frameLayout.addView(scrollView);
-
-        return fragmentView;
-    }
-
-    protected abstract String title();
-
-    protected abstract void fillInContainerLayout(Context context, LinearLayout containerLayout);
-
-    protected Button createButton(Context context, String text, View.OnClickListener clickListener) {
-        Button button = new Button(context);
-        button.setPadding(20, 20, 20, 20);
-        button.setTextSize(18);
-        button.setAllCaps(false);
-        button.setGravity(Gravity.CENTER);
-        button.setText(text);
-        button.setOnClickListener(clickListener);
-        return button;
-    }
-    protected Button createButton(Context context, String text, BasePage page) {
-        return createButton(context, text, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presentFragment(page);
-            }
-        });
-    }
+public class BaseSamePage extends BaseThemePage {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

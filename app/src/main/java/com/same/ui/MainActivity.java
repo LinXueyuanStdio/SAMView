@@ -1,6 +1,5 @@
 package com.same.ui;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -28,7 +27,9 @@ import com.same.lib.util.Space;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.main.MainPage;
 
-public class MainActivity extends Activity
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity
         implements ContainerLayout.ActionBarLayoutDelegate, ContainerCreator.ContextDelegate {
     ContainerCreator creator;
     private ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener;
@@ -183,7 +184,8 @@ public class MainActivity extends Activity
     }
 
     @Override
-    public void onMultiWindowModeChanged(boolean isInMultiWindowMode) {
+    public void onMultiWindowModeChanged(boolean isInMultiWindowMode, Configuration newConfig) {
+        super.onMultiWindowModeChanged(isInMultiWindowMode, newConfig);
         AndroidUtilities.isInMultiwindow = isInMultiWindowMode;
         creator.checkLayout();
     }
@@ -253,11 +255,6 @@ public class MainActivity extends Activity
     @Override
     public boolean onPreIme() {
         return false;
-    }
-
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        return super.dispatchKeyEvent(event);
     }
 
     @Override

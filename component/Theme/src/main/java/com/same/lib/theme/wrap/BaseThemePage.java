@@ -14,7 +14,7 @@ import com.same.lib.util.KeyHub;
  * @description null
  * @usage null
  */
-public class ThemeBasePage extends BasePage {
+public class BaseThemePage extends BasePage {
     @Override
     protected ActionBar createActionBar(Context context) {
         ActionBar actionBar = new ActionBar(context);

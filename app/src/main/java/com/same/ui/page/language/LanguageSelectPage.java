@@ -25,7 +25,7 @@ import com.same.lib.same.view.RecyclerListView;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.MyThemeDescription;
 import com.same.lib.theme.Theme;
-import com.same.lib.theme.wrap.ThemeBasePage;
+import com.same.lib.theme.wrap.BaseThemePage;
 import com.same.lib.util.UIThread;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
@@ -47,7 +47,7 @@ import java.util.TimerTask;
  * @description null
  * @usage null
  */
-public class LanguageSelectPage extends ThemeBasePage {
+public class LanguageSelectPage extends BaseThemePage {
 
     private ListAdapter listAdapter;
     private RecyclerListView listView;
