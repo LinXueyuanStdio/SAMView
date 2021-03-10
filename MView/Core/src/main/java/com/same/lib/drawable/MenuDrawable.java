@@ -33,6 +33,7 @@ public class MenuDrawable extends Drawable {
     private int currentAnimationTime;
     private boolean rotateToBack = true;
     private DecelerateInterpolator interpolator = new DecelerateInterpolator();
+    private int iconColor;
 
     public MenuDrawable() {
         super();
@@ -140,5 +141,9 @@ public class MenuDrawable extends Drawable {
     @Override
     public int getIntrinsicHeight() {
         return Space.dp(24);
+    }
+
+    public void setIconColor(int iconColor) {
+        this.iconColor = iconColor;
     }
 }
