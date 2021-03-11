@@ -726,7 +726,7 @@
 //    }
 //
 //    private void updateSunTime(Location lastKnownLocation, boolean forceUpdate) {
-//        LocationManager locationManager = (LocationManager) ApplicationLoader.applicationContext.getSystemService(Context.LOCATION_SERVICE);
+//        LocationManager locationManager = (LocationManager) MyApplication.applicationContext.getSystemService(Context.LOCATION_SERVICE);
 //        if (Build.VERSION.SDK_INT >= 23) {
 //            Activity activity = getParentActivity();
 //            if (activity != null) {
@@ -741,7 +741,7 @@
 //                return;
 //            }
 //            try {
-//                LocationManager lm = (LocationManager) ApplicationLoader.applicationContext.getSystemService(Context.LOCATION_SERVICE);
+//                LocationManager lm = (LocationManager) MyApplication.applicationContext.getSystemService(Context.LOCATION_SERVICE);
 //                if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 //                    AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
 //                    builder.setTitle(MyLang.getString("GpsDisabledAlertTitle", R.string.GpsDisabledAlertTitle));
@@ -793,7 +793,7 @@
 //        AndroidUtilities.globalQueue.postRunnable(() -> {
 //            String name;
 //            try {
-//                Geocoder gcd = new Geocoder(ApplicationLoader.applicationContext, Locale.getDefault());
+//                Geocoder gcd = new Geocoder(MyApplication.applicationContext, Locale.getDefault());
 //                List<Address> addresses = gcd.getFromLocation(Theme.autoNightLocationLatitude, Theme.autoNightLocationLongitude, 1);
 //                if (addresses.size() > 0) {
 //                    name = addresses.get(0).getLocality();
@@ -829,7 +829,7 @@
 //            return;
 //        }
 //        updatingLocation = true;
-//        LocationManager locationManager = (LocationManager) ApplicationLoader.applicationContext.getSystemService(Context.LOCATION_SERVICE);
+//        LocationManager locationManager = (LocationManager) MyApplication.applicationContext.getSystemService(Context.LOCATION_SERVICE);
 //        try {
 //            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 0, gpsLocationListener);
 //        } catch (Exception e) {
@@ -844,7 +844,7 @@
 //
 //    private void stopLocationUpdate() {
 //        updatingLocation = false;
-//        LocationManager locationManager = (LocationManager) ApplicationLoader.applicationContext.getSystemService(Context.LOCATION_SERVICE);
+//        LocationManager locationManager = (LocationManager) MyApplication.applicationContext.getSystemService(Context.LOCATION_SERVICE);
 //        locationManager.removeUpdates(gpsLocationListener);
 //        locationManager.removeUpdates(networkLocationListener);
 //    }

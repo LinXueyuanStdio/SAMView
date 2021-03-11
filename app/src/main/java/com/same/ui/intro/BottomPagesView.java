@@ -7,7 +7,6 @@ import android.graphics.RectF;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.theme.Theme;
 import com.same.lib.util.Space;
 
@@ -90,7 +89,7 @@ public class BottomPagesView extends View {
         } else {
             rect.set(x, 0, x + Space.dp(5), Space.dp(5));
         }
-        canvas.drawRoundRect(rect, Space.dp(2.5f), AndroidUtilities.dp(2.5f), paint);
+        canvas.drawRoundRect(rect, Space.dp(2.5f), Space.dp(2.5f), paint);
     }
 }
 
