@@ -11,7 +11,7 @@ import android.text.TextPaint;
 import android.view.View;
 
 import com.same.lib.anim.CubicBezierInterpolator;
-import com.same.lib.base.AndroidUtilities;
+import com.same.lib.util.Space;
 
 /**
  * @author 林学渊
@@ -70,16 +70,16 @@ public class SubstringLayoutAnimator {
                 }
                 inStr.setSpan(new EmptyStubSpan(), startFrom, startFrom + substring.length(), 0);
 
-                animateInLayout = new StaticLayout(inStr, paint, AndroidUtilities.dp(400), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
-                animateStableLayout = new StaticLayout(stabeStr, paint, AndroidUtilities.dp(400), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+                animateInLayout = new StaticLayout(inStr, paint, Space.dp(400), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+                animateStableLayout = new StaticLayout(stabeStr, paint, Space.dp(400), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
                 animateTextChange = true;
                 animateTextChangeOut = animateOut;
                 xOffset = startFrom == 0 ? 0 : -animateStableLayout.getPrimaryHorizontal(startFrom);
                 animateOutLayout = null;
                 replaceAnimation = false;
             } else {
-                animateInLayout = new StaticLayout(text, paint, AndroidUtilities.dp(400), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
-                animateOutLayout = new StaticLayout(hint, paint, AndroidUtilities.dp(400), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+                animateInLayout = new StaticLayout(text, paint, Space.dp(400), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+                animateOutLayout = new StaticLayout(hint, paint, Space.dp(400), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
                 animateStableLayout = null;
                 animateTextChange = true;
                 replaceAnimation = true;
