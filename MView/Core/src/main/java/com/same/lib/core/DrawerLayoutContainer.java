@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -192,8 +191,8 @@ public class DrawerLayoutContainer extends FrameLayout {
         if (!allowOpenDrawer) {
             return;
         }
-        if (Space.isTablet() && parentActionBarLayout != null && parentActionBarLayout.isActivityContext()) {
-            Keyboard.hideKeyboard(((Activity) parentActionBarLayout.parentActivity).getCurrentFocus());
+        if (Space.isTablet() && parentActionBarLayout != null) {
+            Keyboard.hideKeyboard(parentActionBarLayout.parentActivity);
         }
         cancelCurrentAnimation();
         AnimatorSet animatorSet = new AnimatorSet();
@@ -343,9 +342,7 @@ public class DrawerLayoutContainer extends FrameLayout {
                         requestDisallowInterceptTouchEvent(true);
                     } else if (startedTracking) {
                         if (!beginTrackingSent) {
-                            if (((Activity) getContext()).getCurrentFocus() != null) {
-                                Keyboard.hideKeyboard(((Activity) getContext()).getCurrentFocus());
-                            }
+                            Keyboard.hideKeyboard(getContext());
                             beginTrackingSent = true;
                         }
                         moveDrawerByX(dx);

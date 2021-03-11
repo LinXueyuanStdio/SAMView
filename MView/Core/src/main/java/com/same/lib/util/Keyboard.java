@@ -1,5 +1,6 @@
 package com.same.lib.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -36,6 +37,14 @@ public class Keyboard {
             }
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         } catch (Exception e) {
+        }
+    }
+
+    public static void hideKeyboard(Context parentActivity) {
+        if (!(parentActivity instanceof Activity)) { return; }
+        View f = ((Activity) parentActivity).getCurrentFocus();
+        if (f != null) {
+            Keyboard.hideKeyboard(f);
         }
     }
 }
