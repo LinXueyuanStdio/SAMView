@@ -18,7 +18,10 @@ public interface ContainerCreatorService {
             @NonNull ContainerCreator.ContextDelegate delegate
     );
 
-    void onCreateView(@NonNull FrameLayout frameLayout);
+    void onCreateView(
+            @NonNull FrameLayout frameLayout,
+            @NonNull ContainerCreator.ContextDelegate delegate
+    );
     //    void onPause();
     //    void onResume();
     //    void onDestroy();

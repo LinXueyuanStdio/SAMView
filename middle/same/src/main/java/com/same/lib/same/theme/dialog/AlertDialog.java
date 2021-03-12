@@ -191,11 +191,11 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     }
 
     public AlertDialog(Context context, int progressStyle) {
-        super(context, com.same.lib.R.style.TransparentDialog);
+        super(context, R.style.TransparentDialog);
 
         backgroundPaddings = new Rect();
         if (progressStyle != 3) {
-            shadowDrawable = context.getResources().getDrawable(com.same.lib.R.drawable.popup_fixed_alert).mutate();
+            shadowDrawable = context.getResources().getDrawable(R.drawable.popup_fixed_alert).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(getThemeColor(KeyHub.key_dialogBackground), PorterDuff.Mode.MULTIPLY));
             shadowDrawable.getPadding(backgroundPaddings);
         }

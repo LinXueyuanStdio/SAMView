@@ -125,6 +125,8 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
 
         void stopSelf();
 
+        void close();
+
         Resources getResources();
     }
 
@@ -863,7 +865,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
 
     public void onBackPressed() {
         if (passcodeView.getVisibility() == View.VISIBLE) {
-            delegate.stopSelf();
+            delegate.close();
             return;
         }
         if (drawerLayoutContainer.isDrawerOpened()) {
@@ -1013,7 +1015,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         if (Space.isTablet()) {
             if (layout == actionBarLayout && layout.fragmentsStack.size() <= 1) {
                 onFinish();
-                delegate.stopSelf();
+                delegate.close();
                 return false;
             } else if (layout == rightActionBarLayout) {
                 if (!tabletFullSize) {
@@ -1021,13 +1023,13 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
                 }
             } else if (layout == layersActionBarLayout && actionBarLayout.fragmentsStack.isEmpty() && layersActionBarLayout.fragmentsStack.size() == 1) {
                 onFinish();
-                delegate.stopSelf();
+                delegate.close();
                 return false;
             }
         } else {
             if (layout.fragmentsStack.size() <= 1) {
                 onFinish();
-                delegate.stopSelf();
+                delegate.close();
                 return false;
             }
         }
