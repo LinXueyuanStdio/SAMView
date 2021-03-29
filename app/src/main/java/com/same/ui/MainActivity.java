@@ -1,5 +1,6 @@
 package com.same.ui;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -27,9 +28,10 @@ import com.same.lib.util.Space;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.main.MainPage;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends Activity
         implements ContainerLayout.ActionBarLayoutDelegate, ContainerCreator.ContextDelegate {
     ContainerCreator creator;
     private ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener;
@@ -294,7 +296,25 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void stopSelf() {
-        finish();
+    public void close() {
+
+    }
+
+    @NonNull
+    @Override
+    public WindowManager.LayoutParams getWindowLayoutParams() {
+        return getWindow().getAttributes();
+    }
+
+    @NonNull
+    @Override
+    public View getWindowDecorView() {
+        return getWindow().getDecorView();
+    }
+
+    @NonNull
+    @Override
+    public Lifecycle getLifecycle() {
+        return null;
     }
 }

@@ -3,6 +3,8 @@ package com.same.ui.page.service;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.view.KeyEvent;
+import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
@@ -19,6 +21,9 @@ import com.timecat.show.window.WindowAgreement;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
 
 /**
  * @author 林学渊
@@ -152,6 +157,28 @@ public class MainService extends StandOutWindow implements ContainerCreator.Cont
     }
 
     @Override
+    public void close() {
+    }
+
+    @NonNull
+    @Override
+    public WindowManager getWindowManager() {
+        return null;
+    }
+
+    @NonNull
+    @Override
+    public WindowManager.LayoutParams getWindowLayoutParams() {
+        return null;
+    }
+
+    @NonNull
+    @Override
+    public View getWindowDecorView() {
+        return null;
+    }
+
+    @Override
     public void rebuildAllFragments(boolean last) {
         creator.rebuildAllFragments(last);
     }
@@ -169,5 +196,11 @@ public class MainService extends StandOutWindow implements ContainerCreator.Cont
     @Override
     public ContainerLayout getLayersActionBarLayout() {
         return creator.getLayersActionBarLayout();
+    }
+
+    @NonNull
+    @Override
+    public Lifecycle getLifecycle() {
+        return null;
     }
 }

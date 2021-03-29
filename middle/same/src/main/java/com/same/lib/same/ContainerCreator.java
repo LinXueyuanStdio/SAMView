@@ -31,13 +31,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.NotificationCenter;
 import com.same.lib.core.BasePage;
 import com.same.lib.core.ContainerLayout;
 import com.same.lib.core.DrawerLayoutContainer;
 import com.same.lib.helper.LayoutHelper;
-import com.same.lib.listview.LinearLayoutManager;
 import com.same.lib.lottie.RLottieDrawable;
 import com.same.lib.same.theme.ChatTheme;
 import com.same.lib.same.theme.CommonTheme;
@@ -46,7 +46,6 @@ import com.same.lib.same.theme.ProfileTheme;
 import com.same.lib.same.theme.ThemeEditorView;
 import com.same.lib.same.view.PassCode;
 import com.same.lib.same.view.PasscodeView;
-import com.same.lib.same.view.RecyclerListView;
 import com.same.lib.same.view.SideMenultItemAnimator;
 import com.same.lib.same.view.ThemeSwitchView;
 import com.same.lib.theme.KeyHub;
@@ -91,7 +90,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
     private FrameLayout shadowTabletSide;
     private View backgroundTablet;
     private boolean tabletFullSize;
-    public RecyclerListView sideMenu;
+    public MaterialDrawerSliderView sideMenu;
     public SideMenultItemAnimator itemAnimator;
 
     private static ArrayList<BasePage> mainFragmentsStack = new ArrayList<>();
@@ -123,21 +122,28 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
     public interface ContextDelegate extends ThemeEditorView.ThemeContainer, LifecycleOwner {
         Configuration getConfiguration();
 
-        void stopSelf();
-
         void close();
 
         Resources getResources();
+
+        @NonNull
+        WindowManager getWindowManager();
+
+        @NonNull
+        WindowManager.LayoutParams getWindowLayoutParams();
+
+        @NonNull
+        View getWindowDecorView();
     }
 
     public interface SideMenuPage {
-        void setSideMenu(RecyclerListView sideMenu);
+        void setSideMenu(MaterialDrawerSliderView sideMenu);
     }
 
     @NonNull
-    ContextDelegate delegate;
+    public ContextDelegate delegate;
     @NonNull
-    Context context;
+    public Context context;
 
     public ContainerCreator(
             @NonNull Context context,
@@ -328,29 +334,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         }
 
         //侧滑栏
-        sideMenu = new RecyclerListView(context) {
-            @Override
-            public boolean drawChild(Canvas canvas, View child, long drawingTime) {
-                int restore = -1;
-                if (itemAnimator != null && itemAnimator.isRunning() && itemAnimator.isAnimatingChild(child)) {
-                    restore = canvas.save();
-                    canvas.clipRect(0, itemAnimator.getAnimationClipTop(), getMeasuredWidth(), getMeasuredHeight());
-                }
-                boolean result = super.drawChild(canvas, child, drawingTime);
-                if (restore >= 0) {
-                    canvas.restoreToCount(restore);
-                    invalidate();
-                    invalidateViews();
-                }
-                return result;
-            }
-        };
-        itemAnimator = new SideMenultItemAnimator(sideMenu);
-        sideMenu.setItemAnimator(itemAnimator);
-        sideMenu.setBackgroundColor(Theme.getColor(KeyHub.key_actionBarActionModeDefaultIcon));
-        sideMenu.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        sideMenu.setAllowItemsInteractionDuringAnimation(false);
-        //        sideMenu.setAdapter(drawerLayoutAdapter = new DrawerLayoutAdapter(this, itemAnimator));
+        sideMenu = new MaterialDrawerSliderView(context);
         drawerLayoutContainer.setDrawerLayout(sideMenu);
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) sideMenu.getLayoutParams();
         Point screenSize = getRealScreenSize(context);
@@ -714,16 +698,6 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
     }
 
     public void didSetNewTheme(Boolean nightTheme) {
-        if (!nightTheme) {
-            if (sideMenu != null) {
-                sideMenu.setBackgroundColor(Theme.getColor(KeyHub.key_windowBackgroundGray));
-                sideMenu.setGlowColor(Theme.getColor(KeyHub.key_windowBackgroundGray));
-                sideMenu.setListSelectorColor(Theme.getColor(KeyHub.key_listSelector));
-                if (sideMenu.getAdapter() != null) {
-                    sideMenu.getAdapter().notifyDataSetChanged();
-                }
-            }
-        }
         drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(KeyHub.key_windowBackgroundWhite));
     }
 
@@ -772,16 +746,16 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
                 themeSwitchImageView.setVisibility(View.VISIBLE);
                 themeSwitchSunDrawable = darkThemeView.getAnimatedDrawable();
                 float finalRadius = (float) Math.max(Math.sqrt((w - pos[0]) * (w - pos[0]) + (h - pos[1]) * (h - pos[1])), Math.sqrt(pos[0] * pos[0] + (h - pos[1]) * (h - pos[1])));
-//                Animator anim = toDark
-//                                ? ViewAnimationUtils.createCircularReveal(drawerLayoutContainer, pos[0], pos[1], 0, finalRadius)
-//                                : ViewAnimationUtils.createCircularReveal(themeSwitchImageView, pos[0], pos[1], finalRadius, 0);
+                //                Animator anim = toDark
+                //                                ? ViewAnimationUtils.createCircularReveal(drawerLayoutContainer, pos[0], pos[1], 0, finalRadius)
+                //                                : ViewAnimationUtils.createCircularReveal(themeSwitchImageView, pos[0], pos[1], finalRadius, 0);
                 Animator anim = toDark
                                 ? createRevealWithDelay(drawerLayoutContainer, pos[0], pos[1], 0, finalRadius, 4000)
                                 : createRevealWithDelay(themeSwitchImageView, pos[0], pos[1], finalRadius, 0, 4000);
                 Log.e("switchingTheme", "setDuration = " + anim.getDuration());
                 Log.e("switchingTheme", "finalRadius = " + finalRadius);
                 //                anim.setInterpolator(Easings.easeInOutQuad);
-//                anim.setDuration(400000);
+                //                anim.setDuration(400000);
                 final long[] startTime = {0};
                 anim.addListener(new AnimatorListenerAdapter() {
                     @Override

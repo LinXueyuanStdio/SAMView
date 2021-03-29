@@ -15,6 +15,8 @@ import com.same.ui.R;
 import com.same.ui.intro.IntroActivity;
 import com.same.ui.lang.MyLang;
 import com.same.ui.page.base.BaseActionBarPage;
+import com.same.ui.page.input.InputPage;
+import com.same.ui.page.input.InputPage2;
 import com.same.ui.page.language.LanguageSelectPage;
 import com.same.ui.page.service.ServicePage;
 import com.same.ui.page.theme.TestActivity;
@@ -122,6 +124,8 @@ public class MainPage extends BaseActionBarPage {
         containerLayout.addView(createButton(context, "选择主题", new ThemePage()));
         containerLayout.addView(createButton(context, "CheckBox", new CheckBoxPage()));
         containerLayout.addView(createButton(context, "Service", new ServicePage()));
+        containerLayout.addView(createButton(context, "Input", new InputPage()));
+        containerLayout.addView(createButton(context, "Input2", new InputPage2()));
     }
     private TextView fab;
     private TextView layoutButtons;

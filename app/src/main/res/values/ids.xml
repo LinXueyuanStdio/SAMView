@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="menu_regular" type="id"/>
+    <item name="menu_bold" type="id"/>
+    <item name="menu_italic" type="id"/>
+    <item name="menu_link" type="id"/>
+    <item name="menu_mono" type="id"/>
+    <item name="menu_strike" type="id"/>
+    <item name="menu_underline" type="id"/>
+    <item name="menu_groupbolditalic" type="id"/>
+</resources>
