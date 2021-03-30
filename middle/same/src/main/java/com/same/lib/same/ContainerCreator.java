@@ -836,17 +836,20 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         }
     }
 
-
-    public void onBackPressed() {
+    /**
+     *
+     * @return true消耗事件，false跳过
+     */
+    public boolean onBackPressed() {
         if (passcodeView.getVisibility() == View.VISIBLE) {
-            delegate.close();
-            return;
+            return false;
         }
         if (drawerLayoutContainer.isDrawerOpened()) {
             drawerLayoutContainer.closeDrawer(false);
+            return true;
         } else if (Space.isTablet()) {
             if (layersActionBarLayout.getVisibility() == View.VISIBLE) {
-                layersActionBarLayout.onBackPressed();
+                return layersActionBarLayout.onBackPressed();
             } else {
                 boolean cancel = false;
                 if (rightActionBarLayout.getVisibility() == View.VISIBLE && !rightActionBarLayout.fragmentsStack.isEmpty()) {
@@ -854,11 +857,12 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
                     cancel = !lastFragment.onBackPressed();
                 }
                 if (!cancel) {
-                    actionBarLayout.onBackPressed();
+                    return actionBarLayout.onBackPressed();
                 }
+                return cancel;
             }
         } else {
-            actionBarLayout.onBackPressed();
+            return actionBarLayout.onBackPressed();
         }
     }
 
