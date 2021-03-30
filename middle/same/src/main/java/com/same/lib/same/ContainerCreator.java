@@ -124,6 +124,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
 
         void close();
 
+        @NonNull
         Resources getResources();
 
         @NonNull

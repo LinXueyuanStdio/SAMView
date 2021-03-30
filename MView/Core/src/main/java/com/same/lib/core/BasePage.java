@@ -16,6 +16,7 @@ import android.view.accessibility.AccessibilityManager;
 
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 /**
@@ -275,7 +276,7 @@ public class BasePage {
      * @param context 上下文
      * @return View
      */
-    public View createView(Context context) {
+    public View createView(@NonNull Context context) {
         return null;
     }
 
@@ -287,7 +288,7 @@ public class BasePage {
      * @param context 上下文
      * @return ActionBar
      */
-    protected ActionBar createActionBar(Context context) {
+    protected ActionBar createActionBar(@NonNull Context context) {
         ActionBar actionBar = new ActionBar(context);
         if (inPreviewMode) {
             actionBar.setOccupyStatusBar(false);

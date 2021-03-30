@@ -606,8 +606,9 @@ public class ContainerLayout extends FrameLayout {
             if (!fragmentsStack.isEmpty()) {
                 closeLastFragment(true);
             }
+            return true;
         }
-        return true;
+        return false;
     }
 
     public void onLowMemory() {
