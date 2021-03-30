@@ -593,13 +593,13 @@ public class ContainerLayout extends FrameLayout {
         return super.onKeyUp(keyCode, event);
     }
 
-    public void onBackPressed() {
+    public boolean onBackPressed() {
         if (transitionAnimationPreviewMode || startedTracking || checkTransitionAnimation() || fragmentsStack.isEmpty()) {
-            return;
+            return false;
         }
         if (!currentActionBar.isActionModeShowed() && currentActionBar != null && currentActionBar.isSearchFieldVisible) {
             currentActionBar.closeSearchField();
-            return;
+            return true;
         }
         BasePage lastFragment = fragmentsStack.get(fragmentsStack.size() - 1);
         if (lastFragment.onBackPressed()) {
@@ -607,6 +607,7 @@ public class ContainerLayout extends FrameLayout {
                 closeLastFragment(true);
             }
         }
+        return true;
     }
 
     public void onLowMemory() {
