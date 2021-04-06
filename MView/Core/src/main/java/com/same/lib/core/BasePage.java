@@ -398,8 +398,12 @@ public class BasePage {
         return false;
     }
 
+    /**
+     * 
+     * @return true消耗事件，false无动作
+     */
     public boolean onBackPressed() {
-        return true;
+        return false;
     }
 
     //region 向其他页面发起请求并获得返回值

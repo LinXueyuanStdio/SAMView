@@ -603,10 +603,13 @@ public class ContainerLayout extends FrameLayout {
         }
         BasePage lastFragment = fragmentsStack.get(fragmentsStack.size() - 1);
         if (lastFragment.onBackPressed()) {
+            //如果消耗掉事件
+            return true;
+        } else {
+            //如果没有事件可以消耗，默认关闭当前页面
             if (!fragmentsStack.isEmpty()) {
                 closeLastFragment(true);
             }
-            return true;
         }
         return false;
     }
