@@ -113,6 +113,20 @@ public class ActionBar extends FrameLayout {
     private boolean titleAnimationRunning;
     private boolean fromBottom;
 
+    private CloseSearchFieldListener closeListener;
+
+    interface CloseSearchFieldListener {
+        void close();
+    }
+
+    public void setCloseListener(CloseSearchFieldListener closeListener) {
+        this.closeListener = closeListener;
+    }
+
+    public CloseSearchFieldListener getCloseListener() {
+        return closeListener;
+    }
+
     EllipsizeSpanAnimator ellipsizeSpanAnimator = new EllipsizeSpanAnimator(this);
 
     public ActionBar(Context context) {
@@ -143,6 +157,9 @@ public class ActionBar extends FrameLayout {
         backButtonImageView.setOnClickListener(v -> {
             if (!actionModeVisible && isSearchFieldVisible) {
                 closeSearchField();
+                if (closeListener != null) {
+                    closeListener.close();
+                }
                 return;
             }
             if (actionBarMenuOnItemClick != null) {
@@ -1156,7 +1173,7 @@ public class ActionBar extends FrameLayout {
                     Drawable drawable = backButtonImageView.getDrawable();
                     if (drawable instanceof BackDrawable) {
                         ((BackDrawable) drawable).setColor(color);
-                    } else if (drawable instanceof  MenuDrawable) {
+                    } else if (drawable instanceof MenuDrawable) {
                         ((MenuDrawable) drawable).setIconColor(color);
                     }
                 }
@@ -1195,7 +1212,7 @@ public class ActionBar extends FrameLayout {
             setTitle(title);
             return;
         }
-        boolean crossfade =  overlayTitleAnimation && !TextUtils.isEmpty(subtitleTextView.getText());
+        boolean crossfade = overlayTitleAnimation && !TextUtils.isEmpty(subtitleTextView.getText());
         if (crossfade) {
             if (subtitleTextView.getVisibility() != View.VISIBLE) {
                 subtitleTextView.setVisibility(View.VISIBLE);
