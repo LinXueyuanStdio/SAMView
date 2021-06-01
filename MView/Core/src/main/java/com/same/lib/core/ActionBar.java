@@ -115,7 +115,7 @@ public class ActionBar extends FrameLayout {
 
     private CloseSearchFieldListener closeListener;
 
-    interface CloseSearchFieldListener {
+    public interface CloseSearchFieldListener {
         void close();
     }
 

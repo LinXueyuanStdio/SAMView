@@ -609,6 +609,7 @@ public class ContainerLayout extends FrameLayout {
             //如果没有事件可以消耗，默认关闭当前页面
             if (!fragmentsStack.isEmpty()) {
                 closeLastFragment(true);
+                return true;
             }
         }
         return false;
