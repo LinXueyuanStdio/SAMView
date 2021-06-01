@@ -608,8 +608,7 @@ public class ContainerLayout extends FrameLayout {
         } else {
             //如果没有事件可以消耗，默认关闭当前页面
             if (!fragmentsStack.isEmpty()) {
-                closeLastFragment(true);
-                return true;
+                return closeLastFragment(true);
             }
         }
         return false;
@@ -1296,9 +1295,9 @@ public class ContainerLayout extends FrameLayout {
      * 关闭最后一个Fragment
      * @param animated 是否显示动画
      */
-    public void closeLastFragment(boolean animated) {
+    public boolean closeLastFragment(boolean animated) {
         if (delegate != null && !delegate.needCloseLastFragment(this) || checkTransitionAnimation() || fragmentsStack.isEmpty()) {
-            return;
+            return false;
         }
         hideKeyboard();
         setInnerTranslationX(0);
@@ -1461,6 +1460,7 @@ public class ContainerLayout extends FrameLayout {
                 }
             }
         }
+        return true;
     }
 
     /**
