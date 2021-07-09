@@ -527,7 +527,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 4096);
 
         onPasscodeResume();
-        if (passcodeView.getVisibility() != View.VISIBLE) {
+        if (passcodeView != null && passcodeView.getVisibility() != View.VISIBLE) {
             actionBarLayout.onResume();
             if (Space.isTablet()) {
                 rightActionBarLayout.onResume();
@@ -539,7 +539,9 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
                 rightActionBarLayout.dismissDialogs();
                 layersActionBarLayout.dismissDialogs();
             }
-            passcodeView.onResume();
+            if (passcodeView != null) {
+                passcodeView.onResume();
+            }
         }
     }
 
@@ -654,7 +656,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
                     rightActionBarLayout.fragmentsStack.add(chatFragment);
                     a--;
                 }
-                if (passcodeView.getVisibility() != View.VISIBLE) {
+                if (passcodeView != null && passcodeView.getVisibility() != View.VISIBLE) {
                     actionBarLayout.showLastFragment();
                     rightActionBarLayout.showLastFragment();
                 }
@@ -672,7 +674,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
                     actionBarLayout.fragmentsStack.add(chatFragment);
                     a--;
                 }
-                if (passcodeView.getVisibility() != View.VISIBLE) {
+                if (passcodeView != null && passcodeView.getVisibility() != View.VISIBLE) {
                     actionBarLayout.showLastFragment();
                 }
             }
@@ -814,15 +816,15 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
     public void onSaveInstanceState(Bundle outState) {
         BasePage lastFragment = null;
         if (Space.isTablet()) {
-            if (!layersActionBarLayout.fragmentsStack.isEmpty()) {
+            if (layersActionBarLayout != null && !layersActionBarLayout.fragmentsStack.isEmpty()) {
                 lastFragment = layersActionBarLayout.fragmentsStack.get(layersActionBarLayout.fragmentsStack.size() - 1);
-            } else if (!rightActionBarLayout.fragmentsStack.isEmpty()) {
+            } else if (rightActionBarLayout != null && !rightActionBarLayout.fragmentsStack.isEmpty()) {
                 lastFragment = rightActionBarLayout.fragmentsStack.get(rightActionBarLayout.fragmentsStack.size() - 1);
-            } else if (!actionBarLayout.fragmentsStack.isEmpty()) {
+            } else if (actionBarLayout != null && !actionBarLayout.fragmentsStack.isEmpty()) {
                 lastFragment = actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1);
             }
         } else {
-            if (!actionBarLayout.fragmentsStack.isEmpty()) {
+            if (actionBarLayout != null && !actionBarLayout.fragmentsStack.isEmpty()) {
                 lastFragment = actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1);
             }
         }
@@ -842,7 +844,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
      * @return true消耗事件，false跳过
      */
     public boolean onBackPressed() {
-        if (passcodeView.getVisibility() == View.VISIBLE) {
+        if (passcodeView != null && passcodeView.getVisibility() == View.VISIBLE) {
             return false;
         }
         if (drawerLayoutContainer.isDrawerOpened()) {
