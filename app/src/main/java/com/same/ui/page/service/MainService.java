@@ -1,14 +1,17 @@
 package com.same.ui.page.service;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 
+import com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView;
 import com.same.lib.core.ContainerLayout;
 import com.same.lib.same.ContainerCreator;
 import com.same.ui.R;
@@ -149,6 +152,12 @@ public class MainService extends StandOutWindow implements ContainerCreator.Cont
     public boolean onKeyEvent(int id, Window window, KeyEvent event) {
         creator.onKeyUp(event.getKeyCode(), event);
         return super.onKeyEvent(id, window, event);
+    }
+
+    @NonNull
+    @Override
+    public ViewGroup buildSlideView(@NonNull Context context) {
+        return new MaterialDrawerSliderView(context);
     }
 
     @Override

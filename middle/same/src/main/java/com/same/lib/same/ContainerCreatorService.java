@@ -1,6 +1,11 @@
 package com.same.lib.same;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.view.ActionMode;
+import android.view.KeyEvent;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -22,17 +27,36 @@ public interface ContainerCreatorService {
             @NonNull FrameLayout frameLayout,
             @NonNull ContainerCreator.ContextDelegate delegate
     );
-    //    void onPause();
-    //    void onResume();
-    //    void onDestroy();
-    //    void onPreActivityResult();
-    //    void onActivityResult(int requestCode, int resultCode, Intent data);
-    //    void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults);
-    //    void onPreConfigurationChanged(Configuration newConfig);
-    //    void onPostConfigurationChanged(Configuration newConfig);
-    //    void onBackPressed();
-    //    void onLowMemory();
-    //    void onActionModeStarted(ActionMode mode);
-    //    void onActionModeFinished(ActionMode mode);
-    //    void onKeyUp(int keyCode, KeyEvent event);
+
+    @NonNull
+    ViewGroup buildSlideView(
+            @NonNull Context context,
+            @NonNull ContainerCreator.ContextDelegate delegate
+    );
+
+    void onPause();
+
+    void onResume();
+
+    void onDestroy();
+
+    void onPreActivityResult();
+
+    void onActivityResult(int requestCode, int resultCode, Intent data);
+
+    void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults);
+
+    void onPreConfigurationChanged(Configuration newConfig);
+
+    void onPostConfigurationChanged(Configuration newConfig);
+
+    void onBackPressed();
+
+    void onLowMemory();
+
+    void onActionModeStarted(ActionMode mode);
+
+    void onActionModeFinished(ActionMode mode);
+
+    void onKeyUp(int keyCode, KeyEvent event);
 }

@@ -84,6 +84,10 @@ public class Space {
     }
 
     //region tablet
+    public static void setIsTablet(Boolean isTablet) {
+        Space.isTablet = isTablet;
+    }
+
     public static boolean isTablet() {
         if (isTablet == null) {
             isTablet = false;

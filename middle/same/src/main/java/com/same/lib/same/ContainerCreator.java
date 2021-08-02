@@ -31,7 +31,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.NotificationCenter;
 import com.same.lib.core.BasePage;
@@ -90,7 +89,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
     private FrameLayout shadowTabletSide;
     private View backgroundTablet;
     private boolean tabletFullSize;
-    public MaterialDrawerSliderView sideMenu;
+    public ViewGroup sideView;
     public SideMenultItemAnimator itemAnimator;
 
     private static ArrayList<BasePage> mainFragmentsStack = new ArrayList<>();
@@ -120,6 +119,9 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
     private Runnable lockRunnable;
 
     public interface ContextDelegate extends ThemeEditorView.ThemeContainer, LifecycleOwner {
+        @NonNull
+        ViewGroup buildSlideView(@NonNull Context context);
+
         Configuration getConfiguration();
 
         void close();
@@ -138,7 +140,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
     }
 
     public interface SideMenuPage {
-        void setSideMenu(MaterialDrawerSliderView sideMenu);
+        void setSideMenu(ViewGroup sideMenu);
     }
 
     @NonNull
@@ -335,13 +337,13 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         }
 
         //侧滑栏
-        sideMenu = new MaterialDrawerSliderView(context);
-        drawerLayoutContainer.setDrawerLayout(sideMenu);
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) sideMenu.getLayoutParams();
+        sideView = delegate.buildSlideView(context);
+        drawerLayoutContainer.setDrawerLayout(sideView);
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) sideView.getLayoutParams();
         Point screenSize = getRealScreenSize(context);
         layoutParams.width = Space.isTablet() ? Space.dp(320) : Math.min(Space.dp(320), Math.min(screenSize.x, screenSize.y) - Space.dp(56));
         layoutParams.height = LayoutHelper.MATCH_PARENT;
-        sideMenu.setLayoutParams(layoutParams);
+        sideView.setLayoutParams(layoutParams);
 
         //双向绑定
         drawerLayoutContainer.setParentActionBarLayout(actionBarLayout);
@@ -362,7 +364,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
 
         if (actionBarLayout.fragmentsStack.isEmpty()) {
             if (homePage instanceof SideMenuPage) {
-                ((SideMenuPage) homePage).setSideMenu(sideMenu);
+                ((SideMenuPage) homePage).setSideMenu(sideView);
             }
             actionBarLayout.addFragmentToStack(homePage);
             drawerLayoutContainer.setAllowOpenDrawer(true, false);
@@ -370,7 +372,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
             //任务栈非空，直接从栈中恢复第一个fragment，清空其他fragment
             BasePage fragment = actionBarLayout.fragmentsStack.get(0);
             if (fragment instanceof SideMenuPage) {
-                ((SideMenuPage) fragment).setSideMenu(sideMenu);
+                ((SideMenuPage) fragment).setSideMenu(sideView);
             }
             boolean allowOpen = true;
             if (Space.isTablet()) {
@@ -403,7 +405,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
             actionBarLayout.removeFragmentFromStack(0);
         }
         if (homePage instanceof SideMenuPage) {
-            ((SideMenuPage) homePage).setSideMenu(sideMenu);
+            ((SideMenuPage) homePage).setSideMenu(sideView);
         }
         actionBarLayout.addFragmentToStack(homePage, 0);
         drawerLayoutContainer.setAllowOpenDrawer(true, false);

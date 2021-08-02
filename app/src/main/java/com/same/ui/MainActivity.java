@@ -2,6 +2,7 @@ package com.same.ui;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -17,6 +18,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.core.BasePage;
 import com.same.lib.core.ContainerLayout;
@@ -288,6 +290,12 @@ public class MainActivity extends Activity
     @Override
     public void onRebuildAllFragments(ContainerLayout layout, boolean last) {
         creator.onRebuildAllFragments(layout, last);
+    }
+
+    @NonNull
+    @Override
+    public ViewGroup buildSlideView(@NonNull Context context) {
+        return new MaterialDrawerSliderView(context);
     }
 
     @Override

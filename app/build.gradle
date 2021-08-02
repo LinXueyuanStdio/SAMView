@@ -60,6 +60,8 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'com.mikepenz:materialdrawer:8.0.3'
+
     implementation 'com.timecat.component:MLang:2.0.2'
     implementation rootProject.ext.timecat["plugin-agreement-window"]
 
