@@ -341,7 +341,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         drawerLayoutContainer.setDrawerLayout(sideView);
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) sideView.getLayoutParams();
         Point screenSize = getRealScreenSize(context);
-        layoutParams.width = Space.isTablet() ? Space.dp(320) : Math.min(Space.dp(320), Math.min(screenSize.x, screenSize.y) - Space.dp(56));
+        layoutParams.width = Space.isTablet() ? Space.dp(320) : Math.min(Space.dp(320), Math.min(screenSize.x, screenSize.y) - Space.dp(24));
         layoutParams.height = LayoutHelper.MATCH_PARENT;
         sideView.setLayoutParams(layoutParams);
 
