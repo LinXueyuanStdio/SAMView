@@ -92,9 +92,9 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
     public ViewGroup sideView;
     public SideMenultItemAnimator itemAnimator;
 
-    private static ArrayList<BasePage> mainFragmentsStack = new ArrayList<>();
-    private static ArrayList<BasePage> layerFragmentsStack = new ArrayList<>();
-    private static ArrayList<BasePage> rightFragmentsStack = new ArrayList<>();
+    private ArrayList<BasePage> mainFragmentsStack = new ArrayList<>();
+    private ArrayList<BasePage> layerFragmentsStack = new ArrayList<>();
+    private ArrayList<BasePage> rightFragmentsStack = new ArrayList<>();
     private ActionMode visibleActionMode;
     private DrawerLayoutContainer drawerLayoutContainer;
     private PasscodeView passcodeView;
