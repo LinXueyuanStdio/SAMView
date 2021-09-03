@@ -1,52 +1,41 @@
 buildscript {
-    def moduleConfigProps = new Properties()
-    File moduleConfig = rootProject.file("moduleConfig.properties")
-    if (moduleConfig.exists()) {
-        moduleConfigProps.load(new FileInputStream(moduleConfig))
-    }
-    def localMavenDir = file(moduleConfigProps.localMavenPath)
+    apply from: "${gradle.ext.localGradleDir}/settings/deps.gradle"
 
     repositories {
-        maven { url "file://${localMavenDir.absolutePath}" }
+        maven { url "file://${gradle.ext.localMavenDir.absolutePath}" }
         google()
-        jcenter()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+
         maven { url "https://plugins.gradle.org/m2/" }
-        maven { url "https://github.com/LinXueyuanStdio/MLang/raw/main/dist/" }
+        maven { url "https://dl.bintray.com/umsdk/release" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.2'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
-        classpath "com.github.breadmoirai:github-release:2.2.12"
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath 'com.android.tools.build:gradle:7.0.0'
+        classpath classpath.kotlin
+        classpath classpath.component_router
+        classpath classpath.bugly
+        classpath classpath.analysis
+        classpath classpath.upload
     }
 }
-
-def moduleConfigProps = new Properties()
-File moduleConfig = rootProject.file("moduleConfig.properties")
-if (moduleConfig.exists()) {
-    moduleConfigProps.load(new FileInputStream(moduleConfig))
-}
-def localMavenDir = file(moduleConfigProps.localMavenPath)
-def localGradleDir = file(moduleConfigProps.localGradlePath)
 
 allprojects {
 
     repositories {
-        maven { url "file://${localMavenDir.absolutePath}" }
+        maven { url "file://${gradle.ext.localMavenDir.absolutePath}" }
 
         google()
-        jcenter()
+        mavenCentral()
         maven { url "https://jitpack.io" }
 
         maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "https://dl.bintray.com/umsdk/release" }
 
-        maven { url "https://github.com/LinXueyuanStdio/MLang/raw/main/dist/" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" } // for org-java
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-
-apply from: "${localGradleDir}/deps.gradle"

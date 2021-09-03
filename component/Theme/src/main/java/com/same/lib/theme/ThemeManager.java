@@ -759,7 +759,7 @@ public class ThemeManager {
                 isInNigthMode = true;
                 lastThemeSwitchTime = SystemClock.elapsedRealtime();
                 switchingNightTheme = true;
-                NotificationCenter.post(NotificationCenter.needSetDayNightTheme, currentNightTheme);
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, currentNightTheme, false, null, -1);
                 switchingNightTheme = false;
             }
         } else {
@@ -767,7 +767,7 @@ public class ThemeManager {
                 isInNigthMode = false;
                 lastThemeSwitchTime = SystemClock.elapsedRealtime();
                 switchingNightTheme = true;
-                NotificationCenter.post(NotificationCenter.needSetDayNightTheme, currentDayTheme);
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, currentDayTheme, false, null, -1);
                 switchingNightTheme = false;
             }
         }
@@ -921,7 +921,7 @@ public class ThemeManager {
                 ThemeInfo.fillAccentValues(accent, info.settings);
                 if (currentTheme == theme && currentTheme.currentAccentId == accent.id) {
                     refreshThemeColors(context);
-                    NotificationCenter.post(NotificationCenter.needSetDayNightTheme, currentTheme);
+                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, currentTheme, false, null, -1);
                 }
             }
             theme.previewParsed = false;

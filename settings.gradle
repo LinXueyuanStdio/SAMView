@@ -1,3 +1,7 @@
+rootProject.name = "SAMView"
+
+apply from: "context.gradle"
+
 include ':app'
 
 include ':middle:same'
@@ -14,23 +18,3 @@ include ':MView:CheckBox'
 include ':MView:ListView'
 include ':MView:RadioButton'
 
-rootProject.name = "SAMView"
-
-// 引入composing的设置
-apply from: "gradle/composingConfig.gradle"
-// 遍历composing_dependencies中的所有配置
-ext.getProperty("composing_dependencies").each { projectConfig ->
-    def isLocal = projectConfig["isLocal"]
-    def projectPath = projectConfig["projectPath"]
-    def projectMaven = projectConfig["projectMaven"]
-    def projectName = projectConfig["projectName"]
-    // 如果是本地依赖
-    if (isLocal) {
-        // 使用本地依赖进行替换
-        includeBuild(projectPath) {
-            dependencySubstitution {
-                substitute module(projectMaven) with project(projectName)
-            }
-        }
-    }
-}

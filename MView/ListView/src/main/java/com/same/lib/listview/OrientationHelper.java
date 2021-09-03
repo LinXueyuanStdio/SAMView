@@ -237,7 +237,7 @@ public abstract class OrientationHelper {
      * @return A new OrientationHelper
      */
     public static OrientationHelper createOrientationHelper(
-            RecyclerView.LayoutManager layoutManager, @RecyclerView.Orientation int orientation) {
+            RecyclerView.LayoutManager layoutManager, @Orientation int orientation) {
         switch (orientation) {
             case HORIZONTAL:
                 return createHorizontalHelper(layoutManager);

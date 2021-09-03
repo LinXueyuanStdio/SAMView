@@ -80,7 +80,7 @@ public class GridLayoutManager extends LinearLayoutManager {
      * @param reverseLayout When set to true, layouts from end to start.
      */
     public GridLayoutManager(Context context, int spanCount,
-            @RecyclerView.Orientation int orientation, boolean reverseLayout) {
+            @Orientation int orientation, boolean reverseLayout) {
         super(context, orientation, reverseLayout);
         setSpanCount(spanCount);
     }

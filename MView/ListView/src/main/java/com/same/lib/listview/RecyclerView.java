@@ -54,9 +54,8 @@ import android.widget.EdgeEffect;
 import android.widget.LinearLayout;
 import android.widget.OverScroller;
 
+import com.same.lib.listview.RecyclerView.ItemAnimator.ItemHolderInfo;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -65,7 +64,6 @@ import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.CallSuper;
-import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.Px;
@@ -86,7 +84,6 @@ import androidx.core.view.accessibility.AccessibilityEventCompat;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import androidx.core.widget.EdgeEffectCompat;
 import androidx.customview.view.AbsSavedState;
-import com.same.lib.listview.RecyclerView.ItemAnimator.ItemHolderInfo;
 
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 import static androidx.core.view.ViewCompat.TYPE_NON_TOUCH;
@@ -261,12 +258,6 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
     private static final boolean IGNORE_DETACHED_FOCUSED_CHILD = Build.VERSION.SDK_INT <= 15;
 
     static final boolean DISPATCH_TEMP_DETACH = false;
-
-    /** @hide */
-    @RestrictTo(LIBRARY_GROUP_PREFIX)
-    @IntDef({HORIZONTAL, VERTICAL})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface Orientation {}
 
     public static final int HORIZONTAL = LinearLayout.HORIZONTAL;
     public static final int VERTICAL = LinearLayout.VERTICAL;
@@ -5166,6 +5157,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                 || mAdapterHelper.hasPendingUpdates();
     }
 
+//    @IntDef(flag = true, value = {
+//            State.STEP_START, State.STEP_LAYOUT, State.STEP_ANIMATIONS
+//    })
+//    @Retention(RetentionPolicy.SOURCE)
+//    @interface LayoutState {}
+
     class ViewFlinger implements Runnable {
         private int mLastFlingX;
         private int mLastFlingY;
@@ -5514,10 +5511,6 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
      * @see RecyclerView#setEdgeEffectFactory(EdgeEffectFactory)
      */
     public static class EdgeEffectFactory {
-
-        @Retention(RetentionPolicy.SOURCE)
-        @IntDef({DIRECTION_LEFT, DIRECTION_TOP, DIRECTION_RIGHT, DIRECTION_BOTTOM})
-        public @interface EdgeDirection {}
 
         /**
          * Direction constant for the left edge
@@ -12290,13 +12283,6 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         // Fields below must be updated or cleared before they are used (generally before a pass)
         ////////////////////////////////////////////////////////////////////////////////////////////
 
-        @IntDef(flag = true, value = {
-                STEP_START, STEP_LAYOUT, STEP_ANIMATIONS
-        })
-        @Retention(RetentionPolicy.SOURCE)
-        @interface LayoutState {}
-
-        @LayoutState
         int mLayoutStep = STEP_START;
 
         /**
@@ -12664,16 +12650,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         public static final int FLAG_APPEARED_IN_PRE_LAYOUT =
                 ViewHolder.FLAG_APPEARED_IN_PRE_LAYOUT;
 
-        /**
-         * The set of flags that might be passed to
-         * {@link #recordPreLayoutInformation(State, ViewHolder, int, List)}.
-         */
-        @IntDef(flag = true, value = {
-                FLAG_CHANGED, FLAG_REMOVED, FLAG_MOVED, FLAG_INVALIDATED,
-                FLAG_APPEARED_IN_PRE_LAYOUT
-        })
-        @Retention(RetentionPolicy.SOURCE)
-        public @interface AdapterChanges {}
+
         private ItemAnimatorListener mListener = null;
         private ArrayList<ItemAnimatorFinishedListener> mFinishedListeners =
                 new ArrayList<ItemAnimatorFinishedListener>();

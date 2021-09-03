@@ -63,7 +63,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
     /**
      * Current orientation. Either {@link #HORIZONTAL} or {@link #VERTICAL}
      */
-    @RecyclerView.Orientation
+    @Orientation
     int mOrientation = RecyclerView.DEFAULT_ORIENTATION;
 
     /**
@@ -166,7 +166,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
      *                      #VERTICAL}.
      * @param reverseLayout When set to true, layouts from end to start.
      */
-    public LinearLayoutManager(Context context, @RecyclerView.Orientation int orientation,
+    public LinearLayoutManager(Context context, @Orientation int orientation,
             boolean reverseLayout) {
         setOrientation(orientation);
         setReverseLayout(reverseLayout);
@@ -310,7 +310,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
      * @return Current orientation,  either {@link #HORIZONTAL} or {@link #VERTICAL}
      * @see #setOrientation(int)
      */
-    @RecyclerView.Orientation
+    @Orientation
     public int getOrientation() {
         return mOrientation;
     }
@@ -321,7 +321,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
      *
      * @param orientation {@link #HORIZONTAL} or {@link #VERTICAL}
      */
-    public void setOrientation(@RecyclerView.Orientation int orientation) {
+    public void setOrientation(@Orientation int orientation) {
         if (orientation != HORIZONTAL && orientation != VERTICAL) {
             throw new IllegalArgumentException("invalid orientation:" + orientation);
         }
@@ -1981,8 +1981,8 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
     View findOneVisibleChild(int fromIndex, int toIndex, boolean completelyVisible,
             boolean acceptPartiallyVisible) {
         ensureLayoutState();
-        @ViewBoundsCheck.ViewBounds int preferredBoundsFlag = 0;
-        @ViewBoundsCheck.ViewBounds int acceptableBoundsFlag = 0;
+        @ViewBounds int preferredBoundsFlag = 0;
+        @ViewBounds int acceptableBoundsFlag = 0;
         if (completelyVisible) {
             preferredBoundsFlag = (ViewBoundsCheck.FLAG_CVS_GT_PVS | ViewBoundsCheck.FLAG_CVS_EQ_PVS
                     | ViewBoundsCheck.FLAG_CVE_LT_PVE | ViewBoundsCheck.FLAG_CVE_EQ_PVE);
@@ -2007,8 +2007,8 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         if (next == 0) {
             return getChildAt(fromIndex);
         }
-        @ViewBoundsCheck.ViewBounds int preferredBoundsFlag = 0;
-        @ViewBoundsCheck.ViewBounds int acceptableBoundsFlag = 0;
+        @ViewBounds int preferredBoundsFlag = 0;
+        @ViewBounds int acceptableBoundsFlag = 0;
         if (mOrientationHelper.getDecoratedStart(getChildAt(fromIndex))
                 < mOrientationHelper.getStartAfterPadding()) {
             preferredBoundsFlag = (ViewBoundsCheck.FLAG_CVS_LT_PVS | ViewBoundsCheck.FLAG_CVE_LT_PVE

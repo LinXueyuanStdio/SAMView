@@ -1,14 +1,191 @@
 ext {
     composing_dependencies = [
-            MLang = [
-                    // 是否本地依赖
-                    isLocal     : false,
-                    // 项目的路径
-                    projectPath : "../MLang",
-                    // 项目名称
-                    projectName : ":locale",
-                    // 项目的maven地址
-                    projectMaven: "com.timecat.component:MLang"
-            ]
+            // (是否本地依赖, 项目的路径, 项目名称, 项目的maven地址)
+            [isLocal     : false,
+             projectPath : "../MLang",
+             projectName : ":locale",
+             projectMaven: "com.timecat.component:MLang"
+            ],
+            //一致性
+            [isLocal     : false,
+             projectPath : "../TimeCatIdentity",
+             projectName : ":identity:anim",
+             projectMaven: "com.timecat.identity:anim"
+            ],
+            [isLocal     : false,
+             projectPath : "../TimeCatIdentity",
+             projectName : ":identity:data",
+             projectMaven: "com.timecat.identity:data"
+            ],
+            [isLocal     : false,
+             projectPath : "../TimeCatIdentity",
+             projectName : ":identity:font",
+             projectMaven: "com.timecat.identity:font"
+            ],
+            [isLocal     : false,
+             projectPath : "../TimeCatIdentity",
+             projectName : ":identity:readonly",
+             projectMaven: "com.timecat.identity:readonly"
+            ],
+            [isLocal     : false,
+             projectPath : "../TimeCatIdentity",
+             projectName : ":identity:resources",
+             projectMaven: "com.timecat.identity:resources"
+            ],
+            [isLocal     : false,
+             projectPath : "../TimeCatIdentity",
+             projectName : ":identity:service",
+             projectMaven: "com.timecat.identity:service"
+            ],
+            [isLocal     : false,
+             projectPath : "../TimeCatIdentity",
+             projectName : ":identity:skin",
+             projectMaven: "com.timecat.identity:skin"
+            ],
+            //元素
+            [isLocal     : false,
+             projectPath : "../TimeCatElement",
+             projectName : ":element:alert",
+             projectMaven: "com.timecat.element:alert"
+            ],
+            [isLocal     : false,
+             projectPath : "../TimeCatElement",
+             projectName : ":element:listview",
+             projectMaven: "com.timecat.element:listview"
+            ],
+            //第三方
+            [isLocal     : false,
+             projectPath : "../TimeCatThird",
+             projectName : ":extend:arms",
+             projectMaven: "com.timecat.extend:arms"
+            ],
+            [isLocal     : false,
+             projectPath : "../TimeCatThird",
+             projectName : ":extend:image",
+             projectMaven: "com.timecat.extend:image"
+            ],
+            [isLocal     : false,
+             projectPath : "../TimeCatThird",
+             projectName : ":extend:markdown",
+             projectMaven: "com.timecat.extend:markdown"
+            ],
+            //组件
+            [isLocal     : false,
+             projectPath : "../TimeCatComponents",
+             projectName : ":component:identity",
+             projectMaven: "com.timecat.component:identity"
+            ],
+            [isLocal     : false,
+             projectPath : "../TimeCatComponents",
+             projectName : ":component:router",
+             projectMaven: "com.timecat.component:router"
+            ],
+            [isLocal     : false,
+             projectPath : "../TimeCatComponents",
+             projectName : ":component:sdk",
+             projectMaven: "com.timecat.component:sdk"
+            ],
+            [isLocal     : false,
+             projectPath : "../TimeCatComponents",
+             projectName : ":component:setting",
+             projectMaven: "com.timecat.component:setting"
+            ],
+            //数据
+            [isLocal     : false,
+             projectPath : "../TimeCatDatabase",
+             projectName : ":data:bmob",
+             projectMaven: "com.timecat.data:bmob"
+            ],
+            [isLocal     : false,
+             projectPath : "../TimeCatDatabase",
+             projectName : ":data:greendao",
+             projectMaven: "com.timecat.data:greendao"
+            ],
+            [isLocal     : false,
+             projectPath : "../TimeCatDatabase",
+             projectName : ":data:room",
+             projectMaven: "com.timecat.data:room"
+            ],
+            [isLocal     : false,
+             projectPath : "../TimeCatDatabase",
+             projectName : ":data:system",
+             projectMaven: "com.timecat.data:system"
+            ],
+            //布局
+            [isLocal     : false,
+             projectPath : "../TimeCatLayout",
+             projectName : ":layout:ui",
+             projectMaven: "com.timecat.layout:ui"
+            ],
+            //页面
+            [isLocal     : false,
+             projectPath : "../TimeCatPage",
+             projectName : ":page:base",
+             projectMaven: "com.timecat.page:base"
+            ],
+            //中间层
+            [isLocal     : false,
+             projectPath : "../TimeCatMiddle",
+             projectName : ":middle:block",
+             projectMaven: "com.timecat.middle:block"
+            ],
+            [isLocal     : false,
+             projectPath : "../TimeCatMiddle",
+             projectName : ":middle:selector",
+             projectMaven: "com.timecat.middle:selector"
+            ],
+            [isLocal     : false,
+             projectPath : "../TimeCatMiddle",
+             projectName : ":middle:setting",
+             projectMaven: "com.timecat.middle:setting"
+            ],
+            //组件 online
+            [isLocal     : false,
+             projectPath : "../TimeCatModuleOnline",
+             projectName : ":module:module-login",
+             projectMaven: "com.timecat.module:module-login"
+            ],
+            [isLocal     : false,
+             projectPath : "../TimeCatModuleOnline",
+             projectName : ":module:module-user",
+             projectMaven: "com.timecat.module:module-user"
+            ],
+            //组件 stand
+            [isLocal     : false,
+             projectPath : "../TimeCatModule-Git",
+             projectName : ":module:module-git",
+             projectMaven: "com.timecat.module:module-git"
+            ],
+            //组件 local
+            [isLocal     : false,
+             projectPath : ".",
+             projectName : ":module:module-about",
+             projectMaven: "com.timecat.module:module-about"
+            ],
+            [isLocal     : false,
+             projectPath : ".",
+             projectName : ":module:module-bugly",
+             projectMaven: "com.timecat.module:module-bugly"
+            ],
+            [isLocal     : false,
+             projectPath : ".",
+             projectName : ":module:module-welcome",
+             projectMaven: "com.timecat.module:module-welcome"
+            ],
+            [isLocal     : false,
+             projectPath : ".",
+             projectName : ":module:module-artifact",
+             projectMaven: "com.timecat.module:module-artifact"
+            ],
+            [isLocal     : false,
+             projectPath : ".",
+             projectName : ":module:module-file",
+             projectMaven: "com.timecat.module:module-file"
+            ],
+            [isLocal     : false,
+             projectPath : ".",
+             projectName : ":module:module-timetable",
+             projectMaven: "com.timecat.module:module-timetable"
+            ],
     ]
 }

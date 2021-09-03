@@ -18,11 +18,6 @@ package com.same.lib.listview;
 
 import android.view.View;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
-import androidx.annotation.IntDef;
-
 /**
  * A utility class used to check the boundaries of a given view within its parent view based on
  * a set of boundary flags.
@@ -109,24 +104,6 @@ class ViewBoundsCheck {
 
     final Callback mCallback;
     BoundFlags mBoundFlags;
-    /**
-     * The set of flags that can be passed for checking the view boundary conditions.
-     * CVS in the flag name indicates the child view, and PV indicates the parent view.\
-     * The following S, E indicate a view's start and end points, respectively.
-     * GT and LT indicate a strictly greater and less than relationship.
-     * Greater than or equal (or less than or equal) can be specified by setting both GT and EQ (or
-     * LT and EQ) flags.
-     * For instance, setting both {@link #FLAG_CVS_GT_PVS} and {@link #FLAG_CVS_EQ_PVS} indicate the
-     * child view's start should be greater than or equal to its parent start.
-     */
-    @IntDef(flag = true, value = {
-            FLAG_CVS_GT_PVS, FLAG_CVS_EQ_PVS, FLAG_CVS_LT_PVS,
-            FLAG_CVS_GT_PVE, FLAG_CVS_EQ_PVE, FLAG_CVS_LT_PVE,
-            FLAG_CVE_GT_PVS, FLAG_CVE_EQ_PVS, FLAG_CVE_LT_PVS,
-            FLAG_CVE_GT_PVE, FLAG_CVE_EQ_PVE, FLAG_CVE_LT_PVE
-    })
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface ViewBounds {}
 
     ViewBoundsCheck(Callback callback) {
         mCallback = callback;
@@ -188,7 +165,9 @@ class ViewBoundsCheck {
             }
             return true;
         }
-    };
+    }
+
+    ;
 
     /**
      * Returns the first view starting from fromIndex to toIndex in views whose bounds lie within
@@ -261,9 +240,13 @@ class ViewBoundsCheck {
      */
     interface Callback {
         View getChildAt(int index);
+
         int getParentStart();
+
         int getParentEnd();
+
         int getChildStart(View view);
+
         int getChildEnd(View view);
     }
 }

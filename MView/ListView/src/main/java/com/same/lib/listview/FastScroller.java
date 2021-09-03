@@ -25,10 +25,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.view.MotionEvent;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
-import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
@@ -39,31 +35,22 @@ import androidx.core.view.ViewCompat;
  */
 @VisibleForTesting
 class FastScroller extends RecyclerView.ItemDecoration implements RecyclerView.OnItemTouchListener {
-    @IntDef({STATE_HIDDEN, STATE_VISIBLE, STATE_DRAGGING})
-    @Retention(RetentionPolicy.SOURCE)
-    private @interface State { }
+
     // Scroll thumb not showing
-    private static final int STATE_HIDDEN = 0;
+    public static final int STATE_HIDDEN = 0;
     // Scroll thumb visible and moving along with the scrollbar
-    private static final int STATE_VISIBLE = 1;
+    public static final int STATE_VISIBLE = 1;
     // Scroll thumb being dragged by user
-    private static final int STATE_DRAGGING = 2;
+    public static final int STATE_DRAGGING = 2;
 
-    @IntDef({DRAG_X, DRAG_Y, DRAG_NONE})
-    @Retention(RetentionPolicy.SOURCE)
-    private @interface DragState{ }
-    private static final int DRAG_NONE = 0;
-    private static final int DRAG_X = 1;
-    private static final int DRAG_Y = 2;
+    public static final int DRAG_NONE = 0;
+    public static final int DRAG_X = 1;
+    public static final int DRAG_Y = 2;
 
-    @IntDef({ANIMATION_STATE_OUT, ANIMATION_STATE_FADING_IN, ANIMATION_STATE_IN,
-        ANIMATION_STATE_FADING_OUT})
-    @Retention(RetentionPolicy.SOURCE)
-    private @interface AnimationState { }
-    private static final int ANIMATION_STATE_OUT = 0;
-    private static final int ANIMATION_STATE_FADING_IN = 1;
-    private static final int ANIMATION_STATE_IN = 2;
-    private static final int ANIMATION_STATE_FADING_OUT = 3;
+    public static final int ANIMATION_STATE_OUT = 0;
+    public static final int ANIMATION_STATE_FADING_IN = 1;
+    public static final int ANIMATION_STATE_IN = 2;
+    public static final int ANIMATION_STATE_FADING_OUT = 3;
 
     private static final int SHOW_DURATION_MS = 500;
     private static final int HIDE_DELAY_AFTER_VISIBLE_MS = 1500;
