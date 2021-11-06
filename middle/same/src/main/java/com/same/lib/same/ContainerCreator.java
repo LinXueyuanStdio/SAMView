@@ -38,6 +38,9 @@ import com.same.lib.core.ContainerLayout;
 import com.same.lib.core.DrawerLayoutContainer;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.lottie.RLottieDrawable;
+import com.same.lib.same.page.IsHomePage;
+import com.same.lib.same.page.IsSecondHomePage;
+import com.same.lib.same.page.IsSideMenuPage;
 import com.same.lib.same.theme.ChatTheme;
 import com.same.lib.same.theme.CommonTheme;
 import com.same.lib.same.theme.DialogTheme;
@@ -139,9 +142,6 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         View getWindowDecorView();
     }
 
-    public interface SideMenuPage {
-        void setSideMenu(ViewGroup sideMenu);
-    }
 
     @NonNull
     public ContextDelegate delegate;
@@ -229,10 +229,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
                     int height = MeasureSpec.getSize(heightMeasureSpec);
                     setMeasuredDimension(width, height);
 
-//                    boolean isMaxTable = !Space.isInMultiwindow && (!Space.isSmallTablet() || Space.isFullTablet(getResources()));
-                    boolean isMaxTable = true;
-
-                    if (isMaxTable) {
+                    if (!Space.isInMultiwindow && (!Space.isSmallTablet() || Space.isFullTablet(delegate.getResources()))) {
                         tabletFullSize = false;
                         int leftWidth = width / 100 * 35;
                         if (leftWidth < Space.dp(320)) {
@@ -361,24 +358,22 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         passcodeView = new PasscodeView(context);
         drawerLayoutContainer.addView(passcodeView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-        switchToHomePage(homePage, true);
-
         //注册通知中心，使用观察者模式处理应用内部的通知（消息）
         NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.didSetNewTheme);
         NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.needSetDayNightTheme);
         NotificationCenter.getGlobalInstance().addObserver(notificationCenterDelegate, NotificationCenter.needCheckSystemBarColors);
 
         if (actionBarLayout.fragmentsStack.isEmpty()) {
-            if (homePage instanceof SideMenuPage) {
-                ((SideMenuPage) homePage).setSideMenu(sideView);
+            if (homePage instanceof IsSideMenuPage) {
+                ((IsSideMenuPage) homePage).setSideMenu(sideView);
             }
             actionBarLayout.addFragmentToStack(homePage);
             drawerLayoutContainer.setAllowOpenDrawer(true, false);
         } else {
             //任务栈非空，直接从栈中恢复第一个fragment，清空其他fragment
             BasePage fragment = actionBarLayout.fragmentsStack.get(0);
-            if (fragment instanceof SideMenuPage) {
-                ((SideMenuPage) fragment).setSideMenu(sideView);
+            if (fragment instanceof IsSideMenuPage) {
+                ((IsSideMenuPage) fragment).setSideMenu(sideView);
             }
             boolean allowOpen = true;
             if (Space.isTablet()) {
@@ -387,6 +382,8 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
             drawerLayoutContainer.setAllowOpenDrawer(allowOpen, false);
         }
         checkLayout();
+
+        switchToHomePage(homePage, true);
         if (PassCode.needShowPasscode(true, true) || PassCode.isWaitingForPasscodeEnter) {
             showPasscodeActivity();
         }
@@ -410,8 +407,8 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         } else {
             actionBarLayout.removeFragmentFromStack(0);
         }
-        if (homePage instanceof SideMenuPage) {
-            ((SideMenuPage) homePage).setSideMenu(sideView);
+        if (homePage instanceof IsSideMenuPage) {
+            ((IsSideMenuPage) homePage).setSideMenu(sideView);
         }
         actionBarLayout.addFragmentToStack(homePage, 0);
         drawerLayoutContainer.setAllowOpenDrawer(true, false);
@@ -960,43 +957,155 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
     @Override
     public boolean needPresentFragment(BasePage fragment, boolean removeLast, boolean forceWithoutAnimation, ContainerLayout layout) {
         if (Space.isTablet()) {
-            if (layout != layersActionBarLayout) {
+            drawerLayoutContainer.setAllowOpenDrawer((fragment instanceof IsSideMenuPage) && layersActionBarLayout.getVisibility() != View.VISIBLE, true);
+            if (fragment instanceof IsHomePage) {
+                IsHomePage dialogsActivity = (IsHomePage) fragment;
+                if (dialogsActivity.currentStateIsAtHome() && layout != actionBarLayout) {
+                    actionBarLayout.removeAllFragments();
+                    actionBarLayout.presentFragment(fragment, removeLast, forceWithoutAnimation, false, false);
+                    layersActionBarLayout.removeAllFragments();
+                    layersActionBarLayout.setVisibility(View.GONE);
+                    drawerLayoutContainer.setAllowOpenDrawer(true, false);
+                    if (!tabletFullSize) {
+                        shadowTabletSide.setVisibility(View.VISIBLE);
+                        if (rightActionBarLayout.fragmentsStack.isEmpty()) {
+                            backgroundTablet.setVisibility(View.VISIBLE);
+                        }
+                    }
+                    return false;
+                }
+            }
+            if (fragment instanceof IsSecondHomePage && !((IsSecondHomePage) fragment).isInScheduleMode()) {
+                if (!tabletFullSize && layout == rightActionBarLayout || tabletFullSize && layout == actionBarLayout) {
+                    boolean result = !(tabletFullSize && layout == actionBarLayout && actionBarLayout.fragmentsStack.size() == 1);
+                    if (!layersActionBarLayout.fragmentsStack.isEmpty()) {
+                        for (int a = 0; a < layersActionBarLayout.fragmentsStack.size() - 1; a++) {
+                            layersActionBarLayout.removeFragmentFromStack(layersActionBarLayout.fragmentsStack.get(0));
+                            a--;
+                        }
+                        layersActionBarLayout.closeLastFragment(!forceWithoutAnimation);
+                    }
+                    if (!result) {
+                        actionBarLayout.presentFragment(fragment, false, forceWithoutAnimation, false, false);
+                    }
+                    return result;
+                } else if (!tabletFullSize && layout != rightActionBarLayout) {
+                    rightActionBarLayout.setVisibility(View.VISIBLE);
+                    backgroundTablet.setVisibility(View.GONE);
+                    rightActionBarLayout.removeAllFragments();
+                    rightActionBarLayout.presentFragment(fragment, removeLast, true, false, false);
+                    if (!layersActionBarLayout.fragmentsStack.isEmpty()) {
+                        for (int a = 0; a < layersActionBarLayout.fragmentsStack.size() - 1; a++) {
+                            layersActionBarLayout.removeFragmentFromStack(layersActionBarLayout.fragmentsStack.get(0));
+                            a--;
+                        }
+                        layersActionBarLayout.closeLastFragment(!forceWithoutAnimation);
+                    }
+                    return false;
+                } else if (tabletFullSize && layout != actionBarLayout) {
+                    actionBarLayout.presentFragment(fragment, actionBarLayout.fragmentsStack.size() > 1, forceWithoutAnimation, false, false);
+                    if (!layersActionBarLayout.fragmentsStack.isEmpty()) {
+                        for (int a = 0; a < layersActionBarLayout.fragmentsStack.size() - 1; a++) {
+                            layersActionBarLayout.removeFragmentFromStack(layersActionBarLayout.fragmentsStack.get(0));
+                            a--;
+                        }
+                        layersActionBarLayout.closeLastFragment(!forceWithoutAnimation);
+                    }
+                    return false;
+                } else {
+                    if (!layersActionBarLayout.fragmentsStack.isEmpty()) {
+                        for (int a = 0; a < layersActionBarLayout.fragmentsStack.size() - 1; a++) {
+                            layersActionBarLayout.removeFragmentFromStack(layersActionBarLayout.fragmentsStack.get(0));
+                            a--;
+                        }
+                        layersActionBarLayout.closeLastFragment(!forceWithoutAnimation);
+                    }
+                    actionBarLayout.presentFragment(fragment, actionBarLayout.fragmentsStack.size() > 1, forceWithoutAnimation, false, false);
+                    return false;
+                }
+            } else if (layout != layersActionBarLayout) {
                 layersActionBarLayout.setVisibility(View.VISIBLE);
-                shadowTablet.setBackgroundColor(0x7f000000);
+                drawerLayoutContainer.setAllowOpenDrawer(false, true);
+                if (!(fragment instanceof IsSideMenuPage)) { // if (fragment instanceof LoginActivity) {
+                    backgroundTablet.setVisibility(View.VISIBLE);
+                    shadowTabletSide.setVisibility(View.GONE);
+                    shadowTablet.setBackgroundColor(0x00000000);
+                } else {
+                    shadowTablet.setBackgroundColor(0x7f000000);
+                }
                 layersActionBarLayout.presentFragment(fragment, removeLast, forceWithoutAnimation, false, false);
                 return false;
             }
-            return true;
         } else {
-            boolean allow = true;
-            if (fragment == null) {
-                if (mainFragmentsStack.size() == 1) {
-                    allow = false;
-                }
-            }
-            return true;
+            boolean allow = fragment instanceof IsSideMenuPage;
+            drawerLayoutContainer.setAllowOpenDrawer(allow, false);
         }
+        return true;
     }
 
     @Override
     public boolean needAddFragmentToStack(BasePage fragment, ContainerLayout layout) {
         if (Space.isTablet()) {
-            if (layout != layersActionBarLayout) {
+            drawerLayoutContainer.setAllowOpenDrawer((fragment instanceof IsSideMenuPage) && layersActionBarLayout.getVisibility() != View.VISIBLE, true);
+            if (fragment instanceof IsHomePage) {
+                IsHomePage dialogsActivity = (IsHomePage) fragment;
+                if (dialogsActivity.currentStateIsAtHome() && layout != actionBarLayout) {
+                    actionBarLayout.removeAllFragments();
+                    actionBarLayout.addFragmentToStack(fragment);
+                    layersActionBarLayout.removeAllFragments();
+                    layersActionBarLayout.setVisibility(View.GONE);
+                    drawerLayoutContainer.setAllowOpenDrawer(true, false);
+                    if (!tabletFullSize) {
+                        shadowTabletSide.setVisibility(View.VISIBLE);
+                        if (rightActionBarLayout.fragmentsStack.isEmpty()) {
+                            backgroundTablet.setVisibility(View.VISIBLE);
+                        }
+                    }
+                    return false;
+                }
+            } else if (fragment instanceof IsSecondHomePage && !((IsSecondHomePage) fragment).isInScheduleMode()) {
+                if (!tabletFullSize && layout != rightActionBarLayout) {
+                    rightActionBarLayout.setVisibility(View.VISIBLE);
+                    backgroundTablet.setVisibility(View.GONE);
+                    rightActionBarLayout.removeAllFragments();
+                    rightActionBarLayout.addFragmentToStack(fragment);
+                    if (!layersActionBarLayout.fragmentsStack.isEmpty()) {
+                        for (int a = 0; a < layersActionBarLayout.fragmentsStack.size() - 1; a++) {
+                            layersActionBarLayout.removeFragmentFromStack(layersActionBarLayout.fragmentsStack.get(0));
+                            a--;
+                        }
+                        layersActionBarLayout.closeLastFragment(true);
+                    }
+                    return false;
+                } else if (tabletFullSize && layout != actionBarLayout) {
+                    actionBarLayout.addFragmentToStack(fragment);
+                    if (!layersActionBarLayout.fragmentsStack.isEmpty()) {
+                        for (int a = 0; a < layersActionBarLayout.fragmentsStack.size() - 1; a++) {
+                            layersActionBarLayout.removeFragmentFromStack(layersActionBarLayout.fragmentsStack.get(0));
+                            a--;
+                        }
+                        layersActionBarLayout.closeLastFragment(true);
+                    }
+                    return false;
+                }
+            } else if (layout != layersActionBarLayout) {
                 layersActionBarLayout.setVisibility(View.VISIBLE);
-                shadowTablet.setBackgroundColor(0x7f000000);
+                drawerLayoutContainer.setAllowOpenDrawer(false, true);
+                if (fragment instanceof IsSideMenuPage) {
+                    backgroundTablet.setVisibility(View.VISIBLE);
+                    shadowTabletSide.setVisibility(View.GONE);
+                    shadowTablet.setBackgroundColor(0x00000000);
+                } else {
+                    shadowTablet.setBackgroundColor(0x7f000000);
+                }
                 layersActionBarLayout.addFragmentToStack(fragment);
                 return false;
             }
-            return true;
         } else {
-            boolean allow = true;
-            if (fragment == null) {
-                if (mainFragmentsStack.size() == 1) {
-                    allow = false;
-                }
-            }
-            return true;
+            boolean allow = fragment instanceof IsSideMenuPage;
+            drawerLayoutContainer.setAllowOpenDrawer(allow, false);
         }
+        return true;
     }
 
     @Override
@@ -1020,6 +1129,9 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
                 onFinish();
                 delegate.close();
                 return false;
+            }
+            if (layout.fragmentsStack.get(0) instanceof IsSideMenuPage) {
+                drawerLayoutContainer.setAllowOpenDrawer(true, false);
             }
         }
         return true;

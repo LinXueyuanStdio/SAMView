@@ -8,9 +8,12 @@ import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.same.lib.same.page.IsHomePage;
+import com.same.lib.same.page.IsSideMenuPage;
 import com.same.ui.R;
 import com.same.ui.intro.IntroActivity;
 import com.same.ui.lang.MyLang;
@@ -31,7 +34,7 @@ import com.same.ui.page.widget.checkbox.CheckBoxPage;
  * @description null
  * @usage null
  */
-public class MainPage extends BaseActionBarPage {
+public class MainPage extends BaseActionBarPage implements IsHomePage, IsSideMenuPage {
     @Override
     protected String title() {
         return MyLang.getString("SAMView", R.string.SAMView);
@@ -181,5 +184,9 @@ public class MainPage extends BaseActionBarPage {
 
             isOpen = false;
         }
+    }
+
+    @Override
+    public void setSideMenu(ViewGroup sideMenu) {
     }
 }

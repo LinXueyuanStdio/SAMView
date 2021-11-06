@@ -7,12 +7,12 @@ import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
 
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.listview.LinearLayoutManager;
 import com.same.lib.same.view.RecyclerListView;
 import com.same.lib.theme.wrap.BaseThemePage;
 import com.same.lib.theme.wrap.ThemeContainerLayout;
+import com.same.lib.util.Space;
 import com.same.ui.page.input.enter.ChatActivityEnterView;
 import com.same.ui.page.input.enter.SizeNotifierFrameLayout;
 

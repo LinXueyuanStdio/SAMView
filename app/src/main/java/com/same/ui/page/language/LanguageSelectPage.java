@@ -18,6 +18,7 @@ import com.same.lib.drawable.DrawableManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.listview.LinearLayoutManager;
 import com.same.lib.listview.RecyclerView;
+import com.same.lib.same.page.IsSecondHomePage;
 import com.same.lib.same.theme.CommonTheme;
 import com.same.lib.same.theme.dialog.AlertDialog;
 import com.same.lib.same.view.EmptyTextProgressView;
@@ -47,7 +48,7 @@ import java.util.TimerTask;
  * @description null
  * @usage null
  */
-public class LanguageSelectPage extends BaseThemePage {
+public class LanguageSelectPage extends BaseThemePage implements IsSecondHomePage {
 
     private ListAdapter listAdapter;
     private RecyclerListView listView;

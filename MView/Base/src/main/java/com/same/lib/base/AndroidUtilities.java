@@ -735,25 +735,6 @@ public class AndroidUtilities {
     public static void destroyThemeEditor() {
     }
 
-    public static int getMinTabletSide() {
-        if (!AndroidUtilities.isSmallTablet()) {
-            int smallSide = Math.min(displaySize.x, displaySize.y);
-            int leftSide = smallSide * 35 / 100;
-            if (leftSide < AndroidUtilities.dp(320)) {
-                leftSide = AndroidUtilities.dp(320);
-            }
-            return smallSide - leftSide;
-        } else {
-            int smallSide = Math.min(displaySize.x, displaySize.y);
-            int maxSide = Math.max(displaySize.x, displaySize.y);
-            int leftSide = maxSide * 35 / 100;
-            if (leftSide < AndroidUtilities.dp(320)) {
-                leftSide = AndroidUtilities.dp(320);
-            }
-            return Math.min(smallSide, maxSide - leftSide);
-        }
-    }
-
     /**
      * 适配机械键盘、屏幕密度、平板模式
      * @param context
