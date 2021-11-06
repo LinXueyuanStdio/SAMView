@@ -158,9 +158,15 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
 
     public void onPreCreate() {
         Configuration configuration = delegate.getConfiguration();
-        configuration.orientation = Configuration.ORIENTATION_LANDSCAPE;
-        Space.setIsTablet(true);
-        Space.setIsFullTablet(true);
+        //        configuration.orientation = Configuration.ORIENTATION_LANDSCAPE;
+        if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+                || configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Space.setIsTablet(true);
+            Space.setIsFullTablet(true);
+        } else {
+            Space.setIsTablet(false);
+            Space.setIsFullTablet(false);
+        }
         AndroidUtilities.checkDisplaySize(context, configuration);
         Space.checkDisplaySize(context, configuration);
         Theme.onConfigurationChanged(context, configuration);
@@ -610,7 +616,16 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
     }
 
     public void onPreConfigurationChanged(Configuration newConfig) {
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE
+                || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Space.setIsTablet(true);
+            Space.setIsFullTablet(true);
+        } else {
+            Space.setIsTablet(false);
+            Space.setIsFullTablet(false);
+        }
         AndroidUtilities.checkDisplaySize(context, newConfig);
+        Space.checkDisplaySize(context, newConfig);
         Theme.onConfigurationChanged(context, newConfig);
     }
 

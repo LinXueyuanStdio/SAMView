@@ -41,6 +41,8 @@ import java.util.Comparator;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import androidx.annotation.NonNull;
+
 /**
  * @author 林学渊
  * @email linxy59@mail2.sysu.edu.cn
@@ -84,7 +86,7 @@ public class LanguageSelectPage extends BaseThemePage implements IsSecondHomePag
     }
 
     @Override
-    public View createView(Context context) {
+    public View createView(@NonNull Context context) {
         searching = false;
         searchWas = false;
 
