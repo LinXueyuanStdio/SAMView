@@ -1203,7 +1203,7 @@ public class PasscodeView extends FrameLayout {
         getWindowVisibleDisplayFrame(rect);
         keyboardHeight = usableViewHeight - (rect.bottom - rect.top);
 
-        if (PassCode.passcodeType == 1 && (Space.isTablet() || getContext().getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE)) {
+        if (PassCode.passcodeType == 1 && (Space.isTablet() || Space.isFullTablet(getContext().getResources()))) {
             int t = 0;
             if (passwordFrameLayout.getTag() != null) {
                 t = (Integer) passwordFrameLayout.getTag();

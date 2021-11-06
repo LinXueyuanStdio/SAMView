@@ -160,6 +160,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         Configuration configuration = delegate.getConfiguration();
         configuration.orientation = Configuration.ORIENTATION_LANDSCAPE;
         Space.setIsTablet(true);
+        Space.setIsFullTablet(true);
         AndroidUtilities.checkDisplaySize(context, configuration);
         Space.checkDisplaySize(context, configuration);
         Theme.onConfigurationChanged(context, configuration);
