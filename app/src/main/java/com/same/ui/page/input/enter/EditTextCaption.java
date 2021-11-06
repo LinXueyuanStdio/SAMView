@@ -29,6 +29,7 @@ import android.widget.FrameLayout;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.core.EditTextBoldCursor;
 import com.same.lib.same.theme.dialog.AlertDialog;
+import com.same.lib.util.Space;
 import com.same.ui.FileLog;
 import com.same.ui.R;
 import com.same.ui.lang.MyLang;
@@ -153,7 +154,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         final EditTextBoldCursor editText = new EditTextBoldCursor(getContext()) {
             @Override
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64), MeasureSpec.EXACTLY));
+                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(Space.dp(64), MeasureSpec.EXACTLY));
             }
         };
         editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
@@ -219,8 +220,8 @@ public class EditTextCaption extends EditTextBoldCursor {
                 if (layoutParams instanceof FrameLayout.LayoutParams) {
                     ((FrameLayout.LayoutParams) layoutParams).gravity = Gravity.CENTER_HORIZONTAL;
                 }
-                layoutParams.rightMargin = layoutParams.leftMargin = AndroidUtilities.dp(24);
-                layoutParams.height = AndroidUtilities.dp(36);
+                layoutParams.rightMargin = layoutParams.leftMargin = Space.dp(24);
+                layoutParams.height = Space.dp(36);
                 editText.setLayoutParams(layoutParams);
             }
             editText.setSelection(0, editText.getText().length());
@@ -377,7 +378,7 @@ public class EditTextCaption extends EditTextBoldCursor {
             }
             isInitLineCount = false;
         } catch (Exception e) {
-            setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(51));
+            setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), Space.dp(51));
             FileLog.e(e);
         }
 
@@ -400,7 +401,7 @@ public class EditTextCaption extends EditTextBoldCursor {
                         if (captionLayout.getLineCount() > 0) {
                             xOffset += -captionLayout.getLineLeft(0);
                         }
-                        yOffset = (getMeasuredHeight() - captionLayout.getLineBottom(0)) / 2 + AndroidUtilities.dp(0.5f);
+                        yOffset = (getMeasuredHeight() - captionLayout.getLineBottom(0)) / 2 + Space.dp(0.5f);
                     } catch (Exception e) {
                         FileLog.e(e);
                     }

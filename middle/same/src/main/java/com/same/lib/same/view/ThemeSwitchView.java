@@ -9,7 +9,6 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.NotificationCenter;
 import com.same.lib.drawable.DrawableManager;
 import com.same.lib.lottie.RLottieDrawable;
@@ -61,7 +60,7 @@ public class ThemeSwitchView extends RLottieImageView {
         setScaleType(ImageView.ScaleType.CENTER);
         setAnimation(sunDrawable);
         if (Build.VERSION.SDK_INT >= 21) {
-            setBackground(DrawableManager.createSelectorDrawable(Theme.getColor(KeyHub.key_listSelector), 1, AndroidUtilities.dp(17)));
+            setBackground(DrawableManager.createSelectorDrawable(Theme.getColor(KeyHub.key_listSelector), 1, Space.dp(17)));
             DrawableManager.setRippleDrawableForceSoftware((RippleDrawable) getBackground());
         }
         setOnClickListener(v -> {

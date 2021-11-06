@@ -18,7 +18,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
-import com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.core.BasePage;
 import com.same.lib.core.ContainerLayout;
@@ -63,7 +62,7 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= 24) {
             //适配分屏
-            AndroidUtilities.isInMultiwindow = isInMultiWindowMode();
+            Space.isInMultiwindow = isInMultiWindowMode();
         }
         FrameLayout frameLayout = new FrameLayout(this);
         setContentView(frameLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -96,7 +95,7 @@ public class MainActivity extends Activity
                 view.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener = () -> {
                     int height = view.getMeasuredHeight();
                     if (Build.VERSION.SDK_INT >= 21) {
-                        height -= AndroidUtilities.statusBarHeight;
+                        height -= Space.statusBarHeight;
                     }
                     if (height > Space.dp(100) && height < AndroidUtilities.displaySize.y && height + Space.dp(100) > AndroidUtilities.displaySize.y) {
                         AndroidUtilities.displaySize.y = height;
@@ -190,7 +189,7 @@ public class MainActivity extends Activity
     @Override
     public void onMultiWindowModeChanged(boolean isInMultiWindowMode, Configuration newConfig) {
         super.onMultiWindowModeChanged(isInMultiWindowMode, newConfig);
-        AndroidUtilities.isInMultiwindow = isInMultiWindowMode;
+        Space.isInMultiwindow = isInMultiWindowMode;
         creator.checkLayout();
     }
 
@@ -295,7 +294,7 @@ public class MainActivity extends Activity
     @NonNull
     @Override
     public ViewGroup buildSlideView(@NonNull Context context) {
-        return new MaterialDrawerSliderView(context);
+        return new FrameLayout(context);
     }
 
     @Override

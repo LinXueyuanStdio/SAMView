@@ -11,7 +11,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 
-import com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView;
 import com.same.lib.core.ContainerLayout;
 import com.same.lib.same.ContainerCreator;
 import com.same.ui.R;
@@ -157,7 +156,7 @@ public class MainService extends StandOutWindow implements ContainerCreator.Cont
     @NonNull
     @Override
     public ViewGroup buildSlideView(@NonNull Context context) {
-        return new MaterialDrawerSliderView(context);
+        return new FrameLayout(context);
     }
 
     @Override

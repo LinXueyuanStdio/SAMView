@@ -29,6 +29,7 @@ import com.same.lib.drawable.DrawableManager;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.theme.KeyHub;
 import com.same.lib.theme.Theme;
+import com.same.lib.util.Space;
 import com.same.ui.R;
 import com.same.ui.page.input.InputPage;
 
@@ -170,7 +171,7 @@ public class ChatActivityEnterView extends FrameLayout
         textFieldContainer.setOrientation(LinearLayout.HORIZONTAL);
         textFieldContainer.setClipChildren(false);
         textFieldContainer.setClipToPadding(false);
-        textFieldContainer.setPadding(0, AndroidUtilities.dp(1), 0, 0);
+        textFieldContainer.setPadding(0, Space.dp(1), 0, 0);
         addView(textFieldContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.BOTTOM, 0, 1, 0, 0));
 
         FrameLayout frameLayout = new FrameLayout(context) {
@@ -179,7 +180,7 @@ public class ChatActivityEnterView extends FrameLayout
             protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
                 if (child == messageEditText) {
                     canvas.save();
-                    canvas.clipRect(0, -getTop() - textFieldContainer.getTop() - ChatActivityEnterView.this.getTop(), getMeasuredWidth(), getMeasuredHeight() - AndroidUtilities.dp(6));
+                    canvas.clipRect(0, -getTop() - textFieldContainer.getTop() - ChatActivityEnterView.this.getTop(), getMeasuredWidth(), getMeasuredHeight() - Space.dp(6));
                     boolean rez = super.drawChild(canvas, child, drawingTime);
                     canvas.restore();
                     return rez;
@@ -225,7 +226,7 @@ public class ChatActivityEnterView extends FrameLayout
         messageEditText.setMaxLines(6);
         messageEditText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         messageEditText.setGravity(Gravity.BOTTOM);
-        messageEditText.setPadding(0, AndroidUtilities.dp(11), 0, AndroidUtilities.dp(12));
+        messageEditText.setPadding(0, Space.dp(11), 0, Space.dp(12));
         messageEditText.setBackgroundDrawable(null);
         //        messageEditText.setTextColor(Theme.getColor(Theme.key_chat_messagePanelText));
         //        messageEditText.setHintColor(Theme.getColor(Theme.key_chat_messagePanelHint));
@@ -318,7 +319,7 @@ public class ChatActivityEnterView extends FrameLayout
                         for (int i = 0; i < spans.length; i++) {
                             editable.removeSpan(spans[i]);
                         }
-//                        Emoji.replaceEmoji(editable, messageEditText.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20), false);
+//                        Emoji.replaceEmoji(editable, messageEditText.getPaint().getFontMetricsInt(), Space.dp(20), false);
                         processChange = false;
                     }
                 }
@@ -495,13 +496,13 @@ public class ChatActivityEnterView extends FrameLayout
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) messageEditText.getLayoutParams();
         int oldRightMargin = layoutParams.rightMargin;
         if (attachVisible == 1) {
-            layoutParams.rightMargin = AndroidUtilities.dp(50);
+            layoutParams.rightMargin = Space.dp(50);
         } else if (attachVisible == 2) {
-            if (layoutParams.rightMargin != AndroidUtilities.dp(2)) {
-                layoutParams.rightMargin = AndroidUtilities.dp(50);
+            if (layoutParams.rightMargin != Space.dp(2)) {
+                layoutParams.rightMargin = Space.dp(50);
             }
         } else {
-            layoutParams.rightMargin = AndroidUtilities.dp(50);
+            layoutParams.rightMargin = Space.dp(50);
         }
         if (oldRightMargin != layoutParams.rightMargin) {
             messageEditText.setLayoutParams(layoutParams);

@@ -52,7 +52,6 @@ public class AndroidUtilities {
     public static boolean incorrectDisplaySizeFix;
     public static DisplayMetrics displayMetrics = new DisplayMetrics();
     public static boolean usingHardwareInput;
-    public static boolean isInMultiwindow;
 
     public static float screenRefreshRate = 60;
 

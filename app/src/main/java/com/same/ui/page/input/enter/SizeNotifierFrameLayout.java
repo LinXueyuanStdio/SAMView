@@ -17,6 +17,7 @@ import com.same.lib.core.ActionBar;
 import com.same.lib.core.AdjustPanLayoutHelper;
 import com.same.lib.theme.Theme;
 import com.same.lib.theme.wrap.ThemeContainerLayout;
+import com.same.lib.util.Space;
 
 /**
  * @author 林学渊
@@ -123,7 +124,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         if (rect.bottom == 0 && rect.top == 0) {
             return 0;
         }
-        int usableViewHeight = rootView.getHeight() - (rect.top != 0 ? AndroidUtilities.statusBarHeight : 0) - AndroidUtilities.getViewInset(rootView);
+        int usableViewHeight = rootView.getHeight() - (rect.top != 0 ? Space.statusBarHeight : 0) - Space.getViewInset(rootView);
         return keyboardHeight = Math.max(0, usableViewHeight - (rect.bottom - rect.top));
     }
 
@@ -212,7 +213,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                     drawable.draw(canvas);
                     canvas.restore();
                 } else {
-                    int actionBarHeight = (isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0) + (Build.VERSION.SDK_INT >= 21 && occupyStatusBar ? AndroidUtilities.statusBarHeight : 0);
+                    int actionBarHeight = (isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0) + (Build.VERSION.SDK_INT >= 21 && occupyStatusBar ? Space.statusBarHeight : 0);
                     int viewHeight = getRootView().getMeasuredHeight() - actionBarHeight;
                     float scaleX = (float) getMeasuredWidth() / (float) drawable.getIntrinsicWidth();
                     float scaleY = (float) (viewHeight) / (float) drawable.getIntrinsicHeight();

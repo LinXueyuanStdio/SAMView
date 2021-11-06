@@ -74,6 +74,8 @@ public class MyApplication extends Application {
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        newConfig.orientation = Configuration.ORIENTATION_LANDSCAPE;
+        Space.setIsTablet(true);
         MyLang.onConfigurationChanged(newConfig);
         AndroidUtilities.checkDisplaySize(applicationContext, newConfig);
         Space.checkDisplaySize(applicationContext, newConfig);

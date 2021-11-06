@@ -158,6 +158,8 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
 
     public void onPreCreate() {
         Configuration configuration = delegate.getConfiguration();
+        configuration.orientation = Configuration.ORIENTATION_LANDSCAPE;
+        Space.setIsTablet(true);
         AndroidUtilities.checkDisplaySize(context, configuration);
         Space.checkDisplaySize(context, configuration);
         Theme.onConfigurationChanged(context, configuration);
@@ -226,7 +228,10 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
                     int height = MeasureSpec.getSize(heightMeasureSpec);
                     setMeasuredDimension(width, height);
 
-                    if (!Space.isInMultiwindow && (!Space.isSmallTablet() || getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
+//                    boolean isMaxTable = !Space.isInMultiwindow && (!Space.isSmallTablet() || Space.isFullTablet(getResources()));
+                    boolean isMaxTable = true;
+
+                    if (isMaxTable) {
                         tabletFullSize = false;
                         int leftWidth = width / 100 * 35;
                         if (leftWidth < Space.dp(320)) {
@@ -251,7 +256,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
                     int width = r - l;
                     int height = b - t;
 
-                    if (!Space.isInMultiwindow && (!Space.isSmallTablet() || getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
+                    if (!Space.isInMultiwindow && (!Space.isSmallTablet() || Space.isFullTablet(getResources()))) {
                         int leftWidth = width / 100 * 35;
                         if (leftWidth < Space.dp(320)) {
                             leftWidth = Space.dp(320);
@@ -648,7 +653,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
             return;
         }
 
-        if (!AndroidUtilities.isInMultiwindow && (!Space.isSmallTablet() || delegate.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
+        if (!Space.isInMultiwindow && (!Space.isSmallTablet() || Space.isFullTablet(delegate.getResources()))) {
             tabletFullSize = false;
             if (actionBarLayout.fragmentsStack.size() >= 2) {
                 for (int a = 1; a < actionBarLayout.fragmentsStack.size(); a++) {

@@ -88,12 +88,12 @@ public class PasscodeView extends FrameLayout {
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 36);
                 textView.setGravity(Gravity.CENTER);
                 textView.setAlpha(0);
-                textView.setPivotX(AndroidUtilities.dp(25));
-                textView.setPivotY(AndroidUtilities.dp(25));
+                textView.setPivotX(Space.dp(25));
+                textView.setPivotY(Space.dp(25));
                 addView(textView);
                 FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) textView.getLayoutParams();
-                layoutParams.width = AndroidUtilities.dp(50);
-                layoutParams.height = AndroidUtilities.dp(50);
+                layoutParams.width = Space.dp(50);
+                layoutParams.height = Space.dp(50);
                 layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
                 textView.setLayoutParams(layoutParams);
                 characterTextViews.add(textView);
@@ -104,12 +104,12 @@ public class PasscodeView extends FrameLayout {
                 textView.setGravity(Gravity.CENTER);
                 textView.setAlpha(0);
                 textView.setText(DOT);
-                textView.setPivotX(AndroidUtilities.dp(25));
-                textView.setPivotY(AndroidUtilities.dp(25));
+                textView.setPivotX(Space.dp(25));
+                textView.setPivotY(Space.dp(25));
                 addView(textView);
                 layoutParams = (LayoutParams) textView.getLayoutParams();
-                layoutParams.width = AndroidUtilities.dp(50);
-                layoutParams.height = AndroidUtilities.dp(50);
+                layoutParams.width = Space.dp(50);
+                layoutParams.height = Space.dp(50);
                 layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
                 textView.setLayoutParams(layoutParams);
                 dotTextViews.add(textView);
@@ -117,7 +117,7 @@ public class PasscodeView extends FrameLayout {
         }
 
         private int getXForTextView(int pos) {
-            return (getMeasuredWidth() - stringBuilder.length() * AndroidUtilities.dp(30)) / 2 + pos * AndroidUtilities.dp(30) - AndroidUtilities.dp(10);
+            return (getMeasuredWidth() - stringBuilder.length() * Space.dp(30)) / 2 + pos * Space.dp(30) - Space.dp(10);
         }
 
         public void appendCharacter(String c) {
@@ -141,13 +141,13 @@ public class PasscodeView extends FrameLayout {
             animators.add(ObjectAnimator.ofFloat(textView, View.SCALE_X, 0, 1));
             animators.add(ObjectAnimator.ofFloat(textView, View.SCALE_Y, 0, 1));
             animators.add(ObjectAnimator.ofFloat(textView, View.ALPHA, 0, 1));
-            animators.add(ObjectAnimator.ofFloat(textView, View.TRANSLATION_Y, AndroidUtilities.dp(20), 0));
+            animators.add(ObjectAnimator.ofFloat(textView, View.TRANSLATION_Y, Space.dp(20), 0));
             textView = dotTextViews.get(newPos);
             textView.setTranslationX(getXForTextView(newPos));
             textView.setAlpha(0);
             animators.add(ObjectAnimator.ofFloat(textView, View.SCALE_X, 0, 1));
             animators.add(ObjectAnimator.ofFloat(textView, View.SCALE_Y, 0, 1));
-            animators.add(ObjectAnimator.ofFloat(textView, View.TRANSLATION_Y, AndroidUtilities.dp(20), 0));
+            animators.add(ObjectAnimator.ofFloat(textView, View.TRANSLATION_Y, Space.dp(20), 0));
 
             for (int a = newPos + 1; a < 4; a++) {
                 textView = characterTextViews.get(a);
@@ -467,14 +467,14 @@ public class PasscodeView extends FrameLayout {
         passwordFrameLayout.addView(imageView);
         layoutParams = (LayoutParams) imageView.getLayoutParams();
         if (AndroidUtilities.density < 1) {
-            layoutParams.width = AndroidUtilities.dp(30);
-            layoutParams.height = AndroidUtilities.dp(30);
+            layoutParams.width = Space.dp(30);
+            layoutParams.height = Space.dp(30);
         } else {
-            layoutParams.width = AndroidUtilities.dp(40);
-            layoutParams.height = AndroidUtilities.dp(40);
+            layoutParams.width = Space.dp(40);
+            layoutParams.height = Space.dp(40);
         }
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
-        layoutParams.bottomMargin = AndroidUtilities.dp(100);
+        layoutParams.bottomMargin = Space.dp(100);
         imageView.setLayoutParams(layoutParams);
 
         passcodeTextView = new TextView(context);
@@ -495,9 +495,9 @@ public class PasscodeView extends FrameLayout {
         layoutParams = (FrameLayout.LayoutParams) passwordEditText2.getLayoutParams();
         layoutParams.height = LayoutHelper.WRAP_CONTENT;
         layoutParams.width = LayoutHelper.MATCH_PARENT;
-        layoutParams.leftMargin = AndroidUtilities.dp(70);
-        layoutParams.rightMargin = AndroidUtilities.dp(70);
-        layoutParams.bottomMargin = AndroidUtilities.dp(6);
+        layoutParams.leftMargin = Space.dp(70);
+        layoutParams.rightMargin = Space.dp(70);
+        layoutParams.bottomMargin = Space.dp(6);
         layoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
         passwordEditText2.setLayoutParams(layoutParams);
 
@@ -512,13 +512,13 @@ public class PasscodeView extends FrameLayout {
         passwordEditText.setTypeface(Typeface.DEFAULT);
         passwordEditText.setBackgroundDrawable(null);
         passwordEditText.setCursorColor(0xffffffff);
-        passwordEditText.setCursorSize(AndroidUtilities.dp(32));
+        passwordEditText.setCursorSize(Space.dp(32));
         passwordFrameLayout.addView(passwordEditText);
         layoutParams = (FrameLayout.LayoutParams) passwordEditText.getLayoutParams();
         layoutParams.height = LayoutHelper.WRAP_CONTENT;
         layoutParams.width = LayoutHelper.MATCH_PARENT;
-        layoutParams.leftMargin = AndroidUtilities.dp(70);
-        layoutParams.rightMargin = AndroidUtilities.dp(70);
+        layoutParams.leftMargin = Space.dp(70);
+        layoutParams.rightMargin = Space.dp(70);
         layoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
         passwordEditText.setLayoutParams(layoutParams);
         passwordEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
@@ -569,10 +569,10 @@ public class PasscodeView extends FrameLayout {
         checkImage.setBackgroundResource(R.drawable.bar_selector_lock);
         passwordFrameLayout.addView(checkImage);
         layoutParams = (LayoutParams) checkImage.getLayoutParams();
-        layoutParams.width = AndroidUtilities.dp(60);
-        layoutParams.height = AndroidUtilities.dp(60);
-        layoutParams.bottomMargin = AndroidUtilities.dp(4);
-        layoutParams.rightMargin = AndroidUtilities.dp(10);
+        layoutParams.width = Space.dp(60);
+        layoutParams.height = Space.dp(60);
+        layoutParams.bottomMargin = Space.dp(4);
+        layoutParams.rightMargin = Space.dp(10);
         layoutParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
         checkImage.setLayoutParams(layoutParams);
         checkImage.setContentDescription(Lang.getString(context, "Done", R.string.Done));
@@ -583,10 +583,10 @@ public class PasscodeView extends FrameLayout {
         passwordFrameLayout.addView(lineFrameLayout);
         layoutParams = (LayoutParams) lineFrameLayout.getLayoutParams();
         layoutParams.width = LayoutHelper.MATCH_PARENT;
-        layoutParams.height = AndroidUtilities.dp(1);
+        layoutParams.height = Space.dp(1);
         layoutParams.gravity = Gravity.BOTTOM | Gravity.LEFT;
-        layoutParams.leftMargin = AndroidUtilities.dp(20);
-        layoutParams.rightMargin = AndroidUtilities.dp(20);
+        layoutParams.leftMargin = Space.dp(20);
+        layoutParams.rightMargin = Space.dp(20);
         lineFrameLayout.setLayoutParams(layoutParams);
 
         numbersFrameLayout = new FrameLayout(context);
@@ -608,8 +608,8 @@ public class PasscodeView extends FrameLayout {
             textView.setText(String.format(Locale.US, "%d", a));
             numbersFrameLayout.addView(textView);
             layoutParams = (LayoutParams) textView.getLayoutParams();
-            layoutParams.width = AndroidUtilities.dp(50);
-            layoutParams.height = AndroidUtilities.dp(50);
+            layoutParams.width = Space.dp(50);
+            layoutParams.height = Space.dp(50);
             layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
             textView.setLayoutParams(layoutParams);
             textView.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
@@ -621,8 +621,8 @@ public class PasscodeView extends FrameLayout {
             textView.setGravity(Gravity.CENTER);
             numbersFrameLayout.addView(textView);
             layoutParams = (LayoutParams) textView.getLayoutParams();
-            layoutParams.width = AndroidUtilities.dp(50);
-            layoutParams.height = AndroidUtilities.dp(20);
+            layoutParams.width = Space.dp(50);
+            layoutParams.height = Space.dp(20);
             layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
             textView.setLayoutParams(layoutParams);
             textView.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
@@ -664,8 +664,8 @@ public class PasscodeView extends FrameLayout {
         eraseView.setImageResource(R.drawable.passcode_delete);
         numbersFrameLayout.addView(eraseView);
         layoutParams = (LayoutParams) eraseView.getLayoutParams();
-        layoutParams.width = AndroidUtilities.dp(50);
-        layoutParams.height = AndroidUtilities.dp(50);
+        layoutParams.width = Space.dp(50);
+        layoutParams.height = Space.dp(50);
         layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
         eraseView.setLayoutParams(layoutParams);
         for (int a = 0; a < 11; a++) {
@@ -744,8 +744,8 @@ public class PasscodeView extends FrameLayout {
             FrameLayout frameLayout = numberFrameLayouts.get(a);
             numbersFrameLayout.addView(frameLayout);
             layoutParams = (LayoutParams) frameLayout.getLayoutParams();
-            layoutParams.width = AndroidUtilities.dp(100);
-            layoutParams.height = AndroidUtilities.dp(100);
+            layoutParams.width = Space.dp(100);
+            layoutParams.height = Space.dp(100);
             layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
             frameLayout.setLayoutParams(layoutParams);
         }
@@ -795,8 +795,8 @@ public class PasscodeView extends FrameLayout {
         AnimatorSet AnimatorSet = new AnimatorSet();
         AnimatorSet.setDuration(200);
         AnimatorSet.playTogether(
-                ObjectAnimator.ofFloat(this, View.TRANSLATION_Y, AndroidUtilities.dp(20)),
-                ObjectAnimator.ofFloat(this, View.ALPHA, AndroidUtilities.dp(0.0f)));
+                ObjectAnimator.ofFloat(this, View.TRANSLATION_Y, Space.dp(20)),
+                ObjectAnimator.ofFloat(this, View.ALPHA, Space.dp(0.0f)));
         AnimatorSet.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -819,7 +819,7 @@ public class PasscodeView extends FrameLayout {
             return;
         }
         AnimatorSet AnimatorSet = new AnimatorSet();
-        AnimatorSet.playTogether(ObjectAnimator.ofFloat(passcodeTextView, View.TRANSLATION_X, AndroidUtilities.dp(x)));
+        AnimatorSet.playTogether(ObjectAnimator.ofFloat(passcodeTextView, View.TRANSLATION_X, Space.dp(x)));
         AnimatorSet.setDuration(50);
         AnimatorSet.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -942,7 +942,7 @@ public class PasscodeView extends FrameLayout {
                 FingerprintManagerCompat fingerprintManager = FingerprintManagerCompat.from(getContext());
                 if (fingerprintManager.isHardwareDetected() && fingerprintManager.hasEnrolledFingerprints()) {
                     RelativeLayout relativeLayout = new RelativeLayout(getContext());
-                    relativeLayout.setPadding(AndroidUtilities.dp(24), 0, AndroidUtilities.dp(24), 0);
+                    relativeLayout.setPadding(Space.dp(24), 0, Space.dp(24), 0);
 
                     TextView fingerprintTextView = new TextView(getContext());
                     fingerprintTextView.setId(id_fingerprint_textview);
@@ -967,7 +967,7 @@ public class PasscodeView extends FrameLayout {
                     fingerprintStatusTextView.setTextColor(Theme.getColor(KeyHub.key_dialogTextBlack) & 0x42ffffff);
                     relativeLayout.addView(fingerprintStatusTextView);
                     layoutParams = LayoutHelper.createRelative(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT);
-                    layoutParams.setMarginStart(AndroidUtilities.dp(16));
+                    layoutParams.setMarginStart(Space.dp(16));
                     layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, id_fingerprint_imageview);
                     layoutParams.addRule(RelativeLayout.ALIGN_TOP, id_fingerprint_imageview);
                     layoutParams.addRule(RelativeLayout.END_OF, id_fingerprint_imageview);
@@ -1106,15 +1106,15 @@ public class PasscodeView extends FrameLayout {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
-        int height = AndroidUtilities.displaySize.y - (Build.VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight);
+        int height = AndroidUtilities.displaySize.y - (Build.VERSION.SDK_INT >= 21 ? 0 : Space.statusBarHeight);
 
         LayoutParams layoutParams;
 
-        if (!Space.isTablet() && getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if (!Space.isTablet() && Space.isFullTablet(getContext().getResources())) {
             layoutParams = (LayoutParams) passwordFrameLayout.getLayoutParams();
             layoutParams.width = PassCode.passcodeType == 0 ? width / 2 : width;
-            layoutParams.height = AndroidUtilities.dp(140);
-            layoutParams.topMargin = (height - AndroidUtilities.dp(140)) / 2;
+            layoutParams.height = Space.dp(140);
+            layoutParams.topMargin = (height - Space.dp(140)) / 2;
             passwordFrameLayout.setLayoutParams(layoutParams);
 
             layoutParams = (LayoutParams) numbersFrameLayout.getLayoutParams();
@@ -1152,8 +1152,8 @@ public class PasscodeView extends FrameLayout {
             numbersFrameLayout.setLayoutParams(layoutParams);
         }
 
-        int sizeBetweenNumbersX = (layoutParams.width - AndroidUtilities.dp(50) * 3) / 4;
-        int sizeBetweenNumbersY = (layoutParams.height - AndroidUtilities.dp(50) * 4) / 5;
+        int sizeBetweenNumbersX = (layoutParams.width - Space.dp(50) * 3) / 4;
+        int sizeBetweenNumbersY = (layoutParams.height - Space.dp(50) * 4) / 5;
 
         for (int a = 0; a < 11; a++) {
             LayoutParams layoutParams1;
@@ -1173,23 +1173,23 @@ public class PasscodeView extends FrameLayout {
                 TextView textView1 = lettersTextViews.get(a);
                 layoutParams = (LayoutParams) textView.getLayoutParams();
                 layoutParams1 = (LayoutParams) textView1.getLayoutParams();
-                top = layoutParams1.topMargin = layoutParams.topMargin = sizeBetweenNumbersY + (sizeBetweenNumbersY + AndroidUtilities.dp(50)) * row;
-                layoutParams1.leftMargin = layoutParams.leftMargin = sizeBetweenNumbersX + (sizeBetweenNumbersX + AndroidUtilities.dp(50)) * col;
-                layoutParams1.topMargin += AndroidUtilities.dp(40);
+                top = layoutParams1.topMargin = layoutParams.topMargin = sizeBetweenNumbersY + (sizeBetweenNumbersY + Space.dp(50)) * row;
+                layoutParams1.leftMargin = layoutParams.leftMargin = sizeBetweenNumbersX + (sizeBetweenNumbersX + Space.dp(50)) * col;
+                layoutParams1.topMargin += Space.dp(40);
                 textView.setLayoutParams(layoutParams);
                 textView1.setLayoutParams(layoutParams1);
             } else {
                 layoutParams = (LayoutParams) eraseView.getLayoutParams();
-                top = layoutParams.topMargin = sizeBetweenNumbersY + (sizeBetweenNumbersY + AndroidUtilities.dp(50)) * row + AndroidUtilities.dp(8);
-                layoutParams.leftMargin = sizeBetweenNumbersX + (sizeBetweenNumbersX + AndroidUtilities.dp(50)) * col;
-                top -= AndroidUtilities.dp(8);
+                top = layoutParams.topMargin = sizeBetweenNumbersY + (sizeBetweenNumbersY + Space.dp(50)) * row + Space.dp(8);
+                layoutParams.leftMargin = sizeBetweenNumbersX + (sizeBetweenNumbersX + Space.dp(50)) * col;
+                top -= Space.dp(8);
                 eraseView.setLayoutParams(layoutParams);
             }
 
             FrameLayout frameLayout = numberFrameLayouts.get(a);
             layoutParams1 = (LayoutParams) frameLayout.getLayoutParams();
-            layoutParams1.topMargin = top - AndroidUtilities.dp(17);
-            layoutParams1.leftMargin = layoutParams.leftMargin - AndroidUtilities.dp(25);
+            layoutParams1.topMargin = top - Space.dp(17);
+            layoutParams1.leftMargin = layoutParams.leftMargin - Space.dp(25);
             frameLayout.setLayoutParams(layoutParams1);
         }
 
@@ -1199,7 +1199,7 @@ public class PasscodeView extends FrameLayout {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         View rootView = getRootView();
-        int usableViewHeight = rootView.getHeight() - AndroidUtilities.statusBarHeight - AndroidUtilities.getViewInset(rootView);
+        int usableViewHeight = rootView.getHeight() - Space.statusBarHeight - Space.getViewInset(rootView);
         getWindowVisibleDisplayFrame(rect);
         keyboardHeight = usableViewHeight - (rect.bottom - rect.top);
 
@@ -1209,7 +1209,7 @@ public class PasscodeView extends FrameLayout {
                 t = (Integer) passwordFrameLayout.getTag();
             }
             LayoutParams layoutParams = (LayoutParams) passwordFrameLayout.getLayoutParams();
-            layoutParams.topMargin = t + layoutParams.height - keyboardHeight / 2 - (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+            layoutParams.topMargin = t + layoutParams.height - keyboardHeight / 2 - (Build.VERSION.SDK_INT >= 21 ? Space.statusBarHeight : 0);
             passwordFrameLayout.setLayoutParams(layoutParams);
         }
 

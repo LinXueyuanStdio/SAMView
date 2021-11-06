@@ -9,6 +9,7 @@ import android.view.Surface;
 import android.view.WindowManager;
 
 import com.same.lib.base.AndroidUtilities;
+import com.same.lib.util.Space;
 
 /**
  * @author 林学渊
@@ -51,7 +52,7 @@ public class WallpaperParallaxEffect implements SensorEventListener {
     }
 
     public float getScale(int boundsWidth, int boundsHeight) {
-        int offset = AndroidUtilities.dp(16);
+        int offset = Space.dp(16);
         return Math.max(((float) boundsWidth + offset * 2) / (float) boundsWidth, ((float) boundsHeight + offset * 2) / (float) boundsHeight);
     }
 
@@ -102,8 +103,8 @@ public class WallpaperParallaxEffect implements SensorEventListener {
         } else if (roll < -1f) {
             roll = -2f - roll;
         }
-        int offsetX = Math.round(pitch * AndroidUtilities.dpf2(16));
-        int offsetY = Math.round(roll * AndroidUtilities.dpf2(16));
+        int offsetX = Math.round(pitch * Space.dpf2(16));
+        int offsetY = Math.round(roll * Space.dpf2(16));
         if (callback != null)
             callback.onOffsetsChanged(offsetX, offsetY);
     }

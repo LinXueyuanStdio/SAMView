@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import com.same.lib.base.AndroidUtilities;
 import com.same.lib.helper.LayoutHelper;
 import com.same.lib.util.Keyboard;
+import com.same.lib.util.Space;
 import com.same.ui.page.base.BaseActionBarPage;
 import com.same.ui.page.input.enter.EditTextCaption;
 
@@ -35,7 +36,7 @@ public class InputPage2 extends BaseActionBarPage {
         messageEditText.setMaxLines(6);
         messageEditText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         messageEditText.setGravity(Gravity.BOTTOM);
-        messageEditText.setPadding(0, AndroidUtilities.dp(11), 0, AndroidUtilities.dp(12));
+        messageEditText.setPadding(0, Space.dp(11), 0, Space.dp(12));
         messageEditText.setBackgroundDrawable(null);
         containerLayout.addView(messageEditText, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM, 52, 0, 50, 0));
         Keyboard.showKeyboard(messageEditText);

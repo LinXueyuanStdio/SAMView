@@ -2,6 +2,7 @@ package com.same.lib.util;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -33,6 +34,7 @@ public class Space {
     public static float screenRefreshRate = 60;
 
     private static Boolean isTablet = null;
+    private static Boolean isFullTablet = null;
 
     //region space
     public static int dp(float value) {
@@ -98,6 +100,17 @@ public class Space {
     public static boolean isSmallTablet() {
         float minSide = Math.min(displaySize.x, displaySize.y) / density;
         return minSide <= 700;
+    }
+
+    public static boolean isFullTablet(Resources resources) {
+        if (isFullTablet == null) {
+            return resources.getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        }
+        return isFullTablet;
+    }
+
+    public static void setIsFullTablet(Boolean isFullTablet) {
+        Space.isFullTablet = isFullTablet;
     }
     //endregion
 

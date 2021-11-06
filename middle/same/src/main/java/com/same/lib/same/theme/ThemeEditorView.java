@@ -680,13 +680,13 @@ public class ThemeEditorView {
                     int height = MeasureSpec.getSize(heightMeasureSpec);
                     if (Build.VERSION.SDK_INT >= 21 && !isFullscreen) {
                         ignoreLayout = true;
-                        setPadding(backgroundPaddingLeft, AndroidUtilities.statusBarHeight, backgroundPaddingLeft, 0);
+                        setPadding(backgroundPaddingLeft, Space.statusBarHeight, backgroundPaddingLeft, 0);
                         ignoreLayout = false;
                     }
 
-                    int pickerSize = Math.min(width, height - (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0));
+                    int pickerSize = Math.min(width, height - (Build.VERSION.SDK_INT >= 21 ? Space.statusBarHeight : 0));
 
-                    int padding = height - (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + Space.dp(8) - pickerSize;
+                    int padding = height - (Build.VERSION.SDK_INT >= 21 ? Space.statusBarHeight : 0) + Space.dp(8) - pickerSize;
                     if (listView.getPaddingTop() != padding) {
                         ignoreLayout = true;
                         int previousPadding = listView.getPaddingTop();
@@ -723,18 +723,18 @@ public class ThemeEditorView {
                     int statusBarHeight = 0;
                     float radProgress = 1.0f;
                     if (!isFullscreen && Build.VERSION.SDK_INT >= 21) {
-                        top += AndroidUtilities.statusBarHeight;
-                        y += AndroidUtilities.statusBarHeight;
-                        height -= AndroidUtilities.statusBarHeight;
+                        top += Space.statusBarHeight;
+                        y += Space.statusBarHeight;
+                        height -= Space.statusBarHeight;
 
-                        if (top + backgroundPaddingTop < AndroidUtilities.statusBarHeight * 2) {
-                            int diff = Math.min(AndroidUtilities.statusBarHeight, AndroidUtilities.statusBarHeight * 2 - top - backgroundPaddingTop);
+                        if (top + backgroundPaddingTop < Space.statusBarHeight * 2) {
+                            int diff = Math.min(Space.statusBarHeight, Space.statusBarHeight * 2 - top - backgroundPaddingTop);
                             top -= diff;
                             height += diff;
-                            radProgress = 1.0f - Math.min(1.0f, (diff * 2) / (float) AndroidUtilities.statusBarHeight);
+                            radProgress = 1.0f - Math.min(1.0f, (diff * 2) / (float) Space.statusBarHeight);
                         }
-                        if (top + backgroundPaddingTop < AndroidUtilities.statusBarHeight) {
-                            statusBarHeight = Math.min(AndroidUtilities.statusBarHeight, AndroidUtilities.statusBarHeight - top - backgroundPaddingTop);
+                        if (top + backgroundPaddingTop < Space.statusBarHeight) {
+                            statusBarHeight = Math.min(Space.statusBarHeight, Space.statusBarHeight - top - backgroundPaddingTop);
                         }
                     }
 
@@ -757,7 +757,7 @@ public class ThemeEditorView {
                         int color1 = 0xffffffff;
                         int finalColor = Color.argb(0xff, (int) (Color.red(color1) * 0.8f), (int) (Color.green(color1) * 0.8f), (int) (Color.blue(color1) * 0.8f));
                         DialogTheme.dialogs_onlineCirclePaint.setColor(finalColor);
-                        canvas.drawRect(backgroundPaddingLeft, AndroidUtilities.statusBarHeight - statusBarHeight, getMeasuredWidth() - backgroundPaddingLeft, AndroidUtilities.statusBarHeight, DialogTheme.dialogs_onlineCirclePaint);
+                        canvas.drawRect(backgroundPaddingLeft, Space.statusBarHeight - statusBarHeight, getMeasuredWidth() - backgroundPaddingLeft, Space.statusBarHeight, DialogTheme.dialogs_onlineCirclePaint);
                     }
                 }
             };
@@ -773,7 +773,7 @@ public class ThemeEditorView {
             listView = new RecyclerListView(context) {
                 @Override
                 protected boolean allowSelectChildAtPosition(float x, float y) {
-                    return y >= scrollOffsetY + Space.dp(48) + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+                    return y >= scrollOffsetY + Space.dp(48) + (Build.VERSION.SDK_INT >= 21 ? Space.statusBarHeight : 0);
                 }
             };
             listView.setSelectorDrawableColor(0x0f000000);

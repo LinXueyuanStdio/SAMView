@@ -163,7 +163,7 @@ public class InputPage extends BaseThemePage {
 //                                    mentionContainer.setTranslationY(v);
 //                                }
 //                                if (mentiondownButton != null && mentiondownButton.getTag() != null) {
-//                                    mentiondownButton.setTranslationY(pagedownButton.getVisibility() != VISIBLE ? v : v - AndroidUtilities.dp(72));
+//                                    mentiondownButton.setTranslationY(pagedownButton.getVisibility() != VISIBLE ? v : v - Space.dp(72));
 //                                }
 //                                if (pagedownButton != null && pagedownButton.getTag() != null) {
 //                                    pagedownButton.setTranslationY(v);
@@ -290,7 +290,7 @@ public class InputPage extends BaseThemePage {
 //
 //            @Override
 //            public void onWindowSizeChanged(int size) {
-//                if (size < AndroidUtilities.dp(72) + ActionBar.getCurrentActionBarHeight()) {
+//                if (size < Space.dp(72) + ActionBar.getCurrentActionBarHeight()) {
 //                    allowStickersPanel = false;
 //                    if (stickersPanel.getVisibility() == View.VISIBLE) {
 //                        stickersPanel.setVisibility(View.INVISIBLE);
@@ -389,7 +389,7 @@ public class InputPage extends BaseThemePage {
 //                if (pagedownButton != null) {
 //                    pagedownButton.setTranslationY(translation);
 //                    if (mentiondownButton != null) {
-//                        mentiondownButton.setTranslationY(pagedownButton.getVisibility() != View.VISIBLE ? translation : translation - AndroidUtilities.dp(72));
+//                        mentiondownButton.setTranslationY(pagedownButton.getVisibility() != View.VISIBLE ? translation : translation - Space.dp(72));
 //                    }
 //                }
 //                invalidateChatListViewTopPadding();
@@ -410,7 +410,7 @@ public class InputPage extends BaseThemePage {
 //        });
 
         chatActivityEnterView.setBackgroundColor(Color.BLUE);
-        chatActivityEnterView.setMinimumHeight(AndroidUtilities.dp(51));
+        chatActivityEnterView.setMinimumHeight(Space.dp(51));
         contentView.addView(chatActivityEnterView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.BOTTOM));
 
         return fragmentView;
