@@ -159,6 +159,7 @@ public class MainService extends StandOutWindow implements ContainerCreator.Cont
         return new FrameLayout(context);
     }
 
+    @NonNull
     @Override
     public Configuration getConfiguration() {
         return getResources().getConfiguration();

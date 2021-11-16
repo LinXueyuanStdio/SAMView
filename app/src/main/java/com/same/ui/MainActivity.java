@@ -37,37 +37,15 @@ public class MainActivity extends Activity
     ContainerCreator creator;
     private ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        //region onCreate前
+    private void recreateContainer() {
         creator = new ContainerCreator(this, this);
         creator.onPreCreate();
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setTheme(R.style.Theme_TMessages);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            try {
-                setTaskDescription(new ActivityManager.TaskDescription(null, null, Theme.getColor(KeyHub.key_actionBarDefault) | 0xff000000));
-            } catch (Exception ignore) {
+        createViewForHost();
+    }
 
-            }
-            try {
-                getWindow().setNavigationBarColor(0xff000000);
-            } catch (Exception ignore) {
-
-            }
-        }
-        getWindow().setBackgroundDrawableResource(R.drawable.transparent);
-
-        //endregion
-        super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= 24) {
-            //适配分屏
-            Space.isInMultiwindow = isInMultiWindowMode();
-        }
-        FrameLayout frameLayout = new FrameLayout(this);
-        setContentView(frameLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+    private void createViewForHost() {
         MainPage page = new MainPage();
-        creator.onCreateView(frameLayout, page);
+        creator.onCreateView(hostContainer, page);
 
         if (Space.isTablet()) {
             //适配平板
@@ -105,6 +83,40 @@ public class MainActivity extends Activity
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private FrameLayout hostContainer;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        //region onCreate前
+        creator = new ContainerCreator(this, this);
+        creator.onPreCreate();
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setTheme(R.style.Theme_TMessages);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            try {
+                setTaskDescription(new ActivityManager.TaskDescription(null, null, Theme.getColor(KeyHub.key_actionBarDefault) | 0xff000000));
+            } catch (Exception ignore) {
+
+            }
+            try {
+                getWindow().setNavigationBarColor(0xff000000);
+            } catch (Exception ignore) {
+
+            }
+        }
+        getWindow().setBackgroundDrawableResource(R.drawable.transparent);
+
+        //endregion
+        super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= 24) {
+            //适配分屏
+            Space.isInMultiwindow = isInMultiWindowMode();
+        }
+        hostContainer = new FrameLayout(this);
+        setContentView(hostContainer, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        createViewForHost();
     }
 
     private void checkSystemBarColors() {
@@ -180,10 +192,11 @@ public class MainActivity extends Activity
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         creator.onPreConfigurationChanged(newConfig);
         super.onConfigurationChanged(newConfig);
-        creator.onPostConfigurationChanged(newConfig);
+//        creator.onPostConfigurationChanged(newConfig);
+        recreateContainer();
     }
 
     @Override
@@ -297,6 +310,7 @@ public class MainActivity extends Activity
         return new FrameLayout(context);
     }
 
+    @NonNull
     @Override
     public Configuration getConfiguration() {
         return getResources().getConfiguration();

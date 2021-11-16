@@ -125,6 +125,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         @NonNull
         ViewGroup buildSlideView(@NonNull Context context);
 
+        @NonNull
         Configuration getConfiguration();
 
         void close();
@@ -159,17 +160,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
     public void onPreCreate() {
         Configuration configuration = delegate.getConfiguration();
         //        configuration.orientation = Configuration.ORIENTATION_LANDSCAPE;
-        if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-                || configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            Space.setIsTablet(true);
-            Space.setIsFullTablet(true);
-        } else {
-            Space.setIsTablet(false);
-            Space.setIsFullTablet(false);
-        }
-        AndroidUtilities.checkDisplaySize(context, configuration);
-        Space.checkDisplaySize(context, configuration);
-        Theme.onConfigurationChanged(context, configuration);
+        onPreConfigurationChanged(configuration);
     }
 
     public void onCreateView(@NonNull FrameLayout frameLayout, @NonNull BasePage homePage) {
@@ -615,7 +606,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
         }
     }
 
-    public void onPreConfigurationChanged(Configuration newConfig) {
+    public void onPreConfigurationChanged(@NonNull Configuration newConfig) {
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE
                 || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
             Space.setIsTablet(true);
