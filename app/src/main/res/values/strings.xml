@@ -154,19 +154,19 @@
     <string name="White">White</string>
 
     <!--Intro view-->
-    <string name="Page1Title">Telegram</string>
-    <string name="Page2Title">Fast</string>
-    <string name="Page3Title">Free</string>
-    <string name="Page4Title">Secure</string>
-    <string name="Page5Title">Powerful</string>
-    <string name="Page6Title">Cloud-Based</string>
-    <string name="Page1Message">The world\'s **fastest** messaging app.\nIt is **free** and **secure**.</string>
-    <string name="Page2Message">**Telegram** delivers messages faster than\nany other application.</string>
-    <string name="Page3Message">**Telegram** is free forever. No ads.\nNo subscription fees.</string>
-    <string name="Page4Message">**Telegram** keeps your messages safe\nfrom hacker attacks.</string>
-    <string name="Page5Message">**Telegram** has no limits on\nthe size of your media and chats.</string>
-    <string name="Page6Message">**Telegram** lets you access your messages\nfrom multiple devices.</string>
-    <string name="StartMessaging">Start Messaging</string>
+    <string name="Page1Title">时光猫</string>
+    <string name="Page2Title">超·模块化</string>
+    <string name="Page3Title">免费</string>
+    <string name="Page4Title">安全</string>
+    <string name="Page5Title">强大</string>
+    <string name="Page6Title">云原生</string>
+    <string name="Page1Message">世界上 **最轻盈** 的应用.\n **免费** 且 **模块化**.</string>
+    <string name="Page2Message">**时光猫** 拥有自主可控的符文体系\n符文的创造和重组，为你而繁荣.</string>
+    <string name="Page3Message">**时光猫** 永久免费.\n无广告. 无订阅.</string>
+    <string name="Page4Message">**时光猫** 极度安全.\n没人能拿走你的任何东西.</string>
+    <string name="Page5Message">**时光猫** 无限制\n无限数据存储、无限符文.</string>
+    <string name="Page6Message">**时光猫** 数据全面上云\n多端同步.</string>
+    <string name="StartMessaging">开始使用</string>
 
 <!--    EditTextCaption-->
     <string name="Bold">Bold</string>

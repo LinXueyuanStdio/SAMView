@@ -48,6 +48,7 @@ import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -146,8 +147,8 @@ public class IntroActivity extends Activity {
         frameLayout2.addView(textureView, LayoutHelper.createFrame(200, 150, Gravity.CENTER));
         textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
             @Override
-            public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-                if (eglThread == null && surface != null) {
+            public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surface, int width, int height) {
+                if (eglThread == null) {
                     eglThread = new EGLThread(surface);
                     eglThread.setSurfaceTextureSize(width, height);
                     eglThread.postRunnable(() -> eglThread.drawRunnable.run());
@@ -155,14 +156,14 @@ public class IntroActivity extends Activity {
             }
 
             @Override
-            public void onSurfaceTextureSizeChanged(SurfaceTexture surface, final int width, final int height) {
+            public void onSurfaceTextureSizeChanged(@NonNull SurfaceTexture surface, final int width, final int height) {
                 if (eglThread != null) {
                     eglThread.setSurfaceTextureSize(width, height);
                 }
             }
 
             @Override
-            public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+            public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surface) {
                 if (eglThread != null) {
                     eglThread.shutdown();
                     eglThread = null;
@@ -171,7 +172,7 @@ public class IntroActivity extends Activity {
             }
 
             @Override
-            public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+            public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surface) {
 
             }
         });
@@ -335,33 +336,33 @@ public class IntroActivity extends Activity {
         if (englishInfo == null || systemInfo == null || englishInfo == systemInfo) {
             return;
         }
-//        TLRPC.TL_langpack_getStrings req = new TLRPC.TL_langpack_getStrings();
-//        if (systemInfo != currentLocaleInfo) {
-//            req.lang_code = systemInfo.getLangCode();
-//            localeInfo = systemInfo;
-//        } else {
-//            req.lang_code = englishInfo.getLangCode();
-//            localeInfo = englishInfo;
-//        }
-//        req.keys.add("ContinueOnThisLanguage");
-//        ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
-//            if (response != null) {
-//                TLRPC.Vector vector = (TLRPC.Vector) response;
-//                if (vector.objects.isEmpty()) {
-//                    return;
-//                }
-//                final TLRPC.LangPackString string = (TLRPC.LangPackString) vector.objects.get(0);
-//                if (string instanceof TLRPC.TL_langPackString) {
-//                    UIThread.runOnUIThread(() -> {
-//                        if (!destroyed) {
-//                            textView.setText(string.value);
-//                            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-//                            preferences.edit().putString("language_showed2", systemLang.toLowerCase()).commit();
-//                        }
-//                    });
-//                }
-//            }
-//        }, ConnectionsManager.RequestFlagWithoutLogin);TODO
+        //        TLRPC.TL_langpack_getStrings req = new TLRPC.TL_langpack_getStrings();
+        //        if (systemInfo != currentLocaleInfo) {
+        //            req.lang_code = systemInfo.getLangCode();
+        //            localeInfo = systemInfo;
+        //        } else {
+        //            req.lang_code = englishInfo.getLangCode();
+        //            localeInfo = englishInfo;
+        //        }
+        //        req.keys.add("ContinueOnThisLanguage");
+        //        ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
+        //            if (response != null) {
+        //                TLRPC.Vector vector = (TLRPC.Vector) response;
+        //                if (vector.objects.isEmpty()) {
+        //                    return;
+        //                }
+        //                final TLRPC.LangPackString string = (TLRPC.LangPackString) vector.objects.get(0);
+        //                if (string instanceof TLRPC.TL_langPackString) {
+        //                    UIThread.runOnUIThread(() -> {
+        //                        if (!destroyed) {
+        //                            textView.setText(string.value);
+        //                            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        //                            preferences.edit().putString("language_showed2", systemLang.toLowerCase()).commit();
+        //                        }
+        //                    });
+        //                }
+        //            }
+        //        }, ConnectionsManager.RequestFlagWithoutLogin);TODO
     }
 
     private class IntroAdapter extends PagerAdapter {
@@ -436,10 +437,8 @@ public class IntroActivity extends Activity {
         }
 
         @Override
-        public void unregisterDataSetObserver(DataSetObserver observer) {
-            if (observer != null) {
-                super.unregisterDataSetObserver(observer);
-            }
+        public void unregisterDataSetObserver(@NonNull DataSetObserver observer) {
+            super.unregisterDataSetObserver(observer);
         }
     }
 
@@ -627,7 +626,7 @@ public class IntroActivity extends Activity {
         };
 
         private void loadTexture(int resId, int index) {
-            Drawable drawable = getResources().getDrawable(resId);
+            Drawable drawable = ResourcesCompat.getDrawable(getResources(), resId, null);
             if (drawable instanceof BitmapDrawable) {
                 Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
                 GLES20.glBindTexture(GL10.GL_TEXTURE_2D, textures[index]);
