@@ -26,7 +26,6 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.same.lib.base.AndroidUtilities;
 import com.same.lib.base.DispatchQueue;
 import com.same.lib.base.SharedConfig;
 import com.same.lib.drawable.DrawableManager;
@@ -84,10 +83,7 @@ public class IntroActivity extends Activity {
     private int currentViewPagerPage;
     private EGLThread eglThread;
     private long currentDate;
-    private boolean justEndDragging;
     private boolean dragging;
-    private int startDragX;
-    private boolean destroyed;
 
     private LocaleInfo localeInfo;
 
@@ -207,10 +203,8 @@ public class IntroActivity extends Activity {
             public void onPageScrollStateChanged(int i) {
                 if (i == ViewPager.SCROLL_STATE_DRAGGING) {
                     dragging = true;
-                    startDragX = viewPager.getCurrentItem() * viewPager.getMeasuredWidth();
                 } else if (i == ViewPager.SCROLL_STATE_IDLE || i == ViewPager.SCROLL_STATE_SETTLING) {
                     if (dragging) {
-                        justEndDragging = true;
                         dragging = false;
                     }
                     if (lastPage != viewPager.getCurrentItem()) {
@@ -237,7 +231,6 @@ public class IntroActivity extends Activity {
             Intent intent2 = new Intent(IntroActivity.this, MainActivity.class);
             intent2.putExtra("fromIntro", true);
             startActivity(intent2);
-            destroyed = true;
             finish();
         });
 
@@ -263,7 +256,6 @@ public class IntroActivity extends Activity {
             Intent intent2 = new Intent(IntroActivity.this, MainActivity.class);
             intent2.putExtra("fromIntro", true);
             startActivity(intent2);
-            destroyed = true;
             finish();
         });
 
@@ -319,7 +311,6 @@ public class IntroActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        destroyed = true;
     }
 
     private void checkContinueText() {
@@ -456,7 +447,7 @@ public class IntroActivity extends Activity {
 
         private final static int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
         private final static int EGL_OPENGL_ES2_BIT = 4;
-        private SurfaceTexture surfaceTexture;
+        private final SurfaceTexture surfaceTexture;
         private EGL10 egl10;
         private EGLDisplay eglDisplay;
         private EGLConfig eglConfig;
@@ -464,7 +455,7 @@ public class IntroActivity extends Activity {
         private EGLSurface eglSurface;
         private GL gl;
         private boolean initied;
-        private int[] textures = new int[23];
+        private final int[] textures = new int[23];
 
         private long lastRenderCallTime;
 
@@ -610,7 +601,7 @@ public class IntroActivity extends Activity {
             }
         }
 
-        private Runnable drawRunnable = new Runnable() {
+        private final Runnable drawRunnable = new Runnable() {
             @Override
             public void run() {
                 if (!initied) {

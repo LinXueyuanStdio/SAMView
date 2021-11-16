@@ -159,7 +159,6 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
 
     public void onPreCreate() {
         Configuration configuration = delegate.getConfiguration();
-        //        configuration.orientation = Configuration.ORIENTATION_LANDSCAPE;
         onPreConfigurationChanged(configuration);
     }
 
@@ -607,8 +606,7 @@ public class ContainerCreator implements ContainerLayout.ActionBarLayoutDelegate
     }
 
     public void onPreConfigurationChanged(@NonNull Configuration newConfig) {
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE
-                || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             Space.setIsTablet(true);
             Space.setIsFullTablet(true);
         } else {
