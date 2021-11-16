@@ -64,12 +64,6 @@ public class IntroActivity extends Activity {
         static boolean LOGS_ENABLED = true;
     }
 
-    static class FileLog {
-        static void e(String text) {
-            Log.e("log", text);
-        }
-    }
-
     private ViewPager viewPager;
     private BottomPagesView bottomPages;
     private TextView textView;
@@ -87,7 +81,11 @@ public class IntroActivity extends Activity {
     private boolean dragging;
 
     private LocaleInfo localeInfo;
-
+    
+    private void log_e(String text) {
+        Log.e("log", text);
+    }
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_TMessages);
@@ -304,16 +302,6 @@ public class IntroActivity extends Activity {
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
     private void checkContinueText() {
         LocaleInfo englishInfo = null;
         LocaleInfo systemInfo = null;
@@ -469,7 +457,7 @@ public class IntroActivity extends Activity {
             eglDisplay = egl10.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
             if (eglDisplay == EGL10.EGL_NO_DISPLAY) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.e("eglGetDisplay failed " + GLUtils.getEGLErrorString(egl10.eglGetError()));
+                    log_e("eglGetDisplay failed " + GLUtils.getEGLErrorString(egl10.eglGetError()));
                 }
                 finish();
                 return false;
@@ -478,7 +466,7 @@ public class IntroActivity extends Activity {
             int[] version = new int[2];
             if (!egl10.eglInitialize(eglDisplay, version)) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.e("eglInitialize failed " + GLUtils.getEGLErrorString(egl10.eglGetError()));
+                    log_e("eglInitialize failed " + GLUtils.getEGLErrorString(egl10.eglGetError()));
                 }
                 finish();
                 return false;
@@ -500,7 +488,7 @@ public class IntroActivity extends Activity {
             };
             if (!egl10.eglChooseConfig(eglDisplay, configSpec, configs, 1, configsCount)) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.e("eglChooseConfig failed " + GLUtils.getEGLErrorString(egl10.eglGetError()));
+                    log_e("eglChooseConfig failed " + GLUtils.getEGLErrorString(egl10.eglGetError()));
                 }
                 finish();
                 return false;
@@ -508,7 +496,7 @@ public class IntroActivity extends Activity {
                 eglConfig = configs[0];
             } else {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.e("eglConfig not initialized");
+                    log_e("eglConfig not initialized");
                 }
                 finish();
                 return false;
@@ -518,13 +506,13 @@ public class IntroActivity extends Activity {
             eglContext = egl10.eglCreateContext(eglDisplay, eglConfig, EGL10.EGL_NO_CONTEXT, attrib_list);
             if (eglContext == null) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.e("eglCreateContext failed " + GLUtils.getEGLErrorString(egl10.eglGetError()));
+                    log_e("eglCreateContext failed " + GLUtils.getEGLErrorString(egl10.eglGetError()));
                 }
                 finish();
                 return false;
             }
 
-            if (surfaceTexture instanceof SurfaceTexture) {
+            if (surfaceTexture != null) {
                 eglSurface = egl10.eglCreateWindowSurface(eglDisplay, eglConfig, surfaceTexture, null);
             } else {
                 finish();
@@ -533,14 +521,14 @@ public class IntroActivity extends Activity {
 
             if (eglSurface == null || eglSurface == EGL10.EGL_NO_SURFACE) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.e("createWindowSurface failed " + GLUtils.getEGLErrorString(egl10.eglGetError()));
+                    log_e("createWindowSurface failed " + GLUtils.getEGLErrorString(egl10.eglGetError()));
                 }
                 finish();
                 return false;
             }
             if (!egl10.eglMakeCurrent(eglDisplay, eglSurface, eglSurface, eglContext)) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(egl10.eglGetError()));
+                    log_e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(egl10.eglGetError()));
                 }
                 finish();
                 return false;
@@ -610,7 +598,7 @@ public class IntroActivity extends Activity {
                 if (!eglContext.equals(egl10.eglGetCurrentContext()) || !eglSurface.equals(egl10.eglGetCurrentSurface(EGL10.EGL_DRAW))) {
                     if (!egl10.eglMakeCurrent(eglDisplay, eglSurface, eglSurface, eglContext)) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(egl10.eglGetError()));
+                            log_e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(egl10.eglGetError()));
                         }
                         return;
                     }
